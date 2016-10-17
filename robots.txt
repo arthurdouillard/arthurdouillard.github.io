@@ -1,2 +1,2 @@
 User-Agent: *
-Sitemap: /sitemap.xml
+Sitemap: https://mougatine.github.io/blog/sitemap.xml
