@@ -1,0 +1,33 @@
+# Permalinks
+permalink:        pretty
+
+# Setup
+url:              http://mougatine.github.io
+
+# Set to '' in case of hosting on `http://<your-github-name>.github.io`
+baseurl:        ''
+
+title:            Mougatine
+
+# Markdown enabled, however don't use more than one paragraph (enforced by `>`)
+description:      >
+  I'm Arthur Douillard, and here is my blog.
+
+# The tags listed as entries in the sidebar
+sidebar_tags:     [Miscellaneous, Python, Bibliography]
+
+# Fallback image and color if not overwritten for tag or post
+image:            /public/img/space.jpg
+color:            '#A85641'
+
+author:
+  name:           'Arthur Douillard'
+  twitter:        bobibelo
+  github:         mougatine
+  photo:          /public/img/douill_a.jpg
+
+  # Markdown enabled, can use multiple paragraphs (enabled by `|`)
+  about:          |
+    Hello, my name is Arthur Douillard but you may call me Mougatine or Moug if I like you enough.
+
+    I'm a Computer Engineer student in France.

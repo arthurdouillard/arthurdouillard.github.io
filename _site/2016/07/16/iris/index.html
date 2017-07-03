@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+       Fooling around Iris  &middot; Mougatine
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab:700|PT+Serif:400,400italic,700,700italic" type="text/css">
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/hyde.css">
+  <link rel="stylesheet" href="/public/css/jekyll-github.css">
+  <link rel="stylesheet" href="/public/css/font-awesome.css">
+  <link rel="stylesheet" href="/public/css/fancy_buttons.css">
+
+  
+
+  
+
+  
+
+  <style>
+    .content a,
+    .related-posts li a:hover {
+      color: #949667;
+    }
+    ::selection {
+      color: #fff;
+      background: #949667;
+    }
+    ::-moz-selection {
+      color: #fff;
+      background: #949667;
+    }
+  </style>
+
+  <!-- Icons -->
+  <!-- <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png"> -->
+  <!-- <link rel="shortcut icon" href="/public/favicon.ico"> -->
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/atom+xml" title="Mougatine" href="/atom.xml">
+</head>
+
+
+  <body>
+
+    <main class="content container">
+      
+
+
+<article class="post">
+  <h1 class="post-title">Fooling around Iris</h1>
+  <div class="post-date">
+    <time datetime="2016-07-16T00:00:00+02:00">07/16/16</time>
+    <span>on <a href="/tag/ML/">Machine Learning</a></span>
+  </div>
+  <hr/>
+  <h1 id="preambule">Preambule</h1>
+
+<p>I began learning ML seriously a few weeks ago, and I’ve decided to publish as often as possible articles about how I’m playing with the Dataset I encounter.</p>
+
+<p>The key to understand something is to be able to explain it to others, I hope this serie of articles will help me reach that goal.</p>
+
+<p>I’ll mainly use R language &amp; Python.</p>
+
+<hr />
+
+<h1 id="the-iris-dataset">The Iris Dataset</h1>
+
+<p>You can find the iris dataset <a href="https://archive.ics.uci.edu/ml/datasets/Iris">here</a>.
+It contains several informations (petal width &amp; length, sepal width &amp; length, species) about 150 flowers.</p>
+
+<p>The goal for this exercice is to correctly be able to classify those flower with the help of your favorite gardener.</p>
+
+<h2 id="getting-an-idea-of-the-dataset">Getting an idea of the dataset</h2>
+
+<p>Let’s look the first row of Iris:</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="o">&gt;</span> <span class="n">head</span><span class="p">(</span><span class="n">iris</span><span class="p">)</span>
+  <span class="n">Sepal.Length</span> <span class="n">Sepal.Width</span> <span class="n">Petal.Length</span> <span class="n">Petal.Width</span> <span class="n">Species</span>
+<span class="m">1</span>          <span class="m">5.1</span>         <span class="m">3.5</span>          <span class="m">1.4</span>         <span class="m">0.2</span>  <span class="n">setosa</span>
+<span class="m">2</span>          <span class="m">4.9</span>         <span class="m">3.0</span>          <span class="m">1.4</span>         <span class="m">0.2</span>  <span class="n">setosa</span>
+<span class="m">3</span>          <span class="m">4.7</span>         <span class="m">3.2</span>          <span class="m">1.3</span>         <span class="m">0.2</span>  <span class="n">setosa</span>
+<span class="m">4</span>          <span class="m">4.6</span>         <span class="m">3.1</span>          <span class="m">1.5</span>         <span class="m">0.2</span>  <span class="n">setosa</span>
+<span class="m">5</span>          <span class="m">5.0</span>         <span class="m">3.6</span>          <span class="m">1.4</span>         <span class="m">0.2</span>  <span class="n">setosa</span>
+<span class="m">6</span>          <span class="m">5.4</span>         <span class="m">3.9</span>          <span class="m">1.7</span>         <span class="m">0.4</span>  <span class="n">setosa</span></code></pre></figure>
+
+<p>We want to know with features of the flowers are the most important its classification. We are going to plot as the different combinaisons to see if we can have a clear look on the three different species.</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">pairs</span><span class="p">(</span><span class="n">iris</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">4</span><span class="p">],</span> <span class="n">main</span><span class="o">=</span><span class="s2">"Iris Dataset"</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="n">c</span><span class="p">(</span><span class="s2">"red"</span><span class="p">,</span> <span class="s2">"green"</span><span class="p">,</span> <span class="s2">"blue"</span><span class="p">)[</span><span class="n">iris</span><span class="o">$</span><span class="n">Species</span><span class="p">])</span></code></pre></figure>
+
+<p><img src="/public/img/iris-dataset.jpeg" alt="Iris Dataset" /></p>
+
+<p>Each color is associated to a species.</p>
+
+<p>By giving a look on those plots we can see that both petal length &amp; petal width seem to matter a lot for classification.</p>
+
+<p>Closer look on the plot with petal length &amp; width:</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="o">&gt;</span> <span class="n">plot</span><span class="p">(</span><span class="n">iris</span><span class="o">$</span><span class="n">Petal.Length</span><span class="p">,</span> <span class="n">iris</span><span class="o">$</span><span class="n">Petal.Width</span><span class="p">,</span> <span class="n">main</span> <span class="o">=</span> <span class="s2">"Iris Dataset"</span><span class="p">,</span> <span class="n">col</span> <span class="o">=</span> <span class="n">c</span><span class="p">(</span><span class="s2">"red"</span><span class="p">,</span> <span class="s2">"green"</span><span class="p">,</span> <span class="s2">"blue"</span><span class="p">)[</span><span class="n">iris</span><span class="o">$</span><span class="n">Species</span><span class="p">])</span></code></pre></figure>
+
+<p><img src="/public/img/iris-dataset-1.jpeg" alt="Iris Dataset" /></p>
+
+<p>The three different species are here very distinguable.</p>
+
+<h2 id="clustering">Clustering</h2>
+
+<p>How the world is not perfect, and not all data in the world is already labeled for you. We are going to clusterize the flowers.</p>
+
+<p>First we remove the species of our dataset (we are not suppose to know them !):</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="o">&gt;</span> <span class="n">samples</span> <span class="o">&lt;-</span> <span class="n">iris</span><span class="p">[</span><span class="m">-5</span><span class="p">]</span>
+<span class="o">&gt;</span> <span class="n">species</span>     <span class="o">&lt;-</span> <span class="n">iris</span><span class="o">$</span><span class="n">species</span></code></pre></figure>
+
+<p>Then we clusterize the flowers using <a href="https://en.wikipedia.org/wiki/K-means_clustering">kmeans</a>. We expect 3 clusters, therefore the <em>centers</em> option will be set to <em>3</em>. In real life situation we would have to guess to looking at the data and doing trial &amp; error.</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="o">&gt;</span> <span class="n">km</span> <span class="o">&lt;-</span> <span class="n">kmeans</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">centers</span> <span class="o">=</span> <span class="m">3</span><span class="p">)</span>
+<span class="o">&gt;</span> <span class="n">plot</span><span class="p">(</span><span class="n">iris</span><span class="o">$</span><span class="n">Petal.Length</span><span class="p">,</span> <span class="n">iris</span><span class="o">$</span><span class="n">Petal.Width</span><span class="p">,</span> <span class="n">col</span> <span class="o">=</span> <span class="n">km</span><span class="o">$</span><span class="n">cluster</span><span class="p">)</span></code></pre></figure>
+
+<p><img src="/public/img/iris-dataset-2.jpeg" alt="Iris Dataset" /></p>
+
+<p>The plot above has be colorized with the clusters produced by kmeans. Very similar with the one created the species labels isn’t it ?</p>
+
+<hr />
+
+</article>
+
+
+<aside class="author">
+  <h2 class="aside-title">About</h2>
+
+  
+  <img class="me" src="/public/img/douill_a.jpg" alt="Arthur Douillard"/>
+  
+
+  <p>Hello, my name is Arthur Douillard but you may call me Mougatine or Moug if I like you enough.</p>
+
+<p>I’m a Computer Engineer student in France.</p>
+
+</aside>
+
+
+<aside class="related">
+  <h2 class="aside-title">Related Posts</h2>
+  <ul class="related-posts">
+    
+    
+    
+      
+        
+        
+  </ul>
+</aside>
+
+<hr/>
+
+<div id="disqus_thread"></div>
+<script>
+  /**
+  *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+  *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+  */
+  /*
+  var disqus_config = function () {
+    this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+    this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+  };
+  */
+  (function() {  // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+
+    s.src = '//bobibelo.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+    </main>
+
+    
+
+
+
+
+
+<div id="_backdrop"></div>
+<a   id="_menu" href="#_sidebar">☰</a>
+
+<aside id="_sidebar" class="sidebar" style="background-image:url('/public/img/nebula_blue.jpg')">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <h1><a href="/">Mougatine</a></h1>
+      <p>I’m Arthur Douillard, and here is my blog.</p>
+
+    </div>
+
+    <nav class="sidebar-nav">
+      
+        
+        <a class="sidebar-nav-item" href="/tag/Miscellaneous/">Miscellaneous</a>
+      
+        
+        <a class="sidebar-nav-item" href="/tag/Python/">Python</a>
+      
+        
+        <a class="sidebar-nav-item" href="/tag/Bibliography/">Bibliography</a>
+      
+
+      
+
+      
+      
+        
+          
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/about/">About</a>
+          
+        
+      
+        
+      
+        
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </nav>
+
+    <div class="sidebar-social">
+      <a href="https://github.com/Mougatine"><i class="fa fa-github fa-2x"></i></a>
+      <a href="https://linkedin.com/in/arthurdouillard"><i class="fa fa-linkedin-square fa-2x"></i></a>
+      <a href="https://twitter.com/bobibelo"><i class="fa fa-twitter-square fa-2x"></i></a>
+      <a href="mailto:arthur.douillard@epita.fr"><i class="fa fa-envelope-o fa-2x"></i></a>
+
+   <!--   
+        <a href="https://github.com/mougatine"><span class="icon-icon-github"></span></a>
+
+      
+
+      
+        <a href="https://twitter.com/bobibelo"><span class="icon-icon-twitter"></span></a>
+
+      
+    -->
+    </div>
+  </div>
+</div>
+
+
+    <script src="/public/js/drawer.js"></script>
+  </body>
+</html>
