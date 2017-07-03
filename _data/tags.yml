@@ -11,30 +11,17 @@
 #     *My Tag* is an example of how to define a custom tag.
 # ~~~
 
-Miscellaneous:
-  name: Miscellaneous
-  image: /public/img/eta_carinae.jpg
+ml:
+  name: Machine Learning
+  image: /public/img/space.jpg
   color: '#949667'
   description: >
-    Articles with various subjects.
+    General Machine Learning
 
-Python:
-  name: Python
-  image: /public/img/nebula_blue.jpg
+
+nlp:
+  name: Natural Language Processing
+  image: /public/img/space.jpg
   color: '#949667'
   description: >
-    Python is love, python is life.
-
-Bibliography:
-  name: Bibliography
-  image: /public/img/nebula_blue.jpg
-  color: '#949667'
-  description: >
-    History and Computer
-
-ML:
-    name: Machine Learning
-    image: /public/img/nebula_blue.jpg
-    color: '#949667'
-    description: >
-        Machine Learning is fun !
+    All about Natural Language Processing and Text Mining
