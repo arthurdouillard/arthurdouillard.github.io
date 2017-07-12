@@ -18,6 +18,7 @@
     <link href="public/css/one-page-wonder.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
+
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -28,7 +29,6 @@
 </head>
 
 <body>
-
     <!-- Navigation -->
     <nav class="navbar navbar-inverse navbar-fixed-top" id="fancy-navbar" ole="navigation">
         <div class="container">
@@ -40,7 +40,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" id="top-link" href="#">Mougatine</a>
+                <a class="navbar-brand" id="top-link" href="#">Home</a>
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -49,10 +49,10 @@
                         <a id="top-link" href="#about">About</a>
                     </li>
                     <li>
-                        <a id="top-link" href="#skills">skills</a>
+                        <a id="top-link" href="#exp">Experience</a>
                     </li>
                     <li>
-                        <a id="top-link" href="#contact">Contact</a>
+                        <a id="top-link" href="#projects">Projects</a>
                     </li>
                 </ul>
             </div>
@@ -74,10 +74,10 @@
     <!-- Page Content -->
     <div class="container">
 
-        <hr class="featurette-divider">
+        <hr class="featurette-divider" id="about">
 
-        <!-- First Featurette -->
-        <div class="featurette" id="about">
+        <!-- About -->
+        <div class="featurette" >
             <img class="featurette-image img-circle img-responsive pull-right" src="public/img/icons/astronaut.png">
             <h2 class="featurette-heading">An
                 <span class="text-muted" id="bang" >Avid Learner</span>
@@ -127,10 +127,10 @@
             </p>
         </div>
 
-        <hr class="featurette-divider">
+        <hr class="featurette-divider" id="exp">
 
-        <!-- Second Featurette -->
-        <div class="featurette" id="skills">
+        <!-- Experience -->
+        <div class="featurette">
             <img class="featurette-image img-circle img-responsive pull-left" src="public/img/icons/space-ship.png">
             <h2 class="featurette-heading">Not A Total 
                 <span class="text-muted" id="bang">Newbie</span>
@@ -188,15 +188,44 @@
 
         </div>
 
-        <hr class="featurette-divider">
+        <hr class="featurette-divider" id="projects">
 
         <!-- Third Featurette -->
-        <div class="featurette" id="contact">
-            <img class="featurette-image img-circle img-responsive pull-right" src="public/img/icons/planet-earth.png">
-            <h2 class="featurette-heading">
-                <span class="text-muted" id="bang">Will Seal the Deal.</span>
+        <div class="featurette">
+            <img class="featurette-image img-circle img-responsive pull-right"
+                 src="public/img/icons/planet-earth.png">
+            <h2 class="featurette-heading">Definitely
+                <span class="text-muted" id="bang">Productive.</span>
             </h2>
-            <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+            <p class="lead">
+            <ul>
+                <li>
+                    IMDB's reviews sentiment analysis:
+                    <br/>
+                    Multi-threaded scapping, parallel machine learning prediction, data processing,
+                    Python, Scala, Spark-Streaming, Kafka.
+                </li><br/>
+                <li>
+                    Implementation of HOG and SIFT algorithms to enhance results of SVM on human detection.
+                </li><br/>
+                <li>
+                    Fast implementation an orthographic corrector based on Levenshtein distance
+                    using a compiled Patricia Trie in Golang.
+                </li><br/>
+                <li>
+                    Several Machine Learning contests (Kaggle) using Scikit-Learn, XGBoost, and Keras.
+                </li><br/>
+                <li>
+                    Multi-threaded multi agents sytem interacting with a Minecraft server through a
+                    time-responsive REST API in Java.
+                </li></br/>
+                <li>
+                    Implementation of Malloc, Make, a Posix shell, an HTTP server in C.
+                    <br/>
+                    Implementation of a front-end/back-end Compiler based on Andrew Appel's famous book.
+                </li>
+            </ul>
+            </p>
         </div>
 
         <hr class="featurette-divider">
