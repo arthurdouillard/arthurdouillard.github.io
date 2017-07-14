@@ -11,17 +11,24 @@
 #     *My Tag* is an example of how to define a custom tag.
 # ~~~
 
+python:
+  name: Python
+  color: '#1E90FF'
+  description: >
+    The Python Language.
+
+
 ml:
   name: Machine Learning
-  image: /public/img/space.jpg
-  color: '#949667'
+  color: '#1E90FF'
   description: >
-    General Machine Learning
+    General Machine Learning.
 
 
 nlp:
   name: Natural Language Processing
-  image: /public/img/space.jpg
-  color: '#949667'
+  color: '#1E90FF'
   description: >
     All about Natural Language Processing and Text Mining
+
+

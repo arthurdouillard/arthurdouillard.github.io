@@ -1,5 +1,5 @@
 ---
 layout: blog_by_tag
-tag: Python
-permalink: /tag/Python/
+tag: python
+permalink: /tag/python/
 ---

@@ -1,5 +1,5 @@
 ---
 layout: blog_by_tag
-tag: Machine Learning
+tag: ml
 permalink: /tag/ml
 ---

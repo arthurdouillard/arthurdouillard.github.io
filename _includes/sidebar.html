@@ -23,7 +23,7 @@
 <aside id="_sidebar" class="sidebar" {% if image %}style="background-image:url('{{ image }}')"{% endif %}>
   <div class="container sidebar-sticky">
     <div class="sidebar-about">
-      <h1><a href="{{ site.baseurl }}/">{{ site.title }}</a></h1>
+      <h1><a href="{{ site.baseurl }}">{{ site.title }}</a></h1>
       {{ site.description | markdownify }}
     </div>
 
@@ -33,6 +33,9 @@
         <a class="sidebar-nav-item{% if page.tag == tag_key %} active{% endif %}" href="{{ site.baseurl }}/tag/{{ tag_key }}/">{{ tag.name }}</a>
       {% endfor %}
 
+      <a class="sidebar-nav-item" href="http://arthurdouillard.com/">About</a>
+
+<!--
       {% comment %}
         The code below dynamically generates a sidebar nav of pages with
         `layout: page` in the front-matter. See readme for usage.
@@ -46,6 +49,7 @@
           {% endif %}
         {% endif %}
       {% endfor %}
+-->
     </nav>
 
     <div class="sidebar-social">
