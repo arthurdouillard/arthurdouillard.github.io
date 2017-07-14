@@ -385,3 +385,13 @@ svg{
         top:106%
     }
 }
+
+#my-mail {
+    color: white;
+    text-decoration: none;
+}
+
+#my-mail:hover {
+    color: dodgerblue;
+    text-decoration: none;
+}
