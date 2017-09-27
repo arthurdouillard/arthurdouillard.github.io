@@ -29,6 +29,16 @@ nlp:
   name: Natural Language Processing
   color: '#1E90FF'
   description: >
-    All about Natural Language Processing and Text Mining
+    All about Natural Language Processing and Text Mining.
 
+deep_learning:
+  name: Deep Learning
+  color: '#1E90FF'
+  description: >
+    Neural networks and related.
 
+tensorflow:
+  name: Tensorflow
+  color: '#1E90FF'
+  description: >
+    The Deep Learning library of Google.  
