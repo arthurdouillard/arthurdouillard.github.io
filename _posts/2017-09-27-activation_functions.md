@@ -57,18 +57,18 @@ Given a real-valued number, this function returns a number ranging between 0 and
 This is very similar to how real neurons fire: Sigmoid returning 1 means that
 the network's neuron is fully-saturated.
 
-### 3.1.1. Tensorflow
+**Tensorflow**:
 
 {% highlight python %}
-W = weight_variable([L0, L1])
-b = bias_variable([L1])
+W = tf.Variable(tf.truncated_normal([L0, L1], stddev=0.1)))
+b = tf.Variable(tf.constant(0.1, shape=[L1]))
 Y = tf.nn.sigmoid(tf.matmul(X, W) + b)
 {% endhighlight %}
 
 With L0 and L1 being the number of neurons of, respectively, the current layer
 and the next layer.
 
-### 3.1.2 Drawbacks
+As said before, the sigmoid is not used anymore because of two major drawbacks:
 
 **Sigmoid saturation**:
 
@@ -91,19 +91,20 @@ $$ W* = [1, 0, -2, 3]$$:
 
 With a *same sign update* we can reach the optimal values in two steps:
 
-1. $$ [0, -1, 1, 2] + [1, 1, 0, 1]$$
-2. $$ [1, 0, -2, 3] + [0, 0, -3, 0]$$
+1. $$ [0, -1, 1, 2] + [+1, +1, +0, +1]$$
+2. $$ [1, 0, -2, 3] + [-0, -0, -3, -0]$$
 
 While the *different sign update* we can finish in one single step:
 
-1. $$ [0, -1, 1, 2] + [1, 1, -3, 1]$$
+1. $$ [0, -1, 1, 2] + [+1, +1, -3, +1]$$
 
-The main idea is output not centered won't produce errors but will make networks
-longer to train.
+The main idea is that non-centered output won't produce errors but it will take
+more time to train a network.
 
 ## 3.2 Tanh
 
-Coming soon.
+The hyperbolic tangent, *tanh*, is defined likewise:
+$$tanh(x) = \frac{e^x - e^{-x}}{e^x + e^{-x}}$$
 
 ## 3.3 ReLU
 
