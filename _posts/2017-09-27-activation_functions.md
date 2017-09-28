@@ -38,8 +38,9 @@ For classification problem, such as [CIFAR-10](https://www.cs.toronto.edu/~kriz/
 where you have to predict between 10 classes, you will have 10 output neurons.
 Each of them holding a probability to be the right class.
 
-Each of these layers will have an activation functions that will decide whether
-to *fire* or not the current neuron (symbolized by a weight and bias)
+Each of these layers but the last one will have an activation functions that 
+will decide whether to *fire* or not the current neuron (symbolized by a weight
+and bias.)
 
 # 3. Different kinds of activation functions
 
@@ -74,13 +75,13 @@ As said before, the sigmoid is not used anymore because of two major drawbacks:
 
 When the sigmoid saturates at either 0 or 1, the gradient is close to 0. In a
 [3 dimensions representation](https://en.wikipedia.org/wiki/Gradient_descent#/media/File:Gradient_ascent_(surface).png)
-it means that we are, respectively, in a local minimum (bottom of a valley) or
-local maximum (on top of a plateau.) During backpropagation this zero-valued
+it means that we are, respectively, at a local maximum (on top of a plateau) or
+at a local minimum (bottom of a valley.) During backpropagation this zero-valued
 gradient will not help to learn anything.
 
 **Sigmoid output not centered**:
 
-The signal coming into a neuron is always positive, thus the sigmoid will also
+The signal coming out of a neuron is always positive, thus the sigmoid will also
 outputs only positive values.
 
 Because of this, during backpropagation the values added to all the weights will
@@ -106,13 +107,69 @@ more time to train a network.
 The hyperbolic tangent, *tanh*, is defined likewise:
 $$tanh(x) = \frac{e^x - e^{-x}}{e^x + e^{-x}}$$
 
+![Tanh plot](/public/assets/tanh_plot.png)
+
+As you can see, the tanh function saturates like the sigmoid, but in the range
+-1 to 1. However it is 0-centered, thus the tanh function will at least learn
+faster than the sigmoid.
+
+If you have to choose between sigmoid and tanh, pick the latter.
+
+**Tensorflow**:
+
+{% highlight python %}
+W = tf.Variable(tf.truncated_normal([L0, L1], stddev=0.1)))
+b = tf.Variable(tf.constant(0.1, shape=[L1]))
+Y = tf.nn.tanh(tf.matmul(X, W) + b)
+{% endhighlight %}
+
 ## 3.3 ReLU
 
-Coming soon.
+The *ReLU* (Rectified Linear Unit) is a simple yet efficient activation function:
+$$relu(x) = max(0, x)$$
+
+![ReLU plot](/public/assets/relu_plot.png)
+
+**Tensorflow**:
+
+{% highlight python %}
+W = tf.Variable(tf.truncated_normal([L0, L1], stddev=0.1)))
+b = tf.Variable(tf.constant(0.1, shape=[L1]))
+Y = tf.nn.tanh(tf.matmul(X, W) + b)
+{% endhighlight %}
+
+This function has several advantages:
+
+- It has been found to speed up the convergence of the gradient by a
+  [factor of 6](http://www.cs.toronto.edu/~fritz/absps/imagenet.pdf) compared to
+  sigmoid and tanh.
+- It is a very simple and costless function.
+
+However, it has one problem:
+
+**Dying ReLU**:
+
+If the weights get updated in a manner that whatever the input, the ReLU
+function would only get negative values, this neuron can be considered as
+*dead* because it will always output 0.
+
+One way to deal with this is to set a low-enough learning rate. Indeed, the
+bigger the learning rate is, the bigger will be the magnitude of the weights'
+update. Thus more risks to fall in the *negative zone* and get a dead ReLU.
+
+Another way to fix this problem is the *Leaky ReLU*:
 
 ## 3.4 Leaky ReLU
 
-Coming soon.
+*Leaky ReLU* was created to fix the *dying ReLU* problem. While with positive
+input the function stays the same, with negative input the output is no longer
+0.
+
+$$leaky\_relu(x) = 𝟙(x < 0)(\varepsilon * x) + 𝟙(x >= 0)(x)$$
+
+With $$\varepsilon$$ being a small constant, often $$0.01$$.
+
+
 
 ## 3.5 Maxout
 
@@ -134,3 +191,6 @@ Coursera:
 
 CS231n:
 - [Commonly used activation functions](http://cs231n.github.io/neural-networks-1/#actfun)
+
+Tensorflow:
+- [Tensorflow's activation functions](https://www.tensorflow.org/versions/r0.12/api_docs/python/nn/activation_functions_)
