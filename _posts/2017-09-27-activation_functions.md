@@ -253,7 +253,7 @@ TL;DR:
 - For an output layer in a classification problem: use **softmax**.
 - For an output layer in a regression problem: use a linear function.
 
-# 7. Sources
+# 6. Sources
 
 Sources not cited directly in the article:
 
