@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  Activation functions
-tags:   [deep_learning, tensorflow]
+tags:   [ml, deep_learning, tensorflow]
 ---
 
 # 1. Physiology
