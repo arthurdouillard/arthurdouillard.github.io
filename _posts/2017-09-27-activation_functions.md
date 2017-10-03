@@ -248,10 +248,10 @@ layers could be, mathematically, squashed into a single one.
 
 TL;DR:
 
-- For hidden layers, use **ReLU** as a baseline. Expand to PReLU, ELU, or Maxout in
-  case of dying neurons or slow-convergence.
-- For output layer in a classification problem: use **softmax**.
-- Four output layer in a regression problem: use a linear function.
+- For hidden layers, use **ReLU** as a baseline. Expand to PReLU, ELU, or Maxout
+  in case of dying neurons or slow-convergence.
+- For an output layer in a classification problem: use **softmax**.
+- For an output layer in a regression problem: use a linear function.
 
 # 7. Sources
 
