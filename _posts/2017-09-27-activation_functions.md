@@ -79,6 +79,11 @@ it means that we are, respectively, at a local maximum (on top of a plateau) or
 at a local minimum (bottom of a valley.) During backpropagation this zero-valued
 gradient will not help to learn anything.
 
+Another problem with the saturation aspect of sigmoid (but also tanh, *see
+further*) is the [vanishing gradient problem](https://en.wikipedia.org/wiki/Vanishing_gradient_problem).
+Sigmoid is returning values capped between 0 and 1, thus when chaining several
+layers the signal is going to decreased until to be almost null.
+
 **Sigmoid output not centered**:
 
 The signal coming out of a neuron is always positive, thus the sigmoid will also
@@ -159,38 +164,100 @@ update. Thus more risks to fall in the *negative zone* and get a dead ReLU.
 
 Another way to fix this problem is the *Leaky ReLU*:
 
-## 3.4 Leaky ReLU
+## 3.4 PReLU
 
-*Leaky ReLU* was created to fix the *dying ReLU* problem. While with positive
-input the function stays the same, with negative input the output is no longer
-0.
+*PReLU*, or *Parametric ReLU*, was created to fix the *dying ReLU* problem.
+While with positive input the function stays the same, with negative input
+the output is no longer 0.
 
-$$leaky\_relu(x) = 𝟙(x < 0)(\varepsilon * x) + 𝟙(x >= 0)(x)$$
+$$prelu(x, \alpha) = 𝟙(x < 0)(\alpha * x) + 𝟙(x >= 0)(x)$$
 
-With $$\varepsilon$$ being a small constant, often $$0.01$$.
+$$\alpha$$ is called the coefficient of leakage.
 
+![PReLU plot](/public/assets/prelu_plot.png)
 
+(In this plot, $$\alpha = 0.5$$ for a better visualization)
+
+As you can see on the plot, for negative values the activation function will
+still outputs non-null values, thus the *dying ReLU* problem is avoided.
+
+Other variations of ReLU exist, such as RReLU or ELU. You can find more
+information on these papers: [Bing Xu et al.](https://arxiv.org/abs/1505.00853),
+[Clevert et al.](https://arxiv.org/abs/1511.07289).
+
+**Tensorflow**:
+
+PReLU is not present in Tensorflow, however it is very easy to code:
+
+{% highlight python %}
+prelu = lambda x, alpha: tf.maximum(x * alpha, x)
+
+W = tf.Variable(tf.truncated_normal([L0, L1], stddev=0.1)))
+b = tf.Variable(tf.constant(0.1, shape=[L1]))
+Y = prelu(tf.matmul(X, W) + b, 0.5)
+{% endhighlight %}
+
+**Leaky ReLU**:
+
+A common form of PReLU is the *Leaky ReLU*, this is basically a PReLU with
+$$\alpha = 0.01$$.
 
 ## 3.5 Maxout
 
-Coming soon.
+*Maxout* is a quite recent activation function developped by
+[Goodfellow et al.](https://arxiv.org/abs/1302.4389) in 2013.
+
+While PReLU was computing the maximum between $$x$$ and $$\alpha * x$$, the
+maxout function is computing the maximum between two (or more) different inputs.
+
+The input $$x$$ showed in the previous example is: $$x = w^Tx + b$$.
+
+For a maxout neuron taking two inputs, its formula would be:
+
+$$max(w_1^Tx + b_1, w_2^Tx + b_2)$$.
+
+A more in-depth explanation can be found
+[here](http://www.simon-hohberg.de/2015/07/19/maxout.html).
+
 
 ## 3.6 Softmax
 
-Coming soon.
+Finally the *softmax** function is a bit different than the others: It won't be
+used in a hidden layer but as the output function of your neural network.
 
-# 4. Conclusion
+$$softmax(z)_j = \frac{e^{z_j}}{\sum_{k=1}^{K}e^{z_k}}\ for\ j = 1, ..., K$$
 
-Coming soon.
+With $$K$$ being the number of possible classes to... classify.
 
-# 5. Sources
+The sum of all $$j$$-class will be equal to 1.
 
-Coursera:
-- [Activation functions](https://www.coursera.org/learn/neural-networks-deep-learning/lecture/4dDC1/activation-functions)
-- [Why do you need non-linear activation functions?](https://www.coursera.org/learn/neural-networks-deep-learning/lecture/OASKH/why-do-you-need-non-linear-activation-functions)
+For example if I want to classify an animal between a dog, a cat, and a turtle;
+$$j = 3$$ and I could get for an input image values such as $$0.34$$, $$0.45$$,
+and $$0.21$$. Those are the probabilities of the classification.
 
-CS231n:
-- [Commonly used activation functions](http://cs231n.github.io/neural-networks-1/#actfun)
+# 4. Linear vs Non-Linear
 
-Tensorflow:
-- [Tensorflow's activation functions](https://www.tensorflow.org/versions/r0.12/api_docs/python/nn/activation_functions_)
+You may have remarked that all the functions described in this article are
+non-linear. A linear function would make a several-hidden-layers neural network
+useless!
+
+Composition of linear functions make another linear function, thus all the
+layers could be, mathematically, squashed into a single one.
+
+# 5. Conclusion
+
+TL;DR:
+
+- For hidden layers, use **ReLU** as a baseline. Expand to PReLU, ELU, or Maxout in
+  case of dying neurons or slow-convergence.
+- For output layer in a classification problem: use **softmax**.
+- Four output layer in a regression problem: use a linear function.
+
+# 7. Sources
+
+Sources not cited directly in the article:
+
+- [Coursera: Activation functions](https://www.coursera.org/learn/neural-networks-deep-learning/lecture/4dDC1/activation-functions)
+- [Coursera: Why do you need non-linear activation functions?](https://www.coursera.org/learn/neural-networks-deep-learning/lecture/OASKH/why-do-you-need-non-linear-activation-functions)
+- [CS231n: Commonly used activation functions](http://cs231n.github.io/neural-networks-1/#actfun)
+- [Tensorflow: activation functions](https://www.tensorflow.org/versions/r0.12/api_docs/python/nn/activation_functions_)
