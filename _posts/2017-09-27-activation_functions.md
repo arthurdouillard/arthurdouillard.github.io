@@ -162,7 +162,7 @@ One way to deal with this is to set a low-enough learning rate. Indeed, the
 bigger the learning rate is, the bigger will be the magnitude of the weights'
 update. Thus more risks to fall in the *negative zone* and get a dead ReLU.
 
-Another way to fix this problem is the *Leaky ReLU*:
+Another way to fix this problem is the *PReLU*:
 
 ## 3.4 PReLU
 
