@@ -60,7 +60,7 @@ the network's neuron is fully-saturated.
 
 **Tensorflow**:
 
-{% highlight python %}
+{% highlight python linenos %}
 W = tf.Variable(tf.truncated_normal([L0, L1], stddev=0.1)))
 b = tf.Variable(tf.constant(0.1, shape=[L1]))
 Y = tf.nn.sigmoid(tf.matmul(X, W) + b)
@@ -122,7 +122,7 @@ If you have to choose between sigmoid and tanh, pick the latter.
 
 **Tensorflow**:
 
-{% highlight python %}
+{% highlight python linenos %}
 W = tf.Variable(tf.truncated_normal([L0, L1], stddev=0.1)))
 b = tf.Variable(tf.constant(0.1, shape=[L1]))
 Y = tf.nn.tanh(tf.matmul(X, W) + b)
@@ -137,7 +137,7 @@ $$relu(x) = max(0, x)$$
 
 **Tensorflow**:
 
-{% highlight python %}
+{% highlight python linenos %}
 W = tf.Variable(tf.truncated_normal([L0, L1], stddev=0.1)))
 b = tf.Variable(tf.constant(0.1, shape=[L1]))
 Y = tf.nn.tanh(tf.matmul(X, W) + b)
@@ -189,7 +189,7 @@ information on these papers: [Bing Xu et al.](https://arxiv.org/abs/1505.00853),
 
 PReLU is not present in Tensorflow, however it is very easy to code:
 
-{% highlight python %}
+{% highlight python linenos %}
 prelu = lambda x, alpha: tf.maximum(x * alpha, x)
 
 W = tf.Variable(tf.truncated_normal([L0, L1], stddev=0.1)))
