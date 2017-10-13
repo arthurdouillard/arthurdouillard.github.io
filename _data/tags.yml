@@ -42,3 +42,15 @@ tensorflow:
   color: '#1E90FF'
   description: >
     The Deep Learning library of Google.
+
+dimension_reduction:
+  name: Dimension Reduction
+  color: '#1E90FF'
+  description: >
+    Methods about dimensionality reduction.
+
+linear_algebra:
+  name: Linear Algebra
+  color: '#1E90FF'
+  description: >
+    Study of hyperplanes, matrices operations, subspaces, etc.
