@@ -54,3 +54,9 @@ linear_algebra:
   color: '#1E90FF'
   description: >
     Study of hyperplanes, matrices operations, subspaces, etc.
+
+cv:
+  name: Computer Vision
+  color: '#1E90FF'
+  description: >
+    All tasks image related.
