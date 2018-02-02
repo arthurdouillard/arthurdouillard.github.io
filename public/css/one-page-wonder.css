@@ -10,13 +10,13 @@
 
 body {
     margin-top: 50px; /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
-    background-color: lightblue;
+    background-color: #222;
     color: white;
 }
 
 #fancy-navbar {
-    background-color: lightblue;
-    border-bottom-style: none;
+    border-bottom-style: solid;
+    border-bottom-color: black;
     color: white;
 }
 
@@ -25,7 +25,7 @@ body {
 }
 
 #top-link:hover {
-    color: dodgerblue;
+    color: #df2935;
 }
 
 .social {
@@ -45,15 +45,13 @@ body {
 }
 
 .social > a:hover {
-    color: dodgerblue;
+    color: #df2935;
 }
 
 .header-image {
     display: block;
     width: 100%;
     text-align: center;
-    /* background: url('../img/space.jpg') no-repeat center center scroll; */
-    background-color: lightblue;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     background-size: cover;
@@ -61,11 +59,11 @@ body {
 }
 
 #bang {
-    color: dodgerblue;
+    color: #df2935;
 }
 
 .headline {
-    padding: 120px 0;
+    padding: 90px 0;
 }
 
 .headline h1 {
@@ -294,7 +292,7 @@ footer {
 
 .box .company {
     font-weight: 500;
-    color: dodgerblue;
+    color: #df2935;
     float: right;
     padding-right: 5px;
 }
@@ -396,6 +394,6 @@ svg{
 }
 
 #my-mail:hover {
-    color: dodgerblue;
+    color: #df2935;
     text-decoration: none;
 }
