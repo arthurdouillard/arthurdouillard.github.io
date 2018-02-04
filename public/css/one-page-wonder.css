@@ -20,6 +20,11 @@ body {
     color: white;
 }
 
+li.active > a {
+    background:none !important;
+    color: #df2935 !important;
+}
+
 #top-link {
     color: white
 }
