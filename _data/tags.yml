@@ -60,3 +60,9 @@ cv:
   color: '#df2935'
   description: >
     All tasks image related.
+
+faketag:
+  name: fake
+  color: '#000'
+  description: >
+    fake tag because last tag is always broken.
