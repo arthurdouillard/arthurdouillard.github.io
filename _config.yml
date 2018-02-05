@@ -18,7 +18,7 @@ sidebar_tags:     [python, ml]
 
 # Fallback image and color if not overwritten for tag or post
 image:            
-color:            '#1E90FF'
+color:            '#df2935'
 
 author:
   name:           'Arthur Douillard'

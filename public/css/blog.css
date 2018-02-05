@@ -1,0 +1,19 @@
+p > a {
+    color: #df2935 !important;
+}
+
+.blog-tag, .blog-related {
+    color: #df2935 !important;
+}
+
+a.blog-title-bullet {
+    color: #000 !important;
+}
+
+a.blog-title-bullet:hover, a.blog-title-bullet:focus  {
+    color: #df2935 !important;
+}
+
+.blog-year {
+    color: #df2935 !important;
+}

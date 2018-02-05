@@ -66,7 +66,7 @@ h1, h2, h3, h4, h5, h6 {
   padding: 2rem 1rem;
   color: rgba(255,255,255,.75);
  /* background-color: #202020!important;*/
-  background-color: dodgerblue;
+  background-color: #222;
   text-align: left;
 
   background-size: cover;
@@ -165,14 +165,19 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+.sidebar-name > a {
+  color: #df2935 !important;
+}
+
 /* Sidebar links */
 .sidebar a {
   color: #fff;
 }
 
-/*.sidebar a:hover, .sidebar a:focus {
+.sidebar a:hover, .sidebar a:focus {
   text-decoration: none;
-}*/
+  color: #df2935;
+}
 
 /* About section */
 .sidebar-about > h1 {
@@ -347,6 +352,16 @@ h1, h2, h3, h4, h5, h6 {
  */
 
 /* Base16 (http://chriskempson.github.io/base16/#default) */
+
+/* Theme Dark&Red */
+.theme-darkred .sidebar {
+  background-color: #df2935;
+}
+.theme-darkred .content a,
+.theme-darkred .related-posts li a:hover {
+  color: #df2935;
+}
+
 
 /* Dodgerblue */
 .theme-dodgerblue .sidebar {

@@ -13,50 +13,50 @@
 
 python:
   name: Python
-  color: '#1E90FF'
+  color: '#df2935'
   description: >
     The Python Language.
 
 
 ml:
   name: Machine Learning
-  color: '#1E90FF'
+  color: '#df2935'
   description: >
     General Machine Learning.
 
 
 nlp:
   name: Natural Language Processing
-  color: '#1E90FF'
+  color: '#df2935'
   description: >
     All about Natural Language Processing and Text Mining.
 
 deep_learning:
   name: Deep Learning
-  color: '#1E90FF'
+  color: '#df2935'
   description: >
     Neural networks and related.
 
 tensorflow:
   name: Tensorflow
-  color: '#1E90FF'
+  color: '#df2935'
   description: >
     The Deep Learning library of Google.
 
 dimension_reduction:
   name: Dimension Reduction
-  color: '#1E90FF'
+  color: '#df2935'
   description: >
     Methods about dimensionality reduction.
 
 linear_algebra:
   name: Linear Algebra
-  color: '#1E90FF'
+  color: '#df2935'
   description: >
     Study of hyperplanes, matrices operations, subspaces, etc.
 
 cv:
   name: Computer Vision
-  color: '#1E90FF'
+  color: '#df2935'
   description: >
     All tasks image related.

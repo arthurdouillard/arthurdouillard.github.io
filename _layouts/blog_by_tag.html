@@ -19,13 +19,13 @@ layout: default
     {% assign currentdate = post.date | date: "%Y" %}
     {% if currentdate != date %}
       {% unless forloop.first %}</ul><hr/>{% endunless %}
-      <h2 id="y{{post.date | date: "%Y"}}">{{ currentdate }}</h2>
+      <h2 id="y{{post.date | date: "%Y"}}" class="blog-year">{{ currentdate }}</h2>
       <ul class="related-posts">
       {% assign date = currentdate %}
     {% endif %}
     <li>
       <h4>
-        <a href="{{ post.url | prepend:site.baseurl }}">
+        <a class="blog-title-bullet" href="{{ post.url | prepend:site.baseurl }}">
           <span>{{ post.title }}</span>
           <small>{{ post.date | date: "%d %B" }}</small>
         </a>

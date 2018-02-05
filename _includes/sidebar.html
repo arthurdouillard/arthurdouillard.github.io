@@ -23,7 +23,7 @@
 <aside id="_sidebar" class="sidebar" {% if image %}style="background-image:url('{{ image }}')"{% endif %}>
   <div class="container sidebar-sticky">
     <div class="sidebar-about">
-      <h1><a href="{{ site.url }}/blog">{{ site.title }}</a></h1>
+      <h1 class="sidebar-name"><a href="{{ site.url }}/blog">{{ site.title }}</a></h1>
       {{ site.description | markdownify }}
     </div>
 
@@ -53,11 +53,18 @@
     </nav>
 
     <div class="sidebar-social">
-      <a href="https://github.com/Mougatine"><i class="fa fa-github fa-2x"></i></a>
-      <a href="https://linkedin.com/in/arthurdouillard"><i class="fa fa-linkedin-square fa-2x"></i></a>
-      <a href="https://twitter.com/Ar_Douillard"><i class="fa fa-twitter-square fa-2x"></i></a>
-      <a href="mailto:arthur.douillard@epita.fr"><i class="fa fa-envelope-o fa-2x"></i></a>
-
+        <a href="https://github.com/Mougatine">
+          <i class="fab fa-github"></i>
+      </a>
+      <a href="https://linkedin.com/in/arthurdouillard">
+          <i class="fab fa-linkedin"></i>
+      </a>
+      <a href="https://twitter.com/Ar_Douillard">
+          <i class="fab fa-twitter"></i>
+      </a>
+      <a href="/public/cv/cv.pdf">
+          <i class="fas fa-file-pdf"></i>
+      </a>
    <!--   {% if site.author.github %}
         {% include icon-github.html username=site.author.github %}
       {% endif %}
