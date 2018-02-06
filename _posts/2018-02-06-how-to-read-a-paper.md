@@ -21,7 +21,7 @@ that I vivedly recommend.
 
 The first paper of this blog serie is about the techniques to read a paper.
 
-[How To Read A Paper](http://ccr.sigcomm.org/online/files/p83-keshavA.pdf) by S.Keshav.
+[How To Read A Paper](http://ccr.sigcomm.org/online/files/p83-keshavA.pdf) by [S.Keshav](https://scholar.google.com/citations?user=-EMkK7QAAAAJ).
 
 The author advises a *three-pass approach*:
 
