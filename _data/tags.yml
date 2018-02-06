@@ -61,8 +61,8 @@ cv:
   description: >
     All tasks image related.
 
-faketag:
-  name: fake
-  color: '#000'
+papers:
+  name: Papers Reading
+  color: '#df2935'
   description: >
-    fake tag because last tag is always broken.
+    Reading & analysing scientific papers, inspired by The Morning Paper.
