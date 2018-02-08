@@ -193,7 +193,7 @@ another: The output of one is the input of another.
 # Data, Data, And Data
 
 While Domingos offers us great insights into Machine Learning, and various
-methods to improve our models, he notes that one constant:
+methods to improve our models, he notes one constant:
 
 > More data beats a cleverer algorithm
 
