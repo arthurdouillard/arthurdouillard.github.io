@@ -14,19 +14,20 @@ description:      >
   I'm Arthur Douillard, and here is my blog.
 
 # The tags listed as entries in the sidebar
-sidebar_tags:     [python, ml]
+sidebar_tags:     [papers, ml]
 
 # Fallback image and color if not overwritten for tag or post
-image:            
+image:
 color:            '#df2935'
 
 author:
   name:           'Arthur Douillard'
   twitter:        Ar_Douillard
   github:         mougatine
-  photo:          /public/img/douill_a.jpg
+  photo:          /public/img/me.jpeg
 
   # Markdown enabled, can use multiple paragraphs (enabled by `|`)
   about:          |
     CS student @ EPITA, Teacher assistant in C/C++, Java, SQL, Algo, etc.,
-    Machine Learning enthusiast, curious by nature.
+    Deep Learning Intern @ Dataiku, Machine Learning enthusiast,
+    curious by nature.
