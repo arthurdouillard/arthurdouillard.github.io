@@ -26,6 +26,22 @@ layout: default
   {{ content }}
 </article>
 
+{% if post.tags contains 'papers' %}
+<a href="https://twitter.com/share?ref_src=twsrc%5Etfw"
+   class="twitter-share-button" data-size="large"
+   data-text="Analysis of '{{ post.title }}'"
+   data-via="ar_douillard" data-hashtags="PapersReading" data-lang="en"
+   data-show-count="false">Tweet</a>
+{% else %}
+<a href="https://twitter.com/share?ref_src=twsrc%5Etfw"
+   class="twitter-share-button" data-size="large"
+   data-text="{{ post.title }}"
+   data-via="ar_douillard" data-lang="en"
+   data-show-count="false">Tweet</a>
+{% endif %}
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
 {% if site.author.about %}
 <aside class="author">
   <h2 class="aside-title">About</h2>
