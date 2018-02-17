@@ -136,7 +136,7 @@ implies the samples are often spread on a lower-dimensional manifold.
 To reduce the dimension, i.e. choosing the right features, [many algorithms](https://en.wikipedia.org/wiki/Dimensionality_reduction) exist:
 PCA, NMF, LDA, etc.
 
-The dimensionality of reduction is an often necessary step before feeding the
+The  reduction of dimensionality is an often necessary step before feeding the
 model with the data.
 
 # Feature Engineering Is The Key
