@@ -62,7 +62,9 @@ cv:
     All tasks image related.
 
 papers:
-  name: Papers Reading
+  name: Learn From Papers
   color: '#df2935'
   description: >
-    Reading & analysing scientific papers, inspired by The Morning Paper.
+    Read & analyse of scientific papers, inspired by The Morning Paper.
+
+    <a href="https://twitter.com/search?f=tweets&q=%23learnfrompapers&src=typd">#LearnFromPapers</a>
