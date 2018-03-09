@@ -2,6 +2,8 @@
 layout: post
 title:  A Few Useful Things To Know About Machine Learning
 tags:   [papers, ml]
+descripton: An overview of the "Black Art" of Machine Learning.
+img: /public/assets/bias-variance.png
 ---
 
 This post contains the notes taken from reading of the following paper:
