@@ -2,7 +2,7 @@
 permalink:        pretty
 
 # Setup
-url:              http://arthurdouillard.com
+url:              https://arthurdouillard.com
 
 # Set to '' in case of hosting on `http://<your-github-name>.github.io`
 baseurl:        ''
@@ -11,7 +11,7 @@ title:            Arthur Douillard
 
 # Markdown enabled, however don't use more than one paragraph (enforced by `>`)
 description:      >
-  I'm Arthur Douillard, and here is my blog.
+  A blog about Machine Learning, Computer Science, and everything else.
 
 # The tags listed as entries in the sidebar
 sidebar_tags:     [papers, ml]

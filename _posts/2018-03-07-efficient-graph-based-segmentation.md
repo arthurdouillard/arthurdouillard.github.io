@@ -2,6 +2,8 @@
 layout: post
 title:  Efficient Graph-Based Segmentation
 tags:   [papers, cv]
+img: /public/assets/seg1.png
+description: How to produce both a fast & efficient segmentation of an image with Graph Theory.
 ---
 
 This post contains the notes taken from reading of the following paper:

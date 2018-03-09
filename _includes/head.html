@@ -65,4 +65,31 @@
 
   <!-- RSS -->
   <link rel="alternate" type="application/atom+xml" title="{{ site.title }}" href="{{ site.baseurl }}/atom.xml">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@ar_douillard">
+  <meta name="twitter:creator" content="@ar_douillard">
+
+  {% if page.title %}
+  <meta name="twitter:title" content="{{ page.title }}">
+  {% else %}
+  <meta name="twitter:title" content="{{ site.title }}">
+  {% endif %}
+
+  {% if page.url %}
+  <meta name="twitter:url" content="{{ site.url }}{{ page.url }}">
+  {% endif %}
+
+  {% if page.description %}
+  <meta name="twitter:description" content="{{ page.description }}">
+  {% else %}
+  <meta name="twitter:description" content="{{ site.description }}">
+  {% endif %}
+
+  {% if page.img %}
+  <meta name="twitter:image:src" content="{{ site.url }}{{ page.img }}">
+  {% else %}
+  <meta name="twitter:image:src" content="{{ site.url }}/public/img/icons/astronaut.svg">
+  {% endif %}
 </head>
