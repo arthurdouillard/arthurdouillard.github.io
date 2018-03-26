@@ -2,6 +2,8 @@
 layout: post
 title:  Detecting cloud cover on satellite images with custom K-means
 tags:   [cv, ml]
+description: Detecting cloud cover with custom K-means
+img: /public/assets/cloud1.png
 ---
 
 # The context
