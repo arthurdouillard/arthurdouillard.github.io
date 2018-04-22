@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  Deep Learning Scaling Is Predictable, Empirically
-tags:   [papers, deep_learning, ml]
+tags:   [papers, deep_learning]
 description: How much a Deep Learning model would improve if the dataset size increase?
 img: /public/assets/dl_scaling.png
 ---
