@@ -73,23 +73,30 @@
 
   {% if page.title %}
   <meta name="twitter:title" content="{{ page.title }}">
+  <meta property='og:title' content="{{ page.title }}"/>
   {% else %}
   <meta name="twitter:title" content="{{ site.title }}">
+  <meta property='og:title' content="{{ site.title }}"/>
   {% endif %}
 
   {% if page.url %}
   <meta name="twitter:url" content="{{ site.url }}{{ page.url }}">
+  <meta property='og:url' content="{{site.url }}{{ page.url }}"/>
   {% endif %}
 
   {% if page.description %}
   <meta name="twitter:description" content="{{ page.description }}">
+  <meta property='og:description' content="{{ page.description }}"/>
   {% else %}
   <meta name="twitter:description" content="{{ site.description }}">
+  <meta property='og:description' content="{{ site.description }}"/>
   {% endif %}
 
   {% if page.img %}
   <meta name="twitter:image:src" content="{{ site.url }}{{ page.img }}">
+  <meta property='og:image' content=" {{ site.url }}{{ page.img }}"/>
   {% else %}
   <meta name="twitter:image:src" content="{{ site.url }}/public/img/icons/astronaut.png">
   {% endif %}
+
 </head>
