@@ -1,3 +1,14 @@
+img + em {
+    display: block;
+    text-align: center;
+}
+
+p > img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 p > a {
     color: #df2935 !important;
 }
