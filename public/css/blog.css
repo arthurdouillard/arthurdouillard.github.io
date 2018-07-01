@@ -1,3 +1,16 @@
+.about {
+    width: 100%;
+    padding: 20px;
+    background: lightgray;
+    overflow: hidden;
+}
+
+.about img {
+    width: 40%;
+    margin-right: 15px;
+    float: right;
+}
+
 img + em {
     display: block;
     text-align: center;
