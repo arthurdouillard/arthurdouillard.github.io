@@ -28,11 +28,13 @@
     </div>
 
     <nav class="sidebar-nav">
-      {% for tag_key in site.sidebar_tags %}
+ <!--
+        {% for tag_key in site.sidebar_tags %}
         {% assign tag = site.data.tags[tag_key] %}
         <a class="sidebar-nav-item{% if page.tag == tag_key %} active{% endif %}" href="{{ site.baseurl }}/tag/{{ tag_key }}/">{{ tag.name }}</a>
       {% endfor %}
-
+ -->
+      <a class="sidebar-nav-item" href="{{ site.url }}/blog">Blog</a>
       <a class="sidebar-nav-item" href="{{ site.url }}">About</a>
 
 <!--
