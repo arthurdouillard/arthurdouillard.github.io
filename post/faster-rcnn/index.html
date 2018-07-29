@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="theme" content="hugo-academic">
+  <meta name="generator" content="Hugo 0.45.1" />
+  <meta name="author" content="Arthur Douillard">
+
+  
+  
+  
+  
+    
+      
+    
+  
+  <meta name="description" content="Fast-RCNN is an Object Detection algorithm using Selective Search and CNN.">
+
+  
+  <link rel="alternate" hreflang="en-us" href="/post/faster-rcnn/">
+
+  
+
+
+  
+
+  
+  
+  <meta name="theme-color" content="hsl(339, 90%, 68%)">
+  
+  
+  
+  
+    
+  
+  
+    
+    
+      
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/dracula.min.css">
+      
+    
+  
+  
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha512-6MXa8B6uaO18Hid6blRMetEIoPqHf7Ux1tnyIQdpt9qI5OACx7C+O3IVTr98vwGnlcg0LOLa02i9Y1HpVhlfiw==" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css" integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" integrity="sha256-ygkqlh3CYSUri3LhQxzdcm0n1EQvH2Y+U5S2idbLtxs=" crossorigin="anonymous">
+  
+  
+  
+  
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Montserrat:400,700%7cRoboto:400,400italic,700%7cRoboto&#43;Mono">
+  
+  <link rel="stylesheet" href="/styles.css">
+  
+
+  
+  
+  
+
+  
+  <link rel="alternate" href="/index.xml" type="application/rss+xml" title="Arthur Douillard">
+  <link rel="feed" href="/index.xml" type="application/rss+xml" title="Arthur Douillard">
+  
+
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="icon" type="image/png" href="/img/icon.png">
+  <link rel="apple-touch-icon" type="image/png" href="/img/icon-192.png">
+
+  <link rel="canonical" href="/post/faster-rcnn/">
+
+  <meta property="twitter:card" content="summary_large_image">
+  
+  <meta property="twitter:site" content="@Ar_Douillard">
+  <meta property="twitter:creator" content="@Ar_Douillard">
+  
+  <meta property="og:site_name" content="Arthur Douillard">
+  <meta property="og:url" content="/post/faster-rcnn/">
+  <meta property="og:title" content="Fast and Faster Region-based Convolutional Network | Arthur Douillard">
+  <meta property="og:description" content="Fast-RCNN is an Object Detection algorithm using Selective Search and CNN.">
+  <meta property="og:locale" content="en-us">
+  
+  <meta property="article:published_time" content="2018-03-26T00:00:00&#43;02:00">
+  
+  <meta property="article:modified_time" content="2018-03-26T00:00:00&#43;02:00">
+  
+
+  
+
+  
+<meta name="twitter:title" content="Fast and Faster Region-based Convolutional Network" />
+
+
+
+<meta name="twitter:description" content="Fast-RCNN is an Object Detection algorithm using Selective Search and CNN." />
+
+
+
+<meta name="twitter:image" content="/figures/fast-rcnn.png" />
+
+
+
+<meta property="og:image" content=/figures/fast-rcnn.png/>
+
+
+
+<meta property="og:description" content="Fast-RCNN is an Object Detection algorithm using Selective Search and CNN."/>
+
+
+  <title>Fast and Faster Region-based Convolutional Network | Arthur Douillard</title>
+
+</head>
+<body id="top" data-spy="scroll" data-target="#toc" data-offset="71" class="dark">
+
+<nav class="navbar navbar-default navbar-fixed-top" id="navbar-main">
+  <div class="container">
+
+    
+    <div class="navbar-header">
+      
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+              data-target=".navbar-collapse" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      
+      <a class="navbar-brand" href="/">Arthur Douillard</a>
+    </div>
+
+    
+    <div class="collapse navbar-collapse">
+
+      
+      
+      <ul class="nav navbar-nav navbar-right">
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#about">
+            
+            <span>Home</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#posts">
+            
+            <span>Posts</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#talks_list">
+            
+            <span>Talks</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#teaching">
+            
+            <span>Teaching</span>
+            
+          </a>
+        </li>
+
+        
+        
+      
+
+      
+      </ul>
+
+    </div>
+  </div>
+</nav>
+
+
+<article class="article" itemscope itemtype="http://schema.org/Article">
+
+  
+
+
+  <div class="article-container">
+    <h1 itemprop="name">Fast and Faster Region-based Convolutional Network</h1>
+
+    
+
+<div class="article-metadata">
+
+  
+
+  <span class="article-date">
+    
+    <meta content="2018-03-26 00:00:00 &#43;0200 CEST" itemprop="datePublished">
+    <time datetime="2018-03-26 00:00:00 &#43;0200 CEST" itemprop="dateModified">
+      26 March, 2018
+    </time>
+  </span>
+  <span itemscope itemprop="author publisher" itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Arthur Douillard">
+  </span>
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    5 min read
+  </span>
+  
+
+  
+  
+
+  
+
+  
+  
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    <li>
+      <a class="twitter"
+         href="https://twitter.com/intent/tweet?text=Fast%20and%20Faster%20Region-based%20Convolutional%20Network&amp;url=%2fpost%2ffaster-rcnn%2f"
+         target="_blank" rel="noopener">
+        <i class="fa fa-twitter"></i>
+      </a>
+    </li>
+    <li>
+      <a class="facebook"
+         href="https://www.facebook.com/sharer.php?u=%2fpost%2ffaster-rcnn%2f"
+         target="_blank" rel="noopener">
+        <i class="fa fa-facebook"></i>
+      </a>
+    </li>
+    <li>
+      <a class="linkedin"
+         href="https://www.linkedin.com/shareArticle?mini=true&amp;url=%2fpost%2ffaster-rcnn%2f&amp;title=Fast%20and%20Faster%20Region-based%20Convolutional%20Network"
+         target="_blank" rel="noopener">
+        <i class="fa fa-linkedin"></i>
+      </a>
+    </li>
+    <li>
+      <a class="weibo"
+         href="http://service.weibo.com/share/share.php?url=%2fpost%2ffaster-rcnn%2f&amp;title=Fast%20and%20Faster%20Region-based%20Convolutional%20Network"
+         target="_blank" rel="noopener">
+        <i class="fa fa-weibo"></i>
+      </a>
+    </li>
+    <li>
+      <a class="email"
+         href="mailto:?subject=Fast%20and%20Faster%20Region-based%20Convolutional%20Network&amp;body=%2fpost%2ffaster-rcnn%2f">
+        <i class="fa fa-envelope"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+  
+
+</div>
+
+
+    <div class="article-style" itemprop="articleBody">
+      
+
+<p>This post contains the notes taken from the following paper:</p>
+
+<ul>
+<li><p><a href="https://arxiv.org/abs/1504.08083" target="_blank">Fast-RCNN</a> by <a href="https://scholar.google.com/citations?user=W8VIEZgAAAAJ&amp;hl=en" target="_blank">R. Girshick</a>.</p></li>
+
+<li><p><a href="https://arxiv.org/abs/1506.01497" target="_blank">Faster-RCNN</a> by Microsoft Research.</p></li>
+</ul>
+
+<p>Ross Girshick is a very influential researcher on object detection:
+he has worked on RCNN, Fast{er}-RCNN, Yolo, RetinaNet&hellip;</p>
+
+<p>Fast-RCNN and Faster-RCNN are both incremental improvements on the original
+<a href="https://arxiv.org/abs/1311.2524" target="_blank">RCNN</a>.</p>
+
+<p>Let&rsquo;s see what were those improvements:</p>
+
+<h1 id="fast-rcnn">Fast-RCNN</h1>
+
+<p>In Fast-RCNN, Girshick ditched the SVM used <a href="https://arthurdouillard.com/post/selective-search" target="_blank">previously</a>.
+It resulted in a 10x inference speed improvement, and a better accuracy.</p>
+
+<p>Girshick replaced the SVM by a <strong>Region of Interest (RoI) pooling</strong>. RoIs are still
+produced by the <a href="https://arthurdouillard.com/post/selective-search" target="_blank">selective search</a>,
+and they are used to select a subset of the feature map produced from the whole image:</p>
+
+<p><img src="/figures/feature_map.svg" alt="Feature map" />
+<em>At the end of the CNN, <a href="https://github.com/keras-team/keras/blob/master/keras/applications/vgg16.py#L141" target="_blank">without top</a>,
+a feature map is generated by filter.</em></p>
+
+<p>Let&rsquo;s consider as example an input image of size 10x10; At the end of the CNN,
+the feature map has a size of 5x5. If the selective search proposes a box
+between (top-left and bottom-right)  (0, 2) and (6, 8) then we extract a similar box
+from the feature map. However this box is proportionally scaled down:</p>
+
+<p><img src="/figures/roi_pooling.svg" alt="RoI Pooling" /></p>
+
+<p>Objects have very different sizes, and so are the boxes extracted from the feature
+maps. To normalize their size a max pooling is done. Note that it does not really
+matter if the height or width of the extracted box is not even:</p>
+
+<p><img src="/figures/roi_pooling2.svg" alt="RoI pooling" /></p>
+
+<p>Those extracted fixed-size feature maps (one per filter per object) are then fed
+to several fully connected layers. At some point, the network split into two
+sub-networks. One is designed to classify the class with a softmax activation.
+The other is a regressor with 4 values: The coordinates of the top-left point
+of the box and its width &amp; height.</p>
+
+<p><img src="/figures/fast-rcnn2.png" alt="Fast-rccn" /></p>
+
+<p>Note that if you want to train your RCNN to detect $K$ classes, the sub-network
+detecting the box&rsquo;s class will choose between $K + 1$ classes. The extra class
+is the ubiquitous background. The bounding-box regressor&rsquo;s loss won&rsquo;t be taken
+in account if a background is detected.</p>
+
+<h1 id="faster-rcnn">Faster-RCNN</h1>
+
+<p>The main contribution of Fast-RCNN was the RoI pooling followed by a two-headed
+fully connected network. Faster-RCNN eliminated another speed bottleneck: The
+generation of the region proposals by selective search:</p>
+
+<blockquote>
+<p>Fast R-CNN, achieves near real-time rates using very deep networks,
+when ignoring the time spent on region proposals. Now, proposals are the
+test-time computational bottleneck in state-of-the-art detection systems.</p>
+</blockquote>
+
+<p>The authors introduced the <strong>Region Proposal Network</strong> (RPN) to fix this problem.</p>
+
+<h2 id="region-proposal-network">Region Proposal Network</h2>
+
+<p><img src="/figures/faster-rcnn.png" alt="Faster-rccn" />
+<em>RPN generates region proposals that are given to the classifier which is
+Fast-RCNN.</em></p>
+
+<p>First of all the feature maps are reduced to intermediate layers of smaller size.
+The authors used a layer of dimension 512 when the feature maps were originating
+from VGG16.</p>
+
+<p>Then the RPN uses a sliding window, moving all around the intermediate layers.
+At each location, several <strong>anchors</strong> are used. An anchor is simply a box of a
+pre-defined size and shape. 9 different anchors exist: there are 3 different
+scales and 3 different ratios.</p>
+
+<p><img src="/figures/anchors.svg" alt="Anchors" />
+<em>The first two scales, and the three possible ratios.</em></p>
+
+<p>For each possible anchor a mini-network is used for two tasks:</p>
+
+<ul>
+<li>classify whether the location is a background or an actual object.</li>
+<li>Predict the exact bounding-box coordinates and width.</li>
+</ul>
+
+<p><img src="/figures/rpn.png" alt="RPN" />
+<em>With $k = 9$, the number of anchor.</em></p>
+
+<p>Finally these object proposals are fed to the same top as Fast-RCNN.</p>
+
+<h2 id="how-to-train">How to Train</h2>
+
+<p>In addition of the RPN, I&rsquo;ve really found interesting how the authors used tricks
+to train their model.</p>
+
+<p>A big problem of object detection model is that most of the proposal are coming
+from background (<em><a href="https://arxiv.org/abs/1708.02002" target="_blank">RetinaNet</a> solves this problem
+elegantly</em>). The authors sample 256 proposals for an image where background and
+non-background proposals are in equal quantity. The loss function is computed on
+this sampling.</p>
+
+<p>The features of Fast-RCNN and the RPN are shared. To take advantage of this,
+the authors tried four training strategies:</p>
+
+<ul>
+<li><p><strong>Alternate sharing</strong>: Similar to some matrix decomposition methods, the authors
+train RPN, then Fast-RCN, and so on. Each network is trained a bit alternatively.</p></li>
+
+<li><p><strong>Approximate joint training</strong>: This strategy consider the two networks as a
+single unified one. The back-propagation uses both the Fast-RCNN loss and the RPN
+loss. However the regression of bounding-box coordinates in RPN is considered
+as pre-computed, and thus its derivative is ignored.</p></li>
+
+<li><p><strong>Non-approximate joint training</strong>: This solution was not used as more difficult
+to implement. The RoI pooling is made differentiable w.r.t the box coordinates using
+a <a href="https://arxiv.org/abs/1512.04412" target="_blank"><em>RoI warping</em></a> layer.</p></li>
+
+<li><p><strong>4-Step Alternating training</strong>: The strategy chosen takes 4 steps: In the first
+of one the RPN is trained. In the second, Fast-RCNN is trained using pre-computed
+RPN proposals. For the third step, the trained Fast-RCNN is used to initialize a
+new RPN where only RPN&rsquo;s layers are fine-tuned. Finally in the fourth step RPN&rsquo;s
+layers are frozen and only Fast-RCNN is fine-tuned.</p></li>
+</ul>
+
+<h1 id="summary">Summary</h1>
+
+<p>These two papers are incremental improvements of
+<a href="https://arxiv.org/abs/1311.2524" target="_blank">RCNN</a>. They introduce RoI pooling and Region
+Proposal Network.</p>
+
+<p>RoI pooling concept is now used in many models. <a href="https://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/Liu_DeepFashion_Powering_Robust_CVPR_2016_paper.pdf" target="_blank">FashionNet</a>, a model to predict clothes&rsquo; attributes uses a concept of <em>landmark pooling</em>
+to force model&rsquo;s <em>attention</em> on a particular cloth&rsquo;s trait.</p>
+
+<p>Region Proposal Network is now used in most object detection models, like
+the <a href="https://arxiv.org/abs/1612.03144" target="_blank">Feature Pyramid Network</a>.</p>
+
+    </div>
+
+    
+
+
+
+
+
+    
+    
+
+    
+    <div class="article-widget">
+      <div class="post-nav">
+  
+  <div class="post-nav-item">
+    <div class="meta-nav">Next</div>
+    <a href="/post/deep-learning-scaling/" rel="next">Deep Learning Scaling Is Predictable, Empirically</a>
+  </div>
+  
+  
+  <div class="post-nav-item">
+    <div class="meta-nav">Previous</div>
+    <a href="/post/selective-search/" rel="prev">Selective Search for Object Recognition</a>
+  </div>
+  
+</div>
+
+    </div>
+    
+
+    
+<section id="comments">
+  <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "arthur_douillard" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+
+
+
+  </div>
+</article>
+
+<footer class="site-footer">
+  <div class="container">
+
+    
+    <p class="powered-by">
+      <a href="/privacy/">Privacy Policy</a>
+    </p>
+    
+
+    <p class="powered-by">
+
+      &copy; 2018 &middot; 
+
+      Powered by the
+      <a href="https://sourcethemes.com/academic/" target="_blank" rel="noopener">Academic theme</a> for
+      <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a>.
+
+      <span class="pull-right" aria-hidden="true">
+        <a href="#" id="back_to_top">
+          <span class="button_icon">
+            <i class="fa fa-chevron-up fa-2x"></i>
+          </span>
+        </a>
+      </span>
+
+    </p>
+  </div>
+</footer>
+
+
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close btn-large" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Cite</h4>
+      </div>
+      <div>
+        <pre><code class="modal-body tex"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-primary btn-outline js-copy-cite" href="#" target="_blank">
+          <i class="fa fa-copy"></i> Copy
+        </a>
+        <a class="btn btn-primary btn-outline js-download-cite" href="#" target="_blank">
+          <i class="fa fa-download"></i> Download
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+    
+
+    
+
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" integrity="sha512-3P8rXCuGJdNZOnUx/03c1jOTnMn3rP63nBip5gOP2qmUh5YAdVAvFZ1E+QLZZbC1rtMrQb+mah3AfYW11RUrWA==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.3/imagesloaded.pkgd.min.js" integrity="sha512-umsR78NN0D23AzgoZ11K7raBD+R6hqKojyBZs1w8WvYlsI+QuKRGBx3LFCwhatzBunCjDuJpDHwxD13sLMbpRA==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha512-iztkobsvnjKfAtTNdHkGVjAYTrrtlC7mGp/54c40wowO7LhURYl3gVzzcEqGl/qKXQltJ2HwMrdLcNUdo+N/RQ==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.4/isotope.pkgd.min.js" integrity="sha512-VDBOIlDbuC4VWxGJNmuFRQ0Li0SKkDpmGyuhAG5LTDLd/dJ/S0WMVxriR2Y+CyPL5gzjpN4f/6iqWVBJlht0tQ==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" integrity="sha256-X5PoE3KU5l+JcX+w09p/wHl9AzK333C4hJ2I9S5mD4M=" crossorigin="anonymous"></script>
+    
+    
+    <script src="/js/hugo-academic.js"></script>
+    
+
+    
+    
+      
+      
+      <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+      
+
+      
+      <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/python.min.js"></script>
+      
+
+      
+
+      <script>hljs.initHighlightingOnLoad();</script>
+    
+
+    
+    
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        CommonHTML: { linebreaks: { automatic: true } },
+        tex2jax: { inlineMath: [ ['$', '$'], ['\\(','\\)'] ], displayMath: [ ['$$','$$'], ['\\[', '\\]'] ], processEscapes: false },
+        TeX: { noUndefined: { attributes: { mathcolor: 'red', mathbackground: '#FFEEEE', mathsize: '90%' } } },
+        messageStyle: 'none'
+      });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_CHTML-full" integrity="sha256-GhM+5JHb6QUzOQPXSJLEWP7R73CbkisjzK5Eyij4U9w=" crossorigin="anonymous"></script>
+    
+    
+
+    
+    
+
+  </body>
+</html>
+

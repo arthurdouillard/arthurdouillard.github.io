@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on Arthur Douillard</title>
+    <link>/post/</link>
+    <description>Recent content in Posts on Arthur Douillard</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>&amp;copy; 2018</copyright>
+    <lastBuildDate>Sun, 01 Jan 2017 00:00:00 +0100</lastBuildDate>
+    
+	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Densely Connected Convolutional Networks</title>
+      <link>/post/densenet/</link>
+      <pubDate>Mon, 07 May 2018 00:00:00 +0200</pubDate>
+      
+      <guid>/post/densenet/</guid>
+      <description>This article contains note of the research paper:
+ Densely Connected Convolutional Networks by Cornell Uni, Tsinghua Uni, and Facebook Research.  This paper was awarded the CVPR 2017 Best Paper Award.
+Introduction DenseNet is a new CNN architecture that reached State-Of-The-Art (SOTA) results on classification datasets (CIFAR, SVHN, ImageNet) using few parameters.
+Thanks to its new use of residual it can be very deep and still be easy to optimize.</description>
+    </item>
+    
+    <item>
+      <title>Deep Learning Scaling Is Predictable, Empirically</title>
+      <link>/post/deep-learning-scaling/</link>
+      <pubDate>Fri, 20 Apr 2018 00:00:00 +0200</pubDate>
+      
+      <guid>/post/deep-learning-scaling/</guid>
+      <description>This post contains the notes taken from the following paper:
+ Deep Learning Scaling Is Predictable, Empirically by Baidu Research.  The last few years in Deep Learning have seen a rush to gigantism:
+ Models are becoming deeper and deeper from the 8 layers of AlexNet to the 1001-layer ResNet. Training on huge dataset is way more quicker, ImageNet can now (with enough computing power) been trained in less than 20 minutes.</description>
+    </item>
+    
+    <item>
+      <title>Fast and Faster Region-based Convolutional Network</title>
+      <link>/post/faster-rcnn/</link>
+      <pubDate>Mon, 26 Mar 2018 00:00:00 +0200</pubDate>
+      
+      <guid>/post/faster-rcnn/</guid>
+      <description>This post contains the notes taken from the following paper:
+ Fast-RCNN by R. Girshick.
+ Faster-RCNN by Microsoft Research.
+  Ross Girshick is a very influential researcher on object detection: he has worked on RCNN, Fast{er}-RCNN, Yolo, RetinaNet&amp;hellip;
+Fast-RCNN and Faster-RCNN are both incremental improvements on the original RCNN.
+Let&amp;rsquo;s see what were those improvements:
+Fast-RCNN In Fast-RCNN, Girshick ditched the SVM used previously. It resulted in a 10x inference speed improvement, and a better accuracy.</description>
+    </item>
+    
+    <item>
+      <title>Selective Search for Object Recognition</title>
+      <link>/post/selective-search/</link>
+      <pubDate>Fri, 09 Mar 2018 00:00:00 +0100</pubDate>
+      
+      <guid>/post/selective-search/</guid>
+      <description>This post contains the notes taken from reading of the following paper:
+ Selective Search for Object Recognition.  This paper, published in 2012, describes an algorithm generating multiple possible object locations that will later be used by object recognition models. Fast-RCNN uses the Selective Search in its object proposal module.
+Motivations The authors divide the domain of object recognition in three categories:
+ Exhaustive Search Segmentation Other sampling strategies (using Bag-of-Words, Hough Transform, etc.</description>
+    </item>
+    
+    <item>
+      <title>Efficient Graph-Based Segmentation</title>
+      <link>/post/efficient-graph-based-segmentation/</link>
+      <pubDate>Wed, 07 Mar 2018 00:00:00 +0100</pubDate>
+      
+      <guid>/post/efficient-graph-based-segmentation/</guid>
+      <description>This post contains the notes taken from reading of the following paper:
+ Efficient Graph-Based Segmentation by Pedro Felzenszwalb and Daniel Huttenlocher.  I was also helped by the slides of Stanford&amp;rsquo;s CS231b.
+Fast-RCNN was the state-of-the-art algorithm for object detection in 2015; its object proposal used Selective Search that itself used Efficient Graph-Based Segmentation.
+The reason this segmentation was still very useful almost 10 years later is because the algorithm is fast, while remaining quite efficient.</description>
+    </item>
+    
+    <item>
+      <title>A Few Useful Things To Know About Machine Learning</title>
+      <link>/post/useful-things-to-know-about-ml/</link>
+      <pubDate>Tue, 06 Feb 2018 00:00:00 +0100</pubDate>
+      
+      <guid>/post/useful-things-to-know-about-ml/</guid>
+      <description>This post contains the notes taken from reading of the following paper:
+ A few useful things to know about Machine Learning by Pedro Domingos.  This paper does not introduce any novelties in the field of Machine Learning, nor some kinds of benchmarks, but rather offers a overview of the black art of Machine Learning. Domingos covers a wide area of Machine Learning, but each parts are not explored in depth.</description>
+    </item>
+    
+    <item>
+      <title>How To Read A Paper</title>
+      <link>/post/how-to-read-a-paper/</link>
+      <pubDate>Tue, 06 Feb 2018 00:00:00 +0100</pubDate>
+      
+      <guid>/post/how-to-read-a-paper/</guid>
+      <description>Preambule During my master in Data Science I have read a few papers. While I am a good reader, reading a scientific paper is still a strugle. For the year 2018, and hopefuly the next years, I have decided to read more papers. At least one a week.
+My favorite method to learn something is to explain it to someone else. That&amp;rsquo;s the Feyman&amp;rsquo;s technique. It may be hard to find a patient listener thus I am making this blog to explain to the potential reader papers I am reading.</description>
+    </item>
+    
+  </channel>
+</rss>

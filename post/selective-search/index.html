@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="theme" content="hugo-academic">
+  <meta name="generator" content="Hugo 0.45.1" />
+  <meta name="author" content="Arthur Douillard">
+
+  
+  
+  
+  
+    
+      
+    
+  
+  <meta name="description" content="The Robust Object Proposal used by Fast-RCNN.">
+
+  
+  <link rel="alternate" hreflang="en-us" href="/post/selective-search/">
+
+  
+
+
+  
+
+  
+  
+  <meta name="theme-color" content="hsl(339, 90%, 68%)">
+  
+  
+  
+  
+    
+  
+  
+    
+    
+      
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/dracula.min.css">
+      
+    
+  
+  
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha512-6MXa8B6uaO18Hid6blRMetEIoPqHf7Ux1tnyIQdpt9qI5OACx7C+O3IVTr98vwGnlcg0LOLa02i9Y1HpVhlfiw==" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css" integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" integrity="sha256-ygkqlh3CYSUri3LhQxzdcm0n1EQvH2Y+U5S2idbLtxs=" crossorigin="anonymous">
+  
+  
+  
+  
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Montserrat:400,700%7cRoboto:400,400italic,700%7cRoboto&#43;Mono">
+  
+  <link rel="stylesheet" href="/styles.css">
+  
+
+  
+  
+  
+
+  
+  <link rel="alternate" href="/index.xml" type="application/rss+xml" title="Arthur Douillard">
+  <link rel="feed" href="/index.xml" type="application/rss+xml" title="Arthur Douillard">
+  
+
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="icon" type="image/png" href="/img/icon.png">
+  <link rel="apple-touch-icon" type="image/png" href="/img/icon-192.png">
+
+  <link rel="canonical" href="/post/selective-search/">
+
+  <meta property="twitter:card" content="summary_large_image">
+  
+  <meta property="twitter:site" content="@Ar_Douillard">
+  <meta property="twitter:creator" content="@Ar_Douillard">
+  
+  <meta property="og:site_name" content="Arthur Douillard">
+  <meta property="og:url" content="/post/selective-search/">
+  <meta property="og:title" content="Selective Search for Object Recognition | Arthur Douillard">
+  <meta property="og:description" content="The Robust Object Proposal used by Fast-RCNN.">
+  <meta property="og:locale" content="en-us">
+  
+  <meta property="article:published_time" content="2018-03-09T00:00:00&#43;01:00">
+  
+  <meta property="article:modified_time" content="2018-03-09T00:00:00&#43;01:00">
+  
+
+  
+
+  
+<meta name="twitter:title" content="Selective Search for Object Recognition" />
+
+
+
+<meta name="twitter:description" content="The Robust Object Proposal used by Fast-RCNN." />
+
+
+
+<meta name="twitter:image" content="/figures/selective_search1.png" />
+
+
+
+<meta property="og:image" content=/figures/selective_search1.png/>
+
+
+
+<meta property="og:description" content="The Robust Object Proposal used by Fast-RCNN."/>
+
+
+  <title>Selective Search for Object Recognition | Arthur Douillard</title>
+
+</head>
+<body id="top" data-spy="scroll" data-target="#toc" data-offset="71" class="dark">
+
+<nav class="navbar navbar-default navbar-fixed-top" id="navbar-main">
+  <div class="container">
+
+    
+    <div class="navbar-header">
+      
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+              data-target=".navbar-collapse" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      
+      <a class="navbar-brand" href="/">Arthur Douillard</a>
+    </div>
+
+    
+    <div class="collapse navbar-collapse">
+
+      
+      
+      <ul class="nav navbar-nav navbar-right">
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#about">
+            
+            <span>Home</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#posts">
+            
+            <span>Posts</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#talks_list">
+            
+            <span>Talks</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#teaching">
+            
+            <span>Teaching</span>
+            
+          </a>
+        </li>
+
+        
+        
+      
+
+      
+      </ul>
+
+    </div>
+  </div>
+</nav>
+
+
+<article class="article" itemscope itemtype="http://schema.org/Article">
+
+  
+
+
+  <div class="article-container">
+    <h1 itemprop="name">Selective Search for Object Recognition</h1>
+
+    
+
+<div class="article-metadata">
+
+  
+
+  <span class="article-date">
+    
+    <meta content="2018-03-09 00:00:00 &#43;0100 CET" itemprop="datePublished">
+    <time datetime="2018-03-09 00:00:00 &#43;0100 CET" itemprop="dateModified">
+      9 March, 2018
+    </time>
+  </span>
+  <span itemscope itemprop="author publisher" itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Arthur Douillard">
+  </span>
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    5 min read
+  </span>
+  
+
+  
+  
+
+  
+
+  
+  
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    <li>
+      <a class="twitter"
+         href="https://twitter.com/intent/tweet?text=Selective%20Search%20for%20Object%20Recognition&amp;url=%2fpost%2fselective-search%2f"
+         target="_blank" rel="noopener">
+        <i class="fa fa-twitter"></i>
+      </a>
+    </li>
+    <li>
+      <a class="facebook"
+         href="https://www.facebook.com/sharer.php?u=%2fpost%2fselective-search%2f"
+         target="_blank" rel="noopener">
+        <i class="fa fa-facebook"></i>
+      </a>
+    </li>
+    <li>
+      <a class="linkedin"
+         href="https://www.linkedin.com/shareArticle?mini=true&amp;url=%2fpost%2fselective-search%2f&amp;title=Selective%20Search%20for%20Object%20Recognition"
+         target="_blank" rel="noopener">
+        <i class="fa fa-linkedin"></i>
+      </a>
+    </li>
+    <li>
+      <a class="weibo"
+         href="http://service.weibo.com/share/share.php?url=%2fpost%2fselective-search%2f&amp;title=Selective%20Search%20for%20Object%20Recognition"
+         target="_blank" rel="noopener">
+        <i class="fa fa-weibo"></i>
+      </a>
+    </li>
+    <li>
+      <a class="email"
+         href="mailto:?subject=Selective%20Search%20for%20Object%20Recognition&amp;body=%2fpost%2fselective-search%2f">
+        <i class="fa fa-envelope"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+  
+
+</div>
+
+
+    <div class="article-style" itemprop="articleBody">
+      
+
+<p>This post contains the notes taken from reading of the following paper:</p>
+
+<ul>
+<li><a href="http://www.huppelen.nl/publications/selectiveSearchDraft.pdf" target="_blank">Selective Search for Object Recognition</a>.</li>
+</ul>
+
+<p>This paper, published in 2012, describes an algorithm generating multiple
+possible <strong>object locations</strong> that will later be used by <strong>object recognition
+models</strong>. Fast-RCNN uses the Selective Search in its object proposal module.</p>
+
+<h1 id="motivations">Motivations</h1>
+
+<p>The authors divide the domain of object recognition in three categories:</p>
+
+<ul>
+<li>Exhaustive Search</li>
+<li>Segmentation</li>
+<li>Other sampling strategies (using Bag-of-Words, Hough Transform, etc.)</li>
+</ul>
+
+<p>An <strong>Exhaustive Search</strong> tries to find bounding boxes for every objects in an
+image. Searching at every position and scale is unpracticable. Some use instead
+a few windows of different ratio and make them <em>slide</em> around the image. More
+sophisticated methods also exists (<a href="https://cs.brown.edu/~pff/papers/lsvm-pami.pdf" target="_blank">1</a>,
+<a href="https://pdfs.semanticscholar.org/5be0/610861ffd6782adaa70cc16fcc0610ad1c86.pdf" target="_blank">2</a>).</p>
+
+<p><strong>Segmentation</strong> <em>colors</em> each pixel to a given class, creating objects
+with non-rigid shapes. Segmentation methods usually rely on a single strong
+algorithm to identify pixels&rsquo; regions.</p>
+
+<p><strong>Selective Search</strong> uses the best of both worlds: Segmentation improve the
+sampling process of different boxes. This reduces considerably the search space.
+To improve the algorithm&rsquo;s robustness (to scale, lightning, textures&hellip;) a
+variety of strategies are used during the bottom-up boxes&rsquo; merging.</p>
+
+<p>Selective Search produces boxes that are good proposals for objects, it handles
+well various images condition, but more important it is fast enough to be used
+in a prediction pipeline (like Fast-RCNN) to do real-time object detection.</p>
+
+<h1 id="the-algorithm">The Algorithm</h1>
+
+<p>At first the authors produce a sampling a bounding boxes based on regions&rsquo;
+segmentation produced by the <a href="https://arthurdouillard.com/2018/03/07/efficient-graph-based-segmentation/" target="_blank">Efficient Graph-Based Segmentation</a>.</p>
+
+<p>Starting from these initial boxes, the authors use a <strong>bottom-up merging based on
+similarity</strong>: Boxes, small at first, are merged with their most similar
+neighbour box. The history of all seen boxes at the different steps of the
+algorithm is kept.</p>
+
+<p><img src="/figures/selective_search_merging.svg" alt="Bottom-up merging" /></p>
+
+<p>By keeping all existing boxes, the search can capture all scales which is very
+important in very hierarchical image: <em>Imagine a pilot in a plane: the pilot&rsquo;s
+box in comprised in the bigger plane&rsquo;s box.</em></p>
+
+<p>Plenty of boxes are created, the last box is the entire image! However some may
+be more probable object location. The authors sort the boxes by creation time,
+the most recent first. To avoid privileging too much large boxes, the box&rsquo;s index
+(<em>1 being the most recent box</em>) is multiplied by a random number between 0 and 1.</p>
+
+<p><img src="/figures/selective_search_rank.svg" alt="Ordering of the boxes" /></p>
+
+<p>The model using the selective search can now make a trade-off between having all
+location proposals and getting only the <em>k</em>-first most probable.</p>
+
+<h1 id="diversification-strategies">Diversification Strategies</h1>
+
+<p>The authors use three strategies to improve the search&rsquo;s robustness:</p>
+
+<h2 id="1-different-color-spaces">1. Different color spaces</h2>
+
+<p>In order to handle different lightning, the authors apply their algorithm to
+the same image transposed in several color spaces.</p>
+
+<p>The most known color space is RGB, where a pixel has values of red, blue, and
+green. Among the other used color spaces there are:</p>
+
+<ul>
+<li>Grayscale: Where a pixel has for single value its intensity.</li>
+<li><a href="https://en.wikipedia.org/wiki/Lab_color_space" target="_blank">Lab</a>: With one value for
+lightness, one for green-red, and one for blue-yellow.</li>
+<li><a href="https://en.wikipedia.org/wiki/HSL_and_HSV" target="_blank">HSV</a>: With hue, saturation, and a value</li>
+<li>etc.</li>
+</ul>
+
+<h2 id="2-different-starting-regions">2. Different Starting Regions</h2>
+
+<p>As said before, the algorithm produces its initial boxes from the regions generated
+by the <a href="https://arthurdouillard.com/2018/03/07/efficient-graph-based-segmentation/" target="_blank">efficient graph-based segmentation</a>.
+This segmentation has a parameter $k$ that affects the size of the regions.</p>
+
+<p><img src="/figures/selective_search1.png" alt="Selective search in action" /></p>
+
+<p><em>Different starting regions from the segmentation affect deeply the selective
+search.</em></p>
+
+<h2 id="3-different-similarity-measures">3. Different Similarity Measures</h2>
+
+<p>The most interesting part of this algorithm is the various metrics used to assess
+similarity between boxes.</p>
+
+<p>Four similarity measures are defined: Color, texture, size, fitness. These metrics
+are based on features computed with the pixels&rsquo; values. It would be very slow
+to re-compute these features each time boxes are merged. The authors designed
+these features so that they could be merged and <em>propagated</em> to the new box
+without re-computing everything.</p>
+
+<p>These similarities are added together producing a final similarity measure.</p>
+
+<h3 id="3-1-color-similarity">3.1. Color Similarity</h3>
+
+<p>Each box has a <a href="https://en.wikipedia.org/wiki/Color_histogram" target="_blank">color histogram</a>
+of 25 bins. The similarity of two boxes is the histogram intersection:</p>
+
+<p>$$s_{color}(r_i, r_j) = \sum_{k=1}^n min(c^k_i, c^k_j)$$</p>
+
+<p>With $r_x$ being a region, and $c^k$ a bin of the histogram.</p>
+
+<p>It is simply the number of common pixel values:</p>
+
+<p><img src="/figures/histogram_intersection.svg" alt="Histogram intersection" /></p>
+
+<p>To propagate the histogram to the box created by a merge of two smaller boxes,
+the authors average the two histograms with a size&rsquo;s weight:</p>
+
+<p>$$C_t = \frac{size(r_i) * C_i + size(r_j) * C_J}{size(r_i) + size(r_j)}$$</p>
+
+<h3 id="3-2-texture-similarity">3.2. Texture Similarity</h3>
+
+<p>Textures matter a lot, otherwise how to make a difference between a cameleon
+and the material it sits on?</p>
+
+<p>The authors create a texture histogram with
+<a href="https://en.wikipedia.org/wiki/Scale-invariant_feature_transform" target="_blank">SIFT</a>. From
+this histogram, they use the same formulas for both histogram intersection and
+hierarchy propagation.</p>
+
+<h3 id="3-3-size-similarity">3.3. Size Similarity</h3>
+
+<p>The size similarity has been created in order to avoid an imbalance between
+the boxes&rsquo; size. Where one growing big box would forbid intermediary boxes to
+form.</p>
+
+<p>$$s_{size}(r_i, r_j) = 1 - \frac{size(r_i) + size(r_j)}{size(image)}$$</p>
+
+<p>The propagation of this feature is simply the sum of the two sizes.</p>
+
+<h3 id="3-4-fitness-feature">3.4. Fitness Feature</h3>
+
+<p>The initial boxes created from the segmentation may overlap. Two overlapping
+boxes should be merged early, to do this a <em>fitness</em> feature is used:</p>
+
+<p>$$s_{\text{fitness}}(r_i, r_j) = 1 - \frac{size(BB_{ij} - size(r_i) - size(r_j))}{size(\text{image})}$$</p>
+
+<p>The box $BB_{ij}$ is a bounding box that contains both $r_i$ and $r_j$.
+The feature $s_{\text{fitness}}$ is proportional to the fraction covered by $r_i$
+and $r_j$ in the bounding box $BB_{ij}$.</p>
+
+<h1 id="exploiting-the-search">Exploiting The Search</h1>
+
+<p>Creating bounding boxes is interesting. However the end goal here is to use the
+selective search in a object recognition model.</p>
+
+<p>The authors use a SVM with an histogram intersection kernel. SVMs are binary
+classifiers (but can be expanded to multi-classification with <em>One-Against-Rest</em>,
+<em>One-Against-All</em> schemes). The positive bounding boxes are ground-truth
+objects. The negative bounding boxes are boxes generated by the selective search
+that have an overlap of 20% to 50% with a positive box. <strong>This force the SVMs
+to train on particularly difficult boxes</strong>.</p>
+
+<p><img src="/figures/selective_search2.png" alt="Selective search in action" /></p>
+
+<p>However SVMs are quite slow to train with huge amount of data. I will publish
+another article on Fast-RCNN, a model that use Convolutional Neural Networks on top
+of the Selective Search to do object recognition.</p>
+
+    </div>
+
+    
+
+
+
+
+
+    
+    
+
+    
+    <div class="article-widget">
+      <div class="post-nav">
+  
+  <div class="post-nav-item">
+    <div class="meta-nav">Next</div>
+    <a href="/post/faster-rcnn/" rel="next">Fast and Faster Region-based Convolutional Network</a>
+  </div>
+  
+  
+  <div class="post-nav-item">
+    <div class="meta-nav">Previous</div>
+    <a href="/post/efficient-graph-based-segmentation/" rel="prev">Efficient Graph-Based Segmentation</a>
+  </div>
+  
+</div>
+
+    </div>
+    
+
+    
+<section id="comments">
+  <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "arthur_douillard" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+
+
+
+  </div>
+</article>
+
+<footer class="site-footer">
+  <div class="container">
+
+    
+    <p class="powered-by">
+      <a href="/privacy/">Privacy Policy</a>
+    </p>
+    
+
+    <p class="powered-by">
+
+      &copy; 2018 &middot; 
+
+      Powered by the
+      <a href="https://sourcethemes.com/academic/" target="_blank" rel="noopener">Academic theme</a> for
+      <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a>.
+
+      <span class="pull-right" aria-hidden="true">
+        <a href="#" id="back_to_top">
+          <span class="button_icon">
+            <i class="fa fa-chevron-up fa-2x"></i>
+          </span>
+        </a>
+      </span>
+
+    </p>
+  </div>
+</footer>
+
+
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close btn-large" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Cite</h4>
+      </div>
+      <div>
+        <pre><code class="modal-body tex"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-primary btn-outline js-copy-cite" href="#" target="_blank">
+          <i class="fa fa-copy"></i> Copy
+        </a>
+        <a class="btn btn-primary btn-outline js-download-cite" href="#" target="_blank">
+          <i class="fa fa-download"></i> Download
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+    
+
+    
+
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" integrity="sha512-3P8rXCuGJdNZOnUx/03c1jOTnMn3rP63nBip5gOP2qmUh5YAdVAvFZ1E+QLZZbC1rtMrQb+mah3AfYW11RUrWA==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.3/imagesloaded.pkgd.min.js" integrity="sha512-umsR78NN0D23AzgoZ11K7raBD+R6hqKojyBZs1w8WvYlsI+QuKRGBx3LFCwhatzBunCjDuJpDHwxD13sLMbpRA==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha512-iztkobsvnjKfAtTNdHkGVjAYTrrtlC7mGp/54c40wowO7LhURYl3gVzzcEqGl/qKXQltJ2HwMrdLcNUdo+N/RQ==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.4/isotope.pkgd.min.js" integrity="sha512-VDBOIlDbuC4VWxGJNmuFRQ0Li0SKkDpmGyuhAG5LTDLd/dJ/S0WMVxriR2Y+CyPL5gzjpN4f/6iqWVBJlht0tQ==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" integrity="sha256-X5PoE3KU5l+JcX+w09p/wHl9AzK333C4hJ2I9S5mD4M=" crossorigin="anonymous"></script>
+    
+    
+    <script src="/js/hugo-academic.js"></script>
+    
+
+    
+    
+      
+      
+      <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+      
+
+      
+      <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/python.min.js"></script>
+      
+
+      
+
+      <script>hljs.initHighlightingOnLoad();</script>
+    
+
+    
+    
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        CommonHTML: { linebreaks: { automatic: true } },
+        tex2jax: { inlineMath: [ ['$', '$'], ['\\(','\\)'] ], displayMath: [ ['$$','$$'], ['\\[', '\\]'] ], processEscapes: false },
+        TeX: { noUndefined: { attributes: { mathcolor: 'red', mathbackground: '#FFEEEE', mathsize: '90%' } } },
+        messageStyle: 'none'
+      });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_CHTML-full" integrity="sha256-GhM+5JHb6QUzOQPXSJLEWP7R73CbkisjzK5Eyij4U9w=" crossorigin="anonymous"></script>
+    
+    
+
+    
+    
+
+  </body>
+</html>
+

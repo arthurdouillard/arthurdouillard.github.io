@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="theme" content="hugo-academic">
+  <meta name="generator" content="Hugo 0.45.1" />
+  <meta name="author" content="Arthur Douillard">
+
+  
+  
+  
+  
+    
+      
+    
+  
+  <meta name="description" content="How much a Deep Learning model would improve if the dataset size increase?">
+
+  
+  <link rel="alternate" hreflang="en-us" href="/post/deep-learning-scaling/">
+
+  
+
+
+  
+
+  
+  
+  <meta name="theme-color" content="hsl(339, 90%, 68%)">
+  
+  
+  
+  
+    
+  
+  
+    
+    
+      
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/dracula.min.css">
+      
+    
+  
+  
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha512-6MXa8B6uaO18Hid6blRMetEIoPqHf7Ux1tnyIQdpt9qI5OACx7C+O3IVTr98vwGnlcg0LOLa02i9Y1HpVhlfiw==" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css" integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" integrity="sha256-ygkqlh3CYSUri3LhQxzdcm0n1EQvH2Y+U5S2idbLtxs=" crossorigin="anonymous">
+  
+  
+  
+  
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Montserrat:400,700%7cRoboto:400,400italic,700%7cRoboto&#43;Mono">
+  
+  <link rel="stylesheet" href="/styles.css">
+  
+
+  
+  
+  
+
+  
+  <link rel="alternate" href="/index.xml" type="application/rss+xml" title="Arthur Douillard">
+  <link rel="feed" href="/index.xml" type="application/rss+xml" title="Arthur Douillard">
+  
+
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="icon" type="image/png" href="/img/icon.png">
+  <link rel="apple-touch-icon" type="image/png" href="/img/icon-192.png">
+
+  <link rel="canonical" href="/post/deep-learning-scaling/">
+
+  <meta property="twitter:card" content="summary_large_image">
+  
+  <meta property="twitter:site" content="@Ar_Douillard">
+  <meta property="twitter:creator" content="@Ar_Douillard">
+  
+  <meta property="og:site_name" content="Arthur Douillard">
+  <meta property="og:url" content="/post/deep-learning-scaling/">
+  <meta property="og:title" content="Deep Learning Scaling Is Predictable, Empirically | Arthur Douillard">
+  <meta property="og:description" content="How much a Deep Learning model would improve if the dataset size increase?">
+  <meta property="og:locale" content="en-us">
+  
+  <meta property="article:published_time" content="2018-04-20T00:00:00&#43;02:00">
+  
+  <meta property="article:modified_time" content="2018-04-20T00:00:00&#43;02:00">
+  
+
+  
+
+  
+<meta name="twitter:title" content="Deep Learning Scaling Is Predictable, Empirically" />
+
+
+
+<meta name="twitter:description" content="How much a Deep Learning model would improve if the dataset size increase?" />
+
+
+
+<meta name="twitter:image" content="/figures/dl_scaling.png" />
+
+
+
+<meta property="og:image" content=/figures/dl_scaling.png/>
+
+
+
+<meta property="og:description" content="How much a Deep Learning model would improve if the dataset size increase?"/>
+
+
+  <title>Deep Learning Scaling Is Predictable, Empirically | Arthur Douillard</title>
+
+</head>
+<body id="top" data-spy="scroll" data-target="#toc" data-offset="71" class="dark">
+
+<nav class="navbar navbar-default navbar-fixed-top" id="navbar-main">
+  <div class="container">
+
+    
+    <div class="navbar-header">
+      
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+              data-target=".navbar-collapse" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      
+      <a class="navbar-brand" href="/">Arthur Douillard</a>
+    </div>
+
+    
+    <div class="collapse navbar-collapse">
+
+      
+      
+      <ul class="nav navbar-nav navbar-right">
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#about">
+            
+            <span>Home</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#posts">
+            
+            <span>Posts</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#talks_list">
+            
+            <span>Talks</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#teaching">
+            
+            <span>Teaching</span>
+            
+          </a>
+        </li>
+
+        
+        
+      
+
+      
+      </ul>
+
+    </div>
+  </div>
+</nav>
+
+
+<article class="article" itemscope itemtype="http://schema.org/Article">
+
+  
+
+
+  <div class="article-container">
+    <h1 itemprop="name">Deep Learning Scaling Is Predictable, Empirically</h1>
+
+    
+
+<div class="article-metadata">
+
+  
+
+  <span class="article-date">
+    
+    <meta content="2018-04-20 00:00:00 &#43;0200 CEST" itemprop="datePublished">
+    <time datetime="2018-04-20 00:00:00 &#43;0200 CEST" itemprop="dateModified">
+      20 April, 2018
+    </time>
+  </span>
+  <span itemscope itemprop="author publisher" itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Arthur Douillard">
+  </span>
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    4 min read
+  </span>
+  
+
+  
+  
+
+  
+
+  
+  
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    <li>
+      <a class="twitter"
+         href="https://twitter.com/intent/tweet?text=Deep%20Learning%20Scaling%20Is%20Predictable%2c%20Empirically&amp;url=%2fpost%2fdeep-learning-scaling%2f"
+         target="_blank" rel="noopener">
+        <i class="fa fa-twitter"></i>
+      </a>
+    </li>
+    <li>
+      <a class="facebook"
+         href="https://www.facebook.com/sharer.php?u=%2fpost%2fdeep-learning-scaling%2f"
+         target="_blank" rel="noopener">
+        <i class="fa fa-facebook"></i>
+      </a>
+    </li>
+    <li>
+      <a class="linkedin"
+         href="https://www.linkedin.com/shareArticle?mini=true&amp;url=%2fpost%2fdeep-learning-scaling%2f&amp;title=Deep%20Learning%20Scaling%20Is%20Predictable%2c%20Empirically"
+         target="_blank" rel="noopener">
+        <i class="fa fa-linkedin"></i>
+      </a>
+    </li>
+    <li>
+      <a class="weibo"
+         href="http://service.weibo.com/share/share.php?url=%2fpost%2fdeep-learning-scaling%2f&amp;title=Deep%20Learning%20Scaling%20Is%20Predictable%2c%20Empirically"
+         target="_blank" rel="noopener">
+        <i class="fa fa-weibo"></i>
+      </a>
+    </li>
+    <li>
+      <a class="email"
+         href="mailto:?subject=Deep%20Learning%20Scaling%20Is%20Predictable%2c%20Empirically&amp;body=%2fpost%2fdeep-learning-scaling%2f">
+        <i class="fa fa-envelope"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+  
+
+</div>
+
+
+    <div class="article-style" itemprop="articleBody">
+      
+
+<p>This post contains the notes taken from the following paper:</p>
+
+<ul>
+<li><a href="https://arxiv.org/abs/1712.00409" target="_blank">Deep Learning Scaling Is Predictable, Empirically</a>
+by Baidu Research.</li>
+</ul>
+
+<p>The last few years in Deep Learning have seen a rush to gigantism:</p>
+
+<ul>
+<li>Models are becoming deeper and deeper from the 8 layers of <a href="https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf" target="_blank">AlexNet</a>
+to the <a href="https://arxiv.org/abs/1603.05027" target="_blank">1001-layer ResNet</a>.</li>
+<li>Training on huge dataset is way more quicker, ImageNet can now (with enough
+computing power) been <a href="https://arxiv.org/abs/1709.05011" target="_blank">trained in less than 20 minutes</a>.</li>
+<li>Dataset size are increasing each year.</li>
+</ul>
+
+<p>As this paper rightly declare in its introduction:</p>
+
+<blockquote>
+<p>The Deep Learning (DL) community has created impactful advances across diverse
+application domains by following a straightforward recipe: search for improved
+model architectures, create large training data sets, and scale computation.</p>
+</blockquote>
+
+<p>However it also notes that new models and hyperparameters configuration are
+often depend on <em>epiphany</em> and <em>serendipity</em>.</p>
+
+<p>In order to harness the power of <em>big data</em> (more data, more computation power,
+etc.) models should not be designed to reduce error rate of a few epsilon on
+Imagenet but be designed to be better with more data.</p>
+
+<p>Baidu Research introduce a <strong>power-law expononent</strong>, that measure the <em>steepness</em>
+of the learning curve:</p>
+
+<p>$$\epsilon(m) \propto \alpha m^{\beta_g}$$</p>
+
+<p>Where $\epsilon(m)$ is the generalization error on the number of train samples
+$m$; $\alpha$ a constant related to the problem; and $\beta_g$ the steepness
+of the learning curve.</p>
+
+<p>$\beta_g$ is said to settle between -0.07 and -0.35.</p>
+
+<h3 id="the-methodology">The Methodology</h3>
+
+<p>Baidu tested four domains: machine translation, language modeling, image
+classification, and speech recognition.</p>
+
+<p>For each domain, a variety of architectures, optimizers, and hyperparameters is
+tested. To see how models scale with dataset size, Baidu trained models on samples
+ranging from 0.1% of the original data to the whole data (minus the validation set).</p>
+
+<p>The paper&rsquo;s authors try to find the smallest model that is able to overfit each
+sample.</p>
+
+<p>Baidu also removed any regularizations, like weight decay, that might reduce
+the model&rsquo;s effective <a href="https://en.wikipedia.org/wiki/VC_dimension" target="_blank">capacity</a>.</p>
+
+<h3 id="results">Results</h3>
+
+<p>In all domain, they found that the model size growth with dataset size sublinearly.</p>
+
+<table>
+<thead>
+<tr>
+<th>Domain</th>
+<th>Learning Curve Steepness $\beta_g$</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Machine Translation</td>
+<td>-0.128</td>
+</tr>
+
+<tr>
+<td>Language Modeling</td>
+<td>[-0.09, -0.06]</td>
+</tr>
+
+<tr>
+<td>Image (top-1)</td>
+<td>-0.309</td>
+</tr>
+
+<tr>
+<td>Image (top-5)</td>
+<td>-0.488</td>
+</tr>
+
+<tr>
+<td>Speech</td>
+<td>-0.299</td>
+</tr>
+</tbody>
+</table>
+
+<p>The first thing that we can conclude from these numbers is that text based
+problems (translation and language modeling) scale badly faced to image problems.</p>
+
+<p>It is worth noting that (current) models seem to scale better depending on the data
+dimension: Image and speech are of a higher dimensionality than text.</p>
+
+<p>You may also wonder why image has two entries in the table. One for top-1 generalization
+error, and one for top-5. This is one of the most interesting finding of this paper.
+Current models of image classification improve their top-5 faster than top-1 as data
+size increases! I wonder the reason why.</p>
+
+<h3 id="implications">Implications</h3>
+
+<p><img src="/figures/power_law_curve.png" alt="Power law curve" /></p>
+
+<p>The authors separate the generalization error per data size in three areas:</p>
+
+<ul>
+<li><em>The small data region</em>, where models given so few data can only make random
+guessing.</li>
+<li><em>The power law region</em>, where models follow the power law. However the learning
+curve steepness may be improved.</li>
+<li><em>The irreductible error</em>, a combination of the <a href="https://en.wikipedia.org/wiki/Bayes_error_rate" target="_blank">Bayes error</a>
+(on which the model cannot be improved) and the dataset defects that may impair
+generalization.</li>
+</ul>
+
+<p>The authors also underline several major implications of the power law:</p>
+
+<p>Given the power law, researchers can train their new architecture on a small dataset,
+and have a good estimation of how it would scale on a bigger dataset.
+It may also give a reasonable estimation of the hardware and time requirements
+to reach a chosen generalization error.</p>
+
+<p>Instead of simply trying to improve a model&rsquo;s accuracy, the authors suggest that
+beating the power law should be the end goal. Dataset size is going to grow
+each year, a scalable model would thrive in this situation. The authors advise
+methods that may help to <em>extract more info on less data</em>:</p>
+
+<blockquote>
+<p>We suggest that future work more deeply analyze learning curves when using data
+handling techniques, such as data filtering/augmentation, few-shot learning,
+experience replay, and generative adversarial networks.</p>
+</blockquote>
+
+<p>Baidu also recommends to search how to push the boundaries of the irreductible
+error. To do that we should be able to distinguish between what contributes to
+the <em>bayes error</em>, and what&rsquo;s not.</p>
+
+<h3 id="summary">Summary</h3>
+
+<p>Baidu Research showed that models follow a power law curve. They empirically
+determined the power law exponent, or <em>steepness of the learning curve</em>, for
+machine translation, language modeling, image classification, and speech recognition.</p>
+
+<p>This power law express how much a model can improve given more data.
+Models for text problems are currently the less scalable.</p>
+
+    </div>
+
+    
+
+
+
+
+
+    
+    
+
+    
+    <div class="article-widget">
+      <div class="post-nav">
+  
+  <div class="post-nav-item">
+    <div class="meta-nav">Next</div>
+    <a href="/post/densenet/" rel="next">Densely Connected Convolutional Networks</a>
+  </div>
+  
+  
+  <div class="post-nav-item">
+    <div class="meta-nav">Previous</div>
+    <a href="/post/faster-rcnn/" rel="prev">Fast and Faster Region-based Convolutional Network</a>
+  </div>
+  
+</div>
+
+    </div>
+    
+
+    
+<section id="comments">
+  <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "arthur_douillard" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+
+
+
+  </div>
+</article>
+
+<footer class="site-footer">
+  <div class="container">
+
+    
+    <p class="powered-by">
+      <a href="/privacy/">Privacy Policy</a>
+    </p>
+    
+
+    <p class="powered-by">
+
+      &copy; 2018 &middot; 
+
+      Powered by the
+      <a href="https://sourcethemes.com/academic/" target="_blank" rel="noopener">Academic theme</a> for
+      <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a>.
+
+      <span class="pull-right" aria-hidden="true">
+        <a href="#" id="back_to_top">
+          <span class="button_icon">
+            <i class="fa fa-chevron-up fa-2x"></i>
+          </span>
+        </a>
+      </span>
+
+    </p>
+  </div>
+</footer>
+
+
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close btn-large" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Cite</h4>
+      </div>
+      <div>
+        <pre><code class="modal-body tex"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-primary btn-outline js-copy-cite" href="#" target="_blank">
+          <i class="fa fa-copy"></i> Copy
+        </a>
+        <a class="btn btn-primary btn-outline js-download-cite" href="#" target="_blank">
+          <i class="fa fa-download"></i> Download
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+    
+
+    
+
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" integrity="sha512-3P8rXCuGJdNZOnUx/03c1jOTnMn3rP63nBip5gOP2qmUh5YAdVAvFZ1E+QLZZbC1rtMrQb+mah3AfYW11RUrWA==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.3/imagesloaded.pkgd.min.js" integrity="sha512-umsR78NN0D23AzgoZ11K7raBD+R6hqKojyBZs1w8WvYlsI+QuKRGBx3LFCwhatzBunCjDuJpDHwxD13sLMbpRA==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha512-iztkobsvnjKfAtTNdHkGVjAYTrrtlC7mGp/54c40wowO7LhURYl3gVzzcEqGl/qKXQltJ2HwMrdLcNUdo+N/RQ==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.4/isotope.pkgd.min.js" integrity="sha512-VDBOIlDbuC4VWxGJNmuFRQ0Li0SKkDpmGyuhAG5LTDLd/dJ/S0WMVxriR2Y+CyPL5gzjpN4f/6iqWVBJlht0tQ==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" integrity="sha256-X5PoE3KU5l+JcX+w09p/wHl9AzK333C4hJ2I9S5mD4M=" crossorigin="anonymous"></script>
+    
+    
+    <script src="/js/hugo-academic.js"></script>
+    
+
+    
+    
+      
+      
+      <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+      
+
+      
+      <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/python.min.js"></script>
+      
+
+      
+
+      <script>hljs.initHighlightingOnLoad();</script>
+    
+
+    
+    
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        CommonHTML: { linebreaks: { automatic: true } },
+        tex2jax: { inlineMath: [ ['$', '$'], ['\\(','\\)'] ], displayMath: [ ['$$','$$'], ['\\[', '\\]'] ], processEscapes: false },
+        TeX: { noUndefined: { attributes: { mathcolor: 'red', mathbackground: '#FFEEEE', mathsize: '90%' } } },
+        messageStyle: 'none'
+      });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_CHTML-full" integrity="sha256-GhM+5JHb6QUzOQPXSJLEWP7R73CbkisjzK5Eyij4U9w=" crossorigin="anonymous"></script>
+    
+    
+
+    
+    
+
+  </body>
+</html>
+

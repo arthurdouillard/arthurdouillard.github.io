@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="theme" content="hugo-academic">
+  <meta name="generator" content="Hugo 0.45.1" />
+  <meta name="author" content="Arthur Douillard">
+
+  
+  
+  
+  
+    
+      
+    
+  
+  <meta name="description" content="All about the architecture DenseNet.">
+
+  
+  <link rel="alternate" hreflang="en-us" href="/post/densenet/">
+
+  
+
+
+  
+
+  
+  
+  <meta name="theme-color" content="hsl(339, 90%, 68%)">
+  
+  
+  
+  
+    
+  
+  
+    
+    
+      
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/dracula.min.css">
+      
+    
+  
+  
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha512-6MXa8B6uaO18Hid6blRMetEIoPqHf7Ux1tnyIQdpt9qI5OACx7C+O3IVTr98vwGnlcg0LOLa02i9Y1HpVhlfiw==" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css" integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" integrity="sha256-ygkqlh3CYSUri3LhQxzdcm0n1EQvH2Y+U5S2idbLtxs=" crossorigin="anonymous">
+  
+  
+  
+  
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Montserrat:400,700%7cRoboto:400,400italic,700%7cRoboto&#43;Mono">
+  
+  <link rel="stylesheet" href="/styles.css">
+  
+
+  
+  
+  
+
+  
+  <link rel="alternate" href="/index.xml" type="application/rss+xml" title="Arthur Douillard">
+  <link rel="feed" href="/index.xml" type="application/rss+xml" title="Arthur Douillard">
+  
+
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="icon" type="image/png" href="/img/icon.png">
+  <link rel="apple-touch-icon" type="image/png" href="/img/icon-192.png">
+
+  <link rel="canonical" href="/post/densenet/">
+
+  <meta property="twitter:card" content="summary_large_image">
+  
+  <meta property="twitter:site" content="@Ar_Douillard">
+  <meta property="twitter:creator" content="@Ar_Douillard">
+  
+  <meta property="og:site_name" content="Arthur Douillard">
+  <meta property="og:url" content="/post/densenet/">
+  <meta property="og:title" content="Densely Connected Convolutional Networks | Arthur Douillard">
+  <meta property="og:description" content="All about the architecture DenseNet.">
+  <meta property="og:locale" content="en-us">
+  
+  <meta property="article:published_time" content="2018-05-07T00:00:00&#43;02:00">
+  
+  <meta property="article:modified_time" content="2018-05-07T00:00:00&#43;02:00">
+  
+
+  
+
+  
+<meta name="twitter:title" content="Densely Connected Convolutional Networks" />
+
+
+
+<meta name="twitter:description" content="All about the architecture DenseNet." />
+
+
+
+<meta name="twitter:image" content="/figures/densenet.png" />
+
+
+
+<meta property="og:image" content=/figures/densenet.png/>
+
+
+
+<meta property="og:description" content="All about the architecture DenseNet."/>
+
+
+  <title>Densely Connected Convolutional Networks | Arthur Douillard</title>
+
+</head>
+<body id="top" data-spy="scroll" data-target="#toc" data-offset="71" class="dark">
+
+<nav class="navbar navbar-default navbar-fixed-top" id="navbar-main">
+  <div class="container">
+
+    
+    <div class="navbar-header">
+      
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+              data-target=".navbar-collapse" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      
+      <a class="navbar-brand" href="/">Arthur Douillard</a>
+    </div>
+
+    
+    <div class="collapse navbar-collapse">
+
+      
+      
+      <ul class="nav navbar-nav navbar-right">
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#about">
+            
+            <span>Home</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#posts">
+            
+            <span>Posts</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#talks_list">
+            
+            <span>Talks</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#teaching">
+            
+            <span>Teaching</span>
+            
+          </a>
+        </li>
+
+        
+        
+      
+
+      
+      </ul>
+
+    </div>
+  </div>
+</nav>
+
+
+<article class="article" itemscope itemtype="http://schema.org/Article">
+
+  
+
+
+  <div class="article-container">
+    <h1 itemprop="name">Densely Connected Convolutional Networks</h1>
+
+    
+
+<div class="article-metadata">
+
+  
+
+  <span class="article-date">
+    
+    <meta content="2018-05-07 00:00:00 &#43;0200 CEST" itemprop="datePublished">
+    <time datetime="2018-05-07 00:00:00 &#43;0200 CEST" itemprop="dateModified">
+      7 May, 2018
+    </time>
+  </span>
+  <span itemscope itemprop="author publisher" itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Arthur Douillard">
+  </span>
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    4 min read
+  </span>
+  
+
+  
+  
+
+  
+
+  
+  
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    <li>
+      <a class="twitter"
+         href="https://twitter.com/intent/tweet?text=Densely%20Connected%20Convolutional%20Networks&amp;url=%2fpost%2fdensenet%2f"
+         target="_blank" rel="noopener">
+        <i class="fa fa-twitter"></i>
+      </a>
+    </li>
+    <li>
+      <a class="facebook"
+         href="https://www.facebook.com/sharer.php?u=%2fpost%2fdensenet%2f"
+         target="_blank" rel="noopener">
+        <i class="fa fa-facebook"></i>
+      </a>
+    </li>
+    <li>
+      <a class="linkedin"
+         href="https://www.linkedin.com/shareArticle?mini=true&amp;url=%2fpost%2fdensenet%2f&amp;title=Densely%20Connected%20Convolutional%20Networks"
+         target="_blank" rel="noopener">
+        <i class="fa fa-linkedin"></i>
+      </a>
+    </li>
+    <li>
+      <a class="weibo"
+         href="http://service.weibo.com/share/share.php?url=%2fpost%2fdensenet%2f&amp;title=Densely%20Connected%20Convolutional%20Networks"
+         target="_blank" rel="noopener">
+        <i class="fa fa-weibo"></i>
+      </a>
+    </li>
+    <li>
+      <a class="email"
+         href="mailto:?subject=Densely%20Connected%20Convolutional%20Networks&amp;body=%2fpost%2fdensenet%2f">
+        <i class="fa fa-envelope"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+  
+
+</div>
+
+
+    <div class="article-style" itemprop="articleBody">
+      
+
+<p>This article contains note of the research paper:</p>
+
+<ul>
+<li><a href="https://arxiv.org/abs/1608.06993" target="_blank">Densely Connected Convolutional Networks</a> by
+Cornell Uni, Tsinghua Uni, and Facebook Research.</li>
+</ul>
+
+<p>This paper was awarded the <a href="http://cvpr2017.thecvf.com/" target="_blank">CVPR 2017</a> Best Paper Award.</p>
+
+<h3 id="introduction">Introduction</h3>
+
+<p><strong>DenseNet</strong> is a new CNN architecture that reached State-Of-The-Art (SOTA) results
+on classification datasets (CIFAR, SVHN, ImageNet) using few parameters.</p>
+
+<p>Thanks to its new use of residual it can be very deep and still be easy to
+optimize.</p>
+
+<h3 id="general-architecture">General Architecture</h3>
+
+<p>DenseNet is composed of several <strong>Dense blocks</strong>. In those blocks, the layers are
+<em>densely</em> connected together: Each layer receive in input all previous layers
+output feature maps.</p>
+
+<p><img src="/figures/densenet.png" alt="dense block" /></p>
+
+<p>This extreme use of residual creates a <strong>deep supervision</strong> because each layer
+receive more supervision from the loss function thanks to the shorter connections.</p>
+
+<h4 id="1-dense-block">1. Dense block</h4>
+
+<p>A dense block is a group of layers connected to all their previous layers. A single
+layer looks like this:</p>
+
+<ol>
+<li>Batch Normalization</li>
+<li>ReLU activation</li>
+<li>3x3 Convolution</li>
+</ol>
+
+<p>The authors found that the pre-activation mode (BN and ReLU before the Conv) was
+more efficient than the usual post-activation mode.</p>
+
+<p><em>Note that the authors recommend a zero padding before the convolution in order
+to have a fixed size.</em></p>
+
+<h4 id="2-transition-layer">2. Transition layer</h4>
+
+<p>Instead of summing the residual like in <a href="https://arxiv.org/abs/1603.05027" target="_blank">ResNet</a>,
+DenseNet concatenates all the feature maps.</p>
+
+<p>It would be impracticable to concatenate feature maps of different sizes (although
+some resizing may work). Thus in each dense block, the feature maps of
+each layer has the same size.</p>
+
+<p>However down-sampling is essential to CNN. Transition layers between two
+dense blocks assure this role.</p>
+
+<p>A transition layer is made of:</p>
+
+<ol>
+<li>Batch Normalization</li>
+<li>1x1 Convolution</li>
+<li>Average pooling</li>
+</ol>
+
+<h3 id="growth-rate">Growth rate</h3>
+
+<p>Concatenating residuals instead of summing them has a downside when the model
+is very deep: It generates a lot of input channels!</p>
+
+<p>You may now wonder how could I say in the introduction that DenseNet has few
+parameters. There are two reasons:</p>
+
+<p>First of all a DenseNet&rsquo;s convolution generates a low number of feature maps.
+The authors recommend 32 for optimal performance but shows SOTA results with as
+few as 12 output channels!</p>
+
+<p>The number of output feature maps of a layer is defined as the <strong>growth
+rate</strong>.</p>
+
+<p>DenseNet has lower need of of wide layers because as layers are densely connected
+there is few redundancy in the learned features. All layers of a same dense block
+share a <em>collective knowledge</em>.</p>
+
+<blockquote>
+<p>The growth rate regulates how much new information each layer contributes
+to the global state.</p>
+</blockquote>
+
+<h3 id="bottleneck">Bottleneck</h3>
+
+<p>The second reason DenseNet has few parameters despite concatenating many residuals
+together is that each 3x3 convolution can be upgraded with a bottleneck.</p>
+
+<p>A layer of a dense block with a bottleneck will be:</p>
+
+<ol>
+<li>Batch Normalization</li>
+<li>ReLU activation</li>
+
+<li><p>1x1 Convolution bottleneck producing: $\text{grow rate} * 4$ feature maps.</p></li>
+
+<li><p>Batch Normalization</p></li>
+
+<li><p>ReLU activation</p></li>
+
+<li><p>3x3 Convolution</p></li>
+</ol>
+
+<p>With a growth rate of 32, the tenth layer would have in input 288 feature maps!
+Thanks to the bottleneck at most 128 feature maps would be fed to a layer. This
+helps the network have hundred, if not thousand, layers.</p>
+
+<h3 id="compression">Compression</h3>
+
+<p>The authors further improves the compactness of the model with a <em>compression</em>.
+This compression happens in the transition layer.</p>
+
+<p>Normally the transition layer&rsquo;s convolution does not change the number of feature
+maps. In the case of the compression, its number of output feature maps is
+$\theta * m$. With $m$ the number of input feature maps and $\theta$ a
+compression factor between 0 and 1.</p>
+
+<p><em>Note that the compression factor $\theta$ has the same role as the parameter
+$\alpha$ in <a href="https://arxiv.org/abs/1704.04861" target="_blank">MobileNet</a>.</em></p>
+
+<h3 id="conclusion">Conclusion</h3>
+
+<p>The final architecture of DenseNet is the following:</p>
+
+<p><img src="/figures/densenet_archi.png" alt="densenet architecture" /></p>
+
+<p>To summarize, the DenseNet architecture uses the residual mechanism to its maximum
+by making every layer (of a same dense block) connect to their subsequent
+layers.</p>
+
+<p>This model&rsquo;s compactness makes the learned features non-redundant as they are all
+shared through a <em>common knowledge</em>.</p>
+
+<p>It is also far more easy to train deep network with the dense connections because
+of an <em>implicit deep supervision</em> where the gradient is flowing back more easily
+thanks to the short connections.</p>
+
+    </div>
+
+    
+
+
+
+
+
+    
+    
+
+    
+    <div class="article-widget">
+      <div class="post-nav">
+  
+  
+  <div class="post-nav-item">
+    <div class="meta-nav">Previous</div>
+    <a href="/post/deep-learning-scaling/" rel="prev">Deep Learning Scaling Is Predictable, Empirically</a>
+  </div>
+  
+</div>
+
+    </div>
+    
+
+    
+<section id="comments">
+  <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "arthur_douillard" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+
+
+
+  </div>
+</article>
+
+<footer class="site-footer">
+  <div class="container">
+
+    
+    <p class="powered-by">
+      <a href="/privacy/">Privacy Policy</a>
+    </p>
+    
+
+    <p class="powered-by">
+
+      &copy; 2018 &middot; 
+
+      Powered by the
+      <a href="https://sourcethemes.com/academic/" target="_blank" rel="noopener">Academic theme</a> for
+      <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a>.
+
+      <span class="pull-right" aria-hidden="true">
+        <a href="#" id="back_to_top">
+          <span class="button_icon">
+            <i class="fa fa-chevron-up fa-2x"></i>
+          </span>
+        </a>
+      </span>
+
+    </p>
+  </div>
+</footer>
+
+
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close btn-large" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Cite</h4>
+      </div>
+      <div>
+        <pre><code class="modal-body tex"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-primary btn-outline js-copy-cite" href="#" target="_blank">
+          <i class="fa fa-copy"></i> Copy
+        </a>
+        <a class="btn btn-primary btn-outline js-download-cite" href="#" target="_blank">
+          <i class="fa fa-download"></i> Download
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+    
+
+    
+
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" integrity="sha512-3P8rXCuGJdNZOnUx/03c1jOTnMn3rP63nBip5gOP2qmUh5YAdVAvFZ1E+QLZZbC1rtMrQb+mah3AfYW11RUrWA==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.3/imagesloaded.pkgd.min.js" integrity="sha512-umsR78NN0D23AzgoZ11K7raBD+R6hqKojyBZs1w8WvYlsI+QuKRGBx3LFCwhatzBunCjDuJpDHwxD13sLMbpRA==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha512-iztkobsvnjKfAtTNdHkGVjAYTrrtlC7mGp/54c40wowO7LhURYl3gVzzcEqGl/qKXQltJ2HwMrdLcNUdo+N/RQ==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.4/isotope.pkgd.min.js" integrity="sha512-VDBOIlDbuC4VWxGJNmuFRQ0Li0SKkDpmGyuhAG5LTDLd/dJ/S0WMVxriR2Y+CyPL5gzjpN4f/6iqWVBJlht0tQ==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" integrity="sha256-X5PoE3KU5l+JcX+w09p/wHl9AzK333C4hJ2I9S5mD4M=" crossorigin="anonymous"></script>
+    
+    
+    <script src="/js/hugo-academic.js"></script>
+    
+
+    
+    
+      
+      
+      <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+      
+
+      
+      <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/python.min.js"></script>
+      
+
+      
+
+      <script>hljs.initHighlightingOnLoad();</script>
+    
+
+    
+    
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        CommonHTML: { linebreaks: { automatic: true } },
+        tex2jax: { inlineMath: [ ['$', '$'], ['\\(','\\)'] ], displayMath: [ ['$$','$$'], ['\\[', '\\]'] ], processEscapes: false },
+        TeX: { noUndefined: { attributes: { mathcolor: 'red', mathbackground: '#FFEEEE', mathsize: '90%' } } },
+        messageStyle: 'none'
+      });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_CHTML-full" integrity="sha256-GhM+5JHb6QUzOQPXSJLEWP7R73CbkisjzK5Eyij4U9w=" crossorigin="anonymous"></script>
+    
+    
+
+    
+    
+
+  </body>
+</html>
+

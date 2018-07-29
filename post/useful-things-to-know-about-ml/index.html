@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="theme" content="hugo-academic">
+  <meta name="generator" content="Hugo 0.45.1" />
+  <meta name="author" content="Arthur Douillard">
+
+  
+  
+  
+  
+    
+      
+    
+  
+  <meta name="description" content="This post contains the notes taken from reading of the following paper:
+ A few useful things to know about Machine Learning by Pedro Domingos.  This paper does not introduce any novelties in the field of Machine Learning, nor some kinds of benchmarks, but rather offers a overview of the black art of Machine Learning. Domingos covers a wide area of Machine Learning, but each parts are not explored in depth.">
+
+  
+  <link rel="alternate" hreflang="en-us" href="/post/useful-things-to-know-about-ml/">
+
+  
+
+
+  
+
+  
+  
+  <meta name="theme-color" content="hsl(339, 90%, 68%)">
+  
+  
+  
+  
+    
+  
+  
+    
+    
+      
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/dracula.min.css">
+      
+    
+  
+  
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha512-6MXa8B6uaO18Hid6blRMetEIoPqHf7Ux1tnyIQdpt9qI5OACx7C+O3IVTr98vwGnlcg0LOLa02i9Y1HpVhlfiw==" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css" integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" integrity="sha256-ygkqlh3CYSUri3LhQxzdcm0n1EQvH2Y+U5S2idbLtxs=" crossorigin="anonymous">
+  
+  
+  
+  
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Montserrat:400,700%7cRoboto:400,400italic,700%7cRoboto&#43;Mono">
+  
+  <link rel="stylesheet" href="/styles.css">
+  
+
+  
+  
+  
+
+  
+  <link rel="alternate" href="/index.xml" type="application/rss+xml" title="Arthur Douillard">
+  <link rel="feed" href="/index.xml" type="application/rss+xml" title="Arthur Douillard">
+  
+
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="icon" type="image/png" href="/img/icon.png">
+  <link rel="apple-touch-icon" type="image/png" href="/img/icon-192.png">
+
+  <link rel="canonical" href="/post/useful-things-to-know-about-ml/">
+
+  <meta property="twitter:card" content="summary_large_image">
+  
+  <meta property="twitter:site" content="@Ar_Douillard">
+  <meta property="twitter:creator" content="@Ar_Douillard">
+  
+  <meta property="og:site_name" content="Arthur Douillard">
+  <meta property="og:url" content="/post/useful-things-to-know-about-ml/">
+  <meta property="og:title" content="A Few Useful Things To Know About Machine Learning | Arthur Douillard">
+  <meta property="og:description" content="This post contains the notes taken from reading of the following paper:
+ A few useful things to know about Machine Learning by Pedro Domingos.  This paper does not introduce any novelties in the field of Machine Learning, nor some kinds of benchmarks, but rather offers a overview of the black art of Machine Learning. Domingos covers a wide area of Machine Learning, but each parts are not explored in depth.">
+  <meta property="og:locale" content="en-us">
+  
+  <meta property="article:published_time" content="2018-02-06T00:00:00&#43;01:00">
+  
+  <meta property="article:modified_time" content="2018-02-06T00:00:00&#43;01:00">
+  
+
+  
+
+  
+<meta name="twitter:title" content="A Few Useful Things To Know About Machine Learning" />
+
+
+
+
+
+<meta name="twitter:image" content="/blog/bias-variance.png" />
+
+
+
+<meta property="og:image" content=/blog/bias-variance.png/>
+
+
+
+
+  <title>A Few Useful Things To Know About Machine Learning | Arthur Douillard</title>
+
+</head>
+<body id="top" data-spy="scroll" data-target="#toc" data-offset="71" class="dark">
+
+<nav class="navbar navbar-default navbar-fixed-top" id="navbar-main">
+  <div class="container">
+
+    
+    <div class="navbar-header">
+      
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+              data-target=".navbar-collapse" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      
+      <a class="navbar-brand" href="/">Arthur Douillard</a>
+    </div>
+
+    
+    <div class="collapse navbar-collapse">
+
+      
+      
+      <ul class="nav navbar-nav navbar-right">
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#about">
+            
+            <span>Home</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#posts">
+            
+            <span>Posts</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#talks_list">
+            
+            <span>Talks</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#teaching">
+            
+            <span>Teaching</span>
+            
+          </a>
+        </li>
+
+        
+        
+      
+
+      
+      </ul>
+
+    </div>
+  </div>
+</nav>
+
+
+<article class="article" itemscope itemtype="http://schema.org/Article">
+
+  
+
+
+  <div class="article-container">
+    <h1 itemprop="name">A Few Useful Things To Know About Machine Learning</h1>
+
+    
+
+<div class="article-metadata">
+
+  
+
+  <span class="article-date">
+    
+    <meta content="2018-02-06 00:00:00 &#43;0100 CET" itemprop="datePublished">
+    <time datetime="2018-02-06 00:00:00 &#43;0100 CET" itemprop="dateModified">
+      6 February, 2018
+    </time>
+  </span>
+  <span itemscope itemprop="author publisher" itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Arthur Douillard">
+  </span>
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    6 min read
+  </span>
+  
+
+  
+  
+
+  
+
+  
+  
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    <li>
+      <a class="twitter"
+         href="https://twitter.com/intent/tweet?text=A%20Few%20Useful%20Things%20To%20Know%20About%20Machine%20Learning&amp;url=%2fpost%2fuseful-things-to-know-about-ml%2f"
+         target="_blank" rel="noopener">
+        <i class="fa fa-twitter"></i>
+      </a>
+    </li>
+    <li>
+      <a class="facebook"
+         href="https://www.facebook.com/sharer.php?u=%2fpost%2fuseful-things-to-know-about-ml%2f"
+         target="_blank" rel="noopener">
+        <i class="fa fa-facebook"></i>
+      </a>
+    </li>
+    <li>
+      <a class="linkedin"
+         href="https://www.linkedin.com/shareArticle?mini=true&amp;url=%2fpost%2fuseful-things-to-know-about-ml%2f&amp;title=A%20Few%20Useful%20Things%20To%20Know%20About%20Machine%20Learning"
+         target="_blank" rel="noopener">
+        <i class="fa fa-linkedin"></i>
+      </a>
+    </li>
+    <li>
+      <a class="weibo"
+         href="http://service.weibo.com/share/share.php?url=%2fpost%2fuseful-things-to-know-about-ml%2f&amp;title=A%20Few%20Useful%20Things%20To%20Know%20About%20Machine%20Learning"
+         target="_blank" rel="noopener">
+        <i class="fa fa-weibo"></i>
+      </a>
+    </li>
+    <li>
+      <a class="email"
+         href="mailto:?subject=A%20Few%20Useful%20Things%20To%20Know%20About%20Machine%20Learning&amp;body=%2fpost%2fuseful-things-to-know-about-ml%2f">
+        <i class="fa fa-envelope"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+  
+
+</div>
+
+
+    <div class="article-style" itemprop="articleBody">
+      
+
+<p>This post contains the notes taken from reading of the following paper:</p>
+
+<ul>
+<li><a href="https://homes.cs.washington.edu/~pedrod/papers/cacm12.pdf" target="_blank">A few useful things to know about Machine Learning</a>
+by <a href="https://scholar.google.com/citations?user=KOrhfVMAAAAJ&amp;hl=en" target="_blank">Pedro Domingos</a>.</li>
+</ul>
+
+<p>This paper does not introduce any novelties in the field of Machine Learning, nor
+some kinds of benchmarks, but rather offers a overview of the <em>black art</em> of
+Machine Learning. Domingos covers a wide area of Machine Learning, but each
+parts are not explored in depth.</p>
+
+<h1 id="the-right-algorithm">The Right Algorithm</h1>
+
+<p>Domingos splits the problem of choosing the right algorithm in three sub-problems:</p>
+
+<ul>
+<li>Finding the good <strong>representation</strong> (<em>hyperplanes, rules, decision trees, etc.</em>)</li>
+<li>The <strong>objective function</strong> to optimize (<em>accuracy, likelihood, cross-entropy, etc.</em>)</li>
+<li>The <strong>optimization method</strong> (<em>quadratric, beam search, gradient descent, etc.</em>)</li>
+</ul>
+
+<p>The optimal combinaisons should be taken according to several parameters: The accuracy,
+the training time, the problem type, etc.</p>
+
+<h1 id="evaluating-the-algorithm">Evaluating The Algorithm</h1>
+
+<p>Domingos notes that while a high accuracy may seem <em>good</em>, it is not a sufficient
+indicator. A high score of accuracy on the <em>train data</em> may simply mean that the
+algorithm has an <em>overfit</em> problem, and thus generalize badly on new unseen data.</p>
+
+<p>A common pitfall would be to train the algorithm on the train data and tweak
+the various parameters in order to maximize our score on the <em>test data</em>. This may
+lead to an overfit on also the test data!</p>
+
+<p>The generalization problems (<em>how can I estimate my generalization?</em> and <em>how
+can I improve my generalization</em>) are detailed in the further sections.</p>
+
+<h1 id="the-bias-variance-trade-off">The Bias-Variance Trade-off</h1>
+
+<p>When building a model it is interesting to decompose the generalization error
+into two components: the <em>bias</em> and the <em>variance</em>.</p>
+
+<blockquote>
+<p><strong>Bias</strong> is a learner&rsquo;s tendency to consistently learn the same wrong thing.</p>
+
+<p><strong>Variance</strong> is the tendency to learn random things irrespective of the real signal.</p>
+</blockquote>
+
+<p><img src="/blog/bias-variance.png" alt="Bias-Variance trade-off in dart-throwing" /></p>
+
+<p>This trade-off explains why a powerful learner may not be better than a weak learner.
+If my powerful learner has a very low bias, he is performing very well on the
+train data. However if my powerful learner has also a high variance, it may
+have learned noise from the train data that would be completely irrelevant
+for the test data and behave randomly.</p>
+
+<h1 id="reducing-the-variance">Reducing The Variance</h1>
+
+<p>There are several ways to reduce the variance:</p>
+
+<h3 id="train-validation-and-test">Train, Validation, and Test</h3>
+
+<p>Before training your model, the data should be split in three parts:</p>
+
+<ul>
+<li><strong>Train</strong>: On which the model will learn.</li>
+<li><strong>Validation</strong>: On which we will optimize model&rsquo;s performance by tweaking the parameters.</li>
+<li><strong>Test</strong>: To test the model, only at the end.</li>
+</ul>
+
+<p><img src="/blog/train-validation-test.png" alt="Train-Validation-Test split" /></p>
+
+<p>In a certain way, we are overfitting on <em>validation</em> by tweaking the parameters
+according to the <em>validation</em>&rsquo;s performance. In order to mitigate this we can
+use the cross-validation:</p>
+
+<h3 id="cross-validation">Cross-Validation</h3>
+
+<p>We are still training the model on <em>train</em>, and tweaking the parameters in order
+to optimize <em>validation</em>.</p>
+
+<p>However instead of evaluating a fixed validation set, we are evaluating the average
+performance of several folds of the data:</p>
+
+<p><img src="/blog/cross-validation.png" alt="k-fold cross-validations" /></p>
+
+<p>Note that if there is too many parameters choices, the cross-validation may
+not be able to avoid overfit.</p>
+
+<h3 id="regularization">Regularization</h3>
+
+<p>Another way to way to avoid overfit is to add <em>regularization</em>. It will force
+the model to be simpler.</p>
+
+<p>Let&rsquo;s say the model has a set of weights $W$, an evaluation function $f(X)$
+(that depends of the weights), and a loss function $L(X, Y)$.</p>
+
+<p>Without regularization the model will try to optimize:</p>
+
+<p>$$L(X, f(X))$$</p>
+
+<p>With a regularization $R(W)$:</p>
+
+<p>$$L(X, f(X)) + \lambda R(W)$$</p>
+
+<p>The regularization is multiplied by a factor $\lambda$ that is determined empirically,
+with cross-validation for example.</p>
+
+<p>There is several regularizations possible. The two most common are <strong>L1</strong>
+(also known as <em>LASSO</em>), and <strong>L2</strong> (also known as <em>Ridge</em>):</p>
+
+<p>L1 is the absolute norm:</p>
+
+<p>$$\Vert W \Vert_1 = \Sigma_{i=1}^n |w_i|$$</p>
+
+<p>While L2 is:</p>
+
+<p>$$\Vert W \Vert_2 = \Sigma_{i=1}^{n} w_i^2$$</p>
+
+<h1 id="the-curse-of-dimensionality">The Curse Of Dimensionality</h1>
+
+<p>In addition of overfitting, a model can also fail to learn high-dimensional
+data.</p>
+
+<p>For example, let&rsquo;s imagine that we want to use a decision tree to learn
+data which features are binary discrete values. If there are 10 features, it would
+mean that there is a thousand possible samples. If there are 100 features (which
+is common), there are a thousand billion of billion of billion possible samples.
+It is unlearnable, either because the model will never generalize correctly, or
+the model will take a non-practical amount of time to learn.</p>
+
+<p>Thankfully, the data&rsquo;s features are often not completely independent and many
+features are just noise. The <em>blessing of non-uniformity</em> as Domingos calls,
+implies the samples are often spread on a lower-dimensional manifold.</p>
+
+<p>To reduce the dimension, i.e. choosing the right features, <a href="https://en.wikipedia.org/wiki/Dimensionality_reduction" target="_blank">many algorithms</a> exist:
+PCA, NMF, LDA, etc.</p>
+
+<p>The  reduction of dimensionality is an often necessary step before feeding the
+model with the data.</p>
+
+<h1 id="feature-engineering-is-the-key">Feature Engineering Is The Key</h1>
+
+<p>Feature Engineering is the action of transforming raw data into something that
+is more learnable by the model. It is very dependant on the data&rsquo;s type, and here
+lies most of the <em>black art</em> of Machine Learning.</p>
+
+<p>Two examples:</p>
+
+<p>For text data, several processing are very useful:
+- <strong>tokenization</strong> to split the words of the sentence.
+- <strong>lemmatization</strong> to get the lemma (<em>loved, loving, lover -&gt; love</em>)
+- <strong>POS-Tagging</strong> to get the grammar label of a token (<em>be -&gt; verb, car -&gt; noun</em>)</p>
+
+<p>For image data, in the case of object detection we can extract interesting
+features with the <a href="https://www.learnopencv.com/histogram-of-oriented-gradients/" target="_blank">HOG algorithm</a>
+and feed these features to a SVM to <a href="https://github.com/Mougatine/human-recognition/blob/master/tirf_project.ipynb" target="_blank">improve significantly the performances</a>.</p>
+
+<p>While feature engineering is major part of Machine Learning, it is less important
+in Deep Learning: with Convolutional Neural Network (CNN) the model is learning
+by itself the <a href="https://cs.stanford.edu/people/karpathy/convnetjs/demo/cifar10.html" target="_blank">convolutional matrices</a> extracting the interesting features.</p>
+
+<h1 id="model-ensembles">Model Ensembles</h1>
+
+<p>In order to achieve the best performance we want to decrease both bias and variance.
+It is often complicated to optimize this trade-off. A great way to achieve this
+is to combine several models, kind of like a <em>wisdom of the crowd</em>.</p>
+
+<p>There are three main categories of ensembles:</p>
+
+<h3 id="bagging">Bagging</h3>
+
+<p>Used in the <strong>Random Forest</strong>, bagging generates plenty of model. Each has a low
+bias but a high variance. A voting system is set up between them to choose the
+output, thus lowering the individual variances.</p>
+
+<h3 id="boosting">Boosting</h3>
+
+<p>Used in <strong>Adaboost</strong> or in <strong>Gradient Boosting</strong>, boosting generates at first
+a simple weak learner: It should just be a bit better than a random guess. At each
+iteration of the training, a new weak learner is added to the global learner. The
+new weak learner focuses on the previously poorly predicted data.</p>
+
+<p>At each iteration the bias is reduced as the overall model improves. There is a
+diminished risk of overfitting with boosting: Because each iteration&rsquo;s learner
+focuses on poorly predicted data, the risk of <em>over-learning</em> data is small.</p>
+
+<h3 id="stacking">Stacking</h3>
+
+<p>The stacking ensemble is the easiest to understand: Each model is connected to
+another: The output of one is the input of another.</p>
+
+<h1 id="data-data-and-data">Data, Data, And Data</h1>
+
+<p>While Domingos offers us great insights into Machine Learning, and various
+methods to improve our models, he notes one constant:</p>
+
+<blockquote>
+<p>More data beats a cleverer algorithm</p>
+</blockquote>
+
+<p>It is often more advisable to focus the efforts on getting as much data as
+possible, and begin with a simple model, than to expect a complex model to
+generalize from few data.</p>
+
+<h3 id="available-data">Available Data</h3>
+
+<p>There are plenty of resources available:</p>
+
+<ul>
+<li><a href="https://archive.ics.uci.edu/ml/datasets.html" target="_blank">UCL Datasets</a></li>
+<li><a href="https://www.kaggle.com/datasets" target="_blank">Kaggle Datasets</a></li>
+<li><a href="https://www.cs.toronto.edu/~kriz/cifar.html" target="_blank">CIFAR</a>,
+<a href="http://www.image-net.org/" target="_blank">ImageNet</a>, <a href="http://cocodataset.org/#home" target="_blank">COCO</a></li>
+<li>&hellip;</li>
+</ul>
+
+    </div>
+
+    
+
+
+
+
+
+    
+    
+
+    
+    <div class="article-widget">
+      <div class="post-nav">
+  
+  <div class="post-nav-item">
+    <div class="meta-nav">Next</div>
+    <a href="/post/efficient-graph-based-segmentation/" rel="next">Efficient Graph-Based Segmentation</a>
+  </div>
+  
+  
+  <div class="post-nav-item">
+    <div class="meta-nav">Previous</div>
+    <a href="/post/how-to-read-a-paper/" rel="prev">How To Read A Paper</a>
+  </div>
+  
+</div>
+
+    </div>
+    
+
+    
+<section id="comments">
+  <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "arthur_douillard" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+
+
+
+  </div>
+</article>
+
+<footer class="site-footer">
+  <div class="container">
+
+    
+    <p class="powered-by">
+      <a href="/privacy/">Privacy Policy</a>
+    </p>
+    
+
+    <p class="powered-by">
+
+      &copy; 2018 &middot; 
+
+      Powered by the
+      <a href="https://sourcethemes.com/academic/" target="_blank" rel="noopener">Academic theme</a> for
+      <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a>.
+
+      <span class="pull-right" aria-hidden="true">
+        <a href="#" id="back_to_top">
+          <span class="button_icon">
+            <i class="fa fa-chevron-up fa-2x"></i>
+          </span>
+        </a>
+      </span>
+
+    </p>
+  </div>
+</footer>
+
+
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close btn-large" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Cite</h4>
+      </div>
+      <div>
+        <pre><code class="modal-body tex"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-primary btn-outline js-copy-cite" href="#" target="_blank">
+          <i class="fa fa-copy"></i> Copy
+        </a>
+        <a class="btn btn-primary btn-outline js-download-cite" href="#" target="_blank">
+          <i class="fa fa-download"></i> Download
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+    
+
+    
+
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" integrity="sha512-3P8rXCuGJdNZOnUx/03c1jOTnMn3rP63nBip5gOP2qmUh5YAdVAvFZ1E+QLZZbC1rtMrQb+mah3AfYW11RUrWA==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.3/imagesloaded.pkgd.min.js" integrity="sha512-umsR78NN0D23AzgoZ11K7raBD+R6hqKojyBZs1w8WvYlsI+QuKRGBx3LFCwhatzBunCjDuJpDHwxD13sLMbpRA==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha512-iztkobsvnjKfAtTNdHkGVjAYTrrtlC7mGp/54c40wowO7LhURYl3gVzzcEqGl/qKXQltJ2HwMrdLcNUdo+N/RQ==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.4/isotope.pkgd.min.js" integrity="sha512-VDBOIlDbuC4VWxGJNmuFRQ0Li0SKkDpmGyuhAG5LTDLd/dJ/S0WMVxriR2Y+CyPL5gzjpN4f/6iqWVBJlht0tQ==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" integrity="sha256-X5PoE3KU5l+JcX+w09p/wHl9AzK333C4hJ2I9S5mD4M=" crossorigin="anonymous"></script>
+    
+    
+    <script src="/js/hugo-academic.js"></script>
+    
+
+    
+    
+      
+      
+      <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+      
+
+      
+      <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/python.min.js"></script>
+      
+
+      
+
+      <script>hljs.initHighlightingOnLoad();</script>
+    
+
+    
+    
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        CommonHTML: { linebreaks: { automatic: true } },
+        tex2jax: { inlineMath: [ ['$', '$'], ['\\(','\\)'] ], displayMath: [ ['$$','$$'], ['\\[', '\\]'] ], processEscapes: false },
+        TeX: { noUndefined: { attributes: { mathcolor: 'red', mathbackground: '#FFEEEE', mathsize: '90%' } } },
+        messageStyle: 'none'
+      });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_CHTML-full" integrity="sha256-GhM+5JHb6QUzOQPXSJLEWP7R73CbkisjzK5Eyij4U9w=" crossorigin="anonymous"></script>
+    
+    
+
+    
+    
+
+  </body>
+</html>
+
