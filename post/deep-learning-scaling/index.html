@@ -526,6 +526,10 @@ Models for text problems are currently the less scalable.</p>
     
 
     
+<button id="disqus-show"
+  style="background-color: rgb(20, 22, 34); color: rgb(248, 248, 242); border-style: none">
+  <i class="fa fa-angle-double-right"></i>&nbsp;Comments
+</button>
 <section id="comments">
   <div id="disqus_thread"></div>
 <script>
@@ -549,6 +553,24 @@ Models for text problems are currently the less scalable.</p>
 <a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 </section>
 
+
+<script type="text/javascript">
+  var a=document.querySelector("#disqus-show")
+  var b=document.querySelector("#comments")
+
+  b.style.display = "none";
+
+  a.addEventListener("click",
+    function(){
+      ""==b.style.display?(b.style.display="none", a.innerHTML="<i class=\"fa fa fa-angle-double-right\"/i>&nbsp;Comments"):(b.style.display="",a.innerHTML="<i class=\"fa fa-angle-double-down\"></i>&nbsp;Comments");
+      a.style = "background-color: rgb(20, 22, 34); color: rgb(248, 248, 242); border-style: none";
+      }
+  );
+</script>
+
+<style>
+
+</style>
 
 
   </div>
