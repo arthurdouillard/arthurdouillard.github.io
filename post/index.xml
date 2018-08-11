@@ -13,6 +13,16 @@
     
     
     <item>
+      <title>Normalization in Deep Learning</title>
+      <link>/post/normalization/</link>
+      <pubDate>Fri, 10 Aug 2018 00:00:00 +0200</pubDate>
+      
+      <guid>/post/normalization/</guid>
+      <description>Deep Neural Networks (DNNs) are notorious for requiring less features engineering than Machine Learning algorithms. For example convolutional networks learn itself the right convolution kernels to apply on the image. No need of carefully handcrafted kernels.
+However a common point to all kinds of neural networks is the need to normalize. Normalizing is often done on the input, but it can also take place inside the network. In this article I&amp;rsquo;ll try to describe what the literature is saying about this.</description>
+    </item>
+    
+    <item>
       <title>Densely Connected Convolutional Networks</title>
       <link>/post/densenet/</link>
       <pubDate>Mon, 07 May 2018 00:00:00 +0200</pubDate>
