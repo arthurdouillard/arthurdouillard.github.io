@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Programming on Arthur Douillard</title>
+    <link>/tags/programming/</link>
+    <description>Recent content in Programming on Arthur Douillard</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>&amp;copy; 2018</copyright>
+    <lastBuildDate>Wed, 27 Apr 2016 00:00:00 +0200</lastBuildDate>
+    
+	<atom:link href="/tags/programming/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>C/C&#43;&#43; low-level projects</title>
+      <link>/project/c-projects/</link>
+      <pubDate>Wed, 27 Apr 2016 00:00:00 +0200</pubDate>
+      
+      <guid>/project/c-projects/</guid>
+      <description>Engineering schools last 3 years in France. Before these years students learn for two years a very broad science curriculum covering mathematics, algo, physics, electronics&amp;hellip; The three years of engineering cover a more specialized subject, for me it was computer science.
+The first year of my engineering school, EPITA, is very intensive. We learn many things about low-level programming and almost weekly have hackathons the whole weekend. During the days we study the theory of computer science (language theory, compiler, graph, algo, some maths, etc.</description>
+    </item>
+    
+  </channel>
+</rss>
