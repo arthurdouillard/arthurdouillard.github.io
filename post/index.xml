@@ -23,6 +23,18 @@ However a common point to all kinds of neural networks is the need to normalize.
     </item>
     
     <item>
+      <title>3 Small but Powerful Convolutional Neural Networks</title>
+      <link>/post/3-small-but-powerful-cnn/</link>
+      <pubDate>Sun, 13 May 2018 00:00:00 +0200</pubDate>
+      
+      <guid>/post/3-small-but-powerful-cnn/</guid>
+      <description>Many CNN architectures have been developed to attain the best accuracy on ImageNet. Computing power is not limited for this competition, why bother?
+However you may want to run your model on an old laptop, maybe without GPU, or even on your mobile phone. Let’s see three CNN architectures that are efficient while sacrificing few accuracy performance.
+1. MobileNet Arxiv link: (Howard et al, 2017)
+MobileNet uses depthwise separable convolutions.</description>
+    </item>
+    
+    <item>
       <title>Densely Connected Convolutional Networks</title>
       <link>/post/densenet/</link>
       <pubDate>Mon, 07 May 2018 00:00:00 +0200</pubDate>
