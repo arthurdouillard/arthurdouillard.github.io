@@ -353,24 +353,24 @@
     <div class="article-style" itemprop="articleBody">
       
 
-<p>Deep Neural Networks (DNNs) are notorious for requiring less features engineering than
-Machine Learning algorithms. For example convolutional networks learn itself
-the right convolution kernels to apply on the image. No need of carefully
+<p>Deep Neural Networks (DNNs) are notorious for requiring less feature engineering than
+Machine Learning algorithms. For example convolutional networks learn by themselves
+the right convolution kernels to apply on an image. No need of carefully
 handcrafted kernels.</p>
 
-<p>However a common point to all kinds of neural networks is the <strong>need to normalize</strong>.
+<p>However a common point to all kinds of neural networks is the <strong>need of normalization</strong>.
 Normalizing is often done on the input, but it can also take place inside the
 network. In this article I&rsquo;ll try to describe what the literature is saying about
 this.</p>
 
 <p>This article is not exhaustive but it tries to cover the major algorithms. If
-you feel I miss something important, tell me!</p>
+you feel I missed something important, tell me!</p>
 
 <h3 id="normalizing-the-input">Normalizing the input</h3>
 
 <p>It is <em>extremely</em> common to normalize the input
 <a href="http://yann.lecun.com/exdb/publis/pdf/lecun-98b.pdf" target="_blank">(lecun-98b)</a>, especially
-for computer vision task. Three normalization schemes are often seen:</p>
+for computer vision tasks. Three normalization schemes are often seen:</p>
 
 <ol>
 <li>Normalizing the pixel values between 0 and 1:</li>
@@ -388,7 +388,7 @@ img -= 1.
 </code></pre>
 
 <ol>
-<li>Normalizing according to the dataset means &amp; standard deviation (as <a href="https://github.com/keras-team/keras-applications/blob/master/keras_applications/imagenet_utils.py#L52-L55" target="_blank">Torch does</a>):</li>
+<li>Normalizing according to the dataset mean &amp; standard deviation (as <a href="https://github.com/keras-team/keras-applications/blob/master/keras_applications/imagenet_utils.py#L52-L55" target="_blank">Torch does</a>):</li>
 </ol>
 
 <pre><code class="language-python">img /= 255.
@@ -402,15 +402,16 @@ for i in range(3): # Considering an ordering NCHW (batch, channel, height, width
 
 <p>Why is it recommended? Let&rsquo;s take a fully connected layer, where:</p>
 
-<p>$$X \cdot W = f$$</p>
+<p>$$X \cdot W = Y$$</p>
 
-<p>During the backpropagation, the partial derivative of $f$ w.r.t the weights $w$ is:</p>
+<p>Consider that we have a loss function $L$ that takes as inputs the true targets
+and the predicted targets $Y$. During the backpropagation, the partial derivative of $L$ w.r.t the weights $W$ is:</p>
 
-<p>$$\frac{\partial f}{\partial w} = \nabla f \cdot X^T$$</p>
+<p>$$\frac{\partial L}{\partial W} =  X^T\frac{\partial L}{\partial Y}$$</p>
 
 <p>The scale of the data has an effect on the magnitude of the gradient for
 the weights. If the gradient is very big, you should reduce the learning rate.
-However you could have various gradient magnitude in a same batch. Normalizing
+However you could have various gradient magnitudes in a same batch. Normalizing
 the image to smaller pixel values is a cheap price to pay while making easier to
 tune an optimal learning rate for input images.</p>
 
@@ -458,7 +459,7 @@ $\gamma$ and $\beta$ are learned parameters.</p>
 
 <p>$\gamma$ and $\beta$ are essential because they enable the BN to represent
 the identity transform if needed. If it couldn&rsquo;t, the resulting BN&rsquo;s transformation
-(with a mean of 0 and a variance of 1 fed to a sigmoid non-linearity would
+(with a mean of 0 and a variance of 1) fed to a sigmoid non-linearity would
 be constrained to its linear regime.</p>
 
 <p>While during training the mean and standard deviation are computed on the batch,
@@ -466,10 +467,10 @@ during test time BN uses the whole dataset statistics using a moving average/std
 
 <p>Batch Normalization has showed a considerable training acceleration to existing
 architectures and is now an almost de facto layer. It has however for weakness
-to use the batch statistics at training time. With small batches or with a dataset
+to use the batch statistics at training time: With small batches or with a dataset
 non <a href="https://en.wikipedia.org/wiki/Independent_and_identically_distributed_random_variables" target="_blank">i.i.d</a>
-it shows weak performance. In addition of that, the mean and std during training
-and test time can be very different, this can lead to difference of performance
+it shows weak performance. In addition to that, the mean and std during training
+and test time can be very different, this can lead to a difference of performance
 between the two modes.</p>
 
 <h3 id="1-1-batch-renormalization">1.1. Batch ReNormalization</h3>
@@ -526,9 +527,9 @@ didn&rsquo;t produce extremely different results:</p>
 
 </figure>
 
-<p>On the other they found that the Batch Normalization improved the
+<p>On the other hand they found that the Batch Normalization improved the
 <a href="https://en.wikipedia.org/wiki/Lipschitz_continuity" target="_blank">Lipschitzness</a> of the loss
-function. In simpler term, the loss is smoother, and thus its gradient also.</p>
+function. In simpler term, the loss is smoother, and thus its gradient as well.</p>
 
 <figure>
 

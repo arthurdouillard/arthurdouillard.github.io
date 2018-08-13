@@ -18,24 +18,24 @@
       <guid>/post/normalization/</guid>
       <description>
 
-&lt;p&gt;Deep Neural Networks (DNNs) are notorious for requiring less features engineering than
-Machine Learning algorithms. For example convolutional networks learn itself
-the right convolution kernels to apply on the image. No need of carefully
+&lt;p&gt;Deep Neural Networks (DNNs) are notorious for requiring less feature engineering than
+Machine Learning algorithms. For example convolutional networks learn by themselves
+the right convolution kernels to apply on an image. No need of carefully
 handcrafted kernels.&lt;/p&gt;
 
-&lt;p&gt;However a common point to all kinds of neural networks is the &lt;strong&gt;need to normalize&lt;/strong&gt;.
+&lt;p&gt;However a common point to all kinds of neural networks is the &lt;strong&gt;need of normalization&lt;/strong&gt;.
 Normalizing is often done on the input, but it can also take place inside the
 network. In this article I&amp;rsquo;ll try to describe what the literature is saying about
 this.&lt;/p&gt;
 
 &lt;p&gt;This article is not exhaustive but it tries to cover the major algorithms. If
-you feel I miss something important, tell me!&lt;/p&gt;
+you feel I missed something important, tell me!&lt;/p&gt;
 
 &lt;h3 id=&#34;normalizing-the-input&#34;&gt;Normalizing the input&lt;/h3&gt;
 
 &lt;p&gt;It is &lt;em&gt;extremely&lt;/em&gt; common to normalize the input
 &lt;a href=&#34;http://yann.lecun.com/exdb/publis/pdf/lecun-98b.pdf&#34; target=&#34;_blank&#34;&gt;(lecun-98b)&lt;/a&gt;, especially
-for computer vision task. Three normalization schemes are often seen:&lt;/p&gt;
+for computer vision tasks. Three normalization schemes are often seen:&lt;/p&gt;
 
 &lt;ol&gt;
 &lt;li&gt;Normalizing the pixel values between 0 and 1:&lt;/li&gt;
@@ -53,7 +53,7 @@ img -= 1.
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;ol&gt;
-&lt;li&gt;Normalizing according to the dataset means &amp;amp; standard deviation (as &lt;a href=&#34;https://github.com/keras-team/keras-applications/blob/master/keras_applications/imagenet_utils.py#L52-L55&#34; target=&#34;_blank&#34;&gt;Torch does&lt;/a&gt;):&lt;/li&gt;
+&lt;li&gt;Normalizing according to the dataset mean &amp;amp; standard deviation (as &lt;a href=&#34;https://github.com/keras-team/keras-applications/blob/master/keras_applications/imagenet_utils.py#L52-L55&#34; target=&#34;_blank&#34;&gt;Torch does&lt;/a&gt;):&lt;/li&gt;
 &lt;/ol&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;img /= 255.
@@ -67,15 +67,16 @@ for i in range(3): # Considering an ordering NCHW (batch, channel, height, width
 
 &lt;p&gt;Why is it recommended? Let&amp;rsquo;s take a fully connected layer, where:&lt;/p&gt;
 
-&lt;p&gt;$$X \cdot W = f$$&lt;/p&gt;
+&lt;p&gt;$$X \cdot W = Y$$&lt;/p&gt;
 
-&lt;p&gt;During the backpropagation, the partial derivative of $f$ w.r.t the weights $w$ is:&lt;/p&gt;
+&lt;p&gt;Consider that we have a loss function $L$ that takes as inputs the true targets
+and the predicted targets $Y$. During the backpropagation, the partial derivative of $L$ w.r.t the weights $W$ is:&lt;/p&gt;
 
-&lt;p&gt;$$\frac{\partial f}{\partial w} = \nabla f \cdot X^T$$&lt;/p&gt;
+&lt;p&gt;$$\frac{\partial L}{\partial W} =  X^T\frac{\partial L}{\partial Y}$$&lt;/p&gt;
 
 &lt;p&gt;The scale of the data has an effect on the magnitude of the gradient for
 the weights. If the gradient is very big, you should reduce the learning rate.
-However you could have various gradient magnitude in a same batch. Normalizing
+However you could have various gradient magnitudes in a same batch. Normalizing
 the image to smaller pixel values is a cheap price to pay while making easier to
 tune an optimal learning rate for input images.&lt;/p&gt;
 
@@ -123,7 +124,7 @@ $\gamma$ and $\beta$ are learned parameters.&lt;/p&gt;
 
 &lt;p&gt;$\gamma$ and $\beta$ are essential because they enable the BN to represent
 the identity transform if needed. If it couldn&amp;rsquo;t, the resulting BN&amp;rsquo;s transformation
-(with a mean of 0 and a variance of 1 fed to a sigmoid non-linearity would
+(with a mean of 0 and a variance of 1) fed to a sigmoid non-linearity would
 be constrained to its linear regime.&lt;/p&gt;
 
 &lt;p&gt;While during training the mean and standard deviation are computed on the batch,
@@ -131,10 +132,10 @@ during test time BN uses the whole dataset statistics using a moving average/std
 
 &lt;p&gt;Batch Normalization has showed a considerable training acceleration to existing
 architectures and is now an almost de facto layer. It has however for weakness
-to use the batch statistics at training time. With small batches or with a dataset
+to use the batch statistics at training time: With small batches or with a dataset
 non &lt;a href=&#34;https://en.wikipedia.org/wiki/Independent_and_identically_distributed_random_variables&#34; target=&#34;_blank&#34;&gt;i.i.d&lt;/a&gt;
-it shows weak performance. In addition of that, the mean and std during training
-and test time can be very different, this can lead to difference of performance
+it shows weak performance. In addition to that, the mean and std during training
+and test time can be very different, this can lead to a difference of performance
 between the two modes.&lt;/p&gt;
 
 &lt;h3 id=&#34;1-1-batch-renormalization&#34;&gt;1.1. Batch ReNormalization&lt;/h3&gt;
@@ -191,9 +192,9 @@ didn&amp;rsquo;t produce extremely different results:&lt;/p&gt;
 
 &lt;/figure&gt;
 
-&lt;p&gt;On the other they found that the Batch Normalization improved the
+&lt;p&gt;On the other hand they found that the Batch Normalization improved the
 &lt;a href=&#34;https://en.wikipedia.org/wiki/Lipschitz_continuity&#34; target=&#34;_blank&#34;&gt;Lipschitzness&lt;/a&gt; of the loss
-function. In simpler term, the loss is smoother, and thus its gradient also.&lt;/p&gt;
+function. In simpler term, the loss is smoother, and thus its gradient as well.&lt;/p&gt;
 
 &lt;figure&gt;
 
