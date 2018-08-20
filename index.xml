@@ -67,7 +67,7 @@ for i in range(3): # Considering an ordering NCHW (batch, channel, height, width
 
 &lt;p&gt;Why is it recommended? Let&amp;rsquo;s take a neuron, where:&lt;/p&gt;
 
-&lt;p&gt;$$y = w \cdot w$$&lt;/p&gt;
+&lt;p&gt;$$y = w \cdot x$$&lt;/p&gt;
 
 &lt;p&gt;The partial derivative of $y$ for $w$ that we use during backpropagation is:&lt;/p&gt;
 
