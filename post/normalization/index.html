@@ -400,14 +400,13 @@ for i in range(3): # Considering an ordering NCHW (batch, channel, height, width
     img[i, :, :] /= std[i]
 </code></pre>
 
-<p>Why is it recommended? Let&rsquo;s take a fully connected layer, where:</p>
+<p>Why is it recommended? Let&rsquo;s take a neuron, where:</p>
 
-<p>$$X \cdot W = Y$$</p>
+<p>$$y = w \cdot w$$</p>
 
-<p>Consider that we have a loss function $L$ that takes as inputs the true targets
-and the predicted targets $Y$. During the backpropagation, the partial derivative of $L$ w.r.t the weights $W$ is:</p>
+<p>The partial derivative of $y$ for $w$ that we use during backpropagation is:</p>
 
-<p>$$\frac{\partial L}{\partial W} =  X^T\frac{\partial L}{\partial Y}$$</p>
+<p>$$\frac{\partial y}{\partial w} = X^T$$</p>
 
 <p>The scale of the data has an effect on the magnitude of the gradient for
 the weights. If the gradient is very big, you should reduce the learning rate.

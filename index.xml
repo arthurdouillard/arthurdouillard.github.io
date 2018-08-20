@@ -65,14 +65,13 @@ for i in range(3): # Considering an ordering NCHW (batch, channel, height, width
     img[i, :, :] /= std[i]
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Why is it recommended? Let&amp;rsquo;s take a fully connected layer, where:&lt;/p&gt;
+&lt;p&gt;Why is it recommended? Let&amp;rsquo;s take a neuron, where:&lt;/p&gt;
 
-&lt;p&gt;$$X \cdot W = Y$$&lt;/p&gt;
+&lt;p&gt;$$y = w \cdot w$$&lt;/p&gt;
 
-&lt;p&gt;Consider that we have a loss function $L$ that takes as inputs the true targets
-and the predicted targets $Y$. During the backpropagation, the partial derivative of $L$ w.r.t the weights $W$ is:&lt;/p&gt;
+&lt;p&gt;The partial derivative of $y$ for $w$ that we use during backpropagation is:&lt;/p&gt;
 
-&lt;p&gt;$$\frac{\partial L}{\partial W} =  X^T\frac{\partial L}{\partial Y}$$&lt;/p&gt;
+&lt;p&gt;$$\frac{\partial y}{\partial w} = X^T$$&lt;/p&gt;
 
 &lt;p&gt;The scale of the data has an effect on the magnitude of the gradient for
 the weights. If the gradient is very big, you should reduce the learning rate.
