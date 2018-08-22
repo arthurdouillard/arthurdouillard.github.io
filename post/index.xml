@@ -23,6 +23,16 @@ However a common point to all kinds of neural networks is the need of normalizat
     </item>
     
     <item>
+      <title>Detecting cars from aerial imagery for the NATO Innovation Challenge</title>
+      <link>/post/nato-challenge/</link>
+      <pubDate>Fri, 22 Jun 2018 00:00:00 +0200</pubDate>
+      
+      <guid>/post/nato-challenge/</guid>
+      <description>Imagine you’re in a landlocked country, and an infection has spread. The government has fallen, and rebels are roaming the country. If you’re the armed forces in this scenario, how do you make decisions in this environment? How can you fully understand the situation at hand?
+A few weeks ago, NATO organized an innovation challenge that posed this very scenario and these very questions. We decided to take on the challenge with the goal of finding innovative solutions in the areas of data filtering/fusing, visualization, and predictive analytics.</description>
+    </item>
+    
+    <item>
       <title>3 Small but Powerful Convolutional Neural Networks</title>
       <link>/post/3-small-but-powerful-cnn/</link>
       <pubDate>Sun, 13 May 2018 00:00:00 +0200</pubDate>
