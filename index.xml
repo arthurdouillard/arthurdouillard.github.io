@@ -74,8 +74,8 @@ for i in range(3): # Considering an ordering NCHW (batch, channel, height, width
 &lt;p&gt;$$\frac{\partial y}{\partial w} = X^T$$&lt;/p&gt;
 
 &lt;p&gt;The scale of the data has an effect on the magnitude of the gradient for
-the weights. If the gradient is very big, you should reduce the learning rate.
-However you could have various gradient magnitudes in a same batch. Normalizing
+the weights. If the gradient is big, you should reduce the learning rate.
+However you usually have different gradient magnitudes in a same batch. Normalizing
 the image to smaller pixel values is a cheap price to pay while making easier to
 tune an optimal learning rate for input images.&lt;/p&gt;
 
@@ -133,9 +133,8 @@ during test time BN uses the whole dataset statistics using a moving average/std
 architectures and is now an almost de facto layer. It has however for weakness
 to use the batch statistics at training time: With small batches or with a dataset
 non &lt;a href=&#34;https://en.wikipedia.org/wiki/Independent_and_identically_distributed_random_variables&#34; target=&#34;_blank&#34;&gt;i.i.d&lt;/a&gt;
-it shows weak performance. In addition to that, the mean and std during training
-and test time can be very different, this can lead to a difference of performance
-between the two modes.&lt;/p&gt;
+it shows weak performance. In addition to that, the difference between training
+and test time of the mean and the std can be important, this can lead to a difference of performance between the two modes.&lt;/p&gt;
 
 &lt;h3 id=&#34;1-1-batch-renormalization&#34;&gt;1.1. Batch ReNormalization&lt;/h3&gt;
 
@@ -254,7 +253,7 @@ are computed differently.&lt;/p&gt;
 &lt;p&gt;&lt;a href=&#34;https://arxiv.org/abs/1607.06450&#34; target=&#34;_blank&#34;&gt;(Ba et al, 2016)&lt;/a&gt;&amp;rsquo;s layer norm (LN) normalizes
 each image of a batch independently using all the channels. The goal is have constant
 performance with a large batch or a single image. &lt;strong&gt;It&amp;rsquo;s used in recurrent neural
-networks&lt;/strong&gt; where the number of time steps can differ between several tasks.&lt;/p&gt;
+networks&lt;/strong&gt; where the number of time steps can differ between tasks.&lt;/p&gt;
 
 &lt;p&gt;While all time steps share the same weights, each should have its own statistic.
 BN needs previously computed batch statistics, which would be impossible if there
@@ -308,12 +307,12 @@ and the input by replacing the classic dot product by a cosine similarity:&lt;/p
 
 &lt;h3 id=&#34;4-conclusion&#34;&gt;4. Conclusion&lt;/h3&gt;
 
-&lt;p&gt;Batch normalization (BN) is still very represented among new architectures despite its
-defect: the dependence on the batch size. Batch renormalization (BR) fixes this problem
-by adding two new parameters to approximate instance statistics instead of batch
-statistics.&lt;/p&gt;
+&lt;p&gt;Batch normalization (BN) is still the most represented method among new
+architectures despite its defect: the dependence on the batch size. Batch
+renormalization (BR) fixes this problem by adding two new parameters to
+approximate instance statistics instead of batch statistics.&lt;/p&gt;
 
-&lt;p&gt;Layer norm (LN), instance norm (IN), and group norm (GN), are very similar to
+&lt;p&gt;Layer norm (LN), instance norm (IN), and group norm (GN), are similar to
 BN. Their difference lie in the way statistics are computed.&lt;/p&gt;
 
 &lt;p&gt;LN was conceived for RNNs, IN for style transfer, and GN for CNNs.&lt;/p&gt;
@@ -348,8 +347,8 @@ you fully understand the situation at hand?&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&#34;/figures/nato.png&#34; alt=&#34;nato&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;A few weeks ago, NATO organized an innovation challenge that posed this very
-scenario and these very questions. We decided to take on the challenge with
+&lt;p&gt;A few weeks ago, NATO organized an innovation challenge that posed these
+questions. We decided to take on the challenge with
 the goal of finding innovative solutions in the areas of data filtering/fusing,
 visualization, and predictive analytics.&lt;/p&gt;
 
@@ -423,7 +422,7 @@ two-stage.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Two-stage architectures&lt;/strong&gt; first categorize potential objects in two classes:
 foreground or background. Then all foreground’s potential objects are classified
 in more fine-grained classes: cats, dogs, cars, etc. This two-stage method is
-very slow but also, and of course, produces the best accuracy. The most famous
+slow but also, and of course, produces the best accuracy. The most famous
 two-stage architecture is &lt;a href=&#34;/post/faster-rcnn&#34;&gt;Faster-RCNN&lt;/a&gt; &lt;a href=&#34;https://arxiv.org/abs/1506.01497&#34; target=&#34;_blank&#34;&gt;(Ren et al, 2015)&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;On the other hand, &lt;strong&gt;single-stage architectures&lt;/strong&gt; don’t have this pre-selection
@@ -431,7 +430,7 @@ step of potential foreground objects. They are usually less accurate, but
 they are also faster. RetinaNet’s single-stage architecture is an exception:
 it reaches two-stage performance while having single-stage speed!&lt;/p&gt;
 
-&lt;p&gt;On the figure 2 below, you can see a comparison of various object detection
+&lt;p&gt;On the figure 2 below, you can see a comparison of object detection
 architectures.&lt;/p&gt;
 
 &lt;figure&gt;
@@ -451,7 +450,7 @@ architectures.&lt;/p&gt;
 
 &lt;/figure&gt;
 
-&lt;p&gt;RetinaNet is made of several components. We’ll try to describe how the data is
+&lt;p&gt;RetinaNet is made of four components. We’ll try to describe how the data is
 transformed through every step.&lt;/p&gt;
 
 &lt;figure&gt;
@@ -475,7 +474,7 @@ transformed through every step.&lt;/p&gt;
 
 &lt;p&gt;First of all there is a &lt;strong&gt;ResNet-50&lt;/strong&gt; &lt;a href=&#34;https://arxiv.org/abs/1512.03385&#34; target=&#34;_blank&#34;&gt;(He et al., 2015)&lt;/a&gt;.
 As every convolutional neural network (CNN),
-it takes an image as input and processes it through several convolution kernels.
+it takes an image as input and processes it through convolution kernels.
 Each kernel’s output is a feature map — the first feature maps capture high-level
 features (such as a line or a color). The further we go down in the network,
 the smaller the feature maps become because of the pooling layers. While they
@@ -531,7 +530,7 @@ the dimension of the bigger levels.&lt;/p&gt;
 
 &lt;h4 id=&#34;2-3-anchors&#34;&gt;2.3. Anchors&lt;/h4&gt;
 
-&lt;p&gt;At each FPN level, several &lt;strong&gt;anchors&lt;/strong&gt; are moved around the FPN’s feature maps.
+&lt;p&gt;At each FPN level, &lt;strong&gt;anchors&lt;/strong&gt; are moved around the FPN’s feature maps.
 An anchor is a rectangle with different sizes and ratios, like this:&lt;/p&gt;
 
 &lt;figure&gt;
@@ -696,7 +695,7 @@ classification.&lt;/p&gt;
 &lt;p&gt;In Figure 9, we module the cross entropy loss $-\log(p_t)$ by a factor
 $(1 — p_t)^\gamma$. Here, $\gamma$ is a modulating factor oscillating between
 0 and 5. The well-classified examples have a high $p_t$ , and thus a low factor.
-Therefore, the loss for well-classified examples is very low and forces the
+Therefore, the loss for well-classified examples is low and forces the
 model learn on harder examples. You can see in Figure 10 how much the loss is
 affected.&lt;/p&gt;
 
@@ -1026,12 +1025,12 @@ of this blog post.&lt;/p&gt;
       <guid>/post/3-small-but-powerful-cnn/</guid>
       <description>
 
-&lt;p&gt;Many CNN architectures have been developed to attain the best accuracy on
+&lt;p&gt;Most CNN architectures have been developed to attain the best accuracy on
 ImageNet. Computing power is not limited for this competition, why bother?&lt;/p&gt;
 
 &lt;p&gt;However you may want to run your model on an old laptop, maybe without GPU, or
 even on your mobile phone. Let’s see three CNN architectures that are efficient
-while sacrificing few accuracy performance.&lt;/p&gt;
+while sacrificing little accuracy performance.&lt;/p&gt;
 
 &lt;h3 id=&#34;1-mobilenet&#34;&gt;1. MobileNet&lt;/h3&gt;
 
@@ -1115,7 +1114,7 @@ of the group convolution. The trick to produce this randomness can be seen
 
 &lt;p&gt;Arxiv link: &lt;a href=&#34;https://arxiv.org/abs/1801.06434&#34; target=&#34;_blank&#34;&gt;(Freeman et al, 2018)&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;EffNet uses &lt;strong&gt;spatial separable convolutions&lt;/strong&gt;. It is very similar to
+&lt;p&gt;EffNet uses &lt;strong&gt;spatial separable convolutions&lt;/strong&gt;. It is similar to
 MobileNet&amp;rsquo;s depthwise separable convolutions.&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&#34;/figures/effnet.png&#34; alt=&#34;effnet&#34; /&gt;&lt;/p&gt;
@@ -1195,14 +1194,14 @@ Cornell Uni, Tsinghua Uni, and Facebook Research.&lt;/li&gt;
 &lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
 
 &lt;p&gt;&lt;strong&gt;DenseNet&lt;/strong&gt; is a new CNN architecture that reached State-Of-The-Art (SOTA) results
-on classification datasets (CIFAR, SVHN, ImageNet) using few parameters.&lt;/p&gt;
+on classification datasets (CIFAR, SVHN, ImageNet) using less parameters.&lt;/p&gt;
 
-&lt;p&gt;Thanks to its new use of residual it can be very deep and still be easy to
-optimize.&lt;/p&gt;
+&lt;p&gt;Thanks to its new use of residual it can be deeper than the usual networks and
+still be easy to optimize.&lt;/p&gt;
 
 &lt;h3 id=&#34;general-architecture&#34;&gt;General Architecture&lt;/h3&gt;
 
-&lt;p&gt;DenseNet is composed of several &lt;strong&gt;Dense blocks&lt;/strong&gt;. In those blocks, the layers are
+&lt;p&gt;DenseNet is composed of &lt;strong&gt;Dense blocks&lt;/strong&gt;. In those blocks, the layers are
 &lt;em&gt;densely&lt;/em&gt; connected together: Each layer receive in input all previous layers
 output feature maps.&lt;/p&gt;
 
@@ -1253,18 +1252,18 @@ dense blocks assure this role.&lt;/p&gt;
 &lt;p&gt;Concatenating residuals instead of summing them has a downside when the model
 is very deep: It generates a lot of input channels!&lt;/p&gt;
 
-&lt;p&gt;You may now wonder how could I say in the introduction that DenseNet has few
-parameters. There are two reasons:&lt;/p&gt;
+&lt;p&gt;You may now wonder how could I say in the introduction that DenseNet has less
+parameters than an usual SotA networks. There are two reasons:&lt;/p&gt;
 
 &lt;p&gt;First of all a DenseNet&amp;rsquo;s convolution generates a low number of feature maps.
-The authors recommend 32 for optimal performance but shows SOTA results with as
-few as 12 output channels!&lt;/p&gt;
+The authors recommend 32 for optimal performance but shows SotA results with only
+12 output channels!&lt;/p&gt;
 
 &lt;p&gt;The number of output feature maps of a layer is defined as the &lt;strong&gt;growth
 rate&lt;/strong&gt;.&lt;/p&gt;
 
-&lt;p&gt;DenseNet has lower need of of wide layers because as layers are densely connected
-there is few redundancy in the learned features. All layers of a same dense block
+&lt;p&gt;DenseNet has lower need of wide layers because as layers are densely connected
+there is little redundancy in the learned features. All layers of a same dense block
 share a &lt;em&gt;collective knowledge&lt;/em&gt;.&lt;/p&gt;
 
 &lt;blockquote&gt;
@@ -1343,12 +1342,12 @@ thanks to the short connections.&lt;/p&gt;
 by Baidu Research.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;The last few years in Deep Learning have seen a rush to gigantism:&lt;/p&gt;
+&lt;p&gt;The last years in Deep Learning have seen a rush to gigantism:&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;Models are becoming deeper and deeper from the 8 layers of &lt;a href=&#34;https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf&#34; target=&#34;_blank&#34;&gt;AlexNet&lt;/a&gt;
 to the &lt;a href=&#34;https://arxiv.org/abs/1603.05027&#34; target=&#34;_blank&#34;&gt;1001-layer ResNet&lt;/a&gt;.&lt;/li&gt;
-&lt;li&gt;Training on huge dataset is way more quicker, ImageNet can now (with enough
+&lt;li&gt;Training on large dataset is way quicker, ImageNet can now (with enough
 computing power) been &lt;a href=&#34;https://arxiv.org/abs/1709.05011&#34; target=&#34;_blank&#34;&gt;trained in less than 20 minutes&lt;/a&gt;.&lt;/li&gt;
 &lt;li&gt;Dataset size are increasing each year.&lt;/li&gt;
 &lt;/ul&gt;
@@ -1365,7 +1364,7 @@ model architectures, create large training data sets, and scale computation.&lt;
 often depend on &lt;em&gt;epiphany&lt;/em&gt; and &lt;em&gt;serendipity&lt;/em&gt;.&lt;/p&gt;
 
 &lt;p&gt;In order to harness the power of &lt;em&gt;big data&lt;/em&gt; (more data, more computation power,
-etc.) models should not be designed to reduce error rate of a few epsilon on
+etc.) models should not be designed to reduce error rate of an epsilon on
 Imagenet but be designed to be better with more data.&lt;/p&gt;
 
 &lt;p&gt;Baidu Research introduce a &lt;strong&gt;power-law expononent&lt;/strong&gt;, that measure the &lt;em&gt;steepness&lt;/em&gt;
@@ -1461,7 +1460,7 @@ curve steepness may be improved.&lt;/li&gt;
 generalization.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;The authors also underline several major implications of the power law:&lt;/p&gt;
+&lt;p&gt;The authors also underline major implications of the power law:&lt;/p&gt;
 
 &lt;p&gt;Given the power law, researchers can train their new architecture on a small dataset,
 and have a good estimation of how it would scale on a bigger dataset.
@@ -1510,7 +1509,7 @@ Models for text problems are currently the less scalable.&lt;/p&gt;
 &lt;li&gt;&lt;p&gt;&lt;a href=&#34;https://arxiv.org/abs/1506.01497&#34; target=&#34;_blank&#34;&gt;Faster-RCNN&lt;/a&gt; by Microsoft Research.&lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;Ross Girshick is a very influential researcher on object detection:
+&lt;p&gt;Ross Girshick is an influential researcher on object detection:
 he has worked on RCNN, Fast{er}-RCNN, Yolo, RetinaNet&amp;hellip;&lt;/p&gt;
 
 &lt;p&gt;Fast-RCNN and Faster-RCNN are both incremental improvements on the original
@@ -1538,14 +1537,14 @@ from the feature map. However this box is proportionally scaled down:&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&#34;/figures/roi_pooling.svg&#34; alt=&#34;RoI Pooling&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;Objects have very different sizes, and so are the boxes extracted from the feature
+&lt;p&gt;Objects have different sizes, and so are the boxes extracted from the feature
 maps. To normalize their size a max pooling is done. Note that it does not really
 matter if the height or width of the extracted box is not even:&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&#34;/figures/roi_pooling2.svg&#34; alt=&#34;RoI pooling&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Those extracted fixed-size feature maps (one per filter per object) are then fed
-to several fully connected layers. At some point, the network split into two
+to fully connected layers. At some point, the network split into two
 sub-networks. One is designed to classify the class with a softmax activation.
 The other is a regressor with 4 values: The coordinates of the top-left point
 of the box and its width &amp;amp; height.&lt;/p&gt;
@@ -1582,7 +1581,7 @@ The authors used a layer of dimension 512 when the feature maps were originating
 from VGG16.&lt;/p&gt;
 
 &lt;p&gt;Then the RPN uses a sliding window, moving all around the intermediate layers.
-At each location, several &lt;strong&gt;anchors&lt;/strong&gt; are used. An anchor is simply a box of a
+At each location, &lt;strong&gt;anchors&lt;/strong&gt; are used. An anchor is simply a box of a
 pre-defined size and shape. 9 different anchors exist: there are 3 different
 scales and 3 different ratios.&lt;/p&gt;
 
@@ -1641,8 +1640,8 @@ layers are frozen and only Fast-RCNN is fine-tuned.&lt;/p&gt;&lt;/li&gt;
 &lt;a href=&#34;https://arxiv.org/abs/1311.2524&#34; target=&#34;_blank&#34;&gt;RCNN&lt;/a&gt;. They introduce RoI pooling and Region
 Proposal Network.&lt;/p&gt;
 
-&lt;p&gt;RoI pooling concept is now used in many models. &lt;a href=&#34;https://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/Liu_DeepFashion_Powering_Robust_CVPR_2016_paper.pdf&#34; target=&#34;_blank&#34;&gt;FashionNet&lt;/a&gt;, a model to predict clothes&amp;rsquo; attributes uses a concept of &lt;em&gt;landmark pooling&lt;/em&gt;
-to force model&amp;rsquo;s &lt;em&gt;attention&lt;/em&gt; on a particular cloth&amp;rsquo;s trait.&lt;/p&gt;
+&lt;p&gt;RoI pooling concept is also used in other models. &lt;a href=&#34;https://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/Liu_DeepFashion_Powering_Robust_CVPR_2016_paper.pdf&#34; target=&#34;_blank&#34;&gt;FashionNet&lt;/a&gt;, a model to predict clothes&amp;rsquo; attributes uses a concept of
+&lt;em&gt;landmark pooling&lt;/em&gt; to force model&amp;rsquo;s &lt;em&gt;attention&lt;/em&gt; on a particular cloth&amp;rsquo;s trait.&lt;/p&gt;
 
 &lt;p&gt;Region Proposal Network is now used in most object detection models, like
 the &lt;a href=&#34;https://arxiv.org/abs/1612.03144&#34; target=&#34;_blank&#34;&gt;Feature Pyramid Network&lt;/a&gt;.&lt;/p&gt;
@@ -1679,7 +1678,7 @@ models&lt;/strong&gt;. Fast-RCNN uses the Selective Search in its object proposa
 
 &lt;p&gt;An &lt;strong&gt;Exhaustive Search&lt;/strong&gt; tries to find bounding boxes for every objects in an
 image. Searching at every position and scale is unpracticable. Some use instead
-a few windows of different ratio and make them &lt;em&gt;slide&lt;/em&gt; around the image. More
+a windows of different ratio and make them &lt;em&gt;slide&lt;/em&gt; around the image. More
 sophisticated methods also exists (&lt;a href=&#34;https://cs.brown.edu/~pff/papers/lsvm-pami.pdf&#34; target=&#34;_blank&#34;&gt;1&lt;/a&gt;,
 &lt;a href=&#34;https://pdfs.semanticscholar.org/5be0/610861ffd6782adaa70cc16fcc0610ad1c86.pdf&#34; target=&#34;_blank&#34;&gt;2&lt;/a&gt;).&lt;/p&gt;
 
@@ -1693,7 +1692,7 @@ To improve the algorithm&amp;rsquo;s robustness (to scale, lightning, textures&a
 variety of strategies are used during the bottom-up boxes&amp;rsquo; merging.&lt;/p&gt;
 
 &lt;p&gt;Selective Search produces boxes that are good proposals for objects, it handles
-well various images condition, but more important it is fast enough to be used
+well different image conditions, but more important it is fast enough to be used
 in a prediction pipeline (like Fast-RCNN) to do real-time object detection.&lt;/p&gt;
 
 &lt;h1 id=&#34;the-algorithm&#34;&gt;The Algorithm&lt;/h1&gt;
@@ -1708,8 +1707,8 @@ algorithm is kept.&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&#34;/figures/selective_search_merging.svg&#34; alt=&#34;Bottom-up merging&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;By keeping all existing boxes, the search can capture all scales which is very
-important in very hierarchical image: &lt;em&gt;Imagine a pilot in a plane: the pilot&amp;rsquo;s
+&lt;p&gt;By keeping all existing boxes, the search can capture all scales which is
+important in hierarchical image: &lt;em&gt;Imagine a pilot in a plane: the pilot&amp;rsquo;s
 box in comprised in the bigger plane&amp;rsquo;s box.&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;Plenty of boxes are created, the last box is the entire image! However some may
@@ -1729,7 +1728,7 @@ location proposals and getting only the &lt;em&gt;k&lt;/em&gt;-first most probab
 &lt;h2 id=&#34;1-different-color-spaces&#34;&gt;1. Different color spaces&lt;/h2&gt;
 
 &lt;p&gt;In order to handle different lightning, the authors apply their algorithm to
-the same image transposed in several color spaces.&lt;/p&gt;
+the same image transposed in different color spaces.&lt;/p&gt;
 
 &lt;p&gt;The most known color space is RGB, where a pixel has values of red, blue, and
 green. Among the other used color spaces there are:&lt;/p&gt;
@@ -1755,11 +1754,11 @@ search.&lt;/em&gt;&lt;/p&gt;
 
 &lt;h2 id=&#34;3-different-similarity-measures&#34;&gt;3. Different Similarity Measures&lt;/h2&gt;
 
-&lt;p&gt;The most interesting part of this algorithm is the various metrics used to assess
+&lt;p&gt;The most interesting part of this algorithm is the different metrics used to assess
 similarity between boxes.&lt;/p&gt;
 
 &lt;p&gt;Four similarity measures are defined: Color, texture, size, fitness. These metrics
-are based on features computed with the pixels&amp;rsquo; values. It would be very slow
+are based on features computed with the pixels&amp;rsquo; values. It would be slow
 to re-compute these features each time boxes are merged. The authors designed
 these features so that they could be merged and &lt;em&gt;propagated&lt;/em&gt; to the new box
 without re-computing everything.&lt;/p&gt;
@@ -1829,9 +1828,9 @@ to train on particularly difficult boxes&lt;/strong&gt;.&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&#34;/figures/selective_search2.png&#34; alt=&#34;Selective search in action&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;However SVMs are quite slow to train with huge amount of data. I will publish
-another article on Fast-RCNN, a model that use Convolutional Neural Networks on top
-of the Selective Search to do object recognition.&lt;/p&gt;
+&lt;p&gt;However SVMs are slow to train with large amount of data. I will publish
+another &lt;a href=&#34;/posts/faster-rcnn&#34;&gt;article&lt;/a&gt; on Fast-RCNN, a model that use
+Convolutional Neural Networks on top of the Selective Search to do object recognition.&lt;/p&gt;
 </description>
     </item>
     
@@ -1857,9 +1856,9 @@ and &lt;a href=&#34;https://scholar.google.com/citations?user=q16KVs0AAAAJ&amp;a
 object proposal used &lt;strong&gt;Selective Search&lt;/strong&gt; that itself used &lt;strong&gt;Efficient Graph-Based
 Segmentation&lt;/strong&gt;.&lt;/p&gt;
 
-&lt;p&gt;The reason this segmentation was still very useful almost 10 years later is
-because the algorithm is fast, while remaining quite efficient.
-Its goal is to make a segmentation of various objects in an image.&lt;/p&gt;
+&lt;p&gt;The reason this segmentation was still useful almost 10 years later is
+because the algorithm is fast, while remaining efficient.
+Its goal is to segment the objects in an image.&lt;/p&gt;
 
 &lt;h1 id=&#34;a-graph-based-algorithm&#34;&gt;A Graph-Based Algorithm&lt;/h1&gt;
 
@@ -1930,7 +1929,7 @@ components&lt;/strong&gt;.&lt;/p&gt;
 
 &lt;p&gt;To summarize the predicate $D$: A large difference between two internally
 homogeneous components is evidence of a boundary between them. However, if the
-two components are internally very heterogeneous it would be harder to prove
+two components are internally heterogeneous it would be harder to prove
 a boundary. &lt;strong&gt;Therefore &lt;em&gt;details&lt;/em&gt; are ignored in high-variability regions but
 are preserved in low-variability regions&lt;/strong&gt;:&lt;/p&gt;
 
@@ -2013,7 +2012,7 @@ $S^m$ will neither be too fine nor too coarse.&lt;/p&gt;
 &lt;h1 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h1&gt;
 
 &lt;p&gt;As you have seen, the algorithm of this paper is quite simple. What makes it
-very efficient is the various metrics and the predicate defined beforehand.&lt;/p&gt;
+efficient is the chosen metrics and the predicate defined beforehand.&lt;/p&gt;
 
 &lt;p&gt;If you have read until the bottom of the page, congrats! To thank you, here is
 some demonstrations by the authors:&lt;/p&gt;
@@ -2056,7 +2055,7 @@ parts are not explored in depth.&lt;/p&gt;
 &lt;li&gt;The &lt;strong&gt;optimization method&lt;/strong&gt; (&lt;em&gt;quadratric, beam search, gradient descent, etc.&lt;/em&gt;)&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;The optimal combinaisons should be taken according to several parameters: The accuracy,
+&lt;p&gt;The optimal combinations should be taken according to hyperparameters: The accuracy,
 the training time, the problem type, etc.&lt;/p&gt;
 
 &lt;h1 id=&#34;evaluating-the-algorithm&#34;&gt;Evaluating The Algorithm&lt;/h1&gt;
@@ -2066,7 +2065,7 @@ indicator. A high score of accuracy on the &lt;em&gt;train data&lt;/em&gt; may s
 algorithm has an &lt;em&gt;overfit&lt;/em&gt; problem, and thus generalize badly on new unseen data.&lt;/p&gt;
 
 &lt;p&gt;A common pitfall would be to train the algorithm on the train data and tweak
-the various parameters in order to maximize our score on the &lt;em&gt;test data&lt;/em&gt;. This may
+the hyperparameters in order to maximize our score on the &lt;em&gt;test data&lt;/em&gt;. This may
 lead to an overfit on also the test data!&lt;/p&gt;
 
 &lt;p&gt;The generalization problems (&lt;em&gt;how can I estimate my generalization?&lt;/em&gt; and &lt;em&gt;how
@@ -2086,10 +2085,10 @@ into two components: the &lt;em&gt;bias&lt;/em&gt; and the &lt;em&gt;variance&lt
 &lt;p&gt;&lt;img src=&#34;/blog/bias-variance.png&#34; alt=&#34;Bias-Variance trade-off in dart-throwing&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;This trade-off explains why a powerful learner may not be better than a weak learner.
-If my powerful learner has a very low bias, he is performing very well on the
+If my powerful learner has a low bias, he is performing well on the
 train data. However if my powerful learner has also a high variance, it may
-have learned noise from the train data that would be completely irrelevant
-for the test data and behave randomly.&lt;/p&gt;
+have learned noise from the train data that would be irrelevant for the test
+data and behave randomly.&lt;/p&gt;
 
 &lt;h1 id=&#34;reducing-the-variance&#34;&gt;Reducing The Variance&lt;/h1&gt;
 
@@ -2117,16 +2116,16 @@ use the cross-validation:&lt;/p&gt;
 to optimize &lt;em&gt;validation&lt;/em&gt;.&lt;/p&gt;
 
 &lt;p&gt;However instead of evaluating a fixed validation set, we are evaluating the average
-performance of several folds of the data:&lt;/p&gt;
+performance of the different folds:&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&#34;/blog/cross-validation.png&#34; alt=&#34;k-fold cross-validations&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Note that if there is too many parameters choices, the cross-validation may
-not be able to avoid overfit.&lt;/p&gt;
+not be able to avoid overfitting.&lt;/p&gt;
 
 &lt;h3 id=&#34;regularization&#34;&gt;Regularization&lt;/h3&gt;
 
-&lt;p&gt;Another way to way to avoid overfit is to add &lt;em&gt;regularization&lt;/em&gt;. It will force
+&lt;p&gt;Another way to way to avoid overfitting is to add &lt;em&gt;regularization&lt;/em&gt;. It will force
 the model to be simpler.&lt;/p&gt;
 
 &lt;p&gt;Let&amp;rsquo;s say the model has a set of weights $W$, an evaluation function $f(X)$
@@ -2143,7 +2142,7 @@ the model to be simpler.&lt;/p&gt;
 &lt;p&gt;The regularization is multiplied by a factor $\lambda$ that is determined empirically,
 with cross-validation for example.&lt;/p&gt;
 
-&lt;p&gt;There is several regularizations possible. The two most common are &lt;strong&gt;L1&lt;/strong&gt;
+&lt;p&gt;There are several regularizations possible. The two most common are &lt;strong&gt;L1&lt;/strong&gt;
 (also known as &lt;em&gt;LASSO&lt;/em&gt;), and &lt;strong&gt;L2&lt;/strong&gt; (also known as &lt;em&gt;Ridge&lt;/em&gt;):&lt;/p&gt;
 
 &lt;p&gt;L1 is the absolute norm:&lt;/p&gt;
@@ -2179,12 +2178,12 @@ model with the data.&lt;/p&gt;
 &lt;h1 id=&#34;feature-engineering-is-the-key&#34;&gt;Feature Engineering Is The Key&lt;/h1&gt;
 
 &lt;p&gt;Feature Engineering is the action of transforming raw data into something that
-is more learnable by the model. It is very dependant on the data&amp;rsquo;s type, and here
+is more learnable by the model. It is dependant on the data&amp;rsquo;s type, and here
 lies most of the &lt;em&gt;black art&lt;/em&gt; of Machine Learning.&lt;/p&gt;
 
 &lt;p&gt;Two examples:&lt;/p&gt;
 
-&lt;p&gt;For text data, several processing are very useful:
+&lt;p&gt;For text data, several processing are necessary:
 - &lt;strong&gt;tokenization&lt;/strong&gt; to split the words of the sentence.
 - &lt;strong&gt;lemmatization&lt;/strong&gt; to get the lemma (&lt;em&gt;loved, loving, lover -&amp;gt; love&lt;/em&gt;)
 - &lt;strong&gt;POS-Tagging&lt;/strong&gt; to get the grammar label of a token (&lt;em&gt;be -&amp;gt; verb, car -&amp;gt; noun&lt;/em&gt;)&lt;/p&gt;
@@ -2195,13 +2194,13 @@ and feed these features to a SVM to &lt;a href=&#34;https://github.com/Mougatine
 
 &lt;p&gt;While feature engineering is major part of Machine Learning, it is less important
 in Deep Learning: with Convolutional Neural Network (CNN) the model is learning
-by itself the &lt;a href=&#34;https://cs.stanford.edu/people/karpathy/convnetjs/demo/cifar10.html&#34; target=&#34;_blank&#34;&gt;convolutional matrices&lt;/a&gt; extracting the interesting features.&lt;/p&gt;
+by itself the &lt;a href=&#34;https://cs.stanford.edu/people/karpathy/convnetjs/demo/cifar10.html&#34; target=&#34;_blank&#34;&gt;convolution kernels&lt;/a&gt; extracting the interesting features.&lt;/p&gt;
 
 &lt;h1 id=&#34;model-ensembles&#34;&gt;Model Ensembles&lt;/h1&gt;
 
 &lt;p&gt;In order to achieve the best performance we want to decrease both bias and variance.
 It is often complicated to optimize this trade-off. A great way to achieve this
-is to combine several models, kind of like a &lt;em&gt;wisdom of the crowd&lt;/em&gt;.&lt;/p&gt;
+is to combine different models, kind of like a &lt;em&gt;wisdom of the crowd&lt;/em&gt;.&lt;/p&gt;
 
 &lt;p&gt;There are three main categories of ensembles:&lt;/p&gt;
 
@@ -2331,13 +2330,13 @@ paper with greater attention.&lt;/p&gt;
       <description>
 
 &lt;p&gt;Engineering schools last 3 years in France. Before these years students learn
-for two years a very broad science curriculum covering mathematics, algo,
+for two years a broad science curriculum covering mathematics, algo,
 physics, electronics&amp;hellip;
 The three years of engineering cover a more specialized subject, for me it was
 computer science.&lt;/p&gt;
 
-&lt;p&gt;The first year of my engineering school, EPITA, is very intensive. We learn
-many things about low-level programming and almost weekly have hackathons the
+&lt;p&gt;The first year of my engineering school, EPITA, is intensive. We learn
+many different subjects about low-level programming and almost weekly have hackathons the
 whole weekend. During the days we study the theory of computer science (language
 theory, compiler, graph, algo, some maths, etc.), and during the nights we code.&lt;/p&gt;
 
@@ -2349,7 +2348,7 @@ theory, compiler, graph, algo, some maths, etc.), and during the nights we code.
 a Ubuntu image). The goal was to provide a CLI tool to navigate, and read files
 stored in the ISO.&lt;/p&gt;
 
-&lt;p&gt;While it may sound obvious to me now, it was very interesting to discover how the
+&lt;p&gt;While it may sound obvious to me now, it was interesting to discover how the
 data can be stored in memory, and how simple pointer arithmetic can go a long way.&lt;/p&gt;
 
 &lt;h1 id=&#34;make-like&#34;&gt;Make-like&lt;/h1&gt;
@@ -2360,7 +2359,7 @@ program dependencies and to facilitate a program compilation.&lt;/p&gt;
 &lt;p&gt;It was interesting for both reasons:&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;Learn to parse file, the structure is quite simple but still harder than a csv
+&lt;li&gt;Learn to parse file, the structure is simple but still harder than a csv
 file of course.&lt;/li&gt;
 &lt;li&gt;Learn all the tricks &lt;code&gt;make&lt;/code&gt; have, and it has many.&lt;/li&gt;
 &lt;/ul&gt;
@@ -2371,8 +2370,8 @@ file of course.&lt;/li&gt;
 know, &lt;code&gt;malloc&lt;/code&gt; is used in C program (and a lot of binaries like &lt;code&gt;ls&lt;/code&gt;) to
 allocate memory.&lt;/p&gt;
 
-&lt;p&gt;To allocate memory, I had to map one or several pages. Those pages could be filled
-completely or splitted into several chunks. It&amp;rsquo;s enlightening to understand
+&lt;p&gt;To allocate memory, I had to map one or several pages. Those pages could be fully
+filled or split into several chunks. It&amp;rsquo;s enlightening to understand
 how a program uses the memory, and to see all the tricks to allocate it more
 efficiently than a simple first-fit algo.&lt;/p&gt;
 

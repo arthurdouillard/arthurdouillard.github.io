@@ -365,14 +365,14 @@ Cornell Uni, Tsinghua Uni, and Facebook Research.</li>
 <h3 id="introduction">Introduction</h3>
 
 <p><strong>DenseNet</strong> is a new CNN architecture that reached State-Of-The-Art (SOTA) results
-on classification datasets (CIFAR, SVHN, ImageNet) using few parameters.</p>
+on classification datasets (CIFAR, SVHN, ImageNet) using less parameters.</p>
 
-<p>Thanks to its new use of residual it can be very deep and still be easy to
-optimize.</p>
+<p>Thanks to its new use of residual it can be deeper than the usual networks and
+still be easy to optimize.</p>
 
 <h3 id="general-architecture">General Architecture</h3>
 
-<p>DenseNet is composed of several <strong>Dense blocks</strong>. In those blocks, the layers are
+<p>DenseNet is composed of <strong>Dense blocks</strong>. In those blocks, the layers are
 <em>densely</em> connected together: Each layer receive in input all previous layers
 output feature maps.</p>
 
@@ -423,18 +423,18 @@ dense blocks assure this role.</p>
 <p>Concatenating residuals instead of summing them has a downside when the model
 is very deep: It generates a lot of input channels!</p>
 
-<p>You may now wonder how could I say in the introduction that DenseNet has few
-parameters. There are two reasons:</p>
+<p>You may now wonder how could I say in the introduction that DenseNet has less
+parameters than an usual SotA networks. There are two reasons:</p>
 
 <p>First of all a DenseNet&rsquo;s convolution generates a low number of feature maps.
-The authors recommend 32 for optimal performance but shows SOTA results with as
-few as 12 output channels!</p>
+The authors recommend 32 for optimal performance but shows SotA results with only
+12 output channels!</p>
 
 <p>The number of output feature maps of a layer is defined as the <strong>growth
 rate</strong>.</p>
 
-<p>DenseNet has lower need of of wide layers because as layers are densely connected
-there is few redundancy in the learned features. All layers of a same dense block
+<p>DenseNet has lower need of wide layers because as layers are densely connected
+there is little redundancy in the learned features. All layers of a same dense block
 share a <em>collective knowledge</em>.</p>
 
 <blockquote>

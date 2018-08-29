@@ -361,7 +361,7 @@
 <li><p><a href="https://arxiv.org/abs/1506.01497" target="_blank">Faster-RCNN</a> by Microsoft Research.</p></li>
 </ul>
 
-<p>Ross Girshick is a very influential researcher on object detection:
+<p>Ross Girshick is an influential researcher on object detection:
 he has worked on RCNN, Fast{er}-RCNN, Yolo, RetinaNet&hellip;</p>
 
 <p>Fast-RCNN and Faster-RCNN are both incremental improvements on the original
@@ -389,14 +389,14 @@ from the feature map. However this box is proportionally scaled down:</p>
 
 <p><img src="/figures/roi_pooling.svg" alt="RoI Pooling" /></p>
 
-<p>Objects have very different sizes, and so are the boxes extracted from the feature
+<p>Objects have different sizes, and so are the boxes extracted from the feature
 maps. To normalize their size a max pooling is done. Note that it does not really
 matter if the height or width of the extracted box is not even:</p>
 
 <p><img src="/figures/roi_pooling2.svg" alt="RoI pooling" /></p>
 
 <p>Those extracted fixed-size feature maps (one per filter per object) are then fed
-to several fully connected layers. At some point, the network split into two
+to fully connected layers. At some point, the network split into two
 sub-networks. One is designed to classify the class with a softmax activation.
 The other is a regressor with 4 values: The coordinates of the top-left point
 of the box and its width &amp; height.</p>
@@ -433,7 +433,7 @@ The authors used a layer of dimension 512 when the feature maps were originating
 from VGG16.</p>
 
 <p>Then the RPN uses a sliding window, moving all around the intermediate layers.
-At each location, several <strong>anchors</strong> are used. An anchor is simply a box of a
+At each location, <strong>anchors</strong> are used. An anchor is simply a box of a
 pre-defined size and shape. 9 different anchors exist: there are 3 different
 scales and 3 different ratios.</p>
 
@@ -492,8 +492,8 @@ layers are frozen and only Fast-RCNN is fine-tuned.</p></li>
 <a href="https://arxiv.org/abs/1311.2524" target="_blank">RCNN</a>. They introduce RoI pooling and Region
 Proposal Network.</p>
 
-<p>RoI pooling concept is now used in many models. <a href="https://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/Liu_DeepFashion_Powering_Robust_CVPR_2016_paper.pdf" target="_blank">FashionNet</a>, a model to predict clothes&rsquo; attributes uses a concept of <em>landmark pooling</em>
-to force model&rsquo;s <em>attention</em> on a particular cloth&rsquo;s trait.</p>
+<p>RoI pooling concept is also used in other models. <a href="https://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/Liu_DeepFashion_Powering_Robust_CVPR_2016_paper.pdf" target="_blank">FashionNet</a>, a model to predict clothes&rsquo; attributes uses a concept of
+<em>landmark pooling</em> to force model&rsquo;s <em>attention</em> on a particular cloth&rsquo;s trait.</p>
 
 <p>Region Proposal Network is now used in most object detection models, like
 the <a href="https://arxiv.org/abs/1612.03144" target="_blank">Feature Pyramid Network</a>.</p>

@@ -373,7 +373,7 @@ parts are not explored in depth.</p>
 <li>The <strong>optimization method</strong> (<em>quadratric, beam search, gradient descent, etc.</em>)</li>
 </ul>
 
-<p>The optimal combinaisons should be taken according to several parameters: The accuracy,
+<p>The optimal combinations should be taken according to hyperparameters: The accuracy,
 the training time, the problem type, etc.</p>
 
 <h1 id="evaluating-the-algorithm">Evaluating The Algorithm</h1>
@@ -383,7 +383,7 @@ indicator. A high score of accuracy on the <em>train data</em> may simply mean t
 algorithm has an <em>overfit</em> problem, and thus generalize badly on new unseen data.</p>
 
 <p>A common pitfall would be to train the algorithm on the train data and tweak
-the various parameters in order to maximize our score on the <em>test data</em>. This may
+the hyperparameters in order to maximize our score on the <em>test data</em>. This may
 lead to an overfit on also the test data!</p>
 
 <p>The generalization problems (<em>how can I estimate my generalization?</em> and <em>how
@@ -403,10 +403,10 @@ into two components: the <em>bias</em> and the <em>variance</em>.</p>
 <p><img src="/blog/bias-variance.png" alt="Bias-Variance trade-off in dart-throwing" /></p>
 
 <p>This trade-off explains why a powerful learner may not be better than a weak learner.
-If my powerful learner has a very low bias, he is performing very well on the
+If my powerful learner has a low bias, he is performing well on the
 train data. However if my powerful learner has also a high variance, it may
-have learned noise from the train data that would be completely irrelevant
-for the test data and behave randomly.</p>
+have learned noise from the train data that would be irrelevant for the test
+data and behave randomly.</p>
 
 <h1 id="reducing-the-variance">Reducing The Variance</h1>
 
@@ -434,16 +434,16 @@ use the cross-validation:</p>
 to optimize <em>validation</em>.</p>
 
 <p>However instead of evaluating a fixed validation set, we are evaluating the average
-performance of several folds of the data:</p>
+performance of the different folds:</p>
 
 <p><img src="/blog/cross-validation.png" alt="k-fold cross-validations" /></p>
 
 <p>Note that if there is too many parameters choices, the cross-validation may
-not be able to avoid overfit.</p>
+not be able to avoid overfitting.</p>
 
 <h3 id="regularization">Regularization</h3>
 
-<p>Another way to way to avoid overfit is to add <em>regularization</em>. It will force
+<p>Another way to way to avoid overfitting is to add <em>regularization</em>. It will force
 the model to be simpler.</p>
 
 <p>Let&rsquo;s say the model has a set of weights $W$, an evaluation function $f(X)$
@@ -460,7 +460,7 @@ the model to be simpler.</p>
 <p>The regularization is multiplied by a factor $\lambda$ that is determined empirically,
 with cross-validation for example.</p>
 
-<p>There is several regularizations possible. The two most common are <strong>L1</strong>
+<p>There are several regularizations possible. The two most common are <strong>L1</strong>
 (also known as <em>LASSO</em>), and <strong>L2</strong> (also known as <em>Ridge</em>):</p>
 
 <p>L1 is the absolute norm:</p>
@@ -496,12 +496,12 @@ model with the data.</p>
 <h1 id="feature-engineering-is-the-key">Feature Engineering Is The Key</h1>
 
 <p>Feature Engineering is the action of transforming raw data into something that
-is more learnable by the model. It is very dependant on the data&rsquo;s type, and here
+is more learnable by the model. It is dependant on the data&rsquo;s type, and here
 lies most of the <em>black art</em> of Machine Learning.</p>
 
 <p>Two examples:</p>
 
-<p>For text data, several processing are very useful:
+<p>For text data, several processing are necessary:
 - <strong>tokenization</strong> to split the words of the sentence.
 - <strong>lemmatization</strong> to get the lemma (<em>loved, loving, lover -&gt; love</em>)
 - <strong>POS-Tagging</strong> to get the grammar label of a token (<em>be -&gt; verb, car -&gt; noun</em>)</p>
@@ -512,13 +512,13 @@ and feed these features to a SVM to <a href="https://github.com/Mougatine/human-
 
 <p>While feature engineering is major part of Machine Learning, it is less important
 in Deep Learning: with Convolutional Neural Network (CNN) the model is learning
-by itself the <a href="https://cs.stanford.edu/people/karpathy/convnetjs/demo/cifar10.html" target="_blank">convolutional matrices</a> extracting the interesting features.</p>
+by itself the <a href="https://cs.stanford.edu/people/karpathy/convnetjs/demo/cifar10.html" target="_blank">convolution kernels</a> extracting the interesting features.</p>
 
 <h1 id="model-ensembles">Model Ensembles</h1>
 
 <p>In order to achieve the best performance we want to decrease both bias and variance.
 It is often complicated to optimize this trade-off. A great way to achieve this
-is to combine several models, kind of like a <em>wisdom of the crowd</em>.</p>
+is to combine different models, kind of like a <em>wisdom of the crowd</em>.</p>
 
 <p>There are three main categories of ensembles:</p>
 
