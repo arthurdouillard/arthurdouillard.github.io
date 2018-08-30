@@ -937,7 +937,7 @@ the <strong>f1-score</strong> is a combination of those two metrics.</p>
     recall <span style="color:#f92672">=</span> true_pos <span style="color:#f92672">/</span> (true_pos <span style="color:#f92672">+</span> false_neg)
 
     <span style="color:#66d9ef">if</span> precision <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span> <span style="color:#f92672">or</span> recall <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>:
-        <span style="color:#66d9ef">return</span> precision, recall, f1
+        <span style="color:#66d9ef">return</span> precision, recall, <span style="color:#ae81ff">0</span>
 
     f1 <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">/</span> (<span style="color:#ae81ff">1</span> <span style="color:#f92672">/</span> precision <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span> <span style="color:#f92672">/</span> recall)
     <span style="color:#66d9ef">return</span> precision, recall, f1</code></pre></div>

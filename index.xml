@@ -924,7 +924,7 @@ the &lt;strong&gt;f1-score&lt;/strong&gt; is a combination of those two metrics.
     recall &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; true_pos &lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt; (true_pos &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; false_neg)
 
     &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; precision &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;or&lt;/span&gt; recall &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;:
-        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; precision, recall, f1
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; precision, recall, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
 
     f1 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt; (&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt; precision &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt; recall)
     &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; precision, recall, f1&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
