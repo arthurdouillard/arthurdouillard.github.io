@@ -402,7 +402,7 @@ for i in range(3): # Considering an ordering NCHW (batch, channel, height, width
 
 <p>Why is it recommended? Let&rsquo;s take a neuron, where:</p>
 
-<p>$$y = w \cdot x$$</p>
+<p>$$y = X \cdot w + b$$</p>
 
 <p>The partial derivative of $y$ for $w$ that we use during backpropagation is:</p>
 
