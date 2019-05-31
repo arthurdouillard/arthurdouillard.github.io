@@ -11,6 +11,524 @@
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>How to be confident in your neural network confidence</title>
+      <link>/post/miscalibration/</link>
+      <pubDate>Thu, 30 May 2019 00:00:00 +0200</pubDate>
+      
+      <guid>/post/miscalibration/</guid>
+      <description>
+
+&lt;p&gt;Those notes are based on the research paper
+&lt;a href=&#34;https://arxiv.org/abs/1706.04599&#34; target=&#34;_blank&#34;&gt;&amp;ldquo;On Calibration of Modern Neural Networks&amp;rdquo; (Guo et al, 2017.)&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h1 id=&#34;how-to-be-confident-in-your-neural-network-confidence&#34;&gt;How to be confident in your neural network confidence?&lt;/h1&gt;
+
+&lt;p&gt;Very large and deep model, as ResNet, are far more accurate than their older counterparts, as LeNet, on computer vision datasets as CIFAR100. &lt;strong&gt;However while
+they are more better to classify images, we are less confident in their own confidence!&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Most neural networks for classification uses as last activation a softmax: it
+produces a distribution of probabilities for each target (cat, dog, boat, etc.).
+These probabilities sum to one. We may expect that if for a given image, our
+model associate a score of 0.8 to the target ‘boat’, our model is confident at
+80% that this is the right target.&lt;/p&gt;
+
+&lt;p&gt;Over 100 images that were detected as boat, we can expect approximately that 80
+images are indeed real boats, while the 20 remaining were false positives.&lt;/p&gt;
+
+&lt;p&gt;It was true for shallow model as LeNet but as newer models gained in accuracy
+&lt;strong&gt;their confidences became decorrelated from the “real confidence”&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;This does not work anymore for deep neural networks:&lt;/p&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;/figures/miscalibration.png&#34; alt=&#34;*Figure 1: Miscalibration in modern neural network [[source](https://arxiv.org/abs/1706.04599)]*&#34; /&gt;
+
+
+
+&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
+  &lt;p style=&#34;text-align: center&#34;&gt;
+    &lt;em&gt;Figure 1: Miscalibration in modern neural network [&lt;a href=&#34;https://arxiv.org/abs/1706.04599&#34; target=&#34;_blank&#34;&gt;source&lt;/a&gt;]&lt;/em&gt;
+    
+    
+    
+  &lt;/p&gt; 
+&lt;/figcaption&gt;
+
+&lt;/figure&gt;
+
+&lt;p&gt;As you can see, older networks as LeNet had a low accuracy (55%) but their
+confidence was actually in line with the accuracy! Modern networks as ResNet have
+a higher accuracy (69%) but as showed in figure 1, they are over-confident.&lt;/p&gt;
+
+&lt;p&gt;This discrepancy between the model confidence and the actual accuracy is called
+&lt;strong&gt;miscalibration&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;why-is-it-important&#34;&gt;Why is it important&lt;/h2&gt;
+
+&lt;p&gt;Outside of toy datasets used in the academy, it can be useful to know how much
+we can be confident in a prediction.&lt;/p&gt;
+
+&lt;p&gt;Imagine we have a model predicting frauds. We want to flag some transaction as
+suspicious based on the model confidence that it is a fraud.
+We could definitely compute an optimal threshold on the validation set, and then
+every confidence above this threshold would have flagged as a fraud. However
+this computed threshold could be 0.2 or 0.9 but wouldn’t make much sense to a human.&lt;/p&gt;
+
+&lt;p&gt;A model without miscalibration would help the users to interpret better the
+predictions.&lt;/p&gt;
+
+&lt;h2 id=&#34;why-does-it-happen&#34;&gt;Why does it happen&lt;/h2&gt;
+
+&lt;p&gt;The authors explores empirically what are the causes of this miscalibration in
+modern networks.&lt;/p&gt;
+
+&lt;p&gt;They measure the miscalibration with the &lt;strong&gt;E&lt;/strong&gt;xpected &lt;strong&gt;C&lt;/strong&gt;alibration &lt;strong&gt;E&lt;/strong&gt;rror:
+the average difference between the confidence and the accuracy. This metric should
+be minimized.&lt;/p&gt;
+
+&lt;h3 id=&#34;higher-capacity&#34;&gt;Higher capacity&lt;/h3&gt;
+
+&lt;p&gt;The most interpretable cause of the miscalibration is the increase of capacity
+and the cross-entropy loss.&lt;/p&gt;
+
+&lt;p&gt;Model capacity can be seen as a measurement of how much a model can memorize.
+With an infinite capacity, the model could simply learn by heart the whole
+training dataset. A trade-off has to be made between a low and high capacity.
+If it is too low the model wouldn’t be able to learn essential features of your
+data. If it is too high, the model will learn too much and overfit instead of
+generalize. Indeed comprehension is compression: by leaving few enough capacity
+the model has to pick up the most representative features (pretty much in the
+same way PCA works) and will then generalize better (but too few capacity &amp;amp; no
+learning will happen!).&lt;/p&gt;
+
+&lt;p&gt;The new architectures such as ResNet have way more capacity than the older
+LeNet ([add number of params for each]). This high capacity led to better
+accuracy but also let the models learn more features from the data. In addition the models optimizes the cross-entropy loss that force them to be right AND to be very confident. The higher capacity helped to lower the cross-entropy loss and made the models very confident in their predictions. 
+As you’ve seen on figure 2, the new models are now over-confident.&lt;/p&gt;
+
+&lt;p&gt;[add figure of capacity / miscallibration]&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Introduction to Incremental Learning</title>
+      <link>/post/incremental-learning/</link>
+      <pubDate>Fri, 26 Apr 2019 00:00:00 +0200</pubDate>
+      
+      <guid>/post/incremental-learning/</guid>
+      <description>
+
+&lt;h2 id=&#34;transfer-learning&#34;&gt;Transfer Learning&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;Transfer learning&lt;/strong&gt; allows to transfer the knowledge gained on one task (e.g
+&lt;em&gt;ImageNet&lt;/em&gt;) to another task (e.g &lt;em&gt;classify cats &amp;amp; dogs&lt;/em&gt;). Usually the backbone
+(a ConvNet in Computer Vision, like ResNet) is kept while a new classifier is
+plugged in on top of it. During transfer, we train the new classifier &amp;amp;
+&lt;strong&gt;fine-tune&lt;/strong&gt; the backbone.&lt;/p&gt;
+
+&lt;p&gt;However by fine-tuning the model&amp;rsquo;s backbone on the new task, it will probably change
+it so much that it will forget the old task!&lt;/p&gt;
+
+&lt;p&gt;Neural Networks are good to learn, but bad to retain knowledge from previous task.&lt;/p&gt;
+
+&lt;p&gt;This is called a &lt;strong&gt;catastrophic forgetting&lt;/strong&gt; &lt;a href=&#34;https://www.sciencedirect.com/science/article/pii/S1364661399012942&#34; target=&#34;_blank&#34;&gt;(French, 1995)&lt;/a&gt;. To solve it, one must be an optimal trade-off between
+&lt;strong&gt;rigidity&lt;/strong&gt; (being good on old classes) and &lt;strong&gt;plasticity&lt;/strong&gt; (being good on new classes).&lt;/p&gt;
+
+&lt;h2 id=&#34;lifelong-learning&#34;&gt;Lifelong-Learning&lt;/h2&gt;
+
+&lt;p&gt;This lack of knowledge retention is a problem in two cases:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;(Ideal) Robots must learn continuously without forgetting
+-. New tasks (or new samples) keep coming but we don&amp;rsquo;t want:
+
+&lt;ul&gt;
+&lt;li&gt;to store the increasingly bigger dataset&lt;/li&gt;
+&lt;li&gt;to retrain on all the data in order to not forget anything&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The goal of &lt;strong&gt;lifelong-learning&lt;/strong&gt; is thus three folds:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Learn new tasks or new samples without forgetting the previous ones&lt;/li&gt;
+&lt;li&gt;The model is kept between tasks in order to make us of the incremental knowledge&lt;/li&gt;
+&lt;li&gt;All the seen data cannot be stored, either keep nothing or a constant-size subset.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Lifelong-learning can also be divided in three scenarios
+&lt;a href=&#34;https://arxiv.org/abs/1705.03550&#34; target=&#34;_blank&#34;&gt;(Lomonaco and Maltoni, 2017)&lt;/a&gt;:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;New instances&lt;/strong&gt; added with potentially new domains (&lt;em&gt;online learning&lt;/em&gt;)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;New classes&lt;/strong&gt; added (&lt;em&gt;incremental learning&lt;/em&gt;)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;New instances &amp;amp; new classes&lt;/strong&gt; added&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;In this article we will focus only on the incremental aspect. Note however that the
+methods used are fairly similar between scenarios.&lt;/p&gt;
+
+&lt;h2 id=&#34;small-literature-review&#34;&gt;Small literature review&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://arxiv.org/abs/1802.07569&#34; target=&#34;_blank&#34;&gt;(Parisi et al, 2018)&lt;/a&gt; defines 3 broad strategies:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;External Memory&lt;/strong&gt; storing previous tasks data&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Regularization&lt;/strong&gt; methods avoiding forgetting on previous tasks&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Model Plasticity&lt;/strong&gt; extending the capacity&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&#34;external-memory&#34;&gt;External Memory&lt;/h4&gt;
+
+&lt;p&gt;Lifelong-learning has for constraint to have a size-bounded training dataset. The
+role of the external memory is thus to sample only a subset of every old tasks.&lt;/p&gt;
+
+&lt;p&gt;Three variants exists:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Reharsal learning&lt;/strong&gt; keeps a subsample of previous data&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Pseudo-Reharsal Learning&lt;/strong&gt; generates data using previous data&amp;rsquo;s distribution&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;No memory&lt;/strong&gt;, training only on new data&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&#34;regularization&#34;&gt;Regularization&lt;/h4&gt;
+
+&lt;p&gt;Regularization&amp;rsquo;s goal in lifelong-learning is to force the model trained on task $T + 1$
+to be similar enough to its previous version trained on task $T$. So that the
+catastrophic forgetting is alleviated.&lt;/p&gt;
+
+&lt;p&gt;There are several ways to do so:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;The most obvious is to add to the loss a L2 distance between the weights of the
+old &amp;amp; new version of the model. &lt;a href=&#34;https://arxiv.org/abs/1612.00796&#34; target=&#34;_blank&#34;&gt;(Kirkpatrick et al, 2017)&lt;/a&gt;
+and &lt;a href=&#34;https://arxiv.org/abs/1703.04200&#34; target=&#34;_blank&#34;&gt;(Zenke, Poole, and Ganguli, 2017)&lt;/a&gt; add an
+&lt;strong&gt;importance factor&lt;/strong&gt; to make this distance more or less &amp;ldquo;elastic&amp;rdquo;. An important
+weight would be allowed to change less than a lesser important weight.&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://arxiv.org/abs/1606.09282&#34; target=&#34;_blank&#34;&gt;(Li and Hoiem, 2018)&lt;/a&gt;, &lt;a href=&#34;https://arxiv.org/abs/1611.07725&#34; target=&#34;_blank&#34;&gt;(Rebuffi et al, 2017)&lt;/a&gt;, and &lt;a href=&#34;https://arxiv.org/abs/1807.09536&#34; target=&#34;_blank&#34;&gt;(Castro et al, 2018)&lt;/a&gt; add
+a constraint on the probabilities. If the previous model attributed a confidence of $56%$
+on the class $C$ for the sample $S$ then the new model should attribute it a close confidence.&lt;/li&gt;
+&lt;li&gt;Finally &lt;a href=&#34;https://arxiv.org/abs/1706.08840&#34; target=&#34;_blank&#34;&gt;(Lopez-Paz and Ranzato, 2017)&lt;/a&gt; imposes
+a constraint on the loss itself by forbidding to increase on seen samples.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&#34;model-plasticity&#34;&gt;Model plasticity&lt;/h4&gt;
+
+&lt;p&gt;Most lifelong-learning algorithms add new neurons to their classifier in order
+to predict the new classes. &lt;a href=&#34;https://arxiv.org/abs/1903.04476&#34; target=&#34;_blank&#34;&gt;(Golkar, Kagan and Cho, 2019)&lt;/a&gt;
+doesn&amp;rsquo;t and instead share the same classifier for every task, each task uses
+a mask choosing the input neurons.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://arxiv.org/abs/1708.01547&#34; target=&#34;_blank&#34;&gt;(Yoon et al, 2018)&lt;/a&gt; rationalizes that the total
+model capacity can not suffice sometimes with the increasing number of tasks. Its
+Dynamically Expandable Networks can copy existing neurons or even add new neurons
+to solve this.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://arxiv.org/abs/1803.03635&#34; target=&#34;_blank&#34;&gt;(Frankle and Carbin, 2018)&lt;/a&gt;&amp;rsquo;s Lottery Ticket
+Hypothesis states that neural networks are vastly overparametrized &amp;amp; that we
+can prune them down to a small sub-network having similar performance.
+&lt;a href=&#34;https://arxiv.org/abs/1701.08734&#34; target=&#34;_blank&#34;&gt;(Fernando et al, 2017)&lt;/a&gt;&amp;rsquo;s PathNet explores those
+sub-networks using an evolutionary algorithms &amp;amp; uses one sub-network per task.
+&lt;a href=&#34;https://arxiv.org/abs/1903.04476&#34; target=&#34;_blank&#34;&gt;(Golkar, Kagan and Cho, 2019)&lt;/a&gt; imitates PathNet
+but instead find the sub-networks using an in-training neurons sparsification
+with a L1 regularization on the neurons activity (&lt;a href=&#34;https://stats.stackexchange.com/a/159379&#34; target=&#34;_blank&#34;&gt;see intuition&lt;/a&gt;).&lt;/p&gt;
+
+&lt;h2 id=&#34;our-focus&#34;&gt;Our focus&lt;/h2&gt;
+
+&lt;p&gt;I&amp;rsquo;ll detail now three papers, each an incremental (see the pun?) improvement over the
+precedent:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Learning without Forgetting &lt;a href=&#34;https://arxiv.org/abs/1606.09282&#34; target=&#34;_blank&#34;&gt;(Li and Hoiem, 2016)&lt;/a&gt;.&lt;/li&gt;
+&lt;li&gt;iCaRL: Incremental Classifier and Representation Learning &lt;a href=&#34;https://arxiv.org/abs/1611.07725&#34; target=&#34;_blank&#34;&gt;(Rebuffi et al, 2017)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;End-to-End Incremental Learning &lt;a href=&#34;https://arxiv.org/abs/1807.09536&#34; target=&#34;_blank&#34;&gt;(Castro et al, 2018)&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;You can find my PyTorch implementations &lt;a href=&#34;https://github.com/arthurdouillard/incremental_learning.pytorch&#34; target=&#34;_blank&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h4 id=&#34;evaluation&#34;&gt;Evaluation&lt;/h4&gt;
+
+&lt;p&gt;The three papers are evaluated on the iCIFAR100 benchmark: a training on CIFAR100
+with a growing number of classes. New classes are batched in group of 2, 5, 10, 20,
+and 50 producing respectively 50, 20, 10, 5, and 2 tasks (CIFAR100 has eponymously
+100 classes).&lt;/p&gt;
+
+&lt;p&gt;At each task, the model is evaluated on all the seen classes.&lt;/p&gt;
+
+&lt;p&gt;Finally the plotted curve is not simply the accuracy, but what &lt;a href=&#34;https://arxiv.org/abs/1611.07725&#34; target=&#34;_blank&#34;&gt;(Rebuffi et al, 2017)&lt;/a&gt; named the &lt;strong&gt;average incremental accuracy&lt;/strong&gt;:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;The result of the evaluation are curves of the classification accuracies after
+each batch of classes. If a single number is preferable, we report the average
+of these accuracies, called average incremental accuracy.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;That I understand as: &amp;ldquo;the accuracy at task $T + X$ is actually task $T + X$ accuracy
+averaged with all previous tasks accuracy&amp;rdquo;. Which would make sense, else two models
+reaching the same accuracy on task $T + X$ would be equal while one could have
+had consistently a better accuracy on previous tasks.&lt;/p&gt;
+
+&lt;h4 id=&#34;learning-without-forgetting&#34;&gt;Learning without Forgetting&lt;/h4&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://arxiv.org/abs/1606.09282&#34; target=&#34;_blank&#34;&gt;(Li and Hoiem, 2016)&lt;/a&gt;&amp;rsquo;s LwF does not use any
+external memory. Meaning that once the model was trained on a task, the task&amp;rsquo;s
+data is completely discarded.&lt;/p&gt;
+
+&lt;p&gt;During the first task, the training is common: softmax + cross-entropy to
+classify the images. However before every other tasks, we save the current model
+predictions&amp;rsquo; confidence of old classes on the new task data.
+These predictions are done on completely unseen data, that do not contain any old
+classes. Still the confidences provide plenty of information: as
+&lt;a href=&#34;https://arxiv.org/abs/1503.02531&#34; target=&#34;_blank&#34;&gt;(Hinton et al, 2015)&lt;/a&gt; nicknamed a &lt;strong&gt;dark knowledge&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;Starting from the second task, there are now two losses:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;The &lt;strong&gt;classification loss&lt;/strong&gt; which is a cross-entropy between the new classes&amp;rsquo;
+predictions &amp;amp; the ground-truth&lt;/li&gt;
+&lt;li&gt;The &lt;strong&gt;distillation loss&lt;/strong&gt; which is a binary-cross-entropy between the current
+predictions of the old classes &amp;amp; its previously recorded version.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The goal of the &lt;strong&gt;distillation loss&lt;/strong&gt; is to force the model to match the same
+confidence on old classes as it did before the current task.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Note that as &lt;a href=&#34;https://arxiv.org/abs/1503.02531&#34; target=&#34;_blank&#34;&gt;(Hinton et al, 2015)&lt;/a&gt; suggested,
+they add a temperature (the logits are raised to the power of $\frac{1}{\text{temperature}}$)
+to soften the probabilities.&lt;/em&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;icarl-incremental-classifier-and-representation-learning&#34;&gt;iCaRL: Incremental Classifier and Representation Learning&lt;/h4&gt;
+
+&lt;p&gt;iCaRL also use classification &amp;amp; distillation losses. The only difference&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Lowshot learning using a metric</title>
+      <link>/post/metric-learning/</link>
+      <pubDate>Sun, 13 Jan 2019 00:00:00 +0100</pubDate>
+      
+      <guid>/post/metric-learning/</guid>
+      <description>
+
+&lt;h1 id=&#34;1-a-problem&#34;&gt;1. A problem&lt;/h1&gt;
+
+&lt;p&gt;Deep Learning usually requires many samples: ImageNet has a thousand samples per
+classes. Thanks to &lt;strong&gt;transfer learning&lt;/strong&gt; (see &lt;a href=&#34;https://arxiv.org/abs/1608.08614&#34; target=&#34;_blank&#34;&gt;Huh et al, 2016&lt;/a&gt;
+for a good review) we can use the knowledge of large datasets (i.e. ImageNet),
+and transfer it to a smaller dataset.&lt;/p&gt;
+
+&lt;p&gt;This has two drawbacks:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;The new small dataset must similar to the larger dataset, you can expect
+the knowledge learned on dogs &amp;amp; cats to generalize well on clothing for example.
+This is a problem of &lt;strong&gt;domain adaptation&lt;/strong&gt; that I&amp;rsquo;ll hopefuly cover in another post.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Furthermore, even if transfer learning can alleviate the need of
+data, we still need too much! A good rule of thumb is having at least 500-1,000
+images per class.&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;The second problem is called &lt;strong&gt;lowshot learning&lt;/strong&gt;. It is a commonly faced problem
+at my work, &lt;a href=&#34;https://www.heuritech.com/&#34; target=&#34;_blank&#34;&gt;Heuritech&lt;/a&gt;, when we want to classify
+bag models having only a dozen of images to train on.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Note that lowshot is also called fewshots or meta-learning&lt;/em&gt;.&lt;/p&gt;
+
+&lt;h1 id=&#34;2-toy-datasets-lowshot-vocabulary&#34;&gt;2. Toy datasets &amp;amp; lowshot vocabulary&lt;/h1&gt;
+
+&lt;p&gt;MNIST is the famous &lt;em&gt;toy&lt;/em&gt; dataset for deep learning featuring handwritten
+numbers. It is made of 10 classes (0 to 9), with 7,000 images per class.&lt;/p&gt;
+
+&lt;p&gt;Its equivalent in the &lt;a href=&#34;https://github.com/brendenlake/omniglot&#34; target=&#34;_blank&#34;&gt;Omniglot dataset&lt;/a&gt;.
+It features 1623 unique characters taken from several alphabets (Latin, Korean, etc.).
+The real difference is that each unique character has only 20 samples!&lt;/p&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;/figures/omniglot_0.png&#34; alt=&#34;*Figure 1: A sample of the Omniglot dataset.*&#34; /&gt;
+
+
+
+&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
+  &lt;p style=&#34;text-align: center&#34;&gt;
+    &lt;em&gt;Figure 1: A sample of the Omniglot dataset.&lt;/em&gt;
+    
+    
+    
+  &lt;/p&gt; 
+&lt;/figcaption&gt;
+
+&lt;/figure&gt;
+
+&lt;p&gt;A particular vocabulary, introduced by &lt;a href=&#34;https://www.cs.cmu.edu/~rsalakhu/papers/oneshot1.pdf&#34; target=&#34;_blank&#34;&gt;Koch et al, 2015&lt;/a&gt; was used to described the
+task of lowshot:&lt;/p&gt;
+
+&lt;p&gt;During training, the goal is to differentiate all unique characters of the
+&lt;span style=&#34;color: red;&#34;&gt;&lt;strong&gt;background set&lt;/strong&gt;&lt;/span&gt;. On the next figure, in red,
+the model must learn that the Latin &lt;em&gt;F&lt;/em&gt; is different from the Korean &lt;em&gt;B/P&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;Then during the test phase, we will classify the unseen classes of the
+&lt;span style=&#34;color: blue;&#34;&gt;&lt;strong&gt;query set&lt;/strong&gt;&lt;/span&gt; using the few labelled images of the
+&lt;span style=&#34;color: green;&#34;&gt;&lt;strong&gt;support set&lt;/strong&gt;&lt;/span&gt;.&lt;/p&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;/figures/omniglot_1.png&#34; alt=&#34;*Figure 2: The vocabulary of lowshot tasks.*&#34; /&gt;
+
+
+
+&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
+  &lt;p style=&#34;text-align: center&#34;&gt;
+    &lt;em&gt;Figure 2: The vocabulary of lowshot tasks.&lt;/em&gt;
+    
+    
+    
+  &lt;/p&gt; 
+&lt;/figcaption&gt;
+
+&lt;/figure&gt;
+
+&lt;h1 id=&#34;2-several-methods-for-lowshot-learning&#34;&gt;2. Several methods for lowshot learning&lt;/h1&gt;
+
+&lt;p&gt;Several kinds of methods exist to solve lowshot problems. The three main ones were
+nicely presented by Oriol Vinyals at NeurIPS 2017:&lt;/p&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;/figures/meta_ml.png&#34; alt=&#34;*Figure 1: Taxonomy of lowshot learning, [[source]](http://metalearning-symposium.ml/files/vinyals.pdf)*&#34; /&gt;
+
+
+
+&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
+  &lt;p style=&#34;text-align: center&#34;&gt;
+    &lt;em&gt;Figure 1: Taxonomy of lowshot learning, &lt;a href=&#34;http://metalearning-symposium.ml/files/vinyals.pdf&#34; target=&#34;_blank&#34;&gt;[source]&lt;/a&gt;&lt;/em&gt;
+    
+    
+    
+  &lt;/p&gt; 
+&lt;/figcaption&gt;
+
+&lt;/figure&gt;
+
+&lt;p&gt;I&amp;rsquo;ll present in this post only those metric-based.&lt;/p&gt;
+
+&lt;h1 id=&#34;3-learning-a-metric&#34;&gt;3. Learning a metric&lt;/h1&gt;
+
+&lt;p&gt;The key idea of metric-based models is to learn a distance or a similarity between
+samples. Then having the pairwise metric computed between all labeled &amp;amp; unlabeled
+samples, and finally do a nearest-neighbours to classify the unlabeled data
+based on their similarity with the labelled data:&lt;/p&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;/figures/metric-learning.jpg&#34; alt=&#34;*Figure 2: Unlabeled data is classified based on its distance with the labeled data.*&#34; /&gt;
+
+
+
+&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
+  &lt;p style=&#34;text-align: center&#34;&gt;
+    &lt;em&gt;Figure 2: Unlabeled data is classified based on its distance with the labeled data.&lt;/em&gt;
+    
+    
+    
+  &lt;/p&gt; 
+&lt;/figcaption&gt;
+
+&lt;/figure&gt;
+
+&lt;p&gt;On the previous figure, a single instance of the red class is enough to to classify
+its three closest unlabelled instances as also red. It&amp;rsquo;s a case of &lt;em&gt;one-shot learning&lt;/em&gt;.&lt;/p&gt;
+
+&lt;h1 id=&#34;4-various-models&#34;&gt;4. Various models&lt;/h1&gt;
+
+&lt;h2 id=&#34;4-1-siamese-triplet-co&#34;&gt;4.1. Siamese, Triplet, &amp;amp; co.&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://papers.nips.cc/paper/769-signature-verification-using-a-siamese-time-delay-neural-network.pdf&#34; target=&#34;_blank&#34;&gt;Bromley et al, 1993&lt;/a&gt;
+introduced &lt;strong&gt;Siamese Network&lt;/strong&gt; for signature verification. The network sees a pair
+of signatures &amp;amp; determines whether they are the same or one is a forgery. A
+classification would be far too data-demanding and couldn&amp;rsquo;t scale to millions unique signatures.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://www.cs.cmu.edu/~rsalakhu/papers/oneshot1.pdf&#34; target=&#34;_blank&#34;&gt;(Koch et al, 2015)&lt;/a&gt; re-used
+this architecture to Omniglot with the task described previously. A same network
+extracts features from each image of the pair and pass those to a classifier
+followed by a sigmoid. Then the pair of features are substracted together &amp;amp; an
+absolute function is applied on the result. This result is fed again to a classifier
+with a single output neuron &amp;amp; a sigmoid, predicting a similarity score: 1 if the
+pair corresponds to the same character else 0.&lt;/p&gt;
+
+&lt;p&gt;As the authors remarks, they didn&amp;rsquo;t use a L1 distance on the features that would
+collapse into a single value. Instead the final classifier is weighting the
+importance of the component-wise distance.&lt;/p&gt;
+
+&lt;p&gt;An implementation of this architecture can be done in a few lines of Pytorch:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Siamese&lt;/span&gt;(nn&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;Module):
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; __init__(self):
+        super()&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;__init__()
+        self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;convnet &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; MyConvNet()
+        self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;fc1 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; nn&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;Linear(out_dim, out_dim)
+        self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;fc2 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; nn&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;Linear(out_dim, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)
+
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;forward&lt;/span&gt;(self, image1, image2):
+        x1 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;convnet(image1)
+        x2 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;convnet(image2) &lt;span style=&#34;color:#75715e&#34;&gt;# Shape (batch, channel, width, height)&lt;/span&gt;
+
+        x1 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; x1&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;view(x1&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;shape[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;], &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)
+        x2 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; x2&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;view(x2&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;shape[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;], &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;) &lt;span style=&#34;color:#75715e&#34;&gt;# Shape (batch, channel * width * height)&lt;/span&gt;
+
+        x1 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; torch&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;sigmoid(self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;fc1(x1))
+        x2 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; torch&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;sigmoid(self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;fc1(x2)) &lt;span style=&#34;color:#75715e&#34;&gt;# Shape (batch, channel * width * height)&lt;/span&gt;
+
+        x &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; torch&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;abs(x1 &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; x2) &lt;span style=&#34;color:#75715e&#34;&gt;# Shape (batch, channel * width * height)&lt;/span&gt;
+        x &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; torch&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;sigmoid(self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;fc2(x)) &lt;span style=&#34;color:#75715e&#34;&gt;# Shape (batch, 1)&lt;/span&gt;
+
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; x&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;The loss is simply a &lt;strong&gt;binary cross-entropy&lt;/strong&gt;. What the Siamese Network does is
+pulling closer in the features space images of the same label, while pushing apart
+those of different labels.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;PLOT GRAPH&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;An older alternative to &lt;a href=&#34;https://www.cs.cmu.edu/~rsalakhu/papers/oneshot1.pdf&#34; target=&#34;_blank&#34;&gt;(Koch et al, 2015)&lt;/a&gt;
+is a Siamese Network, with a L2 distance instead of a component-wise L1 distance,
+and the &lt;strong&gt;contrastive loss&lt;/strong&gt; &lt;a href=&#34;http://yann.lecun.com/exdb/publis/pdf/hadsell-chopra-lecun-06.pdf&#34; target=&#34;_blank&#34;&gt;(hadsell-chopra-lecun, 2006)&lt;/a&gt;:&lt;/p&gt;
+
+&lt;p&gt;$L = (1 - Y) D^2 + Y (\max(0, m - D))^2$&lt;/p&gt;
+
+&lt;p&gt;$Y$ is equal to 1 if the pair is dissimilar, otherwise 0. The first part of the
+loss ($(1 - Y) D^2)&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;$&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Siamese&lt;/p&gt;
+
+&lt;p&gt;Triplet &lt;a href=&#34;https://arxiv.org/abs/1412.6622&#34; target=&#34;_blank&#34;&gt;(Hoffer &amp;amp; Ailon, 2014)&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Triplet ranking &lt;a href=&#34;https://arxiv.org/abs/1804.07275&#34; target=&#34;_blank&#34;&gt;(Ye &amp;amp; Guo, 2018)&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Quadruplet &lt;a href=&#34;https://arxiv.org/abs/1704.01719&#34; target=&#34;_blank&#34;&gt;(Chen et al, 2017)&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;N-pair &lt;a href=&#34;http://www.nec-labs.com/uploads/images/Department-Images/MediaAnalytics/papers/nips16_npairmetriclearning.pdf&#34; target=&#34;_blank&#34;&gt;(Sohn et al, 2016)&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;4-3-imprinted-weights&#34;&gt;4.3. Imprinted weights&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://arxiv.org/abs/1712.07136&#34; target=&#34;_blank&#34;&gt;(Qi et al, 2017)&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;4-4-histogram-loss&#34;&gt;4.4. Histogram Loss&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://arxiv.org/abs/1611.00822&#34; target=&#34;_blank&#34;&gt;(Ustinova &amp;amp; Lempitsky, 2016)&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;4-4-matching-network&#34;&gt;4.4. Matching Network&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://arxiv.org/abs/1606.04080&#34; target=&#34;_blank&#34;&gt;(Vinyals et al, 2016)&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
       <title>Normalization in Deep Learning</title>
       <link>/post/normalization/</link>
       <pubDate>Fri, 10 Aug 2018 00:00:00 +0200</pubDate>
@@ -255,7 +773,7 @@ by simply computing the statistics on the incoming input.&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&#34;https://arxiv.org/abs/1607.08022&#34; target=&#34;_blank&#34;&gt;(Ulyanov et al, 2016)&lt;/a&gt;&amp;rsquo;s instance norm (IN)
 normalizes each channel of each batch&amp;rsquo;s image independently. &lt;strong&gt;The goal is to
-normalize the contract of the content image&lt;/strong&gt;. According to the authors, only the
+normalize the constrast of the content image&lt;/strong&gt;. According to the authors, only the
 style image contrast should matter.&lt;/p&gt;
 
 &lt;h3 id=&#34;2-3-group-normalization&#34;&gt;2.3. Group Normalization&lt;/h3&gt;

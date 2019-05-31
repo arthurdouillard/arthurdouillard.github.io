@@ -13,6 +13,38 @@
     
     
     <item>
+      <title>How to be confident in your neural network confidence</title>
+      <link>/post/miscalibration/</link>
+      <pubDate>Thu, 30 May 2019 00:00:00 +0200</pubDate>
+      
+      <guid>/post/miscalibration/</guid>
+      <description>Those notes are based on the research paper &amp;ldquo;On Calibration of Modern Neural Networks&amp;rdquo; (Guo et al, 2017.).
+How to be confident in your neural network confidence? Very large and deep model, as ResNet, are far more accurate than their older counterparts, as LeNet, on computer vision datasets as CIFAR100. However while they are more better to classify images, we are less confident in their own confidence!
+Most neural networks for classification uses as last activation a softmax: it produces a distribution of probabilities for each target (cat, dog, boat, etc.</description>
+    </item>
+    
+    <item>
+      <title>Introduction to Incremental Learning</title>
+      <link>/post/incremental-learning/</link>
+      <pubDate>Fri, 26 Apr 2019 00:00:00 +0200</pubDate>
+      
+      <guid>/post/incremental-learning/</guid>
+      <description>Transfer Learning Transfer learning allows to transfer the knowledge gained on one task (e.g ImageNet) to another task (e.g classify cats &amp;amp; dogs). Usually the backbone (a ConvNet in Computer Vision, like ResNet) is kept while a new classifier is plugged in on top of it. During transfer, we train the new classifier &amp;amp; fine-tune the backbone.
+However by fine-tuning the model&amp;rsquo;s backbone on the new task, it will probably change it so much that it will forget the old task!</description>
+    </item>
+    
+    <item>
+      <title>Lowshot learning using a metric</title>
+      <link>/post/metric-learning/</link>
+      <pubDate>Sun, 13 Jan 2019 00:00:00 +0100</pubDate>
+      
+      <guid>/post/metric-learning/</guid>
+      <description>1. A problem Deep Learning usually requires many samples: ImageNet has a thousand samples per classes. Thanks to transfer learning (see Huh et al, 2016 for a good review) we can use the knowledge of large datasets (i.e. ImageNet), and transfer it to a smaller dataset.
+This has two drawbacks:
+ The new small dataset must similar to the larger dataset, you can expect the knowledge learned on dogs &amp;amp; cats to generalize well on clothing for example.</description>
+    </item>
+    
+    <item>
       <title>Normalization in Deep Learning</title>
       <link>/post/normalization/</link>
       <pubDate>Fri, 10 Aug 2018 00:00:00 +0200</pubDate>
