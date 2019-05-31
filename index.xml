@@ -78,7 +78,7 @@ this computed threshold could be 0.2 or 0.9 but would probably make much sense t
 &lt;p&gt;A model without miscalibration would help the users to interpret better the
 predictions.&lt;/p&gt;
 
-&lt;h2 id=&#34;why-does-it-happen&#34;&gt;Why Does It Happen&lt;/h2&gt;
+&lt;h2 id=&#34;why-it-happens&#34;&gt;Why It Happens&lt;/h2&gt;
 
 &lt;p&gt;The authors explores empirically what are the causes of this miscalibration in
 modern networks.&lt;/p&gt;
