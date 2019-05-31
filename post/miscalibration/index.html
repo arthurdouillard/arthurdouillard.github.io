@@ -105,7 +105,7 @@
   
   <meta property="og:site_name" content="Arthur Douillard">
   <meta property="og:url" content="/post/miscalibration/">
-  <meta property="og:title" content="How to be confident in your neural network confidence | Arthur Douillard">
+  <meta property="og:title" content="How To Be Confident In Your Neural Network Confidence | Arthur Douillard">
   <meta property="og:description" content="Why deep neural networks are flawed and how to fix it.">
   <meta property="og:locale" content="en-us">
   
@@ -117,7 +117,7 @@
   
 
   
-<meta name="twitter:title" content="How to be confident in your neural network confidence" />
+<meta name="twitter:title" content="How To Be Confident In Your Neural Network Confidence" />
 
 
 
@@ -125,7 +125,11 @@
 
 
 
+<meta name="twitter:image" content="/figures/miscalibration.png" />
 
+
+
+<meta property="og:image" content=/figures/miscalibration.png/>
 
 
 
@@ -135,7 +139,7 @@
 <link rel="icon" type="image/png" href="/img/favicon32.png">
 <link rel="apple-touch-icon" type="image/png" href="/img/favicon180.png">
 
-  <title>How to be confident in your neural network confidence | Arthur Douillard</title>
+  <title>How To Be Confident In Your Neural Network Confidence | Arthur Douillard</title>
 
 </head>
 <body id="top" data-spy="scroll" data-target="#toc" data-offset="71" class="dark">
@@ -256,7 +260,7 @@
 
 
   <div class="article-container">
-    <h1 itemprop="name">How to be confident in your neural network confidence</h1>
+    <h1 itemprop="name">How To Be Confident In Your Neural Network Confidence</h1>
 
     
 
@@ -283,7 +287,7 @@
   
   <span class="middot-divider"></span>
   <span class="article-reading-time">
-    3 min read
+    5 min read
   </span>
   
 
@@ -298,7 +302,7 @@
   <ul class="share">
     <li>
       <a class="twitter"
-         href="https://twitter.com/intent/tweet?text=How%20to%20be%20confident%20in%20your%20neural%20network%20confidence&amp;url=%2fpost%2fmiscalibration%2f"
+         href="https://twitter.com/intent/tweet?text=How%20To%20Be%20Confident%20In%20Your%20Neural%20Network%20Confidence&amp;url=%2fpost%2fmiscalibration%2f"
          target="_blank" rel="noopener">
         <i class="fa fa-twitter"></i>
       </a>
@@ -312,21 +316,21 @@
     </li>
     <li>
       <a class="linkedin"
-         href="https://www.linkedin.com/shareArticle?mini=true&amp;url=%2fpost%2fmiscalibration%2f&amp;title=How%20to%20be%20confident%20in%20your%20neural%20network%20confidence"
+         href="https://www.linkedin.com/shareArticle?mini=true&amp;url=%2fpost%2fmiscalibration%2f&amp;title=How%20To%20Be%20Confident%20In%20Your%20Neural%20Network%20Confidence"
          target="_blank" rel="noopener">
         <i class="fa fa-linkedin"></i>
       </a>
     </li>
     <li>
       <a class="weibo"
-         href="http://service.weibo.com/share/share.php?url=%2fpost%2fmiscalibration%2f&amp;title=How%20to%20be%20confident%20in%20your%20neural%20network%20confidence"
+         href="http://service.weibo.com/share/share.php?url=%2fpost%2fmiscalibration%2f&amp;title=How%20To%20Be%20Confident%20In%20Your%20Neural%20Network%20Confidence"
          target="_blank" rel="noopener">
         <i class="fa fa-weibo"></i>
       </a>
     </li>
     <li>
       <a class="email"
-         href="mailto:?subject=How%20to%20be%20confident%20in%20your%20neural%20network%20confidence&amp;body=%2fpost%2fmiscalibration%2f">
+         href="mailto:?subject=How%20To%20Be%20Confident%20In%20Your%20Neural%20Network%20Confidence&amp;body=%2fpost%2fmiscalibration%2f">
         <i class="fa fa-envelope"></i>
       </a>
     </li>
@@ -343,12 +347,12 @@
       
 
 <p>Those notes are based on the research paper
-<a href="https://arxiv.org/abs/1706.04599" target="_blank">&ldquo;On Calibration of Modern Neural Networks&rdquo; (Guo et al, 2017.)</a>.</p>
+&ldquo;<strong>On Calibration of Modern Neural Networks</strong>&rdquo; by <a href="https://arxiv.org/abs/1706.04599" target="_blank">(Guo et al, 2017.)</a>.</p>
 
-<h1 id="how-to-be-confident-in-your-neural-network-confidence">How to be confident in your neural network confidence?</h1>
+<h1 id="how-to-be-confident-in-your-neural-network-confidence">How To Be Confident In Your Neural Network Confidence?</h1>
 
-<p>Very large and deep model, as ResNet, are far more accurate than their older counterparts, as LeNet, on computer vision datasets as CIFAR100. <strong>However while
-they are more better to classify images, we are less confident in their own confidence!</strong></p>
+<p>Very large and deep models, as ResNet, are far more accurate than their older counterparts, as LeNet, on computer vision datasets such as CIFAR100. <strong>However while
+they are better at classifying images, we are less confident in their own confidence!</strong></p>
 
 <p>Most neural networks for classification uses as last activation a softmax: it
 produces a distribution of probabilities for each target (cat, dog, boat, etc.).
@@ -388,30 +392,30 @@ a higher accuracy (69%) but as showed in figure 1, they are over-confident.</p>
 <p>This discrepancy between the model confidence and the actual accuracy is called
 <strong>miscalibration</strong>.</p>
 
-<h2 id="why-is-it-important">Why is it important</h2>
+<h2 id="why-it-is-important">Why It Is Important</h2>
 
 <p>Outside of toy datasets used in the academy, it can be useful to know how much
-we can be confident in a prediction.</p>
+confident our model is.</p>
 
 <p>Imagine we have a model predicting frauds. We want to flag some transaction as
 suspicious based on the model confidence that it is a fraud.
 We could definitely compute an optimal threshold on the validation set, and then
-every confidence above this threshold would have flagged as a fraud. However
-this computed threshold could be 0.2 or 0.9 but wouldn’t make much sense to a human.</p>
+every confidence above this threshold would be flagged as a fraud. However
+this computed threshold could be 0.2 or 0.9 but would probably make much sense to a human.</p>
 
 <p>A model without miscalibration would help the users to interpret better the
 predictions.</p>
 
-<h2 id="why-does-it-happen">Why does it happen</h2>
+<h2 id="why-does-it-happen">Why Does It Happen</h2>
 
 <p>The authors explores empirically what are the causes of this miscalibration in
 modern networks.</p>
 
-<p>They measure the miscalibration with the <strong>E</strong>xpected <strong>C</strong>alibration <strong>E</strong>rror:
+<p>They measure the miscalibration with the <strong>E</strong>xpected <strong>C</strong>alibration <strong>E</strong>rror (ECE):
 the average difference between the confidence and the accuracy. This metric should
 be minimized.</p>
 
-<h3 id="higher-capacity">Higher capacity</h3>
+<h3 id="higher-capacity-cross-entropy">Higher Capacity &amp; Cross-Entropy</h3>
 
 <p>The most interpretable cause of the miscalibration is the increase of capacity
 and the cross-entropy loss.</p>
@@ -427,11 +431,135 @@ same way PCA works) and will then generalize better (but too few capacity &amp; 
 learning will happen!).</p>
 
 <p>The new architectures such as ResNet have way more capacity than the older
-LeNet ([add number of params for each]). This high capacity led to better
-accuracy but also let the models learn more features from the data. In addition the models optimizes the cross-entropy loss that force them to be right AND to be very confident. The higher capacity helped to lower the cross-entropy loss and made the models very confident in their predictions. 
-As you’ve seen on figure 2, the new models are now over-confident.</p>
+LeNet (25M parameters for the former and 20k for the latter). This high
+capacity led to better accuracy: the training set can almost be learned by heart.</p>
 
-<p>[add figure of capacity / miscallibration]</p>
+<p>In addition the models optimizes the cross-entropy loss that force them to be
+right AND to be very confident. The higher capacity helped to lower the
+cross-entropy loss and thus encourages deep neural networks to be over-confident.
+As you’ve seen on figure 1, the new models are now over-confident.</p>
+
+<figure>
+
+<img src="/figures/miscalibration_capacity.png" alt="*Figure 2: More capacity (in depth or width) increases the miscalibration. [[source](https://arxiv.org/abs/1706.04599)]*" />
+
+
+
+<figcaption data-pre="Figure " data-post=":" >
+  <p style="text-align: center">
+    <em>Figure 2: More capacity (in depth or width) increases the miscalibration. [<a href="https://arxiv.org/abs/1706.04599" target="_blank">source</a>]</em>
+    
+    
+    
+  </p> 
+</figcaption>
+
+</figure>
+
+<h3 id="the-mysterious-batch-normalization">The Mysterious Batch Normalization</h3>
+
+<p>Batch Normalization normalizes the tensors in a network. It greatly improves the
+training convergence &amp; the final performance. Why exactly it works that well
+is still a bit undefined (<a href="/posts/normalization">see more</a>).</p>
+
+<p>The authors remark empirically that using Batch Normalization increased the miscalibration
+but could not find an exact reason why.</p>
+
+<figure>
+
+<img src="/figures/miscalibration_bn.png" alt="*Figure 3: Batch Normalization increases the miscalibration. [[source](https://arxiv.org/abs/1706.04599)]*" />
+
+
+
+<figcaption data-pre="Figure " data-post=":" >
+  <p style="text-align: center">
+    <em>Figure 3: Batch Normalization increases the miscalibration. [<a href="https://arxiv.org/abs/1706.04599" target="_blank">source</a>]</em>
+    
+    
+    
+  </p> 
+</figcaption>
+
+</figure>
+
+<p>Could the help given by this method in training facilitate the over-confidence?</p>
+
+<h3 id="regularization">Regularization</h3>
+
+<p>The weight decay is an additional loss that penalizes the L2 norm of the weights.
+The larger the weights, the bigger the norm and thus the loss. By constraining the weights
+magnitude, it avoid the model finding extreme weight values that could make it overfit.</p>
+
+<p>The authors found that increasing the regularization decreases the model accuracy
+as expected. However it also decreased the miscalibration! The answer is then again
+because regularization avoid overfitting &amp; thus over-confidence.</p>
+
+<figure>
+
+<img src="/figures/miscalibration_reg.png" alt="*Figure 4: More regularization decreases the miscalibration. [[source](https://arxiv.org/abs/1706.04599)]*" />
+
+
+
+<figcaption data-pre="Figure " data-post=":" >
+  <p style="text-align: center">
+    <em>Figure 4: More regularization decreases the miscalibration. [<a href="https://arxiv.org/abs/1706.04599" target="_blank">source</a>]</em>
+    
+    
+    
+  </p> 
+</figcaption>
+
+</figure>
+
+<h2 id="how-to-fix-miscalibration">How To Fix Miscalibration</h2>
+
+<p>This article&rsquo;s title, &ldquo;<em>How To Be Confident In Your Neural Network Confidence</em>&rdquo;,
+led you to believe that you would discover how to reduce miscalibration.</p>
+
+<p>You&rsquo;re not going to reduce the capacity, remove Batch Normalization, and increase
+the regularization: you&rsquo;ll hurt too much your precious accuracy.</p>
+
+<p>Fortunately there are post-processing solutions. The authors describe several
+but the most effective one is also the simplest: <strong>Temperature Scaling</strong>.</p>
+
+<p>Instead of computing the softmax like this:</p>
+
+<p>$$\text{softmax}(x)_i = \frac{e^{y_i}}{\Sigma_j^N e^{y_j}}$$</p>
+
+<p>All the logits (values just before the final activation, here softmax) are divided
+by the same value called temperature:</p>
+
+<p>$$\text{softmax}(x)_i = \frac{e^{\frac{y_i}{T}}}{\Sigma_j^N e^{\frac{y_j}{T}}}$$</p>
+
+<p>Similar to (<a href="https://arxiv.org/abs/1503.02531" target="_blank">Hinton et al, 2015.</a>), this temperature
+<em>softens the probabilities</em>.</p>
+
+<p>Extreme probabilities (high confidence) are more decreased than smaller probabilities
+(low confidence). The authors find the optimal temperature by minimizing the
+Expected Calibration Error on the validation set.</p>
+
+<p>The miscalibration is almost entirely corrected:</p>
+
+<figure>
+
+<img src="/figures/miscalibration_tempscaling.png" alt="*Figure 5: Temperature Scaling fixes the miscalibration. [[source](https://arxiv.org/abs/1706.04599)]*" />
+
+
+
+<figcaption data-pre="Figure " data-post=":" >
+  <p style="text-align: center">
+    <em>Figure 5: Temperature Scaling fixes the miscalibration. [<a href="https://arxiv.org/abs/1706.04599" target="_blank">source</a>]</em>
+    
+    
+    
+  </p> 
+</figcaption>
+
+</figure>
+
+<p>Another cool feature of Temperature Scaling: because all logits are divided by the
+same value, and that softmax is a <a href="https://en.wikipedia.org/wiki/Monotonic_function" target="_blank">monotone function</a>,
+the accuracy remains unchanged!</p>
 
     </div>
 
@@ -451,7 +579,7 @@ As you’ve seen on figure 2, the new models are now over-confident.</p>
   
   <div class="post-nav-item">
     <div class="meta-nav">Previous</div>
-    <a href="/post/incremental-learning/" rel="prev">Introduction to Incremental Learning</a>
+    <a href="/post/normalization/" rel="prev">Normalization in Deep Learning</a>
   </div>
   
 </div>

@@ -13,6 +13,17 @@
     
     
     <item>
+      <title>How To Be Confident In Your Neural Network Confidence</title>
+      <link>/post/miscalibration/</link>
+      <pubDate>Thu, 30 May 2019 00:00:00 +0200</pubDate>
+      
+      <guid>/post/miscalibration/</guid>
+      <description>Those notes are based on the research paper &amp;ldquo;On Calibration of Modern Neural Networks&amp;rdquo; by (Guo et al, 2017.).
+How To Be Confident In Your Neural Network Confidence? Very large and deep models, as ResNet, are far more accurate than their older counterparts, as LeNet, on computer vision datasets such as CIFAR100. However while they are better at classifying images, we are less confident in their own confidence!
+Most neural networks for classification uses as last activation a softmax: it produces a distribution of probabilities for each target (cat, dog, boat, etc.</description>
+    </item>
+    
+    <item>
       <title>Normalization in Deep Learning</title>
       <link>/post/normalization/</link>
       <pubDate>Fri, 10 Aug 2018 00:00:00 +0200</pubDate>
