@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Arthur Douillard on Arthur Douillard</title>
@@ -7,7 +6,7 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; 2018</copyright>
-    <lastBuildDate>Wed, 20 Apr 2016 00:00:00 +0200</lastBuildDate>
+    <lastBuildDate>Thu, 30 May 2019 00:00:00 +0200</lastBuildDate>
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
@@ -263,24 +262,23 @@ you feel I missed something important, tell me!&lt;/p&gt;
 for computer vision tasks. Three normalization schemes are often seen:&lt;/p&gt;
 
 &lt;ol&gt;
-&lt;li&gt;Normalizing the pixel values between 0 and 1:&lt;/li&gt;
-&lt;/ol&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;img &lt;span style=&#34;color:#f92672&#34;&gt;/=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;255.&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;ol&gt;
-&lt;li&gt;Normalizing the pixel values between -1 and 1 (as &lt;a href=&#34;https://github.com/keras-team/keras-applications/blob/master/keras_applications/imagenet_utils.py#L47-L50&#34; target=&#34;_blank&#34;&gt;Tensorflow does&lt;/a&gt;):&lt;/li&gt;
-&lt;/ol&gt;
+&lt;li&gt;&lt;p&gt;Normalizing the pixel values between 0 and 1:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;img &lt;span style=&#34;color:#f92672&#34;&gt;/=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;255.&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Normalizing the pixel values between -1 and 1 (as &lt;a href=&#34;https://github.com/keras-team/keras-applications/blob/master/keras_applications/imagenet_utils.py#L47-L50&#34; target=&#34;_blank&#34;&gt;Tensorflow does&lt;/a&gt;):&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;img &lt;span style=&#34;color:#f92672&#34;&gt;/=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;127.5&lt;/span&gt;
-img &lt;span style=&#34;color:#f92672&#34;&gt;-=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1.&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;ol&gt;
-&lt;li&gt;Normalizing according to the dataset mean &amp;amp; standard deviation (as &lt;a href=&#34;https://github.com/keras-team/keras-applications/blob/master/keras_applications/imagenet_utils.py#L52-L55&#34; target=&#34;_blank&#34;&gt;Torch does&lt;/a&gt;):&lt;/li&gt;
-&lt;/ol&gt;
+img &lt;span style=&#34;color:#f92672&#34;&gt;-=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1.&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Normalizing according to the dataset mean &amp;amp; standard deviation (as &lt;a href=&#34;https://github.com/keras-team/keras-applications/blob/master/keras_applications/imagenet_utils.py#L52-L55&#34; target=&#34;_blank&#34;&gt;Torch does&lt;/a&gt;):&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;img &lt;span style=&#34;color:#f92672&#34;&gt;/=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;255.&lt;/span&gt;
 mean &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#ae81ff&#34;&gt;0.485&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0.456&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0.406&lt;/span&gt;] &lt;span style=&#34;color:#75715e&#34;&gt;# Here it&amp;#39;s ImageNet statistics&lt;/span&gt;
 std &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#ae81ff&#34;&gt;0.229&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0.224&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0.225&lt;/span&gt;]
 
 &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;): &lt;span style=&#34;color:#75715e&#34;&gt;# Considering an ordering NCHW (batch, channel, height, width)&lt;/span&gt;
-    img[i, :, :] &lt;span style=&#34;color:#f92672&#34;&gt;-=&lt;/span&gt; mean[i]
-    img[i, :, :] &lt;span style=&#34;color:#f92672&#34;&gt;/=&lt;/span&gt; std[i]&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+img[i, :, :] &lt;span style=&#34;color:#f92672&#34;&gt;-=&lt;/span&gt; mean[i]
+img[i, :, :] &lt;span style=&#34;color:#f92672&#34;&gt;/=&lt;/span&gt; std[i]&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
 &lt;p&gt;Why is it recommended? Let&amp;rsquo;s take a neuron, where:&lt;/p&gt;
 
 &lt;p&gt;$$y = w \cdot x$$&lt;/p&gt;
@@ -539,13 +537,12 @@ the input data.&lt;/p&gt;
     </item>
     
     <item>
-      <title>Privacy Policy</title>
-      <link>/privacy/</link>
+      <title>Reading List</title>
+      <link>/reading/</link>
       <pubDate>Thu, 28 Jun 2018 00:00:00 +0200</pubDate>
       
-      <guid>/privacy/</guid>
-      <description>&lt;p&gt;&amp;hellip;&lt;/p&gt;
-</description>
+      <guid>/reading/</guid>
+      <description></description>
     </item>
     
     <item>

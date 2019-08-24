@@ -1,5 +1,13 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
+    
+    
+    <url>
+    
+      <loc>/</loc>
+      <lastmod>2019-05-30T00:00:00+02:00</lastmod>
+    </url>
+    
   
     
     
@@ -23,7 +31,7 @@
     
     <url>
     
-      <loc>/privacy/</loc>
+      <loc>/reading/</loc>
       <lastmod>2018-06-28T00:00:00+02:00</lastmod>
     </url>
     
@@ -140,6 +148,15 @@
     
     <url>
     
+      <loc>/tags/c/c&#43;&#43;/</loc>
+      <lastmod>2016-04-27T00:00:00+02:00</lastmod>
+    </url>
+    
+  
+    
+    
+    <url>
+    
       <loc>/project/c-projects/</loc>
       <lastmod>2016-04-27T00:00:00+02:00</lastmod>
     </url>
@@ -149,38 +166,8 @@
     
     <url>
     
-      <loc>/</loc>
-      <lastmod>2016-04-20T00:00:00+02:00</lastmod>
-      <priority>0</priority>
-    </url>
-    
-  
-    
-    
-    <url>
-    
-      <loc>/tags/c/c&#43;&#43;/</loc>
-      <lastmod>2016-04-27T00:00:00+02:00</lastmod>
-      <priority>0</priority>
-    </url>
-    
-  
-    
-    
-    <url>
-    
-      <loc>/categories/</loc>
-      <priority>0</priority>
-    </url>
-    
-  
-    
-    
-    <url>
-    
       <loc>/tags/programming/</loc>
       <lastmod>2016-04-27T00:00:00+02:00</lastmod>
-      <priority>0</priority>
     </url>
     
   
@@ -190,16 +177,6 @@
     
       <loc>/project/</loc>
       <lastmod>2016-04-27T00:00:00+02:00</lastmod>
-      <priority>0</priority>
-    </url>
-    
-  
-    
-    
-    <url>
-    
-      <loc>/publication_types/</loc>
-      <priority>0</priority>
     </url>
     
   
@@ -209,7 +186,22 @@
     
       <loc>/tags/</loc>
       <lastmod>2016-04-27T00:00:00+02:00</lastmod>
-      <priority>0</priority>
+    </url>
+    
+  
+    
+    
+    <url>
+    
+      <loc>/categories/</loc>
+    </url>
+    
+  
+    
+    
+    <url>
+    
+      <loc>/publication_types/</loc>
     </url>
     
   

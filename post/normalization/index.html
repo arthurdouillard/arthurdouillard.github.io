@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="theme" content="hugo-academic">
-  <meta name="generator" content="Hugo 0.45.1" />
+  <meta name="generator" content="Hugo 0.57.2" />
   <meta name="author" content="Arthur Douillard">
 
   
@@ -52,9 +52,6 @@
 
     
 
-    
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/instantsearch.js/2.9.0/instantsearch.min.css" integrity="sha256-ZtmLe16p4jS4/2wPwwH6NzJt460SJzgLmhKrYo5yn7g=" crossorigin="anonymous">
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/instantsearch.js/2.9.0/instantsearch-theme-algolia.min.css" integrity="sha256-0vcZrdMQksHcHrY60tPnVK71jnB3wX/JpMcah5BffjA=" crossorigin="anonymous">
     
 
   
@@ -235,6 +232,25 @@
         
 
         <li class="nav-item">
+          <a href="/reading">
+            
+            <span>Reading</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
           <a href="/#teaching">
             
             <span>Teaching</span>
@@ -366,24 +382,23 @@ you feel I missed something important, tell me!</p>
 for computer vision tasks. Three normalization schemes are often seen:</p>
 
 <ol>
-<li>Normalizing the pixel values between 0 and 1:</li>
-</ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">img <span style="color:#f92672">/=</span> <span style="color:#ae81ff">255.</span></code></pre></div>
-<ol>
-<li>Normalizing the pixel values between -1 and 1 (as <a href="https://github.com/keras-team/keras-applications/blob/master/keras_applications/imagenet_utils.py#L47-L50" target="_blank">Tensorflow does</a>):</li>
-</ol>
+<li><p>Normalizing the pixel values between 0 and 1:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">img <span style="color:#f92672">/=</span> <span style="color:#ae81ff">255.</span></code></pre></div></li>
+
+<li><p>Normalizing the pixel values between -1 and 1 (as <a href="https://github.com/keras-team/keras-applications/blob/master/keras_applications/imagenet_utils.py#L47-L50" target="_blank">Tensorflow does</a>):</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">img <span style="color:#f92672">/=</span> <span style="color:#ae81ff">127.5</span>
-img <span style="color:#f92672">-=</span> <span style="color:#ae81ff">1.</span></code></pre></div>
-<ol>
-<li>Normalizing according to the dataset mean &amp; standard deviation (as <a href="https://github.com/keras-team/keras-applications/blob/master/keras_applications/imagenet_utils.py#L52-L55" target="_blank">Torch does</a>):</li>
-</ol>
+img <span style="color:#f92672">-=</span> <span style="color:#ae81ff">1.</span></code></pre></div></li>
+
+<li><p>Normalizing according to the dataset mean &amp; standard deviation (as <a href="https://github.com/keras-team/keras-applications/blob/master/keras_applications/imagenet_utils.py#L52-L55" target="_blank">Torch does</a>):</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">img <span style="color:#f92672">/=</span> <span style="color:#ae81ff">255.</span>
 mean <span style="color:#f92672">=</span> [<span style="color:#ae81ff">0.485</span>, <span style="color:#ae81ff">0.456</span>, <span style="color:#ae81ff">0.406</span>] <span style="color:#75715e"># Here it&#39;s ImageNet statistics</span>
 std <span style="color:#f92672">=</span> [<span style="color:#ae81ff">0.229</span>, <span style="color:#ae81ff">0.224</span>, <span style="color:#ae81ff">0.225</span>]
 
 <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">3</span>): <span style="color:#75715e"># Considering an ordering NCHW (batch, channel, height, width)</span>
-    img[i, :, :] <span style="color:#f92672">-=</span> mean[i]
-    img[i, :, :] <span style="color:#f92672">/=</span> std[i]</code></pre></div>
+img[i, :, :] <span style="color:#f92672">-=</span> mean[i]
+img[i, :, :] <span style="color:#f92672">/=</span> std[i]</code></pre></div></li>
+</ol>
+
 <p>Why is it recommended? Let&rsquo;s take a neuron, where:</p>
 
 <p>$$y = w \cdot x$$</p>
@@ -677,7 +692,7 @@ the input data.</p>
 </button>
 <section id="comments">
   <div id="disqus_thread"></div>
-<script>
+<script type="application/javascript">
     var disqus_config = function () {
     
     
@@ -724,10 +739,6 @@ the input data.</p>
 <footer class="site-footer">
   <div class="container">
 
-    
-    <p class="powered-by">
-      <a href="/privacy/">Privacy Policy</a>
-    </p>
     
 
     <p class="powered-by">
@@ -819,76 +830,6 @@ the input data.</p>
     
 
     
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/instantsearch.js/2.9.0/instantsearch.min.js" integrity="sha256-cJXigylnJlxvAdfFNHeS+IiMcKWS3Rf/cy3bl9bb0ng=" crossorigin="anonymous"></script>
-    <script>
-      const content_type = {
-        'post': "Posts",
-        'project': "Projects",
-        'publication' : "Publications",
-        'talk' : "Talks"
-      };
-
-      function getTemplate(templateName) {
-        return document.querySelector(`#${templateName}-template`).innerHTML;
-      }
-
-      const options = {
-        appId: "NX60KRWN2S",
-        apiKey: "3693810b60d96ef8fdd9bc31f09873e6",
-        indexName: "Posts",
-        routing: true,
-        searchParameters: {
-          hitsPerPage: 10
-        },
-        searchFunction: function(helper) {
-          let searchResults = document.querySelector('#search-hits')
-          if (helper.state.query === '') {
-            searchResults.style.display = 'none';
-            return;
-          }
-          helper.search();
-          searchResults.style.display = 'block';
-        }
-      };
-
-      const search = instantsearch(options);
-
-      
-      search.addWidget(
-        instantsearch.widgets.searchBox({
-          container: '#search-box',
-          placeholder: "Search..."
-        })
-      );
-
-      
-      search.addWidget(
-        instantsearch.widgets.infiniteHits({
-          container: '#search-hits',
-          templates: {
-            empty: '<div class="search-no-results">' + "No results found" + '</div>',
-            item: getTemplate('search-hit')
-          },
-          cssClasses: {
-            showmoreButton: 'btn btn-primary btn-outline'
-          }
-        })
-      );
-
-      
-      search.on('render', function() {
-        $('.search-hit-type').each(function( index ) {
-          let content_key = $( this ).text();
-          if (content_key in content_type) {
-            $( this ).text(content_type[content_key]);
-          }
-        });
-      });
-
-      
-      search.start();
-    </script>
     
 
   </body>

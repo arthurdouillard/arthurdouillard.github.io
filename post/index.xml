@@ -18,9 +18,7 @@
       <pubDate>Thu, 30 May 2019 00:00:00 +0200</pubDate>
       
       <guid>/post/miscalibration/</guid>
-      <description>Those notes are based on the research paper &amp;ldquo;On Calibration of Modern Neural Networks&amp;rdquo; by (Guo et al, 2017.).
-How To Be Confident In Your Neural Network Confidence? Very large and deep models, as ResNet, are far more accurate than their older counterparts, as LeNet, on computer vision datasets such as CIFAR100. However while they are better at classifying images, we are less confident in their own confidence!
-Most neural networks for classification uses as last activation a softmax: it produces a distribution of probabilities for each target (cat, dog, boat, etc.</description>
+      <description>Why deep neural networks confidence are flawed and how to fix it.</description>
     </item>
     
     <item>
@@ -29,8 +27,7 @@ Most neural networks for classification uses as last activation a softmax: it pr
       <pubDate>Fri, 10 Aug 2018 00:00:00 +0200</pubDate>
       
       <guid>/post/normalization/</guid>
-      <description>Deep Neural Networks (DNNs) are notorious for requiring less feature engineering than Machine Learning algorithms. For example convolutional networks learn by themselves the right convolution kernels to apply on an image. No need of carefully handcrafted kernels.
-However a common point to all kinds of neural networks is the need of normalization. Normalizing is often done on the input, but it can also take place inside the network. In this article I&amp;rsquo;ll try to describe what the literature is saying about this.</description>
+      <description>Overview of the different normalization methods that exist for neural networks.</description>
     </item>
     
     <item>
@@ -39,8 +36,7 @@ However a common point to all kinds of neural networks is the need of normalizat
       <pubDate>Fri, 22 Jun 2018 00:00:00 +0200</pubDate>
       
       <guid>/post/nato-challenge/</guid>
-      <description>Imagine you’re in a landlocked country, and an infection has spread. The government has fallen, and rebels are roaming the country. If you’re the armed forces in this scenario, how do you make decisions in this environment? How can you fully understand the situation at hand?
-A few weeks ago, NATO organized an innovation challenge that posed these questions. We decided to take on the challenge with the goal of finding innovative solutions in the areas of data filtering/fusing, visualization, and predictive analytics.</description>
+      <description>Imagine you’re in a landlocked country, and an infection has spread. The gouvernement has fallen, and rebels are roaming the country. If you’re the armed forces in this scenario, how do you make decisions in this environment? How can you fully understand the situation at hand?</description>
     </item>
     
     <item>
@@ -49,10 +45,7 @@ A few weeks ago, NATO organized an innovation challenge that posed these questio
       <pubDate>Sun, 13 May 2018 00:00:00 +0200</pubDate>
       
       <guid>/post/3-small-but-powerful-cnn/</guid>
-      <description>Most CNN architectures have been developed to attain the best accuracy on ImageNet. Computing power is not limited for this competition, why bother?
-However you may want to run your model on an old laptop, maybe without GPU, or even on your mobile phone. Let’s see three CNN architectures that are efficient while sacrificing little accuracy performance.
-1. MobileNet Arxiv link: (Howard et al, 2017)
-MobileNet uses depthwise separable convolutions.</description>
+      <description>Overview of three CNN that have a low computational cost</description>
     </item>
     
     <item>
@@ -61,10 +54,7 @@ MobileNet uses depthwise separable convolutions.</description>
       <pubDate>Mon, 07 May 2018 00:00:00 +0200</pubDate>
       
       <guid>/post/densenet/</guid>
-      <description>This article contains note of the research paper:
- Densely Connected Convolutional Networks by Cornell Uni, Tsinghua Uni, and Facebook Research.  This paper was awarded the CVPR 2017 Best Paper Award.
-Introduction DenseNet is a new CNN architecture that reached State-Of-The-Art (SOTA) results on classification datasets (CIFAR, SVHN, ImageNet) using less parameters.
-Thanks to its new use of residual it can be deeper than the usual networks and still be easy to optimize.</description>
+      <description>All about the architecture DenseNet.</description>
     </item>
     
     <item>
@@ -73,9 +63,7 @@ Thanks to its new use of residual it can be deeper than the usual networks and s
       <pubDate>Fri, 20 Apr 2018 00:00:00 +0200</pubDate>
       
       <guid>/post/deep-learning-scaling/</guid>
-      <description>This post contains the notes taken from the following paper:
- Deep Learning Scaling Is Predictable, Empirically by Baidu Research.  The last years in Deep Learning have seen a rush to gigantism:
- Models are becoming deeper and deeper from the 8 layers of AlexNet to the 1001-layer ResNet. Training on large dataset is way quicker, ImageNet can now (with enough computing power) been trained in less than 20 minutes.</description>
+      <description>How much a Deep Learning model would improve if the dataset size increase?</description>
     </item>
     
     <item>
@@ -84,13 +72,7 @@ Thanks to its new use of residual it can be deeper than the usual networks and s
       <pubDate>Mon, 26 Mar 2018 00:00:00 +0200</pubDate>
       
       <guid>/post/faster-rcnn/</guid>
-      <description>This post contains the notes taken from the following paper:
- Fast-RCNN by R. Girshick.
- Faster-RCNN by Microsoft Research.
-  Ross Girshick is an influential researcher on object detection: he has worked on RCNN, Fast{er}-RCNN, Yolo, RetinaNet&amp;hellip;
-Fast-RCNN and Faster-RCNN are both incremental improvements on the original RCNN.
-Let&amp;rsquo;s see what were those improvements:
-Fast-RCNN In Fast-RCNN, Girshick ditched the SVM used previously. It resulted in a 10x inference speed improvement, and a better accuracy.</description>
+      <description>Fast-RCNN is an Object Detection algorithm using Selective Search and CNN.</description>
     </item>
     
     <item>
@@ -99,10 +81,7 @@ Fast-RCNN In Fast-RCNN, Girshick ditched the SVM used previously. It resulted in
       <pubDate>Fri, 09 Mar 2018 00:00:00 +0100</pubDate>
       
       <guid>/post/selective-search/</guid>
-      <description>This post contains the notes taken from reading of the following paper:
- Selective Search for Object Recognition.  This paper, published in 2012, describes an algorithm generating multiple possible object locations that will later be used by object recognition models. Fast-RCNN uses the Selective Search in its object proposal module.
-Motivations The authors divide the domain of object recognition in three categories:
- Exhaustive Search Segmentation Other sampling strategies (using Bag-of-Words, Hough Transform, etc.</description>
+      <description>The Robust Object Proposal used by Fast-RCNN.</description>
     </item>
     
     <item>
@@ -111,10 +90,7 @@ Motivations The authors divide the domain of object recognition in three categor
       <pubDate>Wed, 07 Mar 2018 00:00:00 +0100</pubDate>
       
       <guid>/post/efficient-graph-based-segmentation/</guid>
-      <description>This post contains the notes taken from reading of the following paper:
- Efficient Graph-Based Segmentation by Pedro Felzenszwalb and Daniel Huttenlocher.  I was also helped by the slides of Stanford&amp;rsquo;s CS231b.
-Fast-RCNN was the state-of-the-art algorithm for object detection in 2015; its object proposal used Selective Search that itself used Efficient Graph-Based Segmentation.
-The reason this segmentation was still useful almost 10 years later is because the algorithm is fast, while remaining efficient.</description>
+      <description>Image segmentation with Graph Theory.</description>
     </item>
     
     <item>
@@ -133,8 +109,7 @@ The reason this segmentation was still useful almost 10 years later is because t
       <pubDate>Tue, 06 Feb 2018 00:00:00 +0100</pubDate>
       
       <guid>/post/how-to-read-a-paper/</guid>
-      <description>Preambule During my master in Data Science I have read a few papers. While I am a good reader, reading a scientific paper is still a strugle. For the year 2018, and hopefuly the next years, I have decided to read more papers. At least one a week.
-My favorite method to learn something is to explain it to someone else. That&amp;rsquo;s the Feyman&amp;rsquo;s technique. It may be hard to find a patient listener thus I am making this blog to explain to the potential reader papers I am reading.</description>
+      <description>Summary of a paper about&amp;hellip; how to read a paper.</description>
     </item>
     
   </channel>
