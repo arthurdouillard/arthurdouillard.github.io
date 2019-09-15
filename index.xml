@@ -546,6 +546,41 @@ the input data.&lt;/p&gt;
     </item>
     
     <item>
+      <title>TP Deep Learning RDFIA</title>
+      <link>/rdfia/</link>
+      <pubDate>Thu, 28 Jun 2018 00:00:00 +0200</pubDate>
+      
+      <guid>/rdfia/</guid>
+      <description>
+
+&lt;h1 id=&#34;tp-deep-learning-rdfia&#34;&gt;TP Deep Learning RDFIA&lt;/h1&gt;
+
+&lt;p&gt;RDFIA / Master DAC &amp;amp; IMA / Sorbonne&lt;/p&gt;
+
+&lt;h2 id=&#34;rappels&#34;&gt;Rappels&lt;/h2&gt;
+
+&lt;p&gt;Les TPs seront en Python3 et plusieurs bibliothèques seront utilisées. Voici
+quelques liens pour rappel, ou pour vous familiariser en avance:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://learnxinyminutes.com/docs/python/&#34; target=&#34;_blank&#34;&gt;Rappel de Python&lt;/a&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.scipy.org/doc/numpy/user/quickstart.html&#34; target=&#34;_blank&#34;&gt;Rappel de Numpy&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://scikit-learn.org/stable/tutorial/basic/tutorial.html&#34; target=&#34;_blank&#34;&gt;Introduction de Scikit-Learn&lt;/a&gt;. L&amp;rsquo;api est très similaire quelque soit l&amp;rsquo;algorithme (init / fit / predict).&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://pytorch.org/tutorials/beginner/deep_learning_60min_blitz.html&#34; target=&#34;_blank&#34;&gt;Introduction de Pytorch&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;tp-1-2-sift-bag-of-words&#34;&gt;TP 1 - 2 : SIFT / Bag of words&lt;/h2&gt;
+
+&lt;p&gt;&lt;em&gt;18 &amp;amp; 25 Septembre 2019&lt;/em&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Énoncé: &lt;a href=&#34;/files/rdfia_resources/tp1-2.pdf&#34;&gt;TP1-2.pdf&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Code et data: &lt;a href=&#34;/files/rdfia_resources/tp1-2.zip&#34;&gt;TP1-2.zip&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
       <title>Detecting cars from aerial imagery for the NATO Innovation Challenge</title>
       <link>/post/nato-challenge/</link>
       <pubDate>Fri, 22 Jun 2018 00:00:00 +0200</pubDate>
