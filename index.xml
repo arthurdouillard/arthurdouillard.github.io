@@ -557,6 +557,13 @@ the input data.&lt;/p&gt;
 
 &lt;p&gt;RDFIA / Master DAC &amp;amp; IMA / Sorbonne&lt;/p&gt;
 
+&lt;p&gt;Le cours est organisé par le professeur Matthieu Cord. Vos assistants de TPs auquel
+vous devrez envoyer vos travaux sont Yifu Chen (yifu.chen@lip6.fr) et moi-même Arthur
+Douillard (arthur.douillard@lip6.fr).&lt;/p&gt;
+
+&lt;p&gt;Pour simplifier notre tâche vous êtes prier de nous adresser les mails avec pour objet
+&lt;code&gt;[RDFIA][TP-&amp;lt;numero&amp;gt;]&lt;/code&gt;.&lt;/p&gt;
+
 &lt;h2 id=&#34;rappels&#34;&gt;Rappels&lt;/h2&gt;
 
 &lt;p&gt;Les TPs seront en Python3 et plusieurs bibliothèques seront utilisées. Voici
@@ -577,7 +584,7 @@ quelques liens pour rappel, ou pour vous familiariser en avance:&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;Énoncé: &lt;a href=&#34;/files/rdfia_resources/tp1-2.pdf&#34;&gt;TP1-2.pdf&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;Code et data: &lt;a href=&#34;/files/rdfia_resources/tp1-2.zip&#34;&gt;TP1-2.zip&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Code et data: &lt;a href=&#34;https://webia.lip6.fr/~douillard/rdfia/tp1-2.zip&#34; target=&#34;_blank&#34;&gt;TP1-2.zip&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 </description>
     </item>
