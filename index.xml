@@ -592,12 +592,23 @@ les contenant: &lt;a href=&#34;https://webia.lip6.fr/~douillard/rdfia/sift.zip&#
 
 &lt;p&gt;Voici le genre de résultat que vous aurez pu obtenir:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;/figures/rdfia_sift_1.png&#34; alt=&#34;Image sift résultat&#34; /&gt;
-&lt;img src=&#34;/figures/rdfia_sift_2.png&#34; alt=&#34;Image sift résultat&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/figures/rdfia_sift_1.png&#34; alt=&#34;Image sift résultat&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;/figures/rdfia_sift_2.png&#34; alt=&#34;Image sift résultat&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;tp-3-svm&#34;&gt;TP 3 : SVM&lt;/h2&gt;
+
+&lt;p&gt;&lt;em&gt;2 Octobre 2019&lt;/em&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Énoncé: &lt;a href=&#34;/files/rdfia_resources/tp3.pdf&#34;&gt;TP3.pdf&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Bow &lt;a href=&#34;https://webia.lip6.fr/~douillard/rdfia/15_scenes_Xy.npz&#34; target=&#34;_blank&#34;&gt;15_scenes_Xy.npz&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
 
 &lt;h4 id=&#34;mises-à-jour&#34;&gt;Mises à jour:&lt;/h4&gt;
 
-&lt;p&gt;2019-09-25, 14:16: Ajout d&amp;rsquo;un zip sift + deux images résultats&lt;/p&gt;
+&lt;p&gt;2019-09-25, 14:16: Ajout d&amp;rsquo;un zip sift + deux images résultats
+2019-10-02, 11:15: Ajout du TP 3 + BoW data.&lt;/p&gt;
 </description>
     </item>
     
