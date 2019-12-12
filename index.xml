@@ -6,8 +6,415 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; 2018</copyright>
-    <lastBuildDate>Thu, 30 May 2019 00:00:00 +0200</lastBuildDate>
+    <lastBuildDate>Wed, 11 Dec 2019 00:00:00 +0100</lastBuildDate>
     <atom:link href="/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Learning Deep Neural Networks incrementally forever</title>
+      <link>/post/incremental-learning/</link>
+      <pubDate>Wed, 11 Dec 2019 00:00:00 +0100</pubDate>
+      
+      <guid>/post/incremental-learning/</guid>
+      <description>
+
+&lt;p&gt;The hallmark of human intelligence is the capacity to learn. A toddler has comparable
+aptitudes to reason about space, quantities, or causality than other ape species (&lt;a href=&#34;https://slatestarcodex.com/2019/06/04/book-review-the-secret-of-our-success/&#34; target=&#34;_blank&#34;&gt;source&lt;/a&gt;). The difference of our cousins and us is the ability to learn from others.&lt;/p&gt;
+
+&lt;p&gt;The recent deep learning hype aims to reach the Artificial General Intelligence (AGI):
+an AI that would express (supra-)human-like intelligence. Unfortunately current deep learning models are flawed in many ways: one of them is that they are unable to learn
+continuously as human does through years of schooling, and so on.&lt;/p&gt;
+
+&lt;h2 id=&#34;why-do-we-want-our-models-to-learn-continuously&#34;&gt;Why do we want our models to learn continuously?&lt;/h2&gt;
+
+&lt;p&gt;Regardless of the far away goal of AGI, there are several practicals reasons why
+we want our model to learn continuously. Before describing a few of them, I&amp;rsquo;ll mention
+two constraints:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Our model cannot review all previous knowledge each time it needs to
+learn new facts. &lt;em&gt;As a child in 9th grade, you don&amp;rsquo;t review all the syllabus of 8th
+grade as it&amp;rsquo;s supposed to have been already memorized.&lt;/em&gt;&lt;/li&gt;
+&lt;li&gt;Our model needs to learn continuously without forgetting any previously learned knowledge.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;A real applications of these two constraints is robotics: a robot in the wild should
+learn continuously its environment. Furthermore due to hardware limitation, it
+may neither store all previous data nor spend too much computational resource.&lt;/p&gt;
+
+&lt;p&gt;Another application is what I do at &lt;a href=&#34;https://www.heuritech.com/&#34; target=&#34;_blank&#34;&gt;Heuritech&lt;/a&gt;: we
+detect fashion trends. However every day across the globe a new trend may appear.
+It is impracticable to review our large trends database each time we need to learn
+a new one.&lt;/p&gt;
+
+&lt;p&gt;Now that the necessity of learning continuously has been explained, let us differentiate three scenarios (&lt;a href=&#34;https://arxiv.org/abs/1705.03550&#34; target=&#34;_blank&#34;&gt;Lomonaco and Maltoni, 2017&lt;/a&gt;):&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Learning new data of known classes (&lt;em&gt;online learning&lt;/em&gt;)&lt;/li&gt;
+&lt;li&gt;Learning new classes (&lt;em&gt;class-incremental learning&lt;/em&gt;)&lt;/li&gt;
+&lt;li&gt;The union of the two previous scenarios&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;In this article I will focus only on the second scenario. Note however that the
+methods used are fairly similar between scenario.&lt;/p&gt;
+
+&lt;p&gt;More practically this article will cover models that learn incrementally new classes.
+The model will see only new classes&amp;rsquo; data, as we aim to remember well old classes.
+After each task, the model is trained on a all seen classes using a separate test set:&lt;/p&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;/figures/incremental_base.jpg&#34; alt=&#34;*Figure 1: Several steps of incremental learning.*&#34; /&gt;
+
+
+
+&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
+  &lt;p style=&#34;text-align: center&#34;&gt;
+    &lt;em&gt;Figure 1: Several steps of incremental learning.&lt;/em&gt;
+    
+    
+    
+  &lt;/p&gt; 
+&lt;/figcaption&gt;
+
+&lt;/figure&gt;
+
+&lt;p&gt;As seen in the image above, each step produces a new accuracy score. Following
+(&lt;a href=&#34;https://arxiv.org/abs/1611.07725&#34; target=&#34;_blank&#34;&gt;Rebuffi et al, 2017&lt;/a&gt;) the final score is the
+average of all previous task accuracy score. It&amp;rsquo;s called the &lt;strong&gt;average incremental accuracy&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;naive-solution-transfer-learning&#34;&gt;Naive solution: transfer learning&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;Transfer learning&lt;/strong&gt; allows to transfer the knowledge gained on one task (e.g
+&lt;em&gt;ImageNet and its 1000 classes&lt;/em&gt;) to another task (e.g &lt;em&gt;classify cats &amp;amp; dogs&lt;/em&gt;) (&lt;a href=&#34;https://arxiv.org/abs/1403.6382&#34; target=&#34;_blank&#34;&gt;Razavian et al, 2014&lt;/a&gt;). Usually the backbone
+(a ConvNet in Computer Vision, like ResNet) is kept while a new classifier is
+plugged in on top of it. During transfer, we train the new classifier &amp;amp;
+&lt;strong&gt;fine-tune&lt;/strong&gt; the backbone.&lt;/p&gt;
+
+&lt;p&gt;Finetuning the backbone is essential to reach good performance on the destination
+task. However we don&amp;rsquo;t have access anymore to the original task data. Therefore our
+model is now optimized only for the new task. While at the training end, we will have good performance on this new task, the old task will suffer a significant drop of
+performance.&lt;/p&gt;
+
+&lt;p&gt;(&lt;a href=&#34;https://www.sciencedirect.com/science/article/pii/S1364661399012942&#34; target=&#34;_blank&#34;&gt;French, 1995&lt;/a&gt;)
+described this phenomenon as a &lt;strong&gt;catastrophic forgetting&lt;/strong&gt;. To solve it, we must find an optimal trade-off between
+&lt;strong&gt;rigidity&lt;/strong&gt; (being good on old tasks) and &lt;strong&gt;plasticity&lt;/strong&gt; (being good on new tasks).&lt;/p&gt;
+
+&lt;h2 id=&#34;three-broad-strategies&#34;&gt;Three broad strategies&lt;/h2&gt;
+
+&lt;p&gt;(&lt;a href=&#34;https://arxiv.org/abs/1802.07569&#34; target=&#34;_blank&#34;&gt;Parisi et al, 2018&lt;/a&gt;) defines 3 broad strategies:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;External Memory&lt;/strong&gt; storing a small amount of previous tasks data&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Constraints&lt;/strong&gt;-based methods avoiding forgetting on previous tasks&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Model Plasticity&lt;/strong&gt; extending the capacity&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&#34;1-external-memory&#34;&gt;1. External Memory&lt;/h4&gt;
+
+&lt;p&gt;As said previously we cannot keep all our previous data for several reasons. We
+can however relax this constraint by limiting access to previous data to a bounded
+amount.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Rehearsal learning&lt;/strong&gt; (&lt;a href=&#34;https://arxiv.org/abs/1611.07725&#34; target=&#34;_blank&#34;&gt;Rebuffi et al, 2017&lt;/a&gt;)&amp;rsquo;s iCaRL
+assumes we dispose of a limited amount of space to store previous data. Our
+external memory could have a capacity of 2,000 images. After learning new
+classes, a few amount of those classes data could be kept in it while
+the rest would be discarded.&lt;/p&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;/figures/incremental_memory.jpg&#34; alt=&#34;*Figure 2: Several steps of incremental learning with a memory storing a subset of previous data.*&#34; /&gt;
+
+
+
+&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
+  &lt;p style=&#34;text-align: center&#34;&gt;
+    &lt;em&gt;Figure 2: Several steps of incremental learning with a memory storing a subset of previous data.&lt;/em&gt;
+    
+    
+    
+  &lt;/p&gt; 
+&lt;/figcaption&gt;
+
+&lt;/figure&gt;
+
+&lt;p&gt;&lt;strong&gt;Pseudo-Rehearsal learning&lt;/strong&gt; (&lt;a href=&#34;https://arxiv.org/abs/1705.08690&#34; target=&#34;_blank&#34;&gt;Shin et al, 2017&lt;/a&gt;; &lt;a href=&#34;https://arxiv.org/abs/1711.10563&#34; target=&#34;_blank&#34;&gt;Kemker and Kanan, 2018&lt;/a&gt;)
+assume instead that we cannot keep previous data, like images, but that we can
+store the class distribution statistics. With this, a generative model can generate
+on-the-fly old classes data. This approach is however very reliant on the quality
+of the generative model; generated data are still subpar
+to real data (&lt;a href=&#34;https://arxiv.org/abs/1905.10887&#34; target=&#34;_blank&#34;&gt;Ravuri and Vinyals, 2019&lt;/a&gt;).
+Furthermore it is still crucial to also avoid a forgetting in the generator.&lt;/p&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;/figures/incremental_gan.jpg&#34; alt=&#34;*Figure 3: Several steps of incremental learning with a generator generating previous data.*&#34; /&gt;
+
+
+
+&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
+  &lt;p style=&#34;text-align: center&#34;&gt;
+    &lt;em&gt;Figure 3: Several steps of incremental learning with a generator generating previous data.&lt;/em&gt;
+    
+    
+    
+  &lt;/p&gt; 
+&lt;/figcaption&gt;
+
+&lt;/figure&gt;
+
+&lt;p&gt;Generally (pseudo-)rehearsal-based methods outperforms methods only using new classes
+data. It&amp;rsquo;s then fair to compare their performance separately.&lt;/p&gt;
+
+&lt;h3 id=&#34;2-constraints-based-methods&#34;&gt;2. Constraints-based methods&lt;/h3&gt;
+
+&lt;p&gt;Intuitively, forcing the current model $M^t$ to be similar to its previous version $M^{t-1}$
+will avoid forgetting. There is a large array of methods aiming to do so. However
+they all have to balance a &lt;strong&gt;rigidity&lt;/strong&gt; (encouraging similarity between
+$M^t$ and $M^{t-1}$) and &lt;strong&gt;plasticity&lt;/strong&gt; (letting enough slack to $M^t$ to learn
+new classes).&lt;/p&gt;
+
+&lt;p&gt;We can separate those methods in three broads categories:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Those enforcing a similarity of the activations&lt;/li&gt;
+&lt;li&gt;Those enforcing a similarity of the weights&lt;/li&gt;
+&lt;li&gt;And those enforcing a similarity of the gradients&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&#34;2-1-constraining-the-activations&#34;&gt;2.1. Constraining the activations&lt;/h4&gt;
+
+&lt;p&gt;(&lt;a href=&#34;https://arxiv.org/abs/1606.09282&#34; target=&#34;_blank&#34;&gt;Li and Hoiem, 2016&lt;/a&gt;)&amp;rsquo;s LwF introduced knowledge
+distillation from (&lt;a href=&#34;https://arxiv.org/abs/1503.02531&#34; target=&#34;_blank&#34;&gt;Hinton et al, 2015&lt;/a&gt;): given
+a same image, $f^t$&amp;rsquo;s base probabilities should be similar to $f^{t-1}$&amp;rsquo;s probabilities:&lt;/p&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;/figures/knowledge_distillation.jpg&#34; alt=&#34;*Figure 4: Base probabilities are distilled from the previous model to the new one.*&#34; /&gt;
+
+
+
+&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
+  &lt;p style=&#34;text-align: center&#34;&gt;
+    &lt;em&gt;Figure 4: Base probabilities are distilled from the previous model to the new one.&lt;/em&gt;
+    
+    
+    
+  &lt;/p&gt; 
+&lt;/figcaption&gt;
+
+&lt;/figure&gt;
+
+&lt;p&gt;The distillation loss can simply be a binary cross-entropy between old and new
+probabilities.&lt;/p&gt;
+
+&lt;p&gt;Model output probabilities is just one kind of activation among others.
+(&lt;a href=&#34;http://dahua.me/publications/dhl19_increclass.pdf&#34; target=&#34;_blank&#34;&gt;Hou et al, 2019&lt;/a&gt;)&amp;rsquo;s UCIR used a
+similarity-based between the extracted features $h^{t-1}$ and $h^t$ of the old
+and new model:&lt;/p&gt;
+
+&lt;p&gt;$$L_\text{Less-Forget} = 1-\langle \frac{h^t}{\Vert h^t \Vert_2}, \frac{h^{t-1}}{\Vert h^{t-1} \Vert_2}\rangle$$&lt;/p&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;/figures/less_forget.jpg&#34; alt=&#34;*Figure 5: New model embeddings must be similar from the old one.*&#34; /&gt;
+
+
+
+&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
+  &lt;p style=&#34;text-align: center&#34;&gt;
+    &lt;em&gt;Figure 5: New model embeddings must be similar from the old one.&lt;/em&gt;
+    
+    
+    
+  &lt;/p&gt; 
+&lt;/figcaption&gt;
+
+&lt;/figure&gt;
+
+&lt;p&gt;To sum up, encouraging the new model to mimic the activations of its previous
+version reduces the forgetting of old classes. A different but similar approach
+is reduce the difference between the new and old model weights:&lt;/p&gt;
+
+&lt;h4 id=&#34;2-2-constraining-the-weights&#34;&gt;2.2. Constraining the weights&lt;/h4&gt;
+
+&lt;p&gt;A naive method would be to minimize a distance between the new and old weights
+likewise $L = (\mathbf{W}^t - \mathbf{W}^{t-1})^2$. However, as remarked by
+(&lt;a href=&#34;https://arxiv.org/abs/1612.00796&#34; target=&#34;_blank&#34;&gt;Kirkpatrick et al, 2016&lt;/a&gt;)&amp;rsquo;s EWC, the resulting new
+weights would be under-performing for both old and new classes. Then, the authors
+suggested to modulate the regularization according to neurons importance.&lt;/p&gt;
+
+&lt;p&gt;Important neurons for task $T-1$ must not change in the new model. On the other
+hand, unimportant neurons can be more freely modified, to learn efficiently the new
+task $T$:&lt;/p&gt;
+
+&lt;p&gt;$$L = I (W^{t-1} - W^t)^2$$&lt;/p&gt;
+
+&lt;p&gt;With $W^{t-1}$ and $W^{t}$ the weights of respectively the old and new model, and
+$I$ a neurons importance matrix defined from $W^{t-1}$.&lt;/p&gt;
+
+&lt;p&gt;In EWC, the neurons importance are defined with the Fisher information, but variants
+exist. Following research (&lt;a href=&#34;https://arxiv.org/abs/1703.04200&#34; target=&#34;_blank&#34;&gt;Zenke et al, 2017&lt;/a&gt;;
+&lt;a href=&#34;https://arxiv.org/abs/1801.10112&#34; target=&#34;_blank&#34;&gt;Chaudhry et al, 2018&lt;/a&gt;) builds on the same idea
+with refinement of the neurons importance definition.&lt;/p&gt;
+
+&lt;h4 id=&#34;2-3-constraining-the-gradients&#34;&gt;2.3. Constraining the gradients&lt;/h4&gt;
+
+&lt;p&gt;Finally a third category of constraints exist: constraining the gradients. Introduced
+by (&lt;a href=&#34;https://arxiv.org/abs/1706.08840&#34; target=&#34;_blank&#34;&gt;Lopez-Paz and Ranzato, 2017&lt;/a&gt;)&amp;rsquo;s GEM, the key idea
+is that the the new model&amp;rsquo;s loss should be lower or equal to the old model&amp;rsquo;s loss
+on old samples stored in a memory (&lt;em&gt;cf rehearsal learning&lt;/em&gt;).&lt;/p&gt;
+
+&lt;p&gt;$$L(f^t, M) \le L(f^{t-1}, M)$$&lt;/p&gt;
+
+&lt;p&gt;The authors rephrase this constraint as an angle constraint on the gradients:&lt;/p&gt;
+
+&lt;p&gt;$$\langle \frac{\partial L(f^t, M)}{\partial f^t}, \frac{\partial L(f^{t-1}, M)}{\partial f^{t-1} \rangle \ge 0$$&lt;/p&gt;
+
+&lt;p&gt;Put it more simply, we want the gradients of the new model to &amp;ldquo;&lt;em&gt;go in the same
+direction&lt;/em&gt;&amp;rdquo; as they would have with the previous model.&lt;/p&gt;
+
+&lt;p&gt;If this constraint is respected, it&amp;rsquo;s likely that the new model won&amp;rsquo;t forget old
+classes. Otherwise the incoming gradients $g$ must be &amp;ldquo;&lt;em&gt;fixed&lt;/em&gt;&amp;ldquo;: they are reprojected
+to their closest valid alternative $\tilde{g}$ by minimizing this quadratic program:&lt;/p&gt;
+
+&lt;p&gt;$$\text{minimize}_{\tilde{g}}\, \Vert g - \tilde{g} \Vert^2$$&lt;/p&gt;
+
+&lt;p&gt;$$\text{subject to}\, \langle g, \tilde{g} \rangle \ge 0$$&lt;/p&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;/figures/gem.jpg&#34; alt=&#34;*Figure 6: Gradients must keep going in the same direction, otherwise their direction is fixed.*&#34; /&gt;
+
+
+
+&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
+  &lt;p style=&#34;text-align: center&#34;&gt;
+    &lt;em&gt;Figure 6: Gradients must keep going in the same direction, otherwise their direction is fixed.&lt;/em&gt;
+    
+    
+    
+  &lt;/p&gt; 
+&lt;/figcaption&gt;
+
+&lt;/figure&gt;
+
+&lt;p&gt;As you may guess, solving this program for each violating gradients, before
+updating the model weights is very costly in time. (&lt;a href=&#34;https://arxiv.org/abs/1812.00420&#34; target=&#34;_blank&#34;&gt;Chaudhry et al, 2018&lt;/a&gt;
+; &lt;a href=&#34;https://arxiv.org/abs/1903.08671&#34; target=&#34;_blank&#34;&gt;Aljundi et al, 2019&lt;/a&gt;) improve the algorithm
+speed by different manners, including sampling a representative subset of the gradients
+constraints.&lt;/p&gt;
+
+&lt;h3 id=&#34;3-plasticity&#34;&gt;3. Plasticity&lt;/h3&gt;
+
+&lt;p&gt;Other algorithms modify the network structure to reduce &lt;em&gt;catastrophic forgetting&lt;/em&gt;.
+The first strategy is to add new neurons to the current model.
+(&lt;a href=&#34;https://arxiv.org/abs/1708.01547&#34; target=&#34;_blank&#34;&gt;Yoon et al, 2017&lt;/a&gt;)&amp;rsquo;s DEN first trains on the
+new task. If its loss is not good enough, new neurons are added at several
+layers and they will be dedicated to learn on the new task. Furthermore the authors
+choose to freeze some of the already-existing neurons. Those neurons, that are
+particularly important for the old tasks, must not change in order to reduce forgetting.&lt;/p&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;/figures/den.jpg&#34; alt=&#34;*Figure 7: DEN adds new neurons for the new tasks, and selectively fine-tunes existing neurons.*&#34; /&gt;
+
+
+
+&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
+  &lt;p style=&#34;text-align: center&#34;&gt;
+    &lt;em&gt;Figure 7: DEN adds new neurons for the new tasks, and selectively fine-tunes existing neurons.&lt;/em&gt;
+    
+    
+    
+  &lt;/p&gt; 
+&lt;/figcaption&gt;
+
+&lt;/figure&gt;
+
+&lt;p&gt;While expanding the network capacity makes sense in an incremental setting where
+our model learns indefinitely, it&amp;rsquo;s worth noting that existing deep learning models
+are over-parametrized. The initial capacity can be enough to learn many tasks, at
+the condition that it&amp;rsquo;s used appropriately. As (&lt;a href=&#34;https://arxiv.org/abs/1803.03635&#34; target=&#34;_blank&#34;&gt;Frankle and Carbin, 2019&lt;/a&gt;)&amp;rsquo;s
+Lottery Ticket Hypothesis formalized, large networks are made of very efficient sub-networks.&lt;/p&gt;
+
+&lt;p&gt;Each sub-network can be dedicated to only one task:&lt;/p&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;/figures/subnetwork.jpg&#34; alt=&#34;*Figure 8: Among a large single network, several subnetworks can be uncovered, each specialized for a task.*&#34; /&gt;
+
+
+
+&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
+  &lt;p style=&#34;text-align: center&#34;&gt;
+    &lt;em&gt;Figure 8: Among a large single network, several subnetworks can be uncovered, each specialized for a task.&lt;/em&gt;
+    
+    
+    
+  &lt;/p&gt; 
+&lt;/figcaption&gt;
+
+&lt;/figure&gt;
+
+&lt;p&gt;Several methods exist to uncover those sub-networks: (&lt;a href=&#34;https://arxiv.org/abs/1701.08734&#34; target=&#34;_blank&#34;&gt;Fernando et al, 2017&lt;/a&gt;)&amp;rsquo;s
+PathNet uses evolutionary algorithm, (&lt;a href=&#34;https://arxiv.org/abs/1903.04476&#34; target=&#34;_blank&#34;&gt;Golkar et al, 2019&lt;/a&gt;)
+sparsify the whole network with a L1 regularization, and (&lt;a href=&#34;https://arxiv.org/abs/1910.06562&#34; target=&#34;_blank&#34;&gt;Hung et al, 2019&lt;/a&gt;)&amp;rsquo;s
+CPG learns binary masks activating and deactivating connections to produce sub-networks.&lt;/p&gt;
+
+&lt;p&gt;It is worth noting that methods based on sub-networks assume to know on which task
+they are evaluated on. This setting, called &lt;strong&gt;multi-heads&lt;/strong&gt; is challenging but fundamentally
+easier than &lt;strong&gt;single-head&lt;/strong&gt; evaluation where models are evaluated on all tasks
+in the same time.&lt;/p&gt;
+
+&lt;h2 id=&#34;dealing-with-class-imbalance&#34;&gt;Dealing with class imbalance&lt;/h2&gt;
+
+&lt;p&gt;We saw previously three strategy to avoid forgetting (rehearsal, constraints,
+and plasticity). Those methods can be used together. Rehearsal is often used in addition
+of constraints.&lt;/p&gt;
+
+&lt;p&gt;Moreover another challenge of incremental learning is the large class imbalance
+between new and old classes. For example, on some benchmarks, new classes could
+be made of 500 images each, while old classes would only have 20 images each stored
+in memory.&lt;/p&gt;
+
+&lt;p&gt;This class imbalance further encourages, wrongly, the model to be over-confident
+for new classes while being under-confident for old classes. Catastrophic forgetting
+is furthermore exacerbated.&lt;/p&gt;
+
+&lt;p&gt;(&lt;a href=&#34;https://arxiv.org/abs/1807.09536&#34; target=&#34;_blank&#34;&gt;Castro et al, 2018&lt;/a&gt;) train for each
+task their model under this class imbalance, but fine-tune it after with under-sampling:
+old &amp;amp; new classes are sampled to have as much images.&lt;/p&gt;
+
+&lt;p&gt;(&lt;a href=&#34;https://arxiv.org/abs/1905.13260&#34; target=&#34;_blank&#34;&gt;Wu et al, 2019&lt;/a&gt;) consider to use re-calibration
+(&lt;a href=&#34;http://proceedings.mlr.press/v70/guo17a.html&#34; target=&#34;_blank&#34;&gt;Guo et al, 2017&lt;/a&gt;): a small linear
+model is learned on validation to &amp;ldquo;&lt;em&gt;fix&lt;/em&gt;&amp;rdquo; the over-confidence on new classes. It
+is only applied for new classes logits. (&lt;a href=&#34;http://openaccess.thecvf.com/content_ICCV_2019/papers/Belouadah_IL2M_Class_Incremental_Learning_With_Dual_Memory_ICCV_2019_paper.pdf&#34; target=&#34;_blank&#34;&gt;Belouadah and Popescu, 2019&lt;/a&gt;) proposed
+concurrently a similar solution fixing the new classes logits, but using instead
+class statistics.&lt;/p&gt;
+
+&lt;p&gt;(&lt;a href=&#34;http://openaccess.thecvf.com/content_ICCV_2019/papers/Belouadah_IL2M_Class_Incremental_Learning_With_Dual_Memory_ICCV_2019_paper.pdf&#34; target=&#34;_blank&#34;&gt;Hou et al, 2019&lt;/a&gt;)
+remarked that weights &amp;amp; biases of the classifier layer have larger magnitude for
+new classes than older classes. To reduce this effect, they replace the usual classifier
+by a cosine classifier where weights and features are L2 normalized. Moreover they
+freeze the classifier weights associated to old classes.&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;In this article we saw what is incremental learning: learning model with classes
+coming incrementally; what is its challenge: avoiding forgetting the previous classes to
+the benefice only of new classes; and broad strategies to solve this domain.&lt;/p&gt;
+
+&lt;p&gt;This domain is far from being solved. The upper bound is a model trained in a single
+step on all data. Current solutions are considerably worse than this.&lt;/p&gt;
+
+&lt;p&gt;On a personal note, my team and I have submitted an article for CVPR 2020 on this
+subject. If it&amp;rsquo;s accepted, I&amp;rsquo;ll make a blog article on it. Furthermore I have made
+a library to train incremental model: &lt;a href=&#34;https://github.com/arthurdouillard/incremental_learning.pytorch&#34; target=&#34;_blank&#34;&gt;inclearn&lt;/a&gt;.
+The library wasn&amp;rsquo;t updated since a few months as I&amp;rsquo;m currently cleaning my code. Be sure
+to check it out later.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>How To Be Confident In Your Neural Network Confidence</title>

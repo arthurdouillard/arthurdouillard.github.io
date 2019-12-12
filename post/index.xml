@@ -13,6 +13,15 @@
     
     
     <item>
+      <title>Learning Deep Neural Networks incrementally forever</title>
+      <link>/post/incremental-learning/</link>
+      <pubDate>Wed, 11 Dec 2019 00:00:00 +0100</pubDate>
+      
+      <guid>/post/incremental-learning/</guid>
+      <description>The hallmark of human intelligence is the capacity to learn continuously. Modern algorithms unfortunately lack this ability; the field of incremental learning is then trying to make our algorithms learn a continuous succession of tasks without forgetting.</description>
+    </item>
+    
+    <item>
       <title>How To Be Confident In Your Neural Network Confidence</title>
       <link>/post/miscalibration/</link>
       <pubDate>Thu, 30 May 2019 00:00:00 +0200</pubDate>
