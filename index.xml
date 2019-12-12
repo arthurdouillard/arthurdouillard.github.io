@@ -269,7 +269,7 @@ on old samples stored in a memory (&lt;em&gt;cf rehearsal learning&lt;/em&gt;).&
 
 &lt;p&gt;The authors rephrase this constraint as an angle constraint on the gradients:&lt;/p&gt;
 
-&lt;p&gt;$$\langle \frac{\partial L(f^t, M)}{\partial f^t}, \frac{\partial L(f^{t-1}, M)}{\partial f^{t-1} \rangle \ge 0$$&lt;/p&gt;
+&lt;p&gt;$$\langle \frac{\partial L(f^t, M)}{\partial f^t}, \frac{\partial L(f^{t-1}, M)}{\partial f^{t-1}} \rangle \ge 0$$&lt;/p&gt;
 
 &lt;p&gt;Put it more simply, we want the gradients of the new model to &amp;ldquo;&lt;em&gt;go in the same
 direction&lt;/em&gt;&amp;rdquo; as they would have with the previous model.&lt;/p&gt;
