@@ -278,9 +278,9 @@ direction&lt;/em&gt;&amp;rdquo; as they would have with the previous model.&lt;/
 classes. Otherwise the incoming gradients $g$ must be &amp;ldquo;&lt;em&gt;fixed&lt;/em&gt;&amp;ldquo;: they are reprojected
 to their closest valid alternative $\tilde{g}$ by minimizing this quadratic program:&lt;/p&gt;
 
-&lt;p&gt;$$\text{minimize}_{\tilde{g}}\, \Vert g - \tilde{g} \Vert^2$$&lt;/p&gt;
+&lt;p&gt;$$\text{minimize}_{\tilde{g}}\, \Vert g^t - \tilde{g} \Vert_2^2$$&lt;/p&gt;
 
-&lt;p&gt;$$\text{subject to}\, \langle g, \tilde{g} \rangle \ge 0$$&lt;/p&gt;
+&lt;p&gt;$$\text{subject to}\, \langle g^{t-1}, \tilde{g} \rangle \ge 0$$&lt;/p&gt;
 
 &lt;figure&gt;
 
@@ -408,7 +408,7 @@ the benefice only of new classes; and broad strategies to solve this domain.&lt;
 &lt;p&gt;This domain is far from being solved. The upper bound is a model trained in a single
 step on all data. Current solutions are considerably worse than this.&lt;/p&gt;
 
-&lt;p&gt;On a personal note, my team and I have submitted an article for CVPR 2020 on this
+&lt;p&gt;On a personal note, my team and I have submitted an article for a conference on this
 subject. If it&amp;rsquo;s accepted, I&amp;rsquo;ll make a blog article on it. Furthermore I have made
 a library to train incremental model: &lt;a href=&#34;https://github.com/arthurdouillard/incremental_learning.pytorch&#34; target=&#34;_blank&#34;&gt;inclearn&lt;/a&gt;.
 The library wasn&amp;rsquo;t updated since a few months as I&amp;rsquo;m currently cleaning my code. Be sure
