@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Books on Arthur Douillard</title>
+    <link>/books/</link>
+    <description>Recent content in Books on Arthur Douillard</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>&amp;copy; 2018</copyright>
+    <lastBuildDate>Sun, 01 Jan 2017 00:00:00 +0100</lastBuildDate>
+    
+	<atom:link href="/books/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Ball Lightning</title>
+      <link>/books/ball-lightning/</link>
+      <pubDate>Sun, 13 May 2018 00:00:00 +0200</pubDate>
+      
+      <guid>/books/ball-lightning/</guid>
+      <description>Ball Lightning is an early book of Cixin Liu, the Three-Body Problem trilogy author. While not as good as its trilogy, the book was interesting to read because of its theme: Science.
+The protagonists try to understand the ball lightning (a real phenomenon). The whole book is structured around their experiments, their thoughts, and failures. The end of the book goes a bit far, and is clearly &amp;ldquo;science-fiction&amp;rdquo;, but still in a &amp;ldquo;hard&amp;rdquo;, plausible way.</description>
+    </item>
+    
+    <item>
+      <title>Very Short Introduction: Food</title>
+      <link>/books/very-short-intro-food/</link>
+      <pubDate>Sun, 13 May 2018 00:00:00 +0200</pubDate>
+      
+      <guid>/books/very-short-intro-food/</guid>
+      <description>Very Short Introduction (VSI) is an Oxford collection about various subjects, ranging from humanities (arts, religion, politics, etc.) to very technical field (neuroscience, physics, etc.). With a small format (~100 pages), they aim to be a good introduction.
+VSI: Food fulfills perfectly this mission. The book is simple enough for a neophyte in food to understand, and still manages to cover a wide breadth of topics, all centered around food. It&amp;rsquo;s far easier than its cousin VSI: Nutrition.</description>
+    </item>
+    
+  </channel>
+</rss>

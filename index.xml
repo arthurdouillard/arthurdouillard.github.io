@@ -944,15 +944,6 @@ the input data.&lt;/p&gt;
     </item>
     
     <item>
-      <title>Reading List</title>
-      <link>/reading/</link>
-      <pubDate>Thu, 28 Jun 2018 00:00:00 +0200</pubDate>
-      
-      <guid>/reading/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>TP Deep Learning RDFIA</title>
       <link>/rdfia/</link>
       <pubDate>Thu, 28 Jun 2018 00:00:00 +0200</pubDate>
@@ -1921,6 +1912,39 @@ splitted along spatial axis with a separable pooling between them.&lt;/p&gt;
 
 &lt;p&gt;This article was at first published in &lt;a href=&#34;https://towardsdatascience.com/3-small-but-powerful-convolutional-networks-27ef86faa42d&#34; target=&#34;_blank&#34;&gt;Towards Data Science&lt;/a&gt;
 and has also been &lt;a href=&#34;https://yq.aliyun.com/articles/592935&#34; target=&#34;_blank&#34;&gt;translated in Chinese&lt;/a&gt;!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Ball Lightning</title>
+      <link>/books/ball-lightning/</link>
+      <pubDate>Sun, 13 May 2018 00:00:00 +0200</pubDate>
+      
+      <guid>/books/ball-lightning/</guid>
+      <description>&lt;p&gt;Ball Lightning is an early book of Cixin Liu, the Three-Body Problem trilogy author.
+While not as good as its trilogy, the book was interesting to read because of its theme:
+Science.&lt;/p&gt;
+
+&lt;p&gt;The protagonists try to understand the ball lightning (&lt;a href=&#34;https://en.wikipedia.org/wiki/Ball_lightning&#34; target=&#34;_blank&#34;&gt;a real phenomenon&lt;/a&gt;).
+The whole book is structured around their experiments, their thoughts, and failures.
+The end of the book goes a bit far, and is clearly &amp;ldquo;science-fiction&amp;rdquo;, but still in a &amp;ldquo;hard&amp;rdquo;, plausible way.
+This won&amp;rsquo;t surprise those who read the trilogy.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Very Short Introduction: Food</title>
+      <link>/books/very-short-intro-food/</link>
+      <pubDate>Sun, 13 May 2018 00:00:00 +0200</pubDate>
+      
+      <guid>/books/very-short-intro-food/</guid>
+      <description>&lt;p&gt;Very Short Introduction (VSI) is an Oxford collection about various subjects, ranging from humanities
+(arts, religion, politics, etc.) to very technical field (neuroscience, physics, etc.). With a small
+format (~100 pages), they aim to be a good introduction.&lt;/p&gt;
+
+&lt;p&gt;VSI: Food fulfills perfectly this mission. The book is simple enough for a neophyte in food to understand,
+and still manages to cover a wide breadth of topics, all centered around food. It&amp;rsquo;s far easier than its
+cousin VSI: Nutrition.&lt;/p&gt;
 </description>
     </item>
     
@@ -3068,79 +3092,6 @@ has to examine carefully each proofs, assumptions, and affirmations.&lt;/p&gt;
 
 &lt;p&gt;At this pass, the reader should also list the strong and the weak points of the
 paper with greater attention.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>C/C&#43;&#43; low-level projects</title>
-      <link>/project/c-projects/</link>
-      <pubDate>Wed, 27 Apr 2016 00:00:00 +0200</pubDate>
-      
-      <guid>/project/c-projects/</guid>
-      <description>
-
-&lt;p&gt;Engineering schools last 3 years in France. Before these years students learn
-for two years a broad science curriculum covering mathematics, algo,
-physics, electronics&amp;hellip;
-The three years of engineering cover a more specialized subject, for me it was
-computer science.&lt;/p&gt;
-
-&lt;p&gt;The first year of my engineering school, EPITA, is intensive. We learn
-many different subjects about low-level programming and almost weekly have hackathons the
-whole weekend. During the days we study the theory of computer science (language
-theory, compiler, graph, algo, some maths, etc.), and during the nights we code.&lt;/p&gt;
-
-&lt;p&gt;I&amp;rsquo;ll list in this page, only some of the projects done during the first semester.&lt;/p&gt;
-
-&lt;h1 id=&#34;iso-reader&#34;&gt;ISO reader&lt;/h1&gt;
-
-&lt;p&gt;In this C project I had to learn how to use &lt;code&gt;mmap&lt;/code&gt; to read ISO files (such as
-a Ubuntu image). The goal was to provide a CLI tool to navigate, and read files
-stored in the ISO.&lt;/p&gt;
-
-&lt;p&gt;While it may sound obvious to me now, it was interesting to discover how the
-data can be stored in memory, and how simple pointer arithmetic can go a long way.&lt;/p&gt;
-
-&lt;h1 id=&#34;make-like&#34;&gt;Make-like&lt;/h1&gt;
-
-&lt;p&gt;For this C project I wrote a &lt;code&gt;make&lt;/code&gt;-like CLI tool. &lt;code&gt;make&lt;/code&gt; is a tool to maintain
-program dependencies and to facilitate a program compilation.&lt;/p&gt;
-
-&lt;p&gt;It was interesting for both reasons:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Learn to parse file, the structure is simple but still harder than a csv
-file of course.&lt;/li&gt;
-&lt;li&gt;Learn all the tricks &lt;code&gt;make&lt;/code&gt; have, and it has many.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h1 id=&#34;naive-malloc&#34;&gt;Naive Malloc&lt;/h1&gt;
-
-&lt;p&gt;For this C project I wrote a naive implementation of &lt;code&gt;malloc&lt;/code&gt;. For those who don&amp;rsquo;t
-know, &lt;code&gt;malloc&lt;/code&gt; is used in C program (and a lot of binaries like &lt;code&gt;ls&lt;/code&gt;) to
-allocate memory.&lt;/p&gt;
-
-&lt;p&gt;To allocate memory, I had to map one or several pages. Those pages could be fully
-filled or split into several chunks. It&amp;rsquo;s enlightening to understand
-how a program uses the memory, and to see all the tricks to allocate it more
-efficiently than a simple first-fit algo.&lt;/p&gt;
-
-&lt;p&gt;Along side &lt;code&gt;malloc&lt;/code&gt;, &lt;code&gt;realloc&lt;/code&gt;, &lt;code&gt;calloc&lt;/code&gt;, and &lt;code&gt;free&lt;/code&gt; were obviously implemented.&lt;/p&gt;
-
-&lt;h1 id=&#34;misc&#34;&gt;Misc&lt;/h1&gt;
-
-&lt;p&gt;I&amp;rsquo;ve also implemented:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Dijkstra algorithm for a real-time formula one competition. Other tricks were
-used as Bezier curves to produce smooth turning.&lt;/li&gt;
-&lt;li&gt;A &lt;code&gt;bash&lt;/code&gt;-like in C in a group of four students, from the command line reading,
-to the execution with custom builtins and instructions tree building.&lt;/li&gt;
-&lt;li&gt;A fast implementation of a calculator in C++. It supported any base (2, 3, 10, etc.)
-with any ASCII characters. It was also a &amp;ldquo;&lt;em&gt;big num&lt;/em&gt;&amp;rdquo; implementation were numbers
-could be bigger than a &lt;code&gt;long long&lt;/code&gt;. Finally some interesting algos were coded
-like the Karatsuba multiplication.&lt;/li&gt;
-&lt;/ul&gt;
 </description>
     </item>
     
