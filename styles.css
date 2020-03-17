@@ -45,7 +45,7 @@ body {
   font-size: 1rem;
   line-height: inherit;
   color: inherit;
-  background-color: rgb(40, 42, 54);
+  background-color: #fff;
   margin-top: 71px; /* Offset body content by navbar height. */
   padding-top: 0;
   counter-reset: captions;
@@ -119,14 +119,14 @@ h4, h5, h6 {
 
 a,
 h3.article-title a:hover {
-  color: hsl(339, 90%, 68%);
+  color: #e0491f;
   text-decoration: none;
   transition: color 0.6s ease;
 }
 
 a:hover,
 a:focus {
-  color: hsl(339, 90%, 68%);
+  color: #e0491f;
 }
 
 img,
@@ -376,7 +376,7 @@ a[data-fancybox] img {
 }
 
 .home-section {
-  background-color: hsla(231, 15%, 18%, 1);
+  background-color: rgb(255, 255, 255);
   padding: 110px 0 110px 0;
   animation: intro 0.3s both;
   animation-delay: 0.15s;
@@ -387,7 +387,7 @@ a[data-fancybox] img {
 }
 
 .home-section:nth-of-type(even) {
-  background-color: hsla(231, 15%, 17%, 1);
+  background-color: rgb(247, 247, 247);
 }
 
 @media screen and (max-width: 768px) {
@@ -482,7 +482,7 @@ a[data-fancybox] img {
 .featurette-icon {
   display: block;
   width: 100%;
-  color: hsl(339, 90%, 68%);
+  color: #e0491f;
   font-size: 3rem;
   text-align: center;
 }
@@ -699,7 +699,7 @@ article .article-metadata {
 }
 
 .article-metadata a:hover {
-  color: hsl(339, 90%, 68%);
+  color: #e0491f;
 }
 
 .middot-divider {
@@ -735,7 +735,7 @@ article .article-metadata {
 .article-style figure img {
   margin-top: 0;
   margin-bottom: 0;
-  border: 5px solid rgb(68, 71, 90);
+ /* border: 5px solid rgb(68, 71, 90);*/
 }
 
 .article-widget {
@@ -1064,8 +1064,8 @@ a.label:hover {
  **************************************************/
 
 .btn-primary {
-  border-color: hsl(339, 90%, 68%) !important;
-  background: hsl(339, 90%, 68%) !important;
+  border-color: #e0491f !important;
+  background: #e0491f !important;
 }
 
 .btn-primary:hover,
@@ -1073,7 +1073,7 @@ a.label:hover {
 .btn-primary.active,
 .btn-primary:visited,
 .open > .dropdown-toggle.btn-primary {
-  background: hsl(339, 90%, 68%) !important;
+  background: #e0491f !important;
 }
 
 .btn-light {
@@ -1107,12 +1107,12 @@ a.label:hover {
 
 .btn-toolbar .btn.btn-primary:hover,
 .btn-toolbar .btn.btn-primary:focus {
-  background-color: hsl(339, 90%, 58%) !important;
+  background-color: #0069c0 !important;
 }
 
 .btn-toolbar .btn.btn-primary:active,
 .btn-toolbar .btn.btn-primary.active {
-  background-color: hsl(339, 90%, 78%) !important;
+  background-color: #6ec6ff !important;
 }
 
 /*************************************************
@@ -1126,12 +1126,12 @@ a.label:hover {
 }
 
 .btn-primary.btn-outline {
-  color: hsl(339, 90%, 68%) !important;
-  border-color: hsl(339, 90%, 68%) !important;
+  color: #e0491f !important;
+  border-color: #e0491f !important;
 }
 
 .btn-primary.btn-outline:focus {
-  color: hsl(339, 90%, 68%) !important;
+  color: #e0491f !important;
 }
 
 .btn-primary.btn-outline:active {
@@ -1185,7 +1185,7 @@ a.label:hover {
 }
 
 .navbar-default {
-  background: rgb(20, 22, 34);
+  background: #fff;
   box-shadow: 0 0.125rem 0.25rem 0 rgba(0,0,0,.11)
 }
 
@@ -1208,24 +1208,24 @@ nav#navbar-main li {
   white-space: nowrap;
   -webkit-transition: 0.2s ease;
   transition: 0.2s ease;
-  color: rgba(255,255,255,0.6);
+  color: #34495e;
   font-weight: 600;
 }
 
 .navbar-default .navbar-nav>li>a:focus {
-  color: rgba(255,255,255,0.6);
+  color: #34495e;
   background-color: transparent;
 }
 
 .navbar-default .navbar-nav>li>a:hover {
-  color: rgba(255,255,255,1);
+  color: #e0491f;
   background-color: transparent;
 }
 
 .navbar-default .navbar-nav>.active>a,
 .navbar-default .navbar-nav>.active>a:focus,
 .navbar-default .navbar-nav>.active>a:hover {
-  color: rgba(255,255,255,1);
+  color: #e0491f;
   font-weight: 700;
   background-color: transparent !important; /* Override Bootstrap. */
 }
@@ -1243,11 +1243,11 @@ nav#navbar-main li {
 }
 
 .navbar-default .navbar-toggle .icon-bar {
-  background-color: rgba(255,255,255,0.6) !important;
+  background-color: #34495e !important;
 }
 
 .dropdown-menu {
-  background-color: rgb(20, 22, 34) !important;
+  background-color: #fff !important;
 }
 
 .dropdown-menu > li > a {
@@ -1256,23 +1256,23 @@ nav#navbar-main li {
   clear: both;
   font-weight: 400;
   line-height: 1.42857143;
-  color: rgba(255,255,255,0.6);
+  color: #34495e;
   white-space: nowrap;
 }
 
 .dropdown-menu>li>a:focus,
 .dropdown-menu>li>a:hover {
-  color: rgba(255,255,255,1);
+  color: #e0491f;
   text-decoration: none;
-  background-color: rgb(20, 22, 34);
+  background-color: #fff;
 }
 
 .dropdown-menu > .active > a,
 .dropdown-menu > .active > a:focus,
 .dropdown-menu > .active > a:hover {
-  color: rgb(20, 22, 34);
+  color: #fff;
   text-decoration: none;
-  background-color: rgba(255,255,255,1);
+  background-color: #e0491f;
   outline: 0;
 }
 
@@ -1280,20 +1280,20 @@ nav#navbar-main li {
 .navbar-default .navbar-nav>.open>a:focus,
 .navbar-default .navbar-nav>.open>a:hover,
 .navbar-default .navbar-nav>.open>a:visited {
-  color: rgba(255,255,255,0.6) !important;
-  background-color: rgb(20, 22, 34) !important;
+  color: #34495e !important;
+  background-color: #fff !important;
 }
 
 .navbar-default .navbar-brand {
   text-transform: uppercase;
   font-weight: bold;
   font-size: 1.2em;
-  color: #fff;
+  color: #2b2b2b;
 }
 
 .navbar-default .navbar-brand:focus,
 .navbar-default .navbar-brand:hover {
-  color: #fff;
+  color: #2b2b2b;
   background-color: transparent;
 }
 
@@ -1358,7 +1358,7 @@ nav#navbar-main li {
     clear: both;
     font-weight: 400;
     line-height: 1.42857143;
-    color: rgba(255,255,255,0.6);
+    color: #34495e;
     white-space: nowrap;
   }
 
@@ -1375,7 +1375,7 @@ nav#navbar-main li {
   .navbar-default .navbar-nav .open .dropdown-menu > li > a {
     padding: 5px 15px 5px 25px;
     line-height: 20px;
-    color: rgba(255,255,255,0.6);
+    color: #34495e;
   }
 
   .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus,
@@ -1387,7 +1387,7 @@ nav#navbar-main li {
   .navbar-default .navbar-nav .open .dropdown-menu > .active > a,
   .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus,
   .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover {
-    color: rgba(255,255,255,1);
+    color: #e0491f;
     background-color: transparent;
   }
 
@@ -1550,7 +1550,7 @@ body.dark {
 }
 
 .dark ul.share li a {
-  background-color: hsl(339, 90%, 68%);
+  background-color: #e0491f;
 }
 
 .dark table table {
@@ -1604,7 +1604,7 @@ body.dark {
 }
 
 .dark .card h4 a {
-  color: hsl(339, 90%, 68%);
+  color: #e0491f;
   border-bottom: solid 1px transparent;
 }
 
