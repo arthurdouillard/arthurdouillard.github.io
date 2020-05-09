@@ -7,18 +7,27 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; 2018</copyright>
-    <lastBuildDate>Wed, 27 Apr 2016 00:00:00 +0200</lastBuildDate>
+    <lastBuildDate>Mon, 27 Apr 2020 00:00:00 +0200</lastBuildDate>
     
 	<atom:link href="/project/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>C/C&#43;&#43; low-level projects</title>
-      <link>/project/c-projects/</link>
-      <pubDate>Wed, 27 Apr 2016 00:00:00 +0200</pubDate>
+      <title>Continuum</title>
+      <link>/project/continuum/</link>
+      <pubDate>Mon, 27 Apr 2020 00:00:00 +0200</pubDate>
       
-      <guid>/project/c-projects/</guid>
-      <description>Low level C/C++ projects done during the first semester of Engineering school</description>
+      <guid>/project/continuum/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Inclearn</title>
+      <link>/project/inclearn/</link>
+      <pubDate>Mon, 27 Apr 2020 00:00:00 +0200</pubDate>
+      
+      <guid>/project/inclearn/</guid>
+      <description></description>
     </item>
     
   </channel>

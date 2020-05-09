@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Arthur Douillard on Arthur Douillard</title>
@@ -6,8 +7,36 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; 2018</copyright>
-    <lastBuildDate>Wed, 11 Dec 2019 00:00:00 +0100</lastBuildDate>
+    <lastBuildDate>Wed, 20 Apr 2016 00:00:00 +0200</lastBuildDate>
     <atom:link href="/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Continuum</title>
+      <link>/project/continuum/</link>
+      <pubDate>Mon, 27 Apr 2020 00:00:00 +0200</pubDate>
+      
+      <guid>/project/continuum/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Inclearn</title>
+      <link>/project/inclearn/</link>
+      <pubDate>Mon, 27 Apr 2020 00:00:00 +0200</pubDate>
+      
+      <guid>/project/inclearn/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Small-Task Incremental Learning</title>
+      <link>/publication/podnet/</link>
+      <pubDate>Wed, 01 Jan 2020 00:00:00 +0100</pubDate>
+      
+      <guid>/publication/podnet/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://arxiv.org/abs/2004.13513&#34; target=&#34;_blank&#34;&gt;https://arxiv.org/abs/2004.13513&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Learning Deep Neural Networks incrementally forever</title>
@@ -669,23 +698,24 @@ you feel I missed something important, tell me!&lt;/p&gt;
 for computer vision tasks. Three normalization schemes are often seen:&lt;/p&gt;
 
 &lt;ol&gt;
-&lt;li&gt;&lt;p&gt;Normalizing the pixel values between 0 and 1:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;img &lt;span style=&#34;color:#f92672&#34;&gt;/=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;255.&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;Normalizing the pixel values between -1 and 1 (as &lt;a href=&#34;https://github.com/keras-team/keras-applications/blob/master/keras_applications/imagenet_utils.py#L47-L50&#34; target=&#34;_blank&#34;&gt;Tensorflow does&lt;/a&gt;):&lt;/p&gt;
+&lt;li&gt;Normalizing the pixel values between 0 and 1:&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;img &lt;span style=&#34;color:#f92672&#34;&gt;/=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;255.&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ol&gt;
+&lt;li&gt;Normalizing the pixel values between -1 and 1 (as &lt;a href=&#34;https://github.com/keras-team/keras-applications/blob/master/keras_applications/imagenet_utils.py#L47-L50&#34; target=&#34;_blank&#34;&gt;Tensorflow does&lt;/a&gt;):&lt;/li&gt;
+&lt;/ol&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;img &lt;span style=&#34;color:#f92672&#34;&gt;/=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;127.5&lt;/span&gt;
-img &lt;span style=&#34;color:#f92672&#34;&gt;-=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1.&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;Normalizing according to the dataset mean &amp;amp; standard deviation (as &lt;a href=&#34;https://github.com/keras-team/keras-applications/blob/master/keras_applications/imagenet_utils.py#L52-L55&#34; target=&#34;_blank&#34;&gt;Torch does&lt;/a&gt;):&lt;/p&gt;
+img &lt;span style=&#34;color:#f92672&#34;&gt;-=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1.&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ol&gt;
+&lt;li&gt;Normalizing according to the dataset mean &amp;amp; standard deviation (as &lt;a href=&#34;https://github.com/keras-team/keras-applications/blob/master/keras_applications/imagenet_utils.py#L52-L55&#34; target=&#34;_blank&#34;&gt;Torch does&lt;/a&gt;):&lt;/li&gt;
+&lt;/ol&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;img &lt;span style=&#34;color:#f92672&#34;&gt;/=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;255.&lt;/span&gt;
 mean &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#ae81ff&#34;&gt;0.485&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0.456&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0.406&lt;/span&gt;] &lt;span style=&#34;color:#75715e&#34;&gt;# Here it&amp;#39;s ImageNet statistics&lt;/span&gt;
 std &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#ae81ff&#34;&gt;0.229&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0.224&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0.225&lt;/span&gt;]
 
 &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;): &lt;span style=&#34;color:#75715e&#34;&gt;# Considering an ordering NCHW (batch, channel, height, width)&lt;/span&gt;
-img[i, :, :] &lt;span style=&#34;color:#f92672&#34;&gt;-=&lt;/span&gt; mean[i]
-img[i, :, :] &lt;span style=&#34;color:#f92672&#34;&gt;/=&lt;/span&gt; std[i]&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
-&lt;/ol&gt;
-
+    img[i, :, :] &lt;span style=&#34;color:#f92672&#34;&gt;-=&lt;/span&gt; mean[i]
+    img[i, :, :] &lt;span style=&#34;color:#f92672&#34;&gt;/=&lt;/span&gt; std[i]&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;Why is it recommended? Let&amp;rsquo;s take a neuron, where:&lt;/p&gt;
 
 &lt;p&gt;$$y = w \cdot x$$&lt;/p&gt;
@@ -1933,6 +1963,45 @@ This won&amp;rsquo;t surprise those who read the trilogy.&lt;/p&gt;
     </item>
     
     <item>
+      <title>The Three-Body Problem trilogy</title>
+      <link>/books/three-body/</link>
+      <pubDate>Sun, 13 May 2018 00:00:00 +0200</pubDate>
+      
+      <guid>/books/three-body/</guid>
+      <description>&lt;p&gt;Except the Sun Tzu&amp;rsquo;s Art of War, the Three-Body Problem first tome was my first
+Chinese book. The first book set the tone, starting in communist-era in the 70s.&lt;/p&gt;
+
+&lt;p&gt;When I introduce this trilogy to friends, I often say &amp;mdash;no spoilers:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Several of world best theoretical physicists suicide. They all leave a note,
+saying in substance: &amp;ldquo;Physic doesn&amp;rsquo;t exist&amp;rdquo;.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;You don&amp;rsquo;t need to know more to go buy this book. It&amp;rsquo;s hard-science-fiction at its
+best.&lt;/p&gt;
+
+&lt;p&gt;WARNING, SPOILERS-AHEAD:&lt;/p&gt;
+
+&lt;p&gt;The first half of the first book (The Three-Body Problem) is very good. The initial
+problem, physic doesn&amp;rsquo;t exist, is both original and extremely exciting. I dislike
+the second half, especially the explanation about sophons and how they would
+communicate by quantic entanglement (&lt;a href=&#34;https://briankoberlein.com/blog/quantum-entanglement/&#34; target=&#34;_blank&#34;&gt;which doesn&amp;rsquo;t work like this&lt;/a&gt;).&lt;/p&gt;
+
+&lt;p&gt;The second book was particularly surprising. I really like the Wallfacers concepts:
+four men whose objective is to find a way to defeat high-tech aliens in 300 years.
+And they have to keep their plans secret to avoid leaking info through the sophons.
+The jump in the future was similar to the movie &lt;em&gt;the 5th element&lt;/em&gt; where everything
+just seems crazy. And finally come the key idea of this book, and trilogy: the dark forest
+hypothesis. It&amp;rsquo;s both terrifying and plausible.&lt;/p&gt;
+
+&lt;p&gt;The third book is at first nice, a lot of tech progress is done. However its very
+end seems a bit far fetched, closer to fantasy than hard-sf. But I guess when talking
+about eons in the future, anything is possible.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
       <title>Very Short Introduction: Food</title>
       <link>/books/very-short-intro-food/</link>
       <pubDate>Sun, 13 May 2018 00:00:00 +0200</pubDate>
@@ -2419,679 +2488,6 @@ Proposal Network.&lt;/p&gt;
 
 &lt;p&gt;Region Proposal Network is now used in most object detection models, like
 the &lt;a href=&#34;https://arxiv.org/abs/1612.03144&#34; target=&#34;_blank&#34;&gt;Feature Pyramid Network&lt;/a&gt;.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Selective Search for Object Recognition</title>
-      <link>/post/selective-search/</link>
-      <pubDate>Fri, 09 Mar 2018 00:00:00 +0100</pubDate>
-      
-      <guid>/post/selective-search/</guid>
-      <description>
-
-&lt;p&gt;This post contains the notes taken from reading of the following paper:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;http://www.huppelen.nl/publications/selectiveSearchDraft.pdf&#34; target=&#34;_blank&#34;&gt;Selective Search for Object Recognition&lt;/a&gt;.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;This paper, published in 2012, describes an algorithm generating multiple
-possible &lt;strong&gt;object locations&lt;/strong&gt; that will later be used by &lt;strong&gt;object recognition
-models&lt;/strong&gt;. Fast-RCNN uses the Selective Search in its object proposal module.&lt;/p&gt;
-
-&lt;h1 id=&#34;motivations&#34;&gt;Motivations&lt;/h1&gt;
-
-&lt;p&gt;The authors divide the domain of object recognition in three categories:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Exhaustive Search&lt;/li&gt;
-&lt;li&gt;Segmentation&lt;/li&gt;
-&lt;li&gt;Other sampling strategies (using Bag-of-Words, Hough Transform, etc.)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;An &lt;strong&gt;Exhaustive Search&lt;/strong&gt; tries to find bounding boxes for every objects in an
-image. Searching at every position and scale is unpracticable. Some use instead
-a windows of different ratio and make them &lt;em&gt;slide&lt;/em&gt; around the image. More
-sophisticated methods also exists (&lt;a href=&#34;https://cs.brown.edu/~pff/papers/lsvm-pami.pdf&#34; target=&#34;_blank&#34;&gt;1&lt;/a&gt;,
-&lt;a href=&#34;https://pdfs.semanticscholar.org/5be0/610861ffd6782adaa70cc16fcc0610ad1c86.pdf&#34; target=&#34;_blank&#34;&gt;2&lt;/a&gt;).&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Segmentation&lt;/strong&gt; &lt;em&gt;colors&lt;/em&gt; each pixel to a given class, creating objects
-with non-rigid shapes. Segmentation methods usually rely on a single strong
-algorithm to identify pixels&amp;rsquo; regions.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Selective Search&lt;/strong&gt; uses the best of both worlds: Segmentation improve the
-sampling process of different boxes. This reduces considerably the search space.
-To improve the algorithm&amp;rsquo;s robustness (to scale, lightning, textures&amp;hellip;) a
-variety of strategies are used during the bottom-up boxes&amp;rsquo; merging.&lt;/p&gt;
-
-&lt;p&gt;Selective Search produces boxes that are good proposals for objects, it handles
-well different image conditions, but more important it is fast enough to be used
-in a prediction pipeline (like Fast-RCNN) to do real-time object detection.&lt;/p&gt;
-
-&lt;h1 id=&#34;the-algorithm&#34;&gt;The Algorithm&lt;/h1&gt;
-
-&lt;p&gt;At first the authors produce a sampling a bounding boxes based on regions&amp;rsquo;
-segmentation produced by the &lt;a href=&#34;https://arthurdouillard.com/2018/03/07/efficient-graph-based-segmentation/&#34; target=&#34;_blank&#34;&gt;Efficient Graph-Based Segmentation&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Starting from these initial boxes, the authors use a &lt;strong&gt;bottom-up merging based on
-similarity&lt;/strong&gt;: Boxes, small at first, are merged with their most similar
-neighbour box. The history of all seen boxes at the different steps of the
-algorithm is kept.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;/figures/selective_search_merging.svg&#34; alt=&#34;Bottom-up merging&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;By keeping all existing boxes, the search can capture all scales which is
-important in hierarchical image: &lt;em&gt;Imagine a pilot in a plane: the pilot&amp;rsquo;s
-box in comprised in the bigger plane&amp;rsquo;s box.&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;Plenty of boxes are created, the last box is the entire image! However some may
-be more probable object location. The authors sort the boxes by creation time,
-the most recent first. To avoid privileging too much large boxes, the box&amp;rsquo;s index
-(&lt;em&gt;1 being the most recent box&lt;/em&gt;) is multiplied by a random number between 0 and 1.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;/figures/selective_search_rank.svg&#34; alt=&#34;Ordering of the boxes&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;The model using the selective search can now make a trade-off between having all
-location proposals and getting only the &lt;em&gt;k&lt;/em&gt;-first most probable.&lt;/p&gt;
-
-&lt;h1 id=&#34;diversification-strategies&#34;&gt;Diversification Strategies&lt;/h1&gt;
-
-&lt;p&gt;The authors use three strategies to improve the search&amp;rsquo;s robustness:&lt;/p&gt;
-
-&lt;h2 id=&#34;1-different-color-spaces&#34;&gt;1. Different color spaces&lt;/h2&gt;
-
-&lt;p&gt;In order to handle different lightning, the authors apply their algorithm to
-the same image transposed in different color spaces.&lt;/p&gt;
-
-&lt;p&gt;The most known color space is RGB, where a pixel has values of red, blue, and
-green. Among the other used color spaces there are:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Grayscale: Where a pixel has for single value its intensity.&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Lab_color_space&#34; target=&#34;_blank&#34;&gt;Lab&lt;/a&gt;: With one value for
-lightness, one for green-red, and one for blue-yellow.&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/HSL_and_HSV&#34; target=&#34;_blank&#34;&gt;HSV&lt;/a&gt;: With hue, saturation, and a value&lt;/li&gt;
-&lt;li&gt;etc.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;2-different-starting-regions&#34;&gt;2. Different Starting Regions&lt;/h2&gt;
-
-&lt;p&gt;As said before, the algorithm produces its initial boxes from the regions generated
-by the &lt;a href=&#34;https://arthurdouillard.com/2018/03/07/efficient-graph-based-segmentation/&#34; target=&#34;_blank&#34;&gt;efficient graph-based segmentation&lt;/a&gt;.
-This segmentation has a parameter $k$ that affects the size of the regions.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;/figures/selective_search1.png&#34; alt=&#34;Selective search in action&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;Different starting regions from the segmentation affect deeply the selective
-search.&lt;/em&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;3-different-similarity-measures&#34;&gt;3. Different Similarity Measures&lt;/h2&gt;
-
-&lt;p&gt;The most interesting part of this algorithm is the different metrics used to assess
-similarity between boxes.&lt;/p&gt;
-
-&lt;p&gt;Four similarity measures are defined: Color, texture, size, fitness. These metrics
-are based on features computed with the pixels&amp;rsquo; values. It would be slow
-to re-compute these features each time boxes are merged. The authors designed
-these features so that they could be merged and &lt;em&gt;propagated&lt;/em&gt; to the new box
-without re-computing everything.&lt;/p&gt;
-
-&lt;p&gt;These similarities are added together producing a final similarity measure.&lt;/p&gt;
-
-&lt;h3 id=&#34;3-1-color-similarity&#34;&gt;3.1. Color Similarity&lt;/h3&gt;
-
-&lt;p&gt;Each box has a &lt;a href=&#34;https://en.wikipedia.org/wiki/Color_histogram&#34; target=&#34;_blank&#34;&gt;color histogram&lt;/a&gt;
-of 25 bins. The similarity of two boxes is the histogram intersection:&lt;/p&gt;
-
-&lt;p&gt;$$s_{color}(r_i, r_j) = \sum_{k=1}^n min(c^k_i, c^k_j)$$&lt;/p&gt;
-
-&lt;p&gt;With $r_x$ being a region, and $c^k$ a bin of the histogram.&lt;/p&gt;
-
-&lt;p&gt;It is simply the number of common pixel values:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;/figures/histogram_intersection.svg&#34; alt=&#34;Histogram intersection&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;To propagate the histogram to the box created by a merge of two smaller boxes,
-the authors average the two histograms with a size&amp;rsquo;s weight:&lt;/p&gt;
-
-&lt;p&gt;$$C_t = \frac{size(r_i) * C_i + size(r_j) * C_J}{size(r_i) + size(r_j)}$$&lt;/p&gt;
-
-&lt;h3 id=&#34;3-2-texture-similarity&#34;&gt;3.2. Texture Similarity&lt;/h3&gt;
-
-&lt;p&gt;Textures matter a lot, otherwise how to make a difference between a cameleon
-and the material it sits on?&lt;/p&gt;
-
-&lt;p&gt;The authors create a texture histogram with
-&lt;a href=&#34;https://en.wikipedia.org/wiki/Scale-invariant_feature_transform&#34; target=&#34;_blank&#34;&gt;SIFT&lt;/a&gt;. From
-this histogram, they use the same formulas for both histogram intersection and
-hierarchy propagation.&lt;/p&gt;
-
-&lt;h3 id=&#34;3-3-size-similarity&#34;&gt;3.3. Size Similarity&lt;/h3&gt;
-
-&lt;p&gt;The size similarity has been created in order to avoid an imbalance between
-the boxes&amp;rsquo; size. Where one growing big box would forbid intermediary boxes to
-form.&lt;/p&gt;
-
-&lt;p&gt;$$s_{size}(r_i, r_j) = 1 - \frac{size(r_i) + size(r_j)}{size(image)}$$&lt;/p&gt;
-
-&lt;p&gt;The propagation of this feature is simply the sum of the two sizes.&lt;/p&gt;
-
-&lt;h3 id=&#34;3-4-fitness-feature&#34;&gt;3.4. Fitness Feature&lt;/h3&gt;
-
-&lt;p&gt;The initial boxes created from the segmentation may overlap. Two overlapping
-boxes should be merged early, to do this a &lt;em&gt;fitness&lt;/em&gt; feature is used:&lt;/p&gt;
-
-&lt;p&gt;$$s_{\text{fitness}}(r_i, r_j) = 1 - \frac{size(BB_{ij} - size(r_i) - size(r_j))}{size(\text{image})}$$&lt;/p&gt;
-
-&lt;p&gt;The box $BB_{ij}$ is a bounding box that contains both $r_i$ and $r_j$.
-The feature $s_{\text{fitness}}$ is proportional to the fraction covered by $r_i$
-and $r_j$ in the bounding box $BB_{ij}$.&lt;/p&gt;
-
-&lt;h1 id=&#34;exploiting-the-search&#34;&gt;Exploiting The Search&lt;/h1&gt;
-
-&lt;p&gt;Creating bounding boxes is interesting. However the end goal here is to use the
-selective search in a object recognition model.&lt;/p&gt;
-
-&lt;p&gt;The authors use a SVM with an histogram intersection kernel. SVMs are binary
-classifiers (but can be expanded to multi-classification with &lt;em&gt;One-Against-Rest&lt;/em&gt;,
-&lt;em&gt;One-Against-All&lt;/em&gt; schemes). The positive bounding boxes are ground-truth
-objects. The negative bounding boxes are boxes generated by the selective search
-that have an overlap of 20% to 50% with a positive box. &lt;strong&gt;This force the SVMs
-to train on particularly difficult boxes&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;/figures/selective_search2.png&#34; alt=&#34;Selective search in action&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;However SVMs are slow to train with large amount of data. I will publish
-another &lt;a href=&#34;/posts/faster-rcnn&#34;&gt;article&lt;/a&gt; on Fast-RCNN, a model that use
-Convolutional Neural Networks on top of the Selective Search to do object recognition.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Efficient Graph-Based Segmentation</title>
-      <link>/post/efficient-graph-based-segmentation/</link>
-      <pubDate>Wed, 07 Mar 2018 00:00:00 +0100</pubDate>
-      
-      <guid>/post/efficient-graph-based-segmentation/</guid>
-      <description>
-
-&lt;p&gt;This post contains the notes taken from reading of the following paper:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://cs.brown.edu/~pff/papers/seg-ijcv.pdf&#34; target=&#34;_blank&#34;&gt;Efficient Graph-Based Segmentation&lt;/a&gt;
-by &lt;a href=&#34;https://scholar.google.com/citations?user=k1hJzF0AAAAJ&amp;amp;hl=en&#34; target=&#34;_blank&#34;&gt;Pedro Felzenszwalb&lt;/a&gt;
-and &lt;a href=&#34;https://scholar.google.com/citations?user=q16KVs0AAAAJ&amp;amp;hl=en&#34; target=&#34;_blank&#34;&gt;Daniel Huttenlocher&lt;/a&gt;.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;I was also helped by the slides of Stanford&amp;rsquo;s &lt;a href=&#34;http://vision.stanford.edu/teaching/cs231b_spring1415/slides/ranjay_pres.pdf&#34; target=&#34;_blank&#34;&gt;CS231b&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Fast-RCNN&lt;/strong&gt; was the state-of-the-art algorithm for object detection in 2015; its
-object proposal used &lt;strong&gt;Selective Search&lt;/strong&gt; that itself used &lt;strong&gt;Efficient Graph-Based
-Segmentation&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;p&gt;The reason this segmentation was still useful almost 10 years later is
-because the algorithm is fast, while remaining efficient.
-Its goal is to segment the objects in an image.&lt;/p&gt;
-
-&lt;h1 id=&#34;a-graph-based-algorithm&#34;&gt;A Graph-Based Algorithm&lt;/h1&gt;
-
-&lt;p&gt;The algorithm sees an image as a graph, and every pixels as vertices. Making of
-good segmentation for an image is thus equivalent to finding communities in a
-graph.&lt;/p&gt;
-
-&lt;p&gt;What separates two communities of pixels is a boundary based on where similarity
-ends and dissimilarity begins. A segmentation &lt;strong&gt;too fine&lt;/strong&gt; would result in
-communities separated without real boundary between them; in a segmentation
-&lt;strong&gt;too coarse&lt;/strong&gt; communities should be splitted.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;/figures/too_fine_coarse.svg&#34; alt=&#34;Too fine vs too coarse segmentation&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;The authors of the papers argue that their algorithm always find the right
-segmentation, neither too fine nor too coarse.&lt;/p&gt;
-
-&lt;h1 id=&#34;predicate-of-a-boundary&#34;&gt;Predicate Of A Boundary&lt;/h1&gt;
-
-&lt;p&gt;The authors define their algorithm with a &lt;strong&gt;predicate&lt;/strong&gt; $D$ that measures
-dissimilarity: That predicate takes two components and returns true if a boundary
-exists between them. A component is a segmentation of one or more
-vertice.&lt;/p&gt;
-
-&lt;p&gt;With $C1$ and $C2$ two components:&lt;/p&gt;
-
-&lt;p&gt;$$
-D(C1, C2) = \begin{cases}
-    true    &amp;amp; \text{if } \text{Dif}(C1, C2) &amp;gt; \text{MInt}(C1, C2)\newline
-    false   &amp;amp; \text{otherwise}
-\end{cases}
-$$&lt;/p&gt;
-
-&lt;p&gt;With:&lt;/p&gt;
-
-&lt;p&gt;$$\text{Dif}(C1, C2) = \min_{\substack{v_i \in C1, v_j \in C2 \newline (v_i, v_j) \in E_{ij}}} w(v_i, v_j)$$&lt;/p&gt;
-
-&lt;p&gt;The function $Dif(C1, C2)$ returns the minimum &lt;strong&gt;weight&lt;/strong&gt; $w(.)$ edge that
-connects a vertice $v_i$ to $v_j$, each of them being in two different
-components. $E_{ij}$ is the set of edges connecting two vertices between components
-$C1$ and $C2$. This function $Dif$ measures the &lt;strong&gt;difference between two components&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;p&gt;And with:&lt;/p&gt;
-
-&lt;p&gt;$$\text{MInt}(C1, C2) = min (\text{Int}(C1) + \tau(C1), \text{Int}(C2) + \tau(C2))$$&lt;/p&gt;
-
-&lt;p&gt;$$\tau(C) = \frac{k}{|C|}$$&lt;/p&gt;
-
-&lt;p&gt;$$\text{Int}(C) = \max_{\substack{e \in \text{MST}(C, E)}} w(e)$$&lt;/p&gt;
-
-&lt;p&gt;The function $\text{Int}(C)$ returns the edge with maximum weight that connects two
-vertices in the &lt;a href=&#34;https://en.wikipedia.org/wiki/Minimum_spanning_tree&#34; target=&#34;_blank&#34;&gt;Minimum Spanning Tree&lt;/a&gt;
-(&lt;em&gt;MST&lt;/em&gt;) of a same component. Looking only in the MST reduces considerably the
-number of possible edges to consider: A spanning tree has $n - 1$ edges instead
-of the $\frac{n(n - 1)}{2}$ total edges. Moreover, using the &lt;em&gt;minimum&lt;/em&gt;
-spanning tree and not just a common spanning tree allows to have segmentation
-with high-variability (but still progressive). This function $\text{Int}$ measures the
-&lt;strong&gt;internal difference of a component&lt;/strong&gt;. A low $\text{Int}$ means that the component
-is homogeneous.&lt;/p&gt;
-
-&lt;p&gt;The function $\tau(C)$ is a threshold function, that &lt;strong&gt;imposes a stronger
-evidence of boundary for small components&lt;/strong&gt;. A large $k$ creates a segmentation
-with large components. The authors set $k = 300$ for wide images, and $k = 150$
-for detailed images.&lt;/p&gt;
-
-&lt;p&gt;Finally $\text{MInt}(C1, C2)$ is the &lt;strong&gt;minimum of internal difference of two
-components&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;p&gt;To summarize the predicate $D$: A large difference between two internally
-homogeneous components is evidence of a boundary between them. However, if the
-two components are internally heterogeneous it would be harder to prove
-a boundary. &lt;strong&gt;Therefore &lt;em&gt;details&lt;/em&gt; are ignored in high-variability regions but
-are preserved in low-variability regions&lt;/strong&gt;:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;/figures/seg1.png&#34; alt=&#34;Segmentation&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;Notice how the highly-variable grass is correctly segmented while details like
-numbers on the back of the first player are preserved.&lt;/em&gt;&lt;/p&gt;
-
-&lt;h1 id=&#34;different-weight-functions&#34;&gt;Different Weight Functions&lt;/h1&gt;
-
-&lt;p&gt;The predicate uses a function $w(v_i, v_j)$ that measures the edge&amp;rsquo;s weight
-between two vertices $v_i$ and $v_j$.&lt;/p&gt;
-
-&lt;p&gt;The authors provide two alternatives for this weight function:&lt;/p&gt;
-
-&lt;h2 id=&#34;grid-graph-weight&#34;&gt;Grid Graph Weight&lt;/h2&gt;
-
-&lt;p&gt;To correctly use this weight function, the authors smooth the image using a
-&lt;a href=&#34;https://en.wikipedia.org/wiki/Gaussian_filter&#34; target=&#34;_blank&#34;&gt;Gaussian filter&lt;/a&gt; with $\sigma = 0.8$.&lt;/p&gt;
-
-&lt;p&gt;The Grid Graph Weight function is:&lt;/p&gt;
-
-&lt;p&gt;$$w(v_j, v_i) = |I(p_i) - I(p_j)|$$&lt;/p&gt;
-
-&lt;p&gt;It is the intensity&amp;rsquo;s difference of the pixel neighbourhood. Indeed, the authors
-choose to not only use the pixel intensity, but also its 8 neighbours.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;/figures/gridgraph_weight.svg&#34; alt=&#34;The eight neighbours&#34; /&gt;
-&lt;em&gt;The intensity is the pixel-value of the central pixel $p_i$ and its 8
-neighbours.&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;Using this weight function, they run the algorithm three times (for &lt;em&gt;red&lt;/em&gt;, &lt;em&gt;blue&lt;/em&gt;,
-and &lt;em&gt;green&lt;/em&gt;) and choose the intersection of the three segmentations as result.&lt;/p&gt;
-
-&lt;h2 id=&#34;nearest-neighbours-graph-weight&#34;&gt;Nearest Neighbours Graph Weight&lt;/h2&gt;
-
-&lt;p&gt;The second weight function is based on the &lt;a href=&#34;https://en.wikipedia.org/wiki/Nearest_neighbor_search#Approximate_nearest_neighbor&#34; target=&#34;_blank&#34;&gt;Approximate Nearest Neighbours Search&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;It tries to find a good approximation of what could be the &lt;em&gt;closest&lt;/em&gt; pixel. The
-features space is both the spatial coordinates and the pixel&amp;rsquo;s RGB.&lt;/p&gt;
-
-&lt;p&gt;Features Space = $(x, y, r, g, b)$.&lt;/p&gt;
-
-&lt;h1 id=&#34;the-actual-algorithm&#34;&gt;The Actual Algorithm&lt;/h1&gt;
-
-&lt;p&gt;Now that every sub-function of the algorithm has been defined, let&amp;rsquo;s see the
-actual algorithm:&lt;/p&gt;
-
-&lt;p&gt;For the Graph $G = (V, E)$ composed of the vertices $V$ and the edges $E$,
-and a segmentation $S = (C_1, C_2, &amp;hellip;)$:&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;Sort E into $\pi$ = ($o_1$, &amp;hellip;, $o_m$) by increasing edge weight order.&lt;/li&gt;
-&lt;li&gt;Each vertice is alone in its own component. This is the initial segmentation
-$S^0$.&lt;/li&gt;
-&lt;li&gt;For $q = 1, &amp;hellip;, m$:
-
-&lt;ul&gt;
-&lt;li&gt;Current segmentation is $S^q$&lt;/li&gt;
-&lt;li&gt;($v_i$, $v_j$) $= o_q$&lt;/li&gt;
-&lt;li&gt;If $v_i$ and $v_j$ are not in the same component, &lt;em&gt;and&lt;/em&gt; the predicate
-$D(C_i^{q - 1}, C_j^{q - 1})$ is false then:
-
-&lt;ul&gt;
-&lt;li&gt;Merge $C_i$ and $C_j$ into a single component.&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;li&gt;Return $S^m$.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;The superscript $q$ in $S^q$ or $C_x^Q$ simply denotes a version of
-the segmentation or of the component at the instant $q$ of the algorithm.&lt;/p&gt;
-
-&lt;p&gt;Basically what the algorithm is doing is a bottom-up merging of at first
-individual pixels into larger and larger components. At the end, the segmentation
-$S^m$ will neither be too fine nor too coarse.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;/figures/seg_algo.svg&#34; alt=&#34;The seg algo&#34; /&gt;&lt;/p&gt;
-
-&lt;h1 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h1&gt;
-
-&lt;p&gt;As you have seen, the algorithm of this paper is quite simple. What makes it
-efficient is the chosen metrics and the predicate defined beforehand.&lt;/p&gt;
-
-&lt;p&gt;If you have read until the bottom of the page, congrats! To thank you, here is
-some demonstrations by the authors:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;/figures/seg2.png&#34; alt=&#34;Some demo&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;/figures/seg3.png&#34; alt=&#34;Some demo&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;/figures/seg4.png&#34; alt=&#34;Some demo&#34; /&gt;&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>A Few Useful Things To Know About Machine Learning</title>
-      <link>/post/useful-things-to-know-about-ml/</link>
-      <pubDate>Tue, 06 Feb 2018 00:00:00 +0100</pubDate>
-      
-      <guid>/post/useful-things-to-know-about-ml/</guid>
-      <description>
-
-&lt;p&gt;This post contains the notes taken from reading of the following paper:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://homes.cs.washington.edu/~pedrod/papers/cacm12.pdf&#34; target=&#34;_blank&#34;&gt;A few useful things to know about Machine Learning&lt;/a&gt;
-by &lt;a href=&#34;https://scholar.google.com/citations?user=KOrhfVMAAAAJ&amp;amp;hl=en&#34; target=&#34;_blank&#34;&gt;Pedro Domingos&lt;/a&gt;.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;This paper does not introduce any novelties in the field of Machine Learning, nor
-some kinds of benchmarks, but rather offers a overview of the &lt;em&gt;black art&lt;/em&gt; of
-Machine Learning. Domingos covers a wide area of Machine Learning, but each
-parts are not explored in depth.&lt;/p&gt;
-
-&lt;h1 id=&#34;the-right-algorithm&#34;&gt;The Right Algorithm&lt;/h1&gt;
-
-&lt;p&gt;Domingos splits the problem of choosing the right algorithm in three sub-problems:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Finding the good &lt;strong&gt;representation&lt;/strong&gt; (&lt;em&gt;hyperplanes, rules, decision trees, etc.&lt;/em&gt;)&lt;/li&gt;
-&lt;li&gt;The &lt;strong&gt;objective function&lt;/strong&gt; to optimize (&lt;em&gt;accuracy, likelihood, cross-entropy, etc.&lt;/em&gt;)&lt;/li&gt;
-&lt;li&gt;The &lt;strong&gt;optimization method&lt;/strong&gt; (&lt;em&gt;quadratric, beam search, gradient descent, etc.&lt;/em&gt;)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;The optimal combinations should be taken according to hyperparameters: The accuracy,
-the training time, the problem type, etc.&lt;/p&gt;
-
-&lt;h1 id=&#34;evaluating-the-algorithm&#34;&gt;Evaluating The Algorithm&lt;/h1&gt;
-
-&lt;p&gt;Domingos notes that while a high accuracy may seem &lt;em&gt;good&lt;/em&gt;, it is not a sufficient
-indicator. A high score of accuracy on the &lt;em&gt;train data&lt;/em&gt; may simply mean that the
-algorithm has an &lt;em&gt;overfit&lt;/em&gt; problem, and thus generalize badly on new unseen data.&lt;/p&gt;
-
-&lt;p&gt;A common pitfall would be to train the algorithm on the train data and tweak
-the hyperparameters in order to maximize our score on the &lt;em&gt;test data&lt;/em&gt;. This may
-lead to an overfit on also the test data!&lt;/p&gt;
-
-&lt;p&gt;The generalization problems (&lt;em&gt;how can I estimate my generalization?&lt;/em&gt; and &lt;em&gt;how
-can I improve my generalization&lt;/em&gt;) are detailed in the further sections.&lt;/p&gt;
-
-&lt;h1 id=&#34;the-bias-variance-trade-off&#34;&gt;The Bias-Variance Trade-off&lt;/h1&gt;
-
-&lt;p&gt;When building a model it is interesting to decompose the generalization error
-into two components: the &lt;em&gt;bias&lt;/em&gt; and the &lt;em&gt;variance&lt;/em&gt;.&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;&lt;strong&gt;Bias&lt;/strong&gt; is a learner&amp;rsquo;s tendency to consistently learn the same wrong thing.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Variance&lt;/strong&gt; is the tendency to learn random things irrespective of the real signal.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;&lt;img src=&#34;/blog/bias-variance.png&#34; alt=&#34;Bias-Variance trade-off in dart-throwing&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;This trade-off explains why a powerful learner may not be better than a weak learner.
-If my powerful learner has a low bias, he is performing well on the
-train data. However if my powerful learner has also a high variance, it may
-have learned noise from the train data that would be irrelevant for the test
-data and behave randomly.&lt;/p&gt;
-
-&lt;h1 id=&#34;reducing-the-variance&#34;&gt;Reducing The Variance&lt;/h1&gt;
-
-&lt;p&gt;There are several ways to reduce the variance:&lt;/p&gt;
-
-&lt;h3 id=&#34;train-validation-and-test&#34;&gt;Train, Validation, and Test&lt;/h3&gt;
-
-&lt;p&gt;Before training your model, the data should be split in three parts:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Train&lt;/strong&gt;: On which the model will learn.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Validation&lt;/strong&gt;: On which we will optimize model&amp;rsquo;s performance by tweaking the parameters.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Test&lt;/strong&gt;: To test the model, only at the end.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&#34;/blog/train-validation-test.png&#34; alt=&#34;Train-Validation-Test split&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;In a certain way, we are overfitting on &lt;em&gt;validation&lt;/em&gt; by tweaking the parameters
-according to the &lt;em&gt;validation&lt;/em&gt;&amp;rsquo;s performance. In order to mitigate this we can
-use the cross-validation:&lt;/p&gt;
-
-&lt;h3 id=&#34;cross-validation&#34;&gt;Cross-Validation&lt;/h3&gt;
-
-&lt;p&gt;We are still training the model on &lt;em&gt;train&lt;/em&gt;, and tweaking the parameters in order
-to optimize &lt;em&gt;validation&lt;/em&gt;.&lt;/p&gt;
-
-&lt;p&gt;However instead of evaluating a fixed validation set, we are evaluating the average
-performance of the different folds:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;/blog/cross-validation.png&#34; alt=&#34;k-fold cross-validations&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Note that if there is too many parameters choices, the cross-validation may
-not be able to avoid overfitting.&lt;/p&gt;
-
-&lt;h3 id=&#34;regularization&#34;&gt;Regularization&lt;/h3&gt;
-
-&lt;p&gt;Another way to way to avoid overfitting is to add &lt;em&gt;regularization&lt;/em&gt;. It will force
-the model to be simpler.&lt;/p&gt;
-
-&lt;p&gt;Let&amp;rsquo;s say the model has a set of weights $W$, an evaluation function $f(X)$
-(that depends of the weights), and a loss function $L(X, Y)$.&lt;/p&gt;
-
-&lt;p&gt;Without regularization the model will try to optimize:&lt;/p&gt;
-
-&lt;p&gt;$$L(X, f(X))$$&lt;/p&gt;
-
-&lt;p&gt;With a regularization $R(W)$:&lt;/p&gt;
-
-&lt;p&gt;$$L(X, f(X)) + \lambda R(W)$$&lt;/p&gt;
-
-&lt;p&gt;The regularization is multiplied by a factor $\lambda$ that is determined empirically,
-with cross-validation for example.&lt;/p&gt;
-
-&lt;p&gt;There are several regularizations possible. The two most common are &lt;strong&gt;L1&lt;/strong&gt;
-(also known as &lt;em&gt;LASSO&lt;/em&gt;), and &lt;strong&gt;L2&lt;/strong&gt; (also known as &lt;em&gt;Ridge&lt;/em&gt;):&lt;/p&gt;
-
-&lt;p&gt;L1 is the absolute norm:&lt;/p&gt;
-
-&lt;p&gt;$$\Vert W \Vert_1 = \Sigma_{i=1}^n |w_i|$$&lt;/p&gt;
-
-&lt;p&gt;While L2 is:&lt;/p&gt;
-
-&lt;p&gt;$$\Vert W \Vert_2 = \Sigma_{i=1}^{n} w_i^2$$&lt;/p&gt;
-
-&lt;h1 id=&#34;the-curse-of-dimensionality&#34;&gt;The Curse Of Dimensionality&lt;/h1&gt;
-
-&lt;p&gt;In addition of overfitting, a model can also fail to learn high-dimensional
-data.&lt;/p&gt;
-
-&lt;p&gt;For example, let&amp;rsquo;s imagine that we want to use a decision tree to learn
-data which features are binary discrete values. If there are 10 features, it would
-mean that there is a thousand possible samples. If there are 100 features (which
-is common), there are a thousand billion of billion of billion possible samples.
-It is unlearnable, either because the model will never generalize correctly, or
-the model will take a non-practical amount of time to learn.&lt;/p&gt;
-
-&lt;p&gt;Thankfully, the data&amp;rsquo;s features are often not completely independent and many
-features are just noise. The &lt;em&gt;blessing of non-uniformity&lt;/em&gt; as Domingos calls,
-implies the samples are often spread on a lower-dimensional manifold.&lt;/p&gt;
-
-&lt;p&gt;To reduce the dimension, i.e. choosing the right features, &lt;a href=&#34;https://en.wikipedia.org/wiki/Dimensionality_reduction&#34; target=&#34;_blank&#34;&gt;many algorithms&lt;/a&gt; exist:
-PCA, NMF, LDA, etc.&lt;/p&gt;
-
-&lt;p&gt;The  reduction of dimensionality is an often necessary step before feeding the
-model with the data.&lt;/p&gt;
-
-&lt;h1 id=&#34;feature-engineering-is-the-key&#34;&gt;Feature Engineering Is The Key&lt;/h1&gt;
-
-&lt;p&gt;Feature Engineering is the action of transforming raw data into something that
-is more learnable by the model. It is dependant on the data&amp;rsquo;s type, and here
-lies most of the &lt;em&gt;black art&lt;/em&gt; of Machine Learning.&lt;/p&gt;
-
-&lt;p&gt;Two examples:&lt;/p&gt;
-
-&lt;p&gt;For text data, several processing are necessary:
-- &lt;strong&gt;tokenization&lt;/strong&gt; to split the words of the sentence.
-- &lt;strong&gt;lemmatization&lt;/strong&gt; to get the lemma (&lt;em&gt;loved, loving, lover -&amp;gt; love&lt;/em&gt;)
-- &lt;strong&gt;POS-Tagging&lt;/strong&gt; to get the grammar label of a token (&lt;em&gt;be -&amp;gt; verb, car -&amp;gt; noun&lt;/em&gt;)&lt;/p&gt;
-
-&lt;p&gt;For image data, in the case of object detection we can extract interesting
-features with the &lt;a href=&#34;https://www.learnopencv.com/histogram-of-oriented-gradients/&#34; target=&#34;_blank&#34;&gt;HOG algorithm&lt;/a&gt;
-and feed these features to a SVM to &lt;a href=&#34;https://github.com/Mougatine/human-recognition/blob/master/tirf_project.ipynb&#34; target=&#34;_blank&#34;&gt;improve significantly the performances&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;While feature engineering is major part of Machine Learning, it is less important
-in Deep Learning: with Convolutional Neural Network (CNN) the model is learning
-by itself the &lt;a href=&#34;https://cs.stanford.edu/people/karpathy/convnetjs/demo/cifar10.html&#34; target=&#34;_blank&#34;&gt;convolution kernels&lt;/a&gt; extracting the interesting features.&lt;/p&gt;
-
-&lt;h1 id=&#34;model-ensembles&#34;&gt;Model Ensembles&lt;/h1&gt;
-
-&lt;p&gt;In order to achieve the best performance we want to decrease both bias and variance.
-It is often complicated to optimize this trade-off. A great way to achieve this
-is to combine different models, kind of like a &lt;em&gt;wisdom of the crowd&lt;/em&gt;.&lt;/p&gt;
-
-&lt;p&gt;There are three main categories of ensembles:&lt;/p&gt;
-
-&lt;h3 id=&#34;bagging&#34;&gt;Bagging&lt;/h3&gt;
-
-&lt;p&gt;Used in the &lt;strong&gt;Random Forest&lt;/strong&gt;, bagging generates plenty of model. Each has a low
-bias but a high variance. A voting system is set up between them to choose the
-output, thus lowering the individual variances.&lt;/p&gt;
-
-&lt;h3 id=&#34;boosting&#34;&gt;Boosting&lt;/h3&gt;
-
-&lt;p&gt;Used in &lt;strong&gt;Adaboost&lt;/strong&gt; or in &lt;strong&gt;Gradient Boosting&lt;/strong&gt;, boosting generates at first
-a simple weak learner: It should just be a bit better than a random guess. At each
-iteration of the training, a new weak learner is added to the global learner. The
-new weak learner focuses on the previously poorly predicted data.&lt;/p&gt;
-
-&lt;p&gt;At each iteration the bias is reduced as the overall model improves. There is a
-diminished risk of overfitting with boosting: Because each iteration&amp;rsquo;s learner
-focuses on poorly predicted data, the risk of &lt;em&gt;over-learning&lt;/em&gt; data is small.&lt;/p&gt;
-
-&lt;h3 id=&#34;stacking&#34;&gt;Stacking&lt;/h3&gt;
-
-&lt;p&gt;The stacking ensemble is the easiest to understand: Each model is connected to
-another: The output of one is the input of another.&lt;/p&gt;
-
-&lt;h1 id=&#34;data-data-and-data&#34;&gt;Data, Data, And Data&lt;/h1&gt;
-
-&lt;p&gt;While Domingos offers us great insights into Machine Learning, and various
-methods to improve our models, he notes one constant:&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;More data beats a cleverer algorithm&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;It is often more advisable to focus the efforts on getting as much data as
-possible, and begin with a simple model, than to expect a complex model to
-generalize from few data.&lt;/p&gt;
-
-&lt;h3 id=&#34;available-data&#34;&gt;Available Data&lt;/h3&gt;
-
-&lt;p&gt;There are plenty of resources available:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://archive.ics.uci.edu/ml/datasets.html&#34; target=&#34;_blank&#34;&gt;UCL Datasets&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.kaggle.com/datasets&#34; target=&#34;_blank&#34;&gt;Kaggle Datasets&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.cs.toronto.edu/~kriz/cifar.html&#34; target=&#34;_blank&#34;&gt;CIFAR&lt;/a&gt;,
-&lt;a href=&#34;http://www.image-net.org/&#34; target=&#34;_blank&#34;&gt;ImageNet&lt;/a&gt;, &lt;a href=&#34;http://cocodataset.org/#home&#34; target=&#34;_blank&#34;&gt;COCO&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&amp;hellip;&lt;/li&gt;
-&lt;/ul&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>How To Read A Paper</title>
-      <link>/post/how-to-read-a-paper/</link>
-      <pubDate>Tue, 06 Feb 2018 00:00:00 +0100</pubDate>
-      
-      <guid>/post/how-to-read-a-paper/</guid>
-      <description>
-
-&lt;h1 id=&#34;preambule&#34;&gt;Preambule&lt;/h1&gt;
-
-&lt;p&gt;During my master in Data Science I have read a few papers. While I am a good
-reader, reading a scientific paper is still a strugle. For the year 2018, and hopefuly
-the next years, I have decided to read more papers. At least one a week.&lt;/p&gt;
-
-&lt;p&gt;My favorite method to learn something is to explain it to someone else.
-That&amp;rsquo;s the Feyman&amp;rsquo;s technique. It may be hard to find a patient listener thus
-I am making this blog to explain to the potential reader papers I am reading.&lt;/p&gt;
-
-&lt;p&gt;A great and similar example is the blog &lt;a href=&#34;https://blog.acolyer.org/&#34; target=&#34;_blank&#34;&gt;The Morning Paper&lt;/a&gt;
-that I vivedly recommend.&lt;/p&gt;
-
-&lt;h1 id=&#34;how-to-read-a-paper&#34;&gt;How To Read A Paper&lt;/h1&gt;
-
-&lt;p&gt;The first paper of this blog serie is about the techniques to read a paper.&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;http://ccr.sigcomm.org/online/files/p83-keshavA.pdf&#34; target=&#34;_blank&#34;&gt;How To Read A Paper&lt;/a&gt; by &lt;a href=&#34;https://scholar.google.com/citations?user=-EMkK7QAAAAJ&#34; target=&#34;_blank&#34;&gt;S.Keshav&lt;/a&gt;.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;The author advises a &lt;em&gt;three-pass approach&lt;/em&gt;:&lt;/p&gt;
-
-&lt;h2 id=&#34;the-first-pass&#34;&gt;The First Pass&lt;/h2&gt;
-
-&lt;p&gt;The first pass is about determining what the paper is talking about and whether
-it is worth it to read it with more attention. A few minutes should suffice.&lt;/p&gt;
-
-&lt;p&gt;The reader should read the abstract &amp;amp; introduction, sub-introduction of
-a new section, and the conclusion. A quick pass on the references may also be useful.&lt;/p&gt;
-
-&lt;p&gt;In order to choose whether to read more of the paper, the reader should check the
-&lt;em&gt;five Cs&lt;/em&gt;:&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;To which &lt;strong&gt;category&lt;/strong&gt; the paper belongs?&lt;/li&gt;
-&lt;li&gt;What is the &lt;strong&gt;context&lt;/strong&gt; surrounding the paper?&lt;/li&gt;
-&lt;li&gt;Does the paper seem to be &lt;strong&gt;correct&lt;/strong&gt;?&lt;/li&gt;
-&lt;li&gt;What are the &lt;strong&gt;contributions&lt;/strong&gt; of the paper?&lt;/li&gt;
-&lt;li&gt;Is the paper &lt;strong&gt;well written&lt;/strong&gt;?&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&#34;the-second-pass&#34;&gt;The Second Pass&lt;/h2&gt;
-
-&lt;p&gt;The second pass may be enough for most papers.&lt;/p&gt;
-
-&lt;p&gt;The reader should at first, pay special attention to the figures and illustrations.
-Then he should read the main gist of the paper while avoiding details such as proofs.
-And finaly he should jot down the main references.&lt;/p&gt;
-
-&lt;h2 id=&#34;the-third-pass&#34;&gt;The Third Pass&lt;/h2&gt;
-
-&lt;p&gt;The third and last pass is about re-doing the worker of the researcher: The reader
-has to examine carefully each proofs, assumptions, and affirmations.&lt;/p&gt;
-
-&lt;p&gt;At this pass, the reader should also list the strong and the weak points of the
-paper with greater attention.&lt;/p&gt;
 </description>
     </item>
     
