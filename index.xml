@@ -1985,6 +1985,20 @@ This won&amp;rsquo;t surprise those who read the trilogy.&lt;/p&gt;
     </item>
     
     <item>
+      <title>Mr Ma and Son</title>
+      <link>/books/mr-ma-and-son/</link>
+      <pubDate>Sun, 13 May 2018 00:00:00 +0200</pubDate>
+      
+      <guid>/books/mr-ma-and-son/</guid>
+      <description>&lt;p&gt;This is the story of a father and his son. Coming from Beijing ([[China]]), they come to London with different goals. The son hopes to learn and to held a business, the father just follow the stream.&lt;/p&gt;
+
+&lt;p&gt;The story itself isn&amp;rsquo;t very interesting. What I liked in this book was the description of [[Racism]] and [[Inter-Generational Gap]].&lt;/p&gt;
+
+&lt;p&gt;English men are deeply racist against Chinese men, but the latter &amp;mdash;especially the old generation&amp;ndash; also hold preconceived ideas on the western culture.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
       <title>The Three-Body Problem trilogy</title>
       <link>/books/three-body/</link>
       <pubDate>Sun, 13 May 2018 00:00:00 +0200</pubDate>
@@ -2189,172 +2203,6 @@ shared through a &lt;em&gt;common knowledge&lt;/em&gt;.&lt;/p&gt;
 &lt;p&gt;It is also far more easy to train deep network with the dense connections because
 of an &lt;em&gt;implicit deep supervision&lt;/em&gt; where the gradient is flowing back more easily
 thanks to the short connections.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Deep Learning Scaling Is Predictable, Empirically</title>
-      <link>/post/deep-learning-scaling/</link>
-      <pubDate>Fri, 20 Apr 2018 00:00:00 +0200</pubDate>
-      
-      <guid>/post/deep-learning-scaling/</guid>
-      <description>
-
-&lt;p&gt;This post contains the notes taken from the following paper:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://arxiv.org/abs/1712.00409&#34; target=&#34;_blank&#34;&gt;Deep Learning Scaling Is Predictable, Empirically&lt;/a&gt;
-by Baidu Research.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;The last years in Deep Learning have seen a rush to gigantism:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Models are becoming deeper and deeper from the 8 layers of &lt;a href=&#34;https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf&#34; target=&#34;_blank&#34;&gt;AlexNet&lt;/a&gt;
-to the &lt;a href=&#34;https://arxiv.org/abs/1603.05027&#34; target=&#34;_blank&#34;&gt;1001-layer ResNet&lt;/a&gt;.&lt;/li&gt;
-&lt;li&gt;Training on large dataset is way quicker, ImageNet can now (with enough
-computing power) been &lt;a href=&#34;https://arxiv.org/abs/1709.05011&#34; target=&#34;_blank&#34;&gt;trained in less than 20 minutes&lt;/a&gt;.&lt;/li&gt;
-&lt;li&gt;Dataset size are increasing each year.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;As this paper rightly declare in its introduction:&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;The Deep Learning (DL) community has created impactful advances across diverse
-application domains by following a straightforward recipe: search for improved
-model architectures, create large training data sets, and scale computation.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;However it also notes that new models and hyperparameters configuration are
-often depend on &lt;em&gt;epiphany&lt;/em&gt; and &lt;em&gt;serendipity&lt;/em&gt;.&lt;/p&gt;
-
-&lt;p&gt;In order to harness the power of &lt;em&gt;big data&lt;/em&gt; (more data, more computation power,
-etc.) models should not be designed to reduce error rate of an epsilon on
-Imagenet but be designed to be better with more data.&lt;/p&gt;
-
-&lt;p&gt;Baidu Research introduce a &lt;strong&gt;power-law expononent&lt;/strong&gt;, that measure the &lt;em&gt;steepness&lt;/em&gt;
-of the learning curve:&lt;/p&gt;
-
-&lt;p&gt;$$\epsilon(m) \propto \alpha m^{\beta_g}$$&lt;/p&gt;
-
-&lt;p&gt;Where $\epsilon(m)$ is the generalization error on the number of train samples
-$m$; $\alpha$ a constant related to the problem; and $\beta_g$ the steepness
-of the learning curve.&lt;/p&gt;
-
-&lt;p&gt;$\beta_g$ is said to settle between -0.07 and -0.35.&lt;/p&gt;
-
-&lt;h3 id=&#34;the-methodology&#34;&gt;The Methodology&lt;/h3&gt;
-
-&lt;p&gt;Baidu tested four domains: machine translation, language modeling, image
-classification, and speech recognition.&lt;/p&gt;
-
-&lt;p&gt;For each domain, a variety of architectures, optimizers, and hyperparameters is
-tested. To see how models scale with dataset size, Baidu trained models on samples
-ranging from 0.1% of the original data to the whole data (minus the validation set).&lt;/p&gt;
-
-&lt;p&gt;The paper&amp;rsquo;s authors try to find the smallest model that is able to overfit each
-sample.&lt;/p&gt;
-
-&lt;p&gt;Baidu also removed any regularizations, like weight decay, that might reduce
-the model&amp;rsquo;s effective &lt;a href=&#34;https://en.wikipedia.org/wiki/VC_dimension&#34; target=&#34;_blank&#34;&gt;capacity&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h3 id=&#34;results&#34;&gt;Results&lt;/h3&gt;
-
-&lt;p&gt;In all domain, they found that the model size growth with dataset size sublinearly.&lt;/p&gt;
-
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;Domain&lt;/th&gt;
-&lt;th&gt;Learning Curve Steepness $\beta_g$&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;Machine Translation&lt;/td&gt;
-&lt;td&gt;-0.128&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;Language Modeling&lt;/td&gt;
-&lt;td&gt;[-0.09, -0.06]&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;Image (top-1)&lt;/td&gt;
-&lt;td&gt;-0.309&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;Image (top-5)&lt;/td&gt;
-&lt;td&gt;-0.488&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;Speech&lt;/td&gt;
-&lt;td&gt;-0.299&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;The first thing that we can conclude from these numbers is that text based
-problems (translation and language modeling) scale badly faced to image problems.&lt;/p&gt;
-
-&lt;p&gt;It is worth noting that (current) models seem to scale better depending on the data
-dimension: Image and speech are of a higher dimensionality than text.&lt;/p&gt;
-
-&lt;p&gt;You may also wonder why image has two entries in the table. One for top-1 generalization
-error, and one for top-5. This is one of the most interesting finding of this paper.
-Current models of image classification improve their top-5 faster than top-1 as data
-size increases! I wonder the reason why.&lt;/p&gt;
-
-&lt;h3 id=&#34;implications&#34;&gt;Implications&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;/figures/power_law_curve.png&#34; alt=&#34;Power law curve&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;The authors separate the generalization error per data size in three areas:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;em&gt;The small data region&lt;/em&gt;, where models given so few data can only make random
-guessing.&lt;/li&gt;
-&lt;li&gt;&lt;em&gt;The power law region&lt;/em&gt;, where models follow the power law. However the learning
-curve steepness may be improved.&lt;/li&gt;
-&lt;li&gt;&lt;em&gt;The irreductible error&lt;/em&gt;, a combination of the &lt;a href=&#34;https://en.wikipedia.org/wiki/Bayes_error_rate&#34; target=&#34;_blank&#34;&gt;Bayes error&lt;/a&gt;
-(on which the model cannot be improved) and the dataset defects that may impair
-generalization.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;The authors also underline major implications of the power law:&lt;/p&gt;
-
-&lt;p&gt;Given the power law, researchers can train their new architecture on a small dataset,
-and have a good estimation of how it would scale on a bigger dataset.
-It may also give a reasonable estimation of the hardware and time requirements
-to reach a chosen generalization error.&lt;/p&gt;
-
-&lt;p&gt;Instead of simply trying to improve a model&amp;rsquo;s accuracy, the authors suggest that
-beating the power law should be the end goal. Dataset size is going to grow
-each year, a scalable model would thrive in this situation. The authors advise
-methods that may help to &lt;em&gt;extract more info on less data&lt;/em&gt;:&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;We suggest that future work more deeply analyze learning curves when using data
-handling techniques, such as data filtering/augmentation, few-shot learning,
-experience replay, and generative adversarial networks.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;Baidu also recommends to search how to push the boundaries of the irreductible
-error. To do that we should be able to distinguish between what contributes to
-the &lt;em&gt;bayes error&lt;/em&gt;, and what&amp;rsquo;s not.&lt;/p&gt;
-
-&lt;h3 id=&#34;summary&#34;&gt;Summary&lt;/h3&gt;
-
-&lt;p&gt;Baidu Research showed that models follow a power law curve. They empirically
-determined the power law exponent, or &lt;em&gt;steepness of the learning curve&lt;/em&gt;, for
-machine translation, language modeling, image classification, and speech recognition.&lt;/p&gt;
-
-&lt;p&gt;This power law express how much a model can improve given more data.
-Models for text problems are currently the less scalable.&lt;/p&gt;
 </description>
     </item>
     
