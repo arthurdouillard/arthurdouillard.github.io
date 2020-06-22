@@ -360,7 +360,7 @@
   
   <span class="middot-divider"></span>
   <span class="article-reading-time">
-    19 min read
+    18 min read
   </span>
   
   
@@ -477,13 +477,13 @@
 
 <p>The authors propose two contributions: first of all they use at first a <strong>Nereast Class Mean</strong> (NCM) (kNN for CL) classifier. Similar to iCaRL&rsquo;s NME, class means are computed. To handle concept drift, they update the means for new samples with a moving average:</p>
 
-<p>$$ \mu<em>{y}^{\phi} \leftarrow \frac{n</em>{y i}}{n<em>{y i}+1} \mu</em>{y}^{\phi}+\frac{1}{n<em>{y i}+1} \phi\left(\mathbf{x}</em>{i}\right) $$</p>
+<p>$$\mu_{y}^{\phi} \leftarrow \frac{n_{y i}}{n_{y i}+1} \mu_{y}^{\phi}+\frac{1}{n_{y i}+1} \phi\left(\mathbf{x}_{i}\right)$$</p>
 
 <p>Furthermore, during the early tasks, they use in inference their NCM classifier because they remark that it behaves well with data scarcity. When the model is better trained, having seen enough samples, they switch their classifier for the class probabilities from a softmax. It&rsquo;s interesting to mix those inference classifiers (classification and metric-based) contrary to <a href="http://openaccess.thecvf.com/content_CVPR_2019/papers/Hou_Learning_a_Unified_Classifier_Incrementally_via_Rebalancing_CVPR_2019_paper.pdf" target="_blank">Hou et al., 2019</a> and <a href="https://arxiv.org/abs/2004.13513" target="_blank">Douillard et al., 2020</a> that evaluated separately the two methods. However <em>He et al.</em>&rsquo;s switch from one method to the other is an hyperparameter, it would have been nice to do so based on some Uncertainty measure.</p>
 
 <p>Their second contribution is a <strong>modified cross-distillation</strong>: in addition of an usual distillation loss on probabilities with temperature (<a href="https://arxiv.org/abs/1503.02531" target="_blank">Hinton et al., 2015</a>), they modify the classification loss. It is still a cross-entropy but the probabilities associated to old classes are a linear combination of the old and new model outputs:</p>
 
-<p>$$\tilde{p}^{(i)}=\left{\begin{array}{cc}\beta p^{(i)}+(1-\beta) \hat{p}^{(i)} &amp; 0&lt;i \leq n \ p^{(i)} &amp; n&lt;i \leq n+m\end{array}\right.$$</p>
+<p>$$\tilde{p}^{(i)}=\left{\begin{array}{cc}\beta p^{(i)}+(1-\beta) \hat{p}^{(i)} &amp; 0&lt;i \leq n \\\ p^{(i)} &amp; n&lt;i \leq n+m\end{array}\right.$$</p>
 
 <p>They also finetune their model on a balanced set like <a href="https://arxiv.org/abs/1807.09536" target="_blank">Castro et al., 2018</a> did.</p>
 
@@ -495,7 +495,7 @@
 
 <p>The goal of Meta-Learning is to &ldquo;learn to learn&rdquo;. In this case, they want to obtain a network that learns to produce a set of parameters that can then be tuned quickly to a particular task. Following existing Meta-Learning models, they train in two loops. The inner loop learns an actual task, while the outer loop learns to produce a good initialization for the inner loop (i.e. &ldquo;learn to learn&rdquo;). Inspired by Reptile (<a href="https://arxiv.org/abs/1803.02999" target="_blank">Nichol et al., 2018</a>), their outer loop is trained on the difference between the base parameters and the parameters learned after the inner loop. The different with Reptile is that the inner loop learns separately each task, producing mean inner loop parameters:</p>
 
-<p>$$\Phi=\Phi<em>{b a s e}-\eta \frac{1}{t} \sum</em>{i=1}^{t}\left(\Phi<em>{b a s e}-\Phi</em>{i}\right)=\eta \frac{1}{t} \sum<em>{i=1}^{t} \Phi</em>{i}+(1-\eta) \Phi_{b a s e}$$</p>
+<p>$$\Phi=\Phi_{b a s e}-\eta \frac{1}{t} \sum_{i=1}^{t}\left(\Phi_{b a s e}-\Phi_{i}\right)=\eta \frac{1}{t} \sum_{i=1}^{t} \Phi_{i}+(1-\eta) \Phi_{b a s e}$$</p>
 
 <p>This forces the meta-model to find a set of parameters good for all tasks:</p>
 
@@ -519,13 +519,13 @@
 
 <p>To solve the problem mentionned before, they revisit both the cross-entropy and distillation losses. The former is split in two part: if the pixel probability belongs to the current task&rsquo;s set of classes it is kept unchanged. Otherwise, it is the probability of having <strong>either an old class or the background</strong>:</p>
 
-<p>$$\begin{array}{l}\qquad \ell<em>{c e}^{\theta^{t}}(x, y)=-\frac{1}{|\mathcal{I}|} \sum</em>{i \in \mathcal{I}} \log \tilde{q}<em>{x}^{t}\left(i, y</em>{i}\right) \ \text { where: } \ \qquad \tilde{q}<em>{x}^{t}(i, c)=\left{\begin{array}{ll}q</em>{x}^{t}(i, c) &amp; \text { if } c \neq \mathrm{b} \ \sum<em>{k \in \mathcal{Y}^{t-1}} q</em>{x}^{t}(i, k) &amp; \text { if } c=\mathrm{b}\end{array}\right.\end{array}$$</p>
+<p>$$\begin{array}{l}\qquad \ell_{c e}^{\theta^{t}}(x, y)=-\frac{1}{|\mathcal{I}|} \sum_{i \in \mathcal{I}} \log \tilde{q}_{x}^{t}\left(i, y_{i}\right) \\\ \text { where: } \\\ \qquad \tilde{q}_{x}^{t}(i, c)=\left{\begin{array}{ll}q_{x}^{t}(i, c) &amp; \text { if } c \neq \mathrm{b} \\\ \sum_{k \in \mathcal{Y}^{t-1}} q_{x}^{t}(i, k) &amp; \text { if } c=\mathrm{b}\end{array}\right.\end{array}$$</p>
 
 <p>Likewise, the distillation loss is changed if the pixel belongs to the background, according to the current task, to the probability of having <strong>either a new class or the background</strong>:</p>
 
-<p>$$\ell<em>{k d}^{\theta^{t}}(x, y)=-\frac{1}{|\mathcal{I}|} \sum</em>{i \in \mathcal{I}} \sum<em>{c \in \mathcal{V} t-1} q</em>{x}^{t-1}(i, c) \log \hat{q}_{x}^{t}(i, c)$$</p>
+<p>$$\ell_{k d}^{\theta^{t}}(x, y)=-\frac{1}{|\mathcal{I}|} \sum_{i \in \mathcal{I}} \sum_{c \in \mathcal{V} t-1} q_{x}^{t-1}(i, c) \log \hat{q}_{x}^{t}(i, c)$$</p>
 
-<p>$$\hat{q}<em>{x}^{t}(i, c)=\left{\begin{array}{ll}q</em>{x}^{t}(i, c) &amp; \text { if } c \neq \mathrm{b} \ \sum<em>{k \in \mathcal{C}^{t}} q</em>{x}^{t}(i, k) &amp; \text { if } c=\mathrm{b}\end{array}\right.$$</p>
+<p>$$\hat{q}_{x}^{t}(i, c)=\left{\begin{array}{ll}q_{x}^{t}(i, c) &amp; \text { if } c \neq \mathrm{b} \\\ \sum_{k \in \mathcal{C}^{t}} q_{x}^{t}(i, k) &amp; \text { if } c=\mathrm{b}\end{array}\right.$$</p>
 
 <p>This handles the case where the previous model considers a current pixel as background while the current model considers it as a new class.</p>
 
@@ -551,11 +551,11 @@
 
 <p><img src="202006221421.png" alt="image 10" /></p>
 
-<p>$$\boldsymbol{\delta}<em>{i}^{t-1 \rightarrow t}=\mathbf{z}</em>{i}^{t}-\mathbf{z}<em>{i}^{t-1}, y</em>{i} \in C^{t}$$</p>
+<p>$$\boldsymbol{\delta}_{i}^{t-1 \rightarrow t}=\mathbf{z}_{i}^{t}-\mathbf{z}_{i}^{t-1}, y_{i} \in C^{t}$$</p>
 
 <p>Then for each old classes, they compute the mean vector of drift:</p>
 
-<p>$$\begin{array}{c}\hat{\Delta}<em>{c^{s}}^{t-1 \rightarrow t}=\frac{\sum</em>{i}\left[y<em>{i} \in C^{t}\right] w</em>{i} \delta<em>{i}^{t-1 \rightarrow t}}{\sum</em>{i}\left[y<em>{i} \in C^{t}\right] w</em>{i}} \ w<em>{i}=e^{-\frac{\left|x</em>{i}^{t-1}-\mu_{c^{s}}^{t-1}\right|^{2}}{2 \sigma^{2}}}\end{array}$$</p>
+<p>$$\begin{array}{c}\hat{\Delta}_{c^{s}}^{t-1 \rightarrow t}=\frac{\sum_{i}\left[y_{i} \in C^{t}\right] w_{i} \delta_{i}^{t-1 \rightarrow t}}{\sum_{i}\left[y_{i} \in C^{t}\right] w_{i}} \ w_{i}=e^{-\frac{\left|x_{i}^{t-1}-\mu_{c^{s}}^{t-1}\right|^{2}}{2 \sigma^{2}}}\end{array}$$</p>
 
 <p>The drift is weighted by $w_i$, which gives a lower weight to outliers. Thus samples will low confidence won&rsquo;t affect as much the drift computation than &ldquo;archetypal&rdquo; samples.</p>
 
@@ -575,7 +575,7 @@
 
 <p><em>Hou et al., 2019</em> and <em>Douillard et al., 2020</em> use a cosine classifier so that all norms are equal to 1. <em>Zhao et al.</em> instead re-normalize the weights based on the norm ratio:</p>
 
-<p>$$\begin{array}{c}\widehat{\mathbf{W}}<em>{n e w}=\gamma \cdot \mathbf{W}</em>{n e w} \ \text { where } \ \gamma=\frac{M e a n\left(N o r m<em>{o l d}\right)}{M e a n\left(N o r m</em>{n e w}\right)}\end{array}$$</p>
+<p>$$\begin{array}{c}\widehat{\mathbf{W}}_{n e w}=\gamma \cdot \mathbf{W}_{n e w} \\\ \text { where } \\\ \gamma=\frac{M e a n\left(N o r m_{o l d}\right)}{M e a n\left(N o r m_{n e w}\right)}\end{array}$$</p>
 
 <p>They remark that:</p>
 
@@ -631,7 +631,7 @@
 
 <p><img src="202006181639.png" alt="image 16" /></p>
 
-<p>The first part of the loss update the new model on new dataset $T<em>\text{new}$. For the second part, the best alternative proposed is training the old classifier $w</em>{c\,\text{old}}$ with the new features extractor $w<em>\theta$ on the new dataset $T</em>\text{new} = T<em>\text{BCT}$. Because the new dataset can contain new classes, the old classifier is extended with new weights. They are initialized with the mean features extracted by $w</em>{\theta\, \text{old}}$ like Weight Imprinting did in Metric-Learning (<a href="https://arxiv.org/abs/1712.07136" target="_blank">Qi et al., 2018</a>).</p>
+<p>The first part of the loss update the new model on new dataset $T_\text{new}$. For the second part, the best alternative proposed is training the old classifier $w_{c\,\text{old}}$ with the new features extractor $w_\theta$ on the new dataset $T_\text{new} = T_\text{BCT}$. Because the new dataset can contain new classes, the old classifier is extended with new weights. They are initialized with the mean features extracted by $w_{\theta\, \text{old}}$ like Weight Imprinting did in Metric-Learning (<a href="https://arxiv.org/abs/1712.07136" target="_blank">Qi et al., 2018</a>).</p>
 
 <p>Overall, their model is still far from the upper-bound (recomputing the gallery with the new model) but they improve significantly over simple baselines and beat LwF (<a href="https://arxiv.org/abs/1606.09282" target="_blank">Li &amp; Hoiem, 2016</a>) by 3 points. I think this model is quite &ldquo;simple&rdquo; compared to SotA Continual Learning but it is interesting to see actual applications of the domain.</p>
 
