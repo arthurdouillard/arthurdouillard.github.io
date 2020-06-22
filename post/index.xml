@@ -13,6 +13,16 @@
     
     
     <item>
+      <title>CVPR&#39;2020 review of Continual Learning</title>
+      <link>/post/cvpr20_continual/</link>
+      <pubDate>Sun, 21 Jun 2020 00:00:00 +0200</pubDate>
+      
+      <guid>/post/cvpr20_continual/</guid>
+      <description>I review in this article, papers published at CVPR 2020 about Continual Learning. If you think I made a mistake or miss an important paper, please tell me!
+1. Few-Shots Many papers this year in Continual Learning were about few-shot learning. Besides the CVPR papers I&amp;rsquo;ll present, there is also a workshop paper (Cognitively-Inspired Model for Incremental Learning Using a Few Examples, Ayub et al. CVPR Workshop 2020) and an arXiv (Defining Benchmarks for Continual Few-Shot Learning, Antoniou et al.</description>
+    </item>
+    
+    <item>
       <title>Learning Deep Neural Networks incrementally forever</title>
       <link>/post/incremental-learning/</link>
       <pubDate>Wed, 11 Dec 2019 00:00:00 +0100</pubDate>
