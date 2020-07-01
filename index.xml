@@ -11,7 +11,7 @@
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
-      <title>CVPR&#39;2020 review of Continual Learning</title>
+      <title>Review of Continual Learning at CVPR&#39;20</title>
       <link>/post/cvpr20-continual/</link>
       <pubDate>Sun, 21 Jun 2020 00:00:00 +0200</pubDate>
       
@@ -338,6 +338,16 @@
       
       <guid>/project/inclearn/</guid>
       <description></description>
+    </item>
+    
+    <item>
+      <title>Insights from the Future for Continual Learning</title>
+      <link>/publication/ghost/</link>
+      <pubDate>Wed, 01 Jan 2020 00:00:00 +0100</pubDate>
+      
+      <guid>/publication/ghost/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://arxiv.org/abs/2004.13513&#34; target=&#34;_blank&#34;&gt;https://arxiv.org/abs/2004.13513&lt;/a&gt;&lt;/p&gt;
+</description>
     </item>
     
     <item>
@@ -2346,22 +2356,6 @@ hypothesis. It&amp;rsquo;s both terrifying and plausible.&lt;/p&gt;
 &lt;p&gt;The third book is at first nice, a lot of tech progress is done. However its very
 end seems a bit far fetched, closer to fantasy than hard-sf. But I guess when talking
 about eons in the future, anything is possible.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Very Short Introduction: Food</title>
-      <link>/books/very-short-intro-food/</link>
-      <pubDate>Sun, 13 May 2018 00:00:00 +0200</pubDate>
-      
-      <guid>/books/very-short-intro-food/</guid>
-      <description>&lt;p&gt;Very Short Introduction (VSI) is an Oxford collection about various subjects, ranging from humanities
-(arts, religion, politics, etc.) to very technical field (neuroscience, physics, etc.). With a small
-format (~100 pages), they aim to be a good introduction.&lt;/p&gt;
-
-&lt;p&gt;VSI: Food fulfills perfectly this mission. The book is simple enough for a neophyte in food to understand,
-and still manages to cover a wide breadth of topics, all centered around food. It&amp;rsquo;s far easier than its
-cousin VSI: Nutrition.&lt;/p&gt;
 </description>
     </item>
     

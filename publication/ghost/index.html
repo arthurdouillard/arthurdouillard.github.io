@@ -15,10 +15,10 @@
   
     
   
-  <meta name="description" content="How much a Deep Learning model would improve if the dataset size increase?">
+  <meta name="description" content="https://arxiv.org/abs/2004.13513">
 
   
-  <link rel="alternate" hreflang="en-us" href="/post/deep-learning-scaling/">
+  <link rel="alternate" hreflang="en-us" href="/publication/ghost/">
 
   
 
@@ -95,7 +95,7 @@
   <link rel="icon" type="image/png" href="/img/icon.png">
   <link rel="apple-touch-icon" type="image/png" href="/img/icon-192.png">
 
-  <link rel="canonical" href="/post/deep-learning-scaling/">
+  <link rel="canonical" href="/publication/ghost/">
 
   <meta property="twitter:card" content="summary_large_image">
   
@@ -103,47 +103,39 @@
   <meta property="twitter:creator" content="@Ar_Douilllard">
   
   <meta property="og:site_name" content="Arthur Douillard">
-  <meta property="og:url" content="/post/deep-learning-scaling/">
-  <meta property="og:title" content="Deep Learning Scaling Is Predictable, Empirically | Arthur Douillard">
-  <meta property="og:description" content="How much a Deep Learning model would improve if the dataset size increase?">
+  <meta property="og:url" content="/publication/ghost/">
+  <meta property="og:title" content="Insights from the Future for Continual Learning | Arthur Douillard">
+  <meta property="og:description" content="https://arxiv.org/abs/2004.13513">
   
   
     
   <meta property="og:image" content="/img/icon-192.png">
   <meta property="og:locale" content="en-us">
   
-  <meta property="article:published_time" content="2018-04-20T00:00:00&#43;02:00">
+  <meta property="article:published_time" content="2020-01-01T00:00:00&#43;01:00">
   
-  <meta property="article:modified_time" content="2018-04-20T00:00:00&#43;02:00">
-  
-
+  <meta property="article:modified_time" content="2020-01-01T00:00:00&#43;01:00">
   
 
   
-<meta name="twitter:title" content="Deep Learning Scaling Is Predictable, Empirically" />
+
+  
+<meta name="twitter:title" content="Insights from the Future for Continual Learning" />
 
 
 
-<meta name="twitter:description" content="How much a Deep Learning model would improve if the dataset size increase?" />
 
 
 
-<meta name="twitter:image" content="/figures/dl_scaling.png" />
 
 
-
-<meta property="og:image" content=/figures/dl_scaling.png />
-
-
-
-<meta property="og:description" content="How much a Deep Learning model would improve if the dataset size increase?" />
 
 
 <link rel="icon" type="image/png" href="/img/favicon32.png">
 <link rel="apple-touch-icon" type="image/png" href="/img/favicon180.png">
 
 
-  <title>Deep Learning Scaling Is Predictable, Empirically | Arthur Douillard</title>
+  <title>Insights from the Future for Continual Learning | Arthur Douillard</title>
 
 </head>
 <body id="top" data-spy="scroll" data-target="#TableOfContents" data-offset="71" >
@@ -312,8 +304,7 @@
   </div>
 </nav>
 
-
-<article class="article" itemscope itemtype="http://schema.org/Article">
+<div class="pub" itemscope itemtype="http://schema.org/CreativeWork">
 
   
 
@@ -334,7 +325,7 @@
 
 
 <div class="article-container pt-3">
-  <h1 itemprop="name">Deep Learning Scaling Is Predictable, Empirically</h1>
+  <h1 itemprop="name">Insights from the Future for Continual Learning</h1>
 
   
 
@@ -345,27 +336,38 @@
 
   
   
-  <span itemscope itemprop="author" itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="Arthur Douillard">
-  </span>
+  
+  <div>
+    <span itemscope itemprop="author" itemtype="http://schema.org/Person">
+      <span itemprop="name">Arthur Douillard</span>
+    </span>, 
+    <span itemscope itemprop="author" itemtype="http://schema.org/Person">
+      <span itemprop="name">Eduardo Valle</span>
+    </span>, 
+    <span itemscope itemprop="author" itemtype="http://schema.org/Person">
+      <span itemprop="name">Charles Ollion</span>
+    </span>, 
+    <span itemscope itemprop="author" itemtype="http://schema.org/Person">
+      <span itemprop="name">Thomas Robert</span>
+    </span>, 
+    <span itemscope itemprop="author" itemtype="http://schema.org/Person">
+      <span itemprop="name">Matthieu Cord</span>
+    </span>
+    
+  </div>
   
 
   <span class="article-date">
     
-    <meta content="2018-04-20 00:00:00 &#43;0200 CEST" itemprop="datePublished">
-    <time datetime="2018-04-20 00:00:00 &#43;0200 CEST" itemprop="dateModified">
-      20 April, 2018
+    <meta content="2020-01-01 00:00:00 &#43;0100 CET" itemprop="datePublished">
+    <time datetime="2020-01-01 00:00:00 &#43;0100 CET" itemprop="dateModified">
+      1 January, 2020
     </time>
   </span>
   <span itemscope itemprop="publisher" itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Arthur Douillard">
   </span>
 
-  
-  <span class="middot-divider"></span>
-  <span class="article-reading-time">
-    4 min read
-  </span>
   
   
 
@@ -388,247 +390,109 @@
 
   <div class="article-container">
 
-    <div class="article-style" itemprop="articleBody">
-      
+    
 
-<p>This post contains the notes taken from the following paper:</p>
+    
 
-<ul>
-<li><a href="https://arxiv.org/abs/1712.00409" target="_blank">Deep Learning Scaling Is Predictable, Empirically</a>
-by Baidu Research.</li>
-</ul>
+    
 
-<p>The last years in Deep Learning have seen a rush to gigantism:</p>
-
-<ul>
-<li>Models are becoming deeper and deeper from the 8 layers of <a href="https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf" target="_blank">AlexNet</a>
-to the <a href="https://arxiv.org/abs/1603.05027" target="_blank">1001-layer ResNet</a>.</li>
-<li>Training on large dataset is way quicker, ImageNet can now (with enough
-computing power) been <a href="https://arxiv.org/abs/1709.05011" target="_blank">trained in less than 20 minutes</a>.</li>
-<li>Dataset size are increasing each year.</li>
-</ul>
-
-<p>As this paper rightly declare in its introduction:</p>
-
-<blockquote>
-<p>The Deep Learning (DL) community has created impactful advances across diverse
-application domains by following a straightforward recipe: search for improved
-model architectures, create large training data sets, and scale computation.</p>
-</blockquote>
-
-<p>However it also notes that new models and hyperparameters configuration are
-often depend on <em>epiphany</em> and <em>serendipity</em>.</p>
-
-<p>In order to harness the power of <em>big data</em> (more data, more computation power,
-etc.) models should not be designed to reduce error rate of an epsilon on
-Imagenet but be designed to be better with more data.</p>
-
-<p>Baidu Research introduce a <strong>power-law expononent</strong>, that measure the <em>steepness</em>
-of the learning curve:</p>
-
-<p>$$\epsilon(m) \propto \alpha m^{\beta_g}$$</p>
-
-<p>Where $\epsilon(m)$ is the generalization error on the number of train samples
-$m$; $\alpha$ a constant related to the problem; and $\beta_g$ the steepness
-of the learning curve.</p>
-
-<p>$\beta_g$ is said to settle between -0.07 and -0.35.</p>
-
-<h3 id="the-methodology">The Methodology</h3>
-
-<p>Baidu tested four domains: machine translation, language modeling, image
-classification, and speech recognition.</p>
-
-<p>For each domain, a variety of architectures, optimizers, and hyperparameters is
-tested. To see how models scale with dataset size, Baidu trained models on samples
-ranging from 0.1% of the original data to the whole data (minus the validation set).</p>
-
-<p>The paper&rsquo;s authors try to find the smallest model that is able to overfit each
-sample.</p>
-
-<p>Baidu also removed any regularizations, like weight decay, that might reduce
-the model&rsquo;s effective <a href="https://en.wikipedia.org/wiki/VC_dimension" target="_blank">capacity</a>.</p>
-
-<h3 id="results">Results</h3>
-
-<p>In all domain, they found that the model size growth with dataset size sublinearly.</p>
-
-<table>
-<thead>
-<tr>
-<th>Domain</th>
-<th>Learning Curve Steepness $\beta_g$</th>
-</tr>
-</thead>
-
-<tbody>
-<tr>
-<td>Machine Translation</td>
-<td>-0.128</td>
-</tr>
-
-<tr>
-<td>Language Modeling</td>
-<td>[-0.09, -0.06]</td>
-</tr>
-
-<tr>
-<td>Image (top-1)</td>
-<td>-0.309</td>
-</tr>
-
-<tr>
-<td>Image (top-5)</td>
-<td>-0.488</td>
-</tr>
-
-<tr>
-<td>Speech</td>
-<td>-0.299</td>
-</tr>
-</tbody>
-</table>
-
-<p>The first thing that we can conclude from these numbers is that text based
-problems (translation and language modeling) scale badly faced to image problems.</p>
-
-<p>It is worth noting that (current) models seem to scale better depending on the data
-dimension: Image and speech are of a higher dimensionality than text.</p>
-
-<p>You may also wonder why image has two entries in the table. One for top-1 generalization
-error, and one for top-5. This is one of the most interesting finding of this paper.
-Current models of image classification improve their top-5 faster than top-1 as data
-size increases! I wonder the reason why.</p>
-
-<h3 id="implications">Implications</h3>
-
-<p><img src="/figures/power_law_curve.png" alt="Power law curve" /></p>
-
-<p>The authors separate the generalization error per data size in three areas:</p>
-
-<ul>
-<li><em>The small data region</em>, where models given so few data can only make random
-guessing.</li>
-<li><em>The power law region</em>, where models follow the power law. However the learning
-curve steepness may be improved.</li>
-<li><em>The irreductible error</em>, a combination of the <a href="https://en.wikipedia.org/wiki/Bayes_error_rate" target="_blank">Bayes error</a>
-(on which the model cannot be improved) and the dataset defects that may impair
-generalization.</li>
-</ul>
-
-<p>The authors also underline major implications of the power law:</p>
-
-<p>Given the power law, researchers can train their new architecture on a small dataset,
-and have a good estimation of how it would scale on a bigger dataset.
-It may also give a reasonable estimation of the hardware and time requirements
-to reach a chosen generalization error.</p>
-
-<p>Instead of simply trying to improve a model&rsquo;s accuracy, the authors suggest that
-beating the power law should be the end goal. Dataset size is going to grow
-each year, a scalable model would thrive in this situation. The authors advise
-methods that may help to <em>extract more info on less data</em>:</p>
-
-<blockquote>
-<p>We suggest that future work more deeply analyze learning curves when using data
-handling techniques, such as data filtering/augmentation, few-shot learning,
-experience replay, and generative adversarial networks.</p>
-</blockquote>
-
-<p>Baidu also recommends to search how to push the boundaries of the irreductible
-error. To do that we should be able to distinguish between what contributes to
-the <em>bayes error</em>, and what&rsquo;s not.</p>
-
-<h3 id="summary">Summary</h3>
-
-<p>Baidu Research showed that models follow a power law curve. They empirically
-determined the power law exponent, or <em>steepness of the learning curve</em>, for
-machine translation, language modeling, image classification, and speech recognition.</p>
-
-<p>This power law express how much a model can improve given more data.
-Models for text problems are currently the less scalable.</p>
-
+    <div class="row">
+      <div class="col-md-1"></div>
+      <div class="col-md-10">
+        <div class="row">
+          <div class="col-12 col-md-3 pub-row-heading">Date</div>
+          <div class="col-12 col-md-9" itemprop="datePublished">
+            January, 2020
+          </div>
+        </div>
+      </div>
+      <div class="col-md-1"></div>
     </div>
+    <div class="d-sm-none space-below"></div>
+
+    <div class="row" style="padding-top: 10px">
+      <div class="col-md-1"></div>
+      <div class="col-md-10">
+        <div class="row">
+          <div class="col-12 col-md-3 pub-row-heading" style="line-height:34px;">Links</div>
+          <div class="col-12 col-md-9">
+
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<a class="btn btn-primary btn-outline my-1 mr-1" href="https://arxiv.org/abs/2006.13748" target="_blank"
+  rel="noopener">
+  PDF
+</a>
+
+
+
+
+
+
+<a class="btn btn-primary btn-outline my-1 mr-1" href="https://github.com/arthurdouillard/incremental_learning.pytorch" target="_blank"
+  rel="noopener">
+  Code
+</a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+          </div>
+        </div>
+      </div>
+      <div class="col-md-1"></div>
+    </div>
+    <div class="d-sm-none space-below"></div>
+
+    <div class="space-below"></div>
+
+    <div class="article-style"><p><a href="https://arxiv.org/abs/2004.13513" target="_blank">https://arxiv.org/abs/2004.13513</a></p>
+</div>
 
     
 
-
-
-
     
 
-    
-    
-
-    
-    <div class="article-widget">
-      <div class="post-nav">
-  
-  <div class="post-nav-item">
-    <div class="meta-nav">Next</div>
-    <a href="/post/densenet/" rel="next">Densely Connected Convolutional Networks</a>
   </div>
+</div>
+
+
+<div class="article-container article-widget">
+  <div class="post-nav">
   
   
   <div class="post-nav-item">
     <div class="meta-nav">Previous</div>
-    <a href="/post/faster-rcnn/" rel="prev">Fast and Faster Region-based Convolutional Network</a>
+    <a href="/publication/podnet/" rel="prev">Small-Task Incremental Learning</a>
   </div>
   
 </div>
 
-    </div>
-    
+</div>
 
-    
-<button id="disqus-show"
-  style="background-color: rgb(20, 22, 34); color: rgb(248, 248, 242); border-style: none">
-  <i class="fa fa-angle-double-right"></i>&nbsp;Comments
-</button>
-<section id="comments">
-  <div id="disqus_thread"></div>
-<script type="application/javascript">
-    var disqus_config = function () {
-    
-    
-    
-    };
-    (function() {
-        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
-            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
-            return;
-        }
-        var d = document, s = d.createElement('script'); s.async = true;
-        s.src = '//' + "arthurdouillard" + '.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-</section>
-
-
-<script type="text/javascript">
-  var a=document.querySelector("#disqus-show")
-  var b=document.querySelector("#comments")
-
-  b.style.display = "none";
-
-  a.addEventListener("click",
-    function(){
-      ""==b.style.display?(b.style.display="none", a.innerHTML="<i class=\"fa fa fa-angle-double-right\"/i>&nbsp;Comments"):(b.style.display="",a.innerHTML="<i class=\"fa fa-angle-double-down\"></i>&nbsp;Comments");
-      a.style = "background-color: rgb(20, 22, 34); color: rgb(248, 248, 242); border-style: none";
-      }
-  );
-</script>
-
-<style>
-
-</style>
-
-
-  </div>
-</article>
 
 <div class="container">
   <footer class="site-footer">
