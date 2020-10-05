@@ -11,6 +11,53 @@
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>TP Deep Learning RDFIA</title>
+      <link>/rdfia/</link>
+      <pubDate>Mon, 05 Oct 2020 00:00:00 +0200</pubDate>
+      
+      <guid>/rdfia/</guid>
+      <description>
+
+&lt;p&gt;RDFIA / Master DAC &amp;amp; IMA / Sorbonne&lt;/p&gt;
+
+&lt;p&gt;Le cours est organisé par le professeur Matthieu Cord. Vos assistants de TPs auquels
+vous devrez envoyer vos travaux sont Asya Grechka, Alexandre Rame et moi-même Arthur
+Douillard. Nos mails sont &lt;code&gt;prenom.nom@lip6.fr&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Pour simplifier notre tâche vous êtes priés de nous adresser les mails avec pour objet
+&lt;code&gt;[RDFIA][TP-&amp;lt;numero&amp;gt;]&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;rappels&#34;&gt;Rappels&lt;/h2&gt;
+
+&lt;p&gt;Les TPs seront en Python3 et plusieurs bibliothèques seront utilisées. Voici
+quelques liens pour rappel, ou pour vous familiariser en avance:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://learnxinyminutes.com/docs/python/&#34; target=&#34;_blank&#34;&gt;Rappel de Python&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.scipy.org/doc/numpy/user/quickstart.html&#34; target=&#34;_blank&#34;&gt;Rappel de Numpy&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://scikit-learn.org/stable/tutorial/basic/tutorial.html&#34; target=&#34;_blank&#34;&gt;Introduction de Scikit-Learn&lt;/a&gt;. L&amp;rsquo;api est très similaire quelque soit l&amp;rsquo;algorithme (init / fit / predict)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://pytorch.org/tutorials/beginner/deep_learning_60min_blitz.html&#34; target=&#34;_blank&#34;&gt;Introduction de Pytorch&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Les cours seront ajoutés au fur et à mesure.&lt;/p&gt;
+
+&lt;h2 id=&#34;tp-1-2-sift-bag-of-words&#34;&gt;TP 1 - 2 : SIFT / Bag of words&lt;/h2&gt;
+
+&lt;p&gt;&lt;em&gt;7 &amp;amp; 14 Septembre 2020&lt;/em&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Énoncé: &lt;a href=&#34;/files/rdfia_resources/tp1-2.pdf&#34;&gt;TP1-2.pdf&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Code: &lt;a href=&#34;/files/rdfia_resources/code_tp1-2.zip&#34;&gt;code_tp1-2.zip&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Data: &lt;a href=&#34;/files/rdfia_resources/data_tp1-2.zip&#34;&gt;data_tp1-2.zip&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&#34;mises-à-jour&#34;&gt;Mises à jour:&lt;/h4&gt;
+
+&lt;p&gt;2020-10-05, 22:34: Ajout du TP 1-2.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
       <title>Review of Continual Learning at CVPR&#39;20</title>
       <link>/post/cvpr20-continual/</link>
       <pubDate>Sun, 21 Jun 2020 00:00:00 +0200</pubDate>
@@ -1297,10 +1344,10 @@ the input data.&lt;/p&gt;
     
     <item>
       <title>TP Deep Learning RDFIA</title>
-      <link>/rdfia/</link>
+      <link>/rdfia_2019/</link>
       <pubDate>Thu, 28 Jun 2018 00:00:00 +0200</pubDate>
       
-      <guid>/rdfia/</guid>
+      <guid>/rdfia_2019/</guid>
       <description>
 
 &lt;h1 id=&#34;tp-deep-learning-rdfia&#34;&gt;TP Deep Learning RDFIA&lt;/h1&gt;
@@ -2317,45 +2364,6 @@ This won&amp;rsquo;t surprise those who read the trilogy.&lt;/p&gt;
 &lt;p&gt;The story itself isn&amp;rsquo;t very interesting. What I liked in this book was the description of racism and inter-generational gap.&lt;/p&gt;
 
 &lt;p&gt;English men are deeply racist against Chinese men, but the latter &amp;mdash;especially the old generation&amp;ndash; also hold preconceived ideas on the western culture.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>The Three-Body Problem trilogy</title>
-      <link>/books/three-body/</link>
-      <pubDate>Sun, 13 May 2018 00:00:00 +0200</pubDate>
-      
-      <guid>/books/three-body/</guid>
-      <description>&lt;p&gt;Except the Sun Tzu&amp;rsquo;s Art of War, the Three-Body Problem first tome was my first
-Chinese book. The first book set the tone, starting in communist-era in the 70s.&lt;/p&gt;
-
-&lt;p&gt;When I introduce this trilogy to friends, I often say &amp;mdash;no spoilers:&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Several of world best theoretical physicists suicide. They all leave a note,
-saying in substance: &amp;ldquo;Physic doesn&amp;rsquo;t exist&amp;rdquo;.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;You don&amp;rsquo;t need to know more to go buy this book. It&amp;rsquo;s hard-science-fiction at its
-best.&lt;/p&gt;
-
-&lt;p&gt;WARNING, SPOILERS-AHEAD:&lt;/p&gt;
-
-&lt;p&gt;The first half of the first book (The Three-Body Problem) is very good. The initial
-problem, physic doesn&amp;rsquo;t exist, is both original and extremely exciting. I dislike
-the second half, especially the explanation about sophons and how they would
-communicate by quantic entanglement (&lt;a href=&#34;https://briankoberlein.com/blog/quantum-entanglement/&#34; target=&#34;_blank&#34;&gt;which doesn&amp;rsquo;t work like this&lt;/a&gt;).&lt;/p&gt;
-
-&lt;p&gt;The second book was particularly surprising. I really like the Wallfacers concepts:
-four men whose objective is to find a way to defeat high-tech aliens in 300 years.
-And they have to keep their plans secret to avoid leaking info through the sophons.
-The jump in the future was similar to the movie &lt;em&gt;the 5th element&lt;/em&gt; where everything
-just seems crazy. And finally come the key idea of this book, and trilogy: the dark forest
-hypothesis. It&amp;rsquo;s both terrifying and plausible.&lt;/p&gt;
-
-&lt;p&gt;The third book is at first nice, a lot of tech progress is done. However its very
-end seems a bit far fetched, closer to fantasy than hard-sf. But I guess when talking
-about eons in the future, anything is possible.&lt;/p&gt;
 </description>
     </item>
     

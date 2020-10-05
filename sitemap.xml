@@ -4,6 +4,14 @@
     
     <url>
     
+      <loc>/rdfia/</loc>
+      <lastmod>2020-10-05T00:00:00+02:00</lastmod>
+    </url>
+    
+  
+    
+    <url>
+    
       <loc>/post/cvpr20-continual/</loc>
       <lastmod>2020-06-21T00:00:00+02:00</lastmod>
     </url>
@@ -68,7 +76,7 @@
     
     <url>
     
-      <loc>/rdfia/</loc>
+      <loc>/rdfia_2019/</loc>
       <lastmod>2018-06-28T00:00:00+02:00</lastmod>
     </url>
     
@@ -109,6 +117,14 @@
     <url>
     
       <loc>/books/mr-ma-and-son/</loc>
+      <lastmod>2018-05-13T00:00:00+02:00</lastmod>
+    </url>
+    
+  
+    
+    <url>
+    
+      <loc>/books/ride-of-a-lifetime/</loc>
       <lastmod>2018-05-13T00:00:00+02:00</lastmod>
     </url>
     
