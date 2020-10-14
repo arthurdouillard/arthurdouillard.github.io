@@ -21,8 +21,8 @@
 &lt;p&gt;RDFIA / Master DAC &amp;amp; IMA / Sorbonne&lt;/p&gt;
 
 &lt;p&gt;Le cours est organisé par le professeur Matthieu Cord. Vos assistants de TPs auquels
-vous devrez envoyer vos travaux sont Asya Grechka, Alexandre Rame et moi-même Arthur
-Douillard. Nos mails sont &lt;code&gt;prenom.nom@lip6.fr&lt;/code&gt;.&lt;/p&gt;
+vous devrez envoyer vos travaux sont Asya Grechka (asya.grechka@lip6.fr), Alexandre Rame (alexandre.rame@lip6.fr) et moi-même Arthur
+Douillard (arthur.douillard@lip6.fr).&lt;/p&gt;
 
 &lt;p&gt;Pour simplifier notre tâche vous êtes priés de nous adresser les mails avec pour objet
 &lt;code&gt;[RDFIA][TP-&amp;lt;numero&amp;gt;]&lt;/code&gt;.&lt;/p&gt;
@@ -45,7 +45,15 @@ quelques liens pour rappel, ou pour vous familiariser en avance:&lt;/p&gt;
 
 &lt;p&gt;&lt;em&gt;7 &amp;amp; 14 Octobre 2020&lt;/em&gt;&lt;/p&gt;
 
-&lt;p&gt;A rendre pour avant le 21 Octobre 2020 à 23h59.&lt;/p&gt;
+&lt;p&gt;&lt;del&gt;A rendre pour avant le 21 Octobre 2020 à 23h59.&lt;/del&gt;
+&lt;strong&gt;MaJ: A rendre pour avant le 30 Octobre 2020 à 23h59.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Suite à la crise du Covid vous êtes présents en demi-groupes.  Ce TP 1-2
+sera fait en 3 semaines (7, 14, et 21 Octobre). Le deuxième groupe ne nous aura donc que une fois en
+présentiel mais nous serons plus indulgents, de plus nous pourrons répondre aux questions le 28 Octobre.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Pour les prochains TPs (3 -&amp;gt; $\infty$) nous continuerons au rythme normal des années précédentes, il
+faudra donc commencer le TP en remote.&lt;/strong&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;Énoncé: &lt;a href=&#34;/files/rdfia_resources/tp1-2.pdf&#34;&gt;TP1-2.pdf&lt;/a&gt;&lt;/li&gt;
@@ -56,7 +64,8 @@ quelques liens pour rappel, ou pour vous familiariser en avance:&lt;/p&gt;
 
 &lt;p&gt;2020-10-05, 22:34: Ajout du TP 1-2.
 2020-10-07, 13:35: Add Colab link.
-2020-10-07, 14:15: Change Colab link.&lt;/p&gt;
+2020-10-07, 14:15: Change Colab link.
+2020-10-14, 10:54: Update de date de rendu et précision covid.&lt;/p&gt;
 </description>
     </item>
     
