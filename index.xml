@@ -60,6 +60,8 @@ faudra donc commencer le TP en remote.&lt;/strong&gt;&lt;/p&gt;
 &lt;li&gt;Colab: &lt;a href=&#34;https://colab.research.google.com/drive/1jL8yy91z6RI0JJIxMQi6Odkh3uMeb7-H?usp=sharing&#34; target=&#34;_blank&#34;&gt;colab&lt;/a&gt; (faire &amp;ldquo;File -&amp;gt; Save a copy in Drive&amp;rdquo;)&lt;/li&gt;
 &lt;/ul&gt;
 
+&lt;p&gt;NB: There is a mistake in our conv_separable, you should see that the images with horizontal and vertical gradients have been inversed. This only impair the visualization of the function compute_grad, but no worry the quality of the final sift stay the same.&lt;/p&gt;
+
 &lt;p&gt;Pour aller plus loin, TP sur les SVMs (non noté!):&lt;/p&gt;
 
 &lt;ul&gt;
@@ -78,6 +80,8 @@ faudra donc commencer le TP en remote.&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;2020-10-14, 10:54: Update de date de rendu et précision covid.&lt;/p&gt;
 
 &lt;p&gt;2020-10-21, 11:17: Add bonus on svm.&lt;/p&gt;
+
+&lt;p&gt;2020-10-23, 14:32: Add warning about minor mistake.&lt;/p&gt;
 </description>
     </item>
     
