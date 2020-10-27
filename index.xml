@@ -69,9 +69,18 @@ faudra donc commencer le TP en remote.&lt;/strong&gt;&lt;/p&gt;
 &lt;li&gt;Colab: &lt;a href=&#34;https://colab.research.google.com/drive/1xkgV6yz2E6_41aYdIC8uSro6gl7eLHn6?usp=sharing&#34; target=&#34;_blank&#34;&gt;colab&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
+&lt;h2 id=&#34;tp-3-4-introduction-aux-réseaux-de-neurones&#34;&gt;TP 3 - 4: Introduction aux réseaux de neurones&lt;/h2&gt;
+
+&lt;p&gt;&lt;em&gt;28 Octobre &amp;amp; 4 Novembre 2020&lt;/em&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Énoncé: [TP3-4.pdf]((/files/rdfia_resources/tp3-4.pdf)&lt;/li&gt;
+&lt;li&gt;Colab: &lt;a href=&#34;https://colab.research.google.com/drive/1MrenVA2opTP0zgut8_Q4O-VUa978Y2DI?usp=sharing&#34; target=&#34;_blank&#34;&gt;colab&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
 &lt;h4 id=&#34;mises-à-jour&#34;&gt;Mises à jour:&lt;/h4&gt;
 
-&lt;p&gt;2020-10-05, 22:34: Ajout du TP 1-2.&lt;/p&gt;
+&lt;p&gt;2020-10-05, 22:34: Add TP 1-2.&lt;/p&gt;
 
 &lt;p&gt;2020-10-07, 13:35: Add Colab link.&lt;/p&gt;
 
@@ -82,6 +91,8 @@ faudra donc commencer le TP en remote.&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;2020-10-21, 11:17: Add bonus on svm.&lt;/p&gt;
 
 &lt;p&gt;2020-10-23, 14:32: Add warning about minor mistake.&lt;/p&gt;
+
+&lt;p&gt;2020-10-27, 15:50: Add TP 3-4.&lt;/p&gt;
 </description>
     </item>
     
