@@ -83,6 +83,18 @@ faudra donc commencer le TP en remote.&lt;/strong&gt;&lt;/p&gt;
 &lt;li&gt;&lt;p&gt;Solution gradient: &lt;a href=&#34;/files/rdfia_resources/tp3-4_math.pdf&#34;&gt;tp3-4_math.pdf&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
+&lt;h2 id=&#34;tp-5-6-réseaux-convolutionnels-pour-l-image&#34;&gt;TP 5 - 6: Réseaux convolutionnels pour l&amp;rsquo;image&lt;/h2&gt;
+
+&lt;p&gt;&lt;em&gt;18 &amp;amp; 25 Novembre 2020&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;Cette fois-ci, les deux groupes auront TPs en même temps, par zoom.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Énoncé: &lt;a href=&#34;/files/rdfia_resources/tp5-6.pdf&#34;&gt;TP5-6.pdf&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Colab: &lt;a href=&#34;https://colab.research.google.com/drive/1ZfD37TsJudcyUjff-D8Gagylf-R5NuHd?usp=sharing&#34; target=&#34;_blank&#34;&gt;colab&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Zoom 18 Novembre 16h: &lt;a href=&#34;https://zoom.us/j/98138914049?pwd=ZTVkbWZsc21vS2tKeUF0cWFVeStOdz09&#34; target=&#34;_blank&#34;&gt;zoom link&lt;/a&gt;, password &lt;strong&gt;rdfia&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
 &lt;h4 id=&#34;mises-à-jour&#34;&gt;Mises à jour:&lt;/h4&gt;
 
 &lt;p&gt;2020-10-05, 22:34: Add TP 1-2.&lt;/p&gt;
@@ -104,6 +116,8 @@ faudra donc commencer le TP en remote.&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;2020-11-03, 21:14: Ajout d&amp;rsquo;un lien zoom pour le prochain tp du 4 Nov.&lt;/p&gt;
 
 &lt;p&gt;2020-11-03, 14:25: Ajout d&amp;rsquo;une cheatsheet gradient.&lt;/p&gt;
+
+&lt;p&gt;2020-11-16, 12:42: Ajout du TP5-6 conv.&lt;/p&gt;
 </description>
     </item>
     
