@@ -11,6 +11,15 @@
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>PLOP: Learning without Forgetting for Continual Semantic Segmentation</title>
+      <link>/publication/plop/</link>
+      <pubDate>Sun, 01 Nov 2020 00:00:00 +0100</pubDate>
+      
+      <guid>/publication/plop/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>TP Deep Learning RDFIA</title>
       <link>/rdfia/</link>
       <pubDate>Mon, 05 Oct 2020 00:00:00 +0200</pubDate>
@@ -119,6 +128,16 @@ faudra donc commencer le TP en remote.&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;2020-11-03, 14:25: Ajout d&amp;rsquo;une cheatsheet gradient.&lt;/p&gt;
 
 &lt;p&gt;2020-11-16, 12:42: Ajout du TP5-6 conv.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Insights from the Future for Continual Learning</title>
+      <link>/publication/ghost/</link>
+      <pubDate>Sat, 01 Aug 2020 00:00:00 +0200</pubDate>
+      
+      <guid>/publication/ghost/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://arxiv.org/abs/2004.13513&#34; target=&#34;_blank&#34;&gt;https://arxiv.org/abs/2004.13513&lt;/a&gt;&lt;/p&gt;
 </description>
     </item>
     
@@ -449,25 +468,6 @@ faudra donc commencer le TP en remote.&lt;/strong&gt;&lt;/p&gt;
       <pubDate>Mon, 27 Apr 2020 00:00:00 +0200</pubDate>
       
       <guid>/project/inclearn/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Insights from the Future for Continual Learning</title>
-      <link>/publication/ghost/</link>
-      <pubDate>Wed, 01 Jan 2020 00:00:00 +0100</pubDate>
-      
-      <guid>/publication/ghost/</guid>
-      <description>&lt;p&gt;&lt;a href=&#34;https://arxiv.org/abs/2004.13513&#34; target=&#34;_blank&#34;&gt;https://arxiv.org/abs/2004.13513&lt;/a&gt;&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>PLOP: Learning without Forgetting for Continual Semantic Segmentation</title>
-      <link>/publication/plop/</link>
-      <pubDate>Wed, 01 Jan 2020 00:00:00 +0100</pubDate>
-      
-      <guid>/publication/plop/</guid>
       <description></description>
     </item>
     

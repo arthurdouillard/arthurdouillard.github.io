@@ -4,8 +4,24 @@
     
     <url>
     
+      <loc>/publication/plop/</loc>
+      <lastmod>2020-11-01T00:00:00+01:00</lastmod>
+    </url>
+    
+  
+    
+    <url>
+    
       <loc>/rdfia/</loc>
       <lastmod>2020-10-05T00:00:00+02:00</lastmod>
+    </url>
+    
+  
+    
+    <url>
+    
+      <loc>/publication/ghost/</loc>
+      <lastmod>2020-08-01T00:00:00+02:00</lastmod>
     </url>
     
   
@@ -30,22 +46,6 @@
     
       <loc>/project/inclearn/</loc>
       <lastmod>2020-04-27T00:00:00+02:00</lastmod>
-    </url>
-    
-  
-    
-    <url>
-    
-      <loc>/publication/ghost/</loc>
-      <lastmod>2020-01-01T00:00:00+01:00</lastmod>
-    </url>
-    
-  
-    
-    <url>
-    
-      <loc>/publication/plop/</loc>
-      <lastmod>2020-01-01T00:00:00+01:00</lastmod>
     </url>
     
   
