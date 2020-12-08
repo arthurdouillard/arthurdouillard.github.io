@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="generator" content="Source Themes Academic 3.0.0">
-  <meta name="generator" content="Hugo 0.79.0" />
+  <meta name="generator" content="Hugo 0.49.2" />
   <meta name="author" content="Arthur Douillard">
 
   
@@ -364,7 +364,7 @@
   
   <span class="middot-divider"></span>
   <span class="article-reading-time">
-    19 min read
+    20 min read
   </span>
   
   
@@ -389,157 +389,309 @@
   <div class="article-container">
 
     <div class="article-style" itemprop="articleBody">
-      <p>I review in this article, papers published at CVPR 2020 about Continual Learning. If you think I made a mistake or miss an important paper, please tell me!</p>
-<!-- raw HTML omitted -->
-<h2 id="1-few-shots">1. Few-Shots</h2>
-<p>Many papers this year in Continual Learning were about few-shot learning. Besides the CVPR papers I&rsquo;ll present, there is also a workshop paper (<em>Cognitively-Inspired Model for Incremental Learning Using a Few Examples, Ayub et al. CVPR Workshop 2020</em>) and an arXiv (<em>Defining Benchmarks for Continual Few-Shot Learning, Antoniou et al. arxiv:2004.11967</em>).</p>
-<h3 id="11-few-shot-class-incremental-learning">1.1. Few-Shot Class-Incremental Learning</h3>
-<p><strong>PDF</strong>: <a href="https://arxiv.org/abs/2004.10956">2004.10956</a>\<br>
-<strong>Authors</strong>: Xiaoyu Tao, Xiaopeng Hong, Xinyuan Chang, Songlin Dong, Xing Wei, Yihong Gong</p>
-<p><em>Tao et al.</em> proposes in this paper a mix between Few-Shot and Continual Learning. They benchmark their model &mdash;TOPIC&ndash; on the CIFAR100, miniImageNet, and CUB200. The first task is large (60 classes for CIFAR100), then the following tasks have few classes (5 &lsquo;n-way&rsquo;) and few training samples per class (5 &lsquo;k-shots&rsquo;).</p>
-<p>The author uses <strong>Neural Gas</strong> (<em>Martinetz et al. 1991</em>) and <strong>Competitive Hebbian Learning</strong> (<em>Martinetz, 1993</em>). This neural network seems similar to the Self-Organizing Maps.</p>
-<p>The Neural Gas is an undirected graph, where each node $j$, is defined as $(m_j, \Lambda_j, z_j, c_j)$:</p>
+      
+
+<p>I review in this article, papers published at CVPR 2020 about Continual Learning. If you think I made a mistake or miss an important paper, please tell me!</p>
+
+<h2>Table of Contents</h2>
+<nav id="TableOfContents">
 <ul>
-<li>$m_j$ is a centroid vector, similar to what we can expect after a K-Means (kNN for CL)</li>
-<li>$\Lambda_j$ is the variance matrix of each dimension of the vector</li>
-<li>$z_j$ and $c_j$ are respectively the assigned images and labels</li>
+<li>
+<ul>
+<li><a href="#1-few-shots">1. Few-Shots</a>
+<ul>
+<li><a href="#1-1-few-shot-class-incremental-learning">1.1. Few-Shot Class-Incremental Learning</a></li>
+<li><a href="#1-2-incremental-few-shot-object-detection">1.2. Incremental Few-Shot Object Detection</a></li>
+</ul></li>
+<li><a href="#2-conditional-channel-gated-networks-for-task-aware-continual-learning">2. Conditional Channel Gated Networks for Task-Aware Continual Learning</a></li>
+<li><a href="#3-incremental-learning-in-online-scenario">3. Incremental Learning in Online Scenario</a></li>
+<li><a href="#4-itaml-an-incremental-task-agnostic-meta-learning">4. iTAML: An Incremental Task-Agnostic Meta-learning</a></li>
+<li><a href="#5-modeling-the-background-for-incremental-learning">5. Modeling the Background for Incremental Learning</a></li>
+<li><a href="#6-adinet-attribute-drive-incremental-network-for-retina-image-classification">6. ADINET: Attribute Drive Incremental Network for Retina Image Classification</a></li>
+<li><a href="#7-semantic-drift-compensation-for-class-incremental-learning">7. Semantic Drift Compensation for Class-Incremental Learning</a></li>
+<li><a href="#8-maintaining-discrimination-and-fairness-in-class-incremental-learning">8. Maintaining Discrimination and Fairness in Class Incremental Learning</a></li>
+<li><a href="#9-mnemonics-training-multi-class-incremental-learning-without-forgetting">9. Mnemonics Training: Multi-Class Incremental Learning without Forgetting</a></li>
+<li><a href="#10-towards-backward-compatible-representation-learning">10. Towards Backward-Compatible Representation Learning</a></li>
+</ul></li>
 </ul>
+</nav>
+
+
+<h2 id="1-few-shots">1. Few-Shots</h2>
+
+<p>Many papers this year in Continual Learning were about few-shot learning. Besides the CVPR papers I&rsquo;ll present, there is also a workshop paper (<em>Cognitively-Inspired Model for Incremental Learning Using a Few Examples, Ayub et al. CVPR Workshop 2020</em>) and an arXiv (<em>Defining Benchmarks for Continual Few-Shot Learning, Antoniou et al. arxiv:2004.11967</em>).</p>
+
+<h3 id="1-1-few-shot-class-incremental-learning">1.1. Few-Shot Class-Incremental Learning</h3>
+
+<p><strong>PDF</strong>: <a href="https://arxiv.org/abs/2004.10956" target="_blank">2004.10956</a><br />
+<strong>Authors</strong>: Xiaoyu Tao, Xiaopeng Hong, Xinyuan Chang, Songlin Dong, Xing Wei, Yihong Gong</p>
+
+<p><em>Tao et al.</em> proposes in this paper a mix between Few-Shot and Continual Learning. They benchmark their model &mdash;TOPIC&ndash; on the CIFAR100, miniImageNet, and CUB200. The first task is large (60 classes for CIFAR100), then the following tasks have few classes (5 &lsquo;n-way&rsquo;) and few training samples per class (5 &lsquo;k-shots&rsquo;).</p>
+
+<p>The author uses <strong>Neural Gas</strong> (<em>Martinetz et al. 1991</em>) and <strong>Competitive Hebbian Learning</strong> (<em>Martinetz, 1993</em>). This neural network seems similar to the Self-Organizing Maps.</p>
+
+<p>The Neural Gas is an undirected graph, where each node $j$, is defined as $(m_j, \Lambda_j, z_j, c_j)$:
+- $m_j$ is a centroid vector, similar to what we can expect after a K-Means (kNN for CL)
+- $\Lambda_j$ is the variance matrix of each dimension of the vector
+- $z_j$ and $c_j$ are respectively the assigned images and labels</p>
+
 <p>The graph is created after the first task, once the features extractor has been trained. They sample 400 features randomly among the training samples and use them as initial centroids.</p>
+
 <p>Nodes are updated by some kind of moving average (Eq.3 of the paper), where all centroids go towards the incoming sample. The move in the latent space is weighted by a learning rate and more importantly by the L2 distance rank: close features will affect more the centroid than far features.</p>
+
 <p>To create the edges between nodes, they use Competitive Hebbian Learning. Hebbian Learning in Neuroscience stipulates that:</p>
+
 <blockquote>
 <p>Neurons that fire together, wire together</p>
 </blockquote>
+
 <p>In this case, if two nodes are respectively the closest and second closest nodes to an input features, an edge is created. The edge has an age that is incremented each time no &ldquo;firing together&rdquo; happened. Past an age threshold, the edge is removed.</p>
-<p><img src="202006181113.png" alt="image 1"></p>
+
+<p><img src="202006181113.png" alt="image 1" /></p>
+
 <p>The model is trained with a usual softmax+cross-entropy but the competitive Hebbian learning is done after each step. Note that the latter doesn&rsquo;t produce gradients for backpropagation.</p>
+
 <p>Finally, the inference is not really explained but I guess that each node has a &ldquo;label&rdquo; by voting which training sample labels were most associated with. Given a test input sample, its label is determined by the label of its closest node.</p>
+
 <p>They <strong>stabilize</strong> the training by constraining the centroids to stay close to their previous position with a loss they called &ldquo;anchor loss&rdquo;. It&rsquo;s actually a Mahalanobis loss, where the distance is weighted per dimension with the inverse of the variance (i.e. precision).</p>
+
 <p>They also add a <strong>regularization</strong> called &ldquo;min-max loss&rdquo; to separate new centroids (added with new tasks) from previous centroids. It is similar to the hinge loss used by <em>Hou et al. 2019</em>.</p>
-<p><img src="202006181114.png" alt="image 2"></p>
-<h3 id="12-incremental-few-shot-object-detection">1.2. Incremental Few-Shot Object Detection</h3>
-<p><strong>PDF</strong>: <a href="https://arxiv.org/abs/2003.04668">2003.04668</a>\<br>
+
+<p><img src="202006181114.png" alt="image 2" /></p>
+
+<h3 id="1-2-incremental-few-shot-object-detection">1.2. Incremental Few-Shot Object Detection</h3>
+
+<p><strong>PDF</strong>: <a href="https://arxiv.org/abs/2003.04668" target="_blank">2003.04668</a><br />
 <strong>Authors</strong>: Juan-Manuel Perez-Rua, Xiatian Zhu, Timothy Hospedales, Tao Xiang</p>
+
 <p><em>Perez-Rua et al.</em> propose to use together three settings: Continual Learning, Object Detection (aka finding object boxes in an image), and Few-Shot (with few training samples).</p>
+
 <p>Their setting is made of a first large task, with many classes &amp; data, then the following tasks add new classes with only 10 labeled examples per class (10 k-shots). This is impressive because object detection is harder than classification!</p>
-<p>During the first task, they train a <strong>CenterNet</strong>. Similar to CornerNet, class-agnostic features are extracted by a ResNet then class-specific heatmaps are generated. The most active zones are chosen to be boxes' centers. Two additional heads regress the boxes' width and height.</p>
+
+<p>During the first task, they train a <strong>CenterNet</strong>. Similar to CornerNet, class-agnostic features are extracted by a ResNet then class-specific heatmaps are generated. The most active zones are chosen to be boxes&rsquo; centers. Two additional heads regress the boxes&rsquo; width and height.</p>
+
 <p>Once their CenterNet has been trained on the base classes, they train a Meta-Learning-based generator. This module must learn to produce the &ldquo;class-codes&rdquo;, aka the class-specific weights used by the detector. To do so, they train the generator on the base classes split into episodes. All weights are frozen except the generator&rsquo;s.</p>
-<p><img src="202006181359.png" alt="image 3"></p>
+
+<p><img src="202006181359.png" alt="image 3" /></p>
+
 <p>For the following tasks, there is no training. Given a new class, the meta-generator produces on-the-fly new weights, and the inference is immediately done.</p>
+
 <p>It&rsquo;s worth noting that the results on novel classes are quite low:</p>
-<p><img src="202006181426.png" alt="image 4"></p>
+
+<p><img src="202006181426.png" alt="image 4" /></p>
+
 <h2 id="2-conditional-channel-gated-networks-for-task-aware-continual-learning">2. Conditional Channel Gated Networks for Task-Aware Continual Learning</h2>
-<p><strong>PDF</strong>: <a href="https://arxiv.org/abs/2004.00070">2004.00070</a>\<br>
+
+<p><strong>PDF</strong>: <a href="https://arxiv.org/abs/2004.00070" target="_blank">2004.00070</a><br />
 <strong>Authors</strong>: Davide Abati, Jakub Tomczak, Tijmen Blankevoort, Simone Calderara, Rita Cucchiara, Babak Ehteshami Bejnordi</p>
-<p><em>Abati et al.</em> propose an interesting view of sub-networks in Continual Learning. Previous methods proposed to learn sub-networks inside a unique network (think Lottery Ticket Hypothesis (<a href="https://arxiv.org/abs/1803.03635">Frankle &amp; Carbin, 2018</a>)). Those sub-networks can be learned by an evolutionary algorithm (<a href="https://arxiv.org/abs/1701.08734">Fernando et al., 2017</a>), L1 sparsity (<a href="https://arxiv.org/abs/1903.04476">Golkar et al., 2019</a>), or learned gating (<a href="https://arxiv.org/abs/1910.06562">Hung et al., 2019</a>). However they all have a major constraint: they need the task id in inference to choose the right sub-networks, a setting called Multi-Head Evaluation. Having the task id in inference makes the problem much easier, and I think it is not realistic.</p>
-<p>The authors propose to train sub-networks with learned gating. The right sub-network will be chosen inference with a Task Classifier, therefore they don&rsquo;t use the task id! To the best of my knowledge, they are only the second to do this (<a href="https://openreview.net/forum?id=SJgwNerKvB">von Oswald et al. 2020</a>).</p>
+
+<p><em>Abati et al.</em> propose an interesting view of sub-networks in Continual Learning. Previous methods proposed to learn sub-networks inside a unique network (think Lottery Ticket Hypothesis (<a href="https://arxiv.org/abs/1803.03635" target="_blank">Frankle &amp; Carbin, 2018</a>)). Those sub-networks can be learned by an evolutionary algorithm (<a href="https://arxiv.org/abs/1701.08734" target="_blank">Fernando et al., 2017</a>), L1 sparsity (<a href="https://arxiv.org/abs/1903.04476" target="_blank">Golkar et al., 2019</a>), or learned gating (<a href="https://arxiv.org/abs/1910.06562" target="_blank">Hung et al., 2019</a>). However they all have a major constraint: they need the task id in inference to choose the right sub-networks, a setting called Multi-Head Evaluation. Having the task id in inference makes the problem much easier, and I think it is not realistic.</p>
+
+<p>The authors propose to train sub-networks with learned gating. The right sub-network will be chosen inference with a Task Classifier, therefore they don&rsquo;t use the task id! To the best of my knowledge, they are only the second to do this (<a href="https://openreview.net/forum?id=SJgwNerKvB" target="_blank">von Oswald et al. 2020</a>).</p>
+
 <p>Each residual block of their ResNet has $T$ (number of tasks) gate networks that choose the which filters to enable or disable:</p>
-<p><img src="202006181732.png" alt="image 5"></p>
-<p>The selection of filters to pass or block is discrete and thus non-differentiable. Thus they use the Gumbel Softmax Sampling similarly to (<a href="https://arxiv.org/abs/1811.08737">Guo et al. 2019</a>). The forward pass is discrete, but the backward pass is continuous. After each task, they record on a validation set which gates have fired. Their associated filters will be frozen for the following tasks, but still usable!</p>
+
+<p><img src="202006181732.png" alt="image 5" /></p>
+
+<p>The selection of filters to pass or block is discrete and thus non-differentiable. Thus they use the Gumbel Softmax Sampling similarly to (<a href="https://arxiv.org/abs/1811.08737" target="_blank">Guo et al. 2019</a>). The forward pass is discrete, but the backward pass is continuous. After each task, they record on a validation set which gates have fired. Their associated filters will be frozen for the following tasks, but still usable!</p>
+
 <p>The interesting part of this paper is how they train the task classifier. During training, all gates are fired in parallel:</p>
-<p><img src="202006181738.png" alt="image 6"></p>
-<p>This means that given a single input image, they have $T$ parallel stream of activations. All those streams' outputs are concatenated and fed to a task classifier (a two layers MLP) that classifies the task id. This task id will then be used to chose the right stream to give to the task-specific classifier.</p>
+
+<p><img src="202006181738.png" alt="image 6" /></p>
+
+<p>This means that given a single input image, they have $T$ parallel stream of activations. All those streams&rsquo; outputs are concatenated and fed to a task classifier (a two layers MLP) that classifies the task id. This task id will then be used to chose the right stream to give to the task-specific classifier.</p>
+
 <p>I really like this method, however, it&rsquo;s unfortunate that they don&rsquo;t compare their model to the lastest SotA and on large-scale datasets. Their largest dataset is ImageNet-50. Furthermore, I would like to see which gates fire the most, early layers or later layers?&hellip;</p>
+
 <h2 id="3-incremental-learning-in-online-scenario">3. Incremental Learning in Online Scenario</h2>
-<p><strong>PDF</strong>: <a href="https://arxiv.org/abs/2003.13191">2003.13191</a>\<br>
+
+<p><strong>PDF</strong>: <a href="https://arxiv.org/abs/2003.13191" target="_blank">2003.13191</a><br />
 <strong>Authors</strong>: Jiangpeng He, Runyu Mao, Zeman Shao, Fengqing Zhu</p>
-<p><em>He et al.</em> claim to learn in an &ldquo;Online Scenario&rdquo;: new classes are added as usual, with also old classes new samples. This sounds similar to the <strong>New Instances and Classes</strong> (NIC) (<a href="http://proceedings.mlr.press/v78/lomonaco17a.html">Lomonaco et al., 2017</a>). They claim novelty while it&rsquo;s not really true (on top of my head, Aljundi et al. and Lomonaco et al. have worked on this).</p>
+
+<p><em>He et al.</em> claim to learn in an &ldquo;Online Scenario&rdquo;: new classes are added as usual, with also old classes new samples. This sounds similar to the <strong>New Instances and Classes</strong> (NIC) (<a href="http://proceedings.mlr.press/v78/lomonaco17a.html" target="_blank">Lomonaco et al., 2017</a>). They claim novelty while it&rsquo;s not really true (on top of my head, Aljundi et al. and Lomonaco et al. have worked on this).</p>
+
 <p>The authors propose two contributions: first of all they use at first a <strong>Nereast Class Mean</strong> (NCM) (kNN for CL) classifier. Similar to iCaRL&rsquo;s NME, class means are computed. To handle concept drift, they update the means for new samples with a moving average:</p>
+
 <p>$$\mu_{y}^{\phi} \leftarrow \frac{n_{y i}}{n_{y i}+1} \mu_{y}^{\phi}+\frac{1}{n_{y i}+1} \phi\left(\mathbf{x}_{i}\right)$$</p>
-<p>Furthermore, during the early tasks, they use in inference their NCM classifier because they remark that it behaves well with data scarcity. When the model is better trained, having seen enough samples, they switch their classifier for the class probabilities from a softmax. It&rsquo;s interesting to mix those inference classifiers (classification and metric-based) contrary to <a href="http://openaccess.thecvf.com/content_CVPR_2019/papers/Hou_Learning_a_Unified_Classifier_Incrementally_via_Rebalancing_CVPR_2019_paper.pdf">Hou et al., 2019</a> and <a href="https://arxiv.org/abs/2004.13513">Douillard et al., 2020</a> that evaluated separately the two methods. However <em>He et al.</em>&rsquo;s switch from one method to the other is an hyperparameter, it would have been nice to do so based on some Uncertainty measure.</p>
-<p>Their second contribution is a <strong>modified cross-distillation</strong>: in addition of an usual distillation loss on probabilities with temperature (<a href="https://arxiv.org/abs/1503.02531">Hinton et al., 2015</a>), they modify the classification loss. It is still a cross-entropy but the probabilities associated to old classes are a linear combination of the old and new model outputs:</p>
+
+<p>Furthermore, during the early tasks, they use in inference their NCM classifier because they remark that it behaves well with data scarcity. When the model is better trained, having seen enough samples, they switch their classifier for the class probabilities from a softmax. It&rsquo;s interesting to mix those inference classifiers (classification and metric-based) contrary to <a href="http://openaccess.thecvf.com/content_CVPR_2019/papers/Hou_Learning_a_Unified_Classifier_Incrementally_via_Rebalancing_CVPR_2019_paper.pdf" target="_blank">Hou et al., 2019</a> and <a href="https://arxiv.org/abs/2004.13513" target="_blank">Douillard et al., 2020</a> that evaluated separately the two methods. However <em>He et al.</em>&rsquo;s switch from one method to the other is an hyperparameter, it would have been nice to do so based on some Uncertainty measure.</p>
+
+<p>Their second contribution is a <strong>modified cross-distillation</strong>: in addition of an usual distillation loss on probabilities with temperature (<a href="https://arxiv.org/abs/1503.02531" target="_blank">Hinton et al., 2015</a>), they modify the classification loss. It is still a cross-entropy but the probabilities associated to old classes are a linear combination of the old and new model outputs:</p>
+
 <p>$$\tilde{p}^{(i)}=\left\{\begin{array}{cc}\beta p^{(i)}+(1-\beta) \hat{p}^{(i)} &amp; 0 \lt i \leq n \\\ p^{(i)} &amp; n \lt i \leq n+m\end{array}\right.$$</p>
-<p>They also finetune their model on a balanced set like <a href="https://arxiv.org/abs/1807.09536">Castro et al., 2018</a> did.</p>
+
+<p>They also finetune their model on a balanced set like <a href="https://arxiv.org/abs/1807.09536" target="_blank">Castro et al., 2018</a> did.</p>
+
 <p>Finally, they evaluate their model on CIFAR100, ImageNet100, and Food-101. Unfortunately, they evaluate their &ldquo;Online&rdquo; NIC setting only on Food-101 and solely compare against a simple baseline, not any SotA models (adapted to the setting). CIFAR100 and ImageNet100 are evaluated in the classic NC setting. They have slightly better performance than SotA on the former and are equivalent to BiC on the latter. I&rsquo;m quite annoyed that they claimed in the abstract to &ldquo;out-perform&rdquo; SotA on ImageNet1000 while they actually only evaluate on the smaller-scale ImageNet100. BiC really shines on ImageNet1000, I&rsquo;d have liked to see how their model fares in this harsher dataset.</p>
+
 <h2 id="4-itaml-an-incremental-task-agnostic-meta-learning">4. iTAML: An Incremental Task-Agnostic Meta-learning</h2>
-<p><strong>PDF</strong>: <a href="https://arxiv.org/abs/2003.11652">2003.11652</a>\<br>
+
+<p><strong>PDF</strong>: <a href="https://arxiv.org/abs/2003.11652" target="_blank">2003.11652</a><br />
 <strong>Authors</strong>: Jathushan Rajasegaran, Salman Khan, Munawar Hayat, Fahad Shahbaz Khan, Mubarak Shah</p>
+
 <p><em>Rajasegaran et al.</em> propose to a novel Meta-Learning model. Several approaches exist using this branch of methods for Continual Learning, they are however the first to the best of my knowledge to do so without task id in inference.</p>
-<p>The goal of Meta-Learning is to &ldquo;learn to learn&rdquo;. In this case, they want to obtain a network that learns to produce a set of parameters that can then be tuned quickly to a particular task. Following existing Meta-Learning models, they train in two loops. The inner loop learns an actual task, while the outer loop learns to produce a good initialization for the inner loop (i.e. &ldquo;learn to learn&rdquo;). Inspired by Reptile (<a href="https://arxiv.org/abs/1803.02999">Nichol et al., 2018</a>), their outer loop is trained on the difference between the base parameters and the parameters learned after the inner loop. The different with Reptile is that the inner loop learns separately each task, producing mean inner loop parameters:</p>
+
+<p>The goal of Meta-Learning is to &ldquo;learn to learn&rdquo;. In this case, they want to obtain a network that learns to produce a set of parameters that can then be tuned quickly to a particular task. Following existing Meta-Learning models, they train in two loops. The inner loop learns an actual task, while the outer loop learns to produce a good initialization for the inner loop (i.e. &ldquo;learn to learn&rdquo;). Inspired by Reptile (<a href="https://arxiv.org/abs/1803.02999" target="_blank">Nichol et al., 2018</a>), their outer loop is trained on the difference between the base parameters and the parameters learned after the inner loop. The different with Reptile is that the inner loop learns separately each task, producing mean inner loop parameters:</p>
+
 <p>$$\Phi=\Phi_{b a s e}-\eta \frac{1}{t} \sum_{i=1}^{t}\left(\Phi_{b a s e}-\Phi_{i}\right)=\eta \frac{1}{t} \sum_{i=1}^{t} \Phi_{i}+(1-\eta) \Phi_{b a s e}$$</p>
+
 <p>This forces the meta-model to find a set of parameters good for all tasks:</p>
-<p><img src="202006191653.png" alt="image 7"></p>
+
+<p><img src="202006191653.png" alt="image 7" /></p>
+
 <p>During inference, they proceed in two steps: finding the task id, and then tuning the model for this task. To find the task id, they record for the test subset which task predictions are the most activated in average, and choose the maximum value:</p>
-<p><img src="202006191656.png" alt="image 8"></p>
+
+<p><img src="202006191656.png" alt="image 8" /></p>
+
 <p>Then, given the predicted task id, they sample all exemplars memory (aka Rehearsal Learning) belonging to this task and learn in a single inner loop task-specific parameters. The resulting model is then used to classify the test samples.</p>
+
 <p>Note that while it&rsquo;s a very interesting approach, their model stands on the quality of the task classification. They claim it&rsquo;s almost 100% accuracy but it only for a reason: in their setting, the model is evaluated on each seen task separately. In a real setting, samples from different tasks are mixed together. There their algorithm 2 won&rsquo;t work. Therefore I don&rsquo;t think this model is truly &ldquo;task-agnostic&rdquo; but it&rsquo;s definitely a good step forward.</p>
+
 <p>They evaluate various models, from meta-learning to continual learning domains, on MNIST, SVHN, CIFAR100, ImageNet100, ImageNet1000, and Celeb-10k. It&rsquo;s a bit strange however that BiC (a very good alternative for large scale datasets) is evaluated on Celeb-10k but not ImageNet100 (where it would have beaten iTAML).</p>
+
 <h2 id="5-modeling-the-background-for-incremental-learning">5. Modeling the Background for Incremental Learning</h2>
-<p><strong>PDF</strong>: <a href="https://arxiv.org/abs/2002.00718">2002.00718</a>\<br>
+
+<p><strong>PDF</strong>: <a href="https://arxiv.org/abs/2002.00718" target="_blank">2002.00718</a><br />
 <strong>Authors</strong>: Fabio Cermelli, Massimiliano Mancini, Samuel Rota Bulò, Elisa Ricci, Barbara Caputo</p>
+
 <p><em>Cermelli et al.</em> attacks the problem of Semantic Segmentation for Continual Learning. In semantic segmentation, the goal is to give a class to each pixel. Two cars next to each other will have the same pixels labels. This is particularly difficult in Continual Learning for the same reasons as Object Detection: at task $t$, the class &ldquo;car&rdquo; may be a background, but then at task $t+1$ we have to predict it. However, our model may have seen images containing cars in the first task and thus has learned to not detect those. Likewise, images from task $t+1$ may be annotated so that the &ldquo;person&rdquo; learned previously is now part of the background.</p>
-<p><img src="202006211828.png" alt="image 9"></p>
+
+<p><img src="202006211828.png" alt="image 9" /></p>
+
 <p>To solve the problem mentionned before, they revisit both the cross-entropy and distillation losses. The former is split in two part: if the pixel probability belongs to the current task&rsquo;s set of classes it is kept unchanged. Otherwise, it is the probability of having <strong>either an old class or the background</strong>:</p>
+
 <p>$$\begin{array}{l}\qquad \ell_{c e}^{\theta^{t}}(x, y)=-\frac{1}{|\mathcal{I}|} \sum_{i \in \mathcal{I}} \log \tilde{q}_{x}^{t}\left(i, y_{i}\right) \\\ \text { where: } \\\ \qquad \tilde{q}_{x}^{t}(i, c)=\left\{\begin{array}{ll}q_{x}^{t}(i, c) &amp; \text { if } c \neq \mathrm{b} \\\ \sum_{k \in \mathcal{Y}^{t-1}} q_{x}^{t}(i, k) &amp; \text { if } c=\mathrm{b}\end{array}\right.\end{array}$$</p>
+
 <p>Likewise, the distillation loss is changed if the pixel belongs to the background, according to the current task, to the probability of having <strong>either a new class or the background</strong>:</p>
+
 <p>$$\ell_{k d}^{\theta^{t}}(x, y)=-\frac{1}{|\mathcal{I}|} \sum_{i \in \mathcal{I}} \sum_{c \in \mathcal{V} t-1} q_{x}^{t-1}(i, c) \log \hat{q}_{x}^{t}(i, c)$$</p>
+
 <p>$$\hat{q}_{x}^{t}(i, c)=\left\{\begin{array}{ll}q_{x}^{t}(i, c) &amp; \text { if } c \neq \mathrm{b} \\\ \sum_{k \in \mathcal{C}^{t}} q_{x}^{t}(i, k) &amp; \text { if } c=\mathrm{b}\end{array}\right.$$</p>
+
 <p>This handles the case where the previous model considers a current pixel as background while the current model considers it as a new class.</p>
+
 <p>Finally, the classifier weights for new classes are initialized with the background weight.</p>
+
 <h2 id="6-adinet-attribute-drive-incremental-network-for-retina-image-classification">6. ADINET: Attribute Drive Incremental Network for Retina Image Classification</h2>
-<p><strong>PDF</strong>: <a href="http://openaccess.thecvf.com/content_CVPR_2020/papers/Meng_ADINet_Attribute_Driven_Incremental_Network_for_Retinal_Image_Classification_CVPR_2020_paper.pdf">CVPR webpage</a>\<br>
+
+<p><strong>PDF</strong>: <a href="http://openaccess.thecvf.com/content_CVPR_2020/papers/Meng_ADINet_Attribute_Driven_Incremental_Network_for_Retinal_Image_Classification_CVPR_2020_paper.pdf" target="_blank">CVPR webpage</a><br />
 <strong>Authors</strong>: Qier Meng, Satoh Shin&rsquo;ichi</p>
+
 <p><em>Meng and Shin&rsquo;ichi</em> use Continual Learning for retinal images classification. They found that retinal diseases have a large variety of types and that current methods didn&rsquo;t allow them to train incrementally each type a new patient came in.</p>
+
 <p>Their originality lies in their usage of attributes. Retinal images have been annotated with a disease label (&ldquo;AMD&rdquo;, &ldquo;DR&rdquo;&hellip;) but also with several attributes (&ldquo;hermorrhage&rdquo;, &ldquo;macular edema&rdquo;&hellip;). Therefore in addition to the classic distillation loss with temperature scaling applied to the disease prediction, they also distill the attributes prediction of the previous model with a BCE.</p>
+
 <p>In addition to the two distillation losses, they also refine their attributes prediction with a &ldquo;weight estimation&rdquo;. It measures how much of a contribution an attribute has to distinguish classes. It&rsquo;s similar to doing a self-attention on all attributes to find which one is the most important. This weight estimation is then used to ponder the attribute predictions. They didn&rsquo;t detail much the rationale behind this weight estimation but empirical results show small but consistent gains.</p>
-<p><img src="202006232230.png" alt="image 9 bis"></p>
+
+<p><img src="202006232230.png" alt="image 9 bis" /></p>
+
 <p>They evaluate both medical and academic datasets. For the later they used ImageNet-150k-sub: it contains 100 classes of ImageNet1000, but only 150 training images were selected per class instead of ~1200. I&rsquo;ve never seen a model evaluated on this dataset, but it looks like a more challenging dataset than ImageNet100. They display a significant improvement over the 2017&rsquo;s iCaRL.</p>
+
 <p>It&rsquo;s interesting to predict attributes in the context of Continual Learning. I hypothesize that it forces the model to learn fine-grained features common to all tasks and may reduce catastrophic forgetting.</p>
+
 <h2 id="7-semantic-drift-compensation-for-class-incremental-learning">7. Semantic Drift Compensation for Class-Incremental Learning</h2>
-<p><strong>PDF</strong>: <a href="https://arxiv.org/abs/2004.00440">2004.00440</a>\<br>
+
+<p><strong>PDF</strong>: <a href="https://arxiv.org/abs/2004.00440" target="_blank">2004.00440</a><br />
 <strong>Authors</strong>: Lu Yu, Bartłomiej Twardowski, Xialei Liu, Luis Herranz, Kai Wang, Yongmei Cheng, Shangling Jui, Joost van de Weijer</p>
+
 <p><em>Rebuffi et al., 2017</em> uses class means with a k-NN to classify samples in inference. Those class means are updated after each task by re-extracting features of rehearsal samples of old classes with the new ConvNet. This supposes that we have access to previous data, at least in a limited amount.</p>
+
 <p><em>Yu et al.</em> propose to update the class means without even using previous data. First, they compute the embedding drift between the start and the end of the current task on current data:</p>
-<p><img src="202006221421.png" alt="image 10"></p>
+
+<p><img src="202006221421.png" alt="image 10" /></p>
+
 <p>$$\boldsymbol{\delta}_{i}^{t-1 \rightarrow t}=\mathbf{z}_{i}^{t}-\mathbf{z}_{i}^{t-1}, y_{i} \in C^{t}$$</p>
+
 <p>Then for each old classes, they compute the mean vector of drift:</p>
+
 <p>$$\begin{array}{c}\hat{\Delta}_{c^{s}}^{t-1 \rightarrow t}=\frac{\sum_{i}\left[y_{i} \in C^{t}\right] w_{i} \delta_{i}^{t-1 \rightarrow t}}{\sum_{i}\left[y_{i} \in C^{t}\right] w_{i}} \ w_{i}=e^{-\frac{\left|x_{i}^{t-1}-\mu_{c^{s}}^{t-1}\right|^{2}}{2 \sigma^{2}}}\end{array}$$</p>
+
 <p>The drift is weighted by $w_i$, which gives a lower weight to outliers. Thus samples will low confidence won&rsquo;t affect as much the drift computation than &ldquo;archetypal&rdquo; samples.</p>
+
 <p>Finally this drift is computed at after each task, starting from the second one, and is added continuously to the class mean vectors:</p>
+
 <p>$$\hat{\mu}_{c^{s}}^{t}=\mu_{c^{s}}^{s}+\hat{\Delta}_{c^{s}}^{s \rightarrow s+1}+\ldots+\hat{\Delta}_{c^{s}}^{t-1 \rightarrow t}$$</p>
-<p>They add their method, nicknamed SDC, to the model EWC. They show on CIFAR100 and ImageNet100 excellent performance only beaten by <em>Hou et al., 2019</em>. It&rsquo;s important to note that <em>Hou et al., 2019</em> use exemplars while <em>Yu et al.</em> don&rsquo;t. On the other hand, according to their <a href="https://github.com/yulu0724/SDC-IL/blob/master/test.py#L231">code</a> they are in a Multi-Head Evaluation setting where they know the task id during inference. Thus they classify a sample among the task classes instead of all seen classes as do <em>Rebuffi et al., 2017</em> or <em>Hou et al., 2019</em>. Their setting is not really comparable to <em>Hou et al., 2019</em>.</p>
+
+<p>They add their method, nicknamed SDC, to the model EWC. They show on CIFAR100 and ImageNet100 excellent performance only beaten by <em>Hou et al., 2019</em>. It&rsquo;s important to note that <em>Hou et al., 2019</em> use exemplars while <em>Yu et al.</em> don&rsquo;t. On the other hand, according to their <a href="https://github.com/yulu0724/SDC-IL/blob/master/test.py#L231" target="_blank">code</a> they are in a Multi-Head Evaluation setting where they know the task id during inference. Thus they classify a sample among the task classes instead of all seen classes as do <em>Rebuffi et al., 2017</em> or <em>Hou et al., 2019</em>. Their setting is not really comparable to <em>Hou et al., 2019</em>.</p>
+
 <h2 id="8-maintaining-discrimination-and-fairness-in-class-incremental-learning">8. Maintaining Discrimination and Fairness in Class Incremental Learning</h2>
-<p><strong>PDF</strong>: <a href="https://arxiv.org/abs/1911.07053">1911.07053</a>\<br>
+
+<p><strong>PDF</strong>: <a href="https://arxiv.org/abs/1911.07053" target="_blank">1911.07053</a><br />
 <strong>Authors</strong>: Bowen Zhao, Xi Xiao, Guojun Gan, Bin Zhang, Shutao Xia</p>
-<p><em>Zhao et al.</em> propose a method directly in the line of <a href="http://openaccess.thecvf.com/content_ICCV_2019/papers/Belouadah_IL2M_Class_Incremental_Learning_With_Dual_Memory_ICCV_2019_paper.pdf"><em>Belouadah and Popescu, 2019</em></a>) (IL2M) and <a href="https://arxiv.org/abs/1905.13260"><em>Wu et al., 2019</em></a>) (BiC). Both works remarked that a bias towards new classes and detrimental to old classes. IL2M uses some statistics to correct this bias, while BiC recalibrates (Recalibration) the probabilities using a linear model learned on validation data.</p>
+
+<p><em>Zhao et al.</em> propose a method directly in the line of <a href="http://openaccess.thecvf.com/content_ICCV_2019/papers/Belouadah_IL2M_Class_Incremental_Learning_With_Dual_Memory_ICCV_2019_paper.pdf" target="_blank"><em>Belouadah and Popescu, 2019</em></a>) (IL2M) and <a href="https://arxiv.org/abs/1905.13260" target="_blank"><em>Wu et al., 2019</em></a>) (BiC). Both works remarked that a bias towards new classes and detrimental to old classes. IL2M uses some statistics to correct this bias, while BiC recalibrates (Recalibration) the probabilities using a linear model learned on validation data.</p>
+
 <p><em>Zhao et al.</em> use a simpler solution that they call <strong>Weight Aligning</strong> (WA). They saw, as <em>Hou et al., 2019</em>, that the norm of the weights associated with old classes is lower than those associated with new classes:</p>
-<p><img src="202006221420.png" alt="image 11"></p>
+
+<p><img src="202006221420.png" alt="image 11" /></p>
+
 <p><em>Hou et al., 2019</em> and <em>Douillard et al., 2020</em> use a cosine classifier so that all norms are equal to 1. <em>Zhao et al.</em> instead re-normalize the weights based on the norm ratio:</p>
+
 <p>$$\begin{array}{c}\widehat{\mathbf{W}}_{n e w}=\gamma \cdot \mathbf{W}_{n e w} \\\ \text { where } \\\ \gamma=\frac{M e a n\left(N o r m_{o l d}\right)}{M e a n\left(N o r m_{n e w}\right)}\end{array}$$</p>
+
 <p>They remark that:</p>
+
 <blockquote>
 <p>[&hellip;] we only make the average norms become equal, in other words, within new classes (or old classes), the relative magnitude of the norms of the weight vectors does not change. Such a design is mainly used to ensure the data within new classes (or old classes) can be separated well.</p>
 </blockquote>
+
 <p>This weight alignment is done between each task. Furthermore, they clip after each optimization step the value of the weights to be positive to make the weights norm more consistent with their corresponding logits (after ReLU).</p>
+
 <p>In their ablation, they show that weight alignment provides more gain than knowledge distillation which is quite impressive. Using both lead them to a significant gain over BiC and IL2M on large scale datasets like ImageNet1000.</p>
+
 <p>Overall I liked their method as it is very simple and yet efficient.</p>
+
 <h2 id="9-mnemonics-training-multi-class-incremental-learning-without-forgetting">9. Mnemonics Training: Multi-Class Incremental Learning without Forgetting</h2>
-<p><strong>PDF</strong>: <a href="https://arxiv.org/abs/2002.10211">2002.10211</a>\<br>
+
+<p><strong>PDF</strong>: <a href="https://arxiv.org/abs/2002.10211" target="_blank">2002.10211</a><br />
 <strong>Authors</strong>: Yaoyao Liu, An-An Liu, Yuting Su, Bernt Schiele, Qianru Sun</p>
+
 <p><em>Liu et al.</em> propose in this work two important contributions which make it my favorite paper in this review. The first, advertised, is an improvement of Rehearsal Learning. The second, a little hidden in the paper, is Meta-Learning-inspired method to adapt gracefully to new distribution.</p>
+
 <p>In rehearsal learning, we feed old samples to the model to reduce forgetting. Obviously, we won&rsquo;t use all old samples, but a very limited amount. Here the authors use 20 images per class, like <em>Hou et al., 2019</em> and <em>Douillard et al., 2020</em>. <em>Rebuffi et al., 2017</em> proposed with iCaRL to a <strong>herding</strong> selection which finds iteratively the barycenter of the class distribution. However <em>Castro et al., 2018</em> remarked that taking the closest samples to the class mean, or even random samples (!), worked as well.</p>
+
 <p><em>Liu et al.</em> significantly improve those solutions by transforming the selected exemplars. First, they randomly select samples, then given a trained &amp; fixed model, they optimize the exemplars as the pixel-level:</p>
-<p><img src="202006221447.png" alt="image 12"></p>
+
+<p><img src="202006221447.png" alt="image 12" /></p>
+
 <p>The optimized exemplars must lead to a decreased loss on the new classes data (present in large amounts).</p>
+
 <p>The modification is very minor visually: we only see a little bit of noise overlayed on the original images. The authors found that this optimization of the images leads to a set of exemplars well distributed on the class boundaries:</p>
-<p><img src="202006221545.png" alt="image 13"></p>
-<p>This optimization is done at the task end, once exemplars from new classes have been selected. The authors also choose to finetune the exemplars of old classes that have been selected in previous tasks. However, in this case, we don&rsquo;t have anymore a large amount of old classes' data to act as ground truth for the old classes exemplars optimization. Therefore, they split the exemplars set in half. One split is optimized using the second for ground truth and vice-versa.</p>
+
+<p><img src="202006221545.png" alt="image 13" /></p>
+
+<p>This optimization is done at the task end, once exemplars from new classes have been selected. The authors also choose to finetune the exemplars of old classes that have been selected in previous tasks. However, in this case, we don&rsquo;t have anymore a large amount of old classes&rsquo; data to act as ground truth for the old classes exemplars optimization. Therefore, they split the exemplars set in half. One split is optimized using the second for ground truth and vice-versa.</p>
+
 <p>The second contribution, and the major one, is unfortunately not very advertised in this paper. The authors re-use an idea from one of their previous papers in Meta-Learning. Instead of tuning all the ConvNet parameters for each task, they only slightly adapt them:  for each kernel, a small kernel of spatial dimensions equal to one is learned (likewise for the biases). This small kernel is expanded to the base kernel dimension and element-wise multiplied to it:</p>
-<p><img src="202006221558.png" alt="image 14"></p>
+
+<p><img src="202006221558.png" alt="image 14" /></p>
+
 <p>Intuitively, this method called &ldquo;Meta-Transfer&rdquo; does a small &ldquo;shift &amp; scaling&rdquo;. Most of the network is kept frozen and thus don&rsquo;t forget too much. The small adaptation enables the network to learn new classes.</p>
-<p>They evaluated CIFAR100, ImageNet100, and ImageNet1000 in various settings and beat all previous SotA (especially <em>Hou et al., 2019</em> and <em>Wu et al., 2019</em>). In my recent paper (<a href="https://arxiv.org/abs/2004.13513">Douillard et al., 2020</a>), our model PODNet outperforms their&rsquo;s in several settings and evaluate even on even longer incremental training.</p>
+
+<p>They evaluated CIFAR100, ImageNet100, and ImageNet1000 in various settings and beat all previous SotA (especially <em>Hou et al., 2019</em> and <em>Wu et al., 2019</em>). In my recent paper (<a href="https://arxiv.org/abs/2004.13513" target="_blank">Douillard et al., 2020</a>), our model PODNet outperforms their&rsquo;s in several settings and evaluate even on even longer incremental training.</p>
+
 <h2 id="10-towards-backward-compatible-representation-learning">10. Towards Backward-Compatible Representation Learning</h2>
-<p><strong>PDF</strong>: <a href="https://arxiv.org/abs/2003.11942">2003.11942</a>\<br>
+
+<p><strong>PDF</strong>: <a href="https://arxiv.org/abs/2003.11942" target="_blank">2003.11942</a><br />
 <strong>Authors</strong>: Yantao Shen, Yuanjun Xiong, Wei Xia, Stefano Soatto</p>
+
 <p>This paper is not directly related to Continual Learning but rather to Visual Search.  <em>Shen et al.</em> raise the issue of <strong>backfilling</strong>:</p>
+
 <p>On a visual search model, embeddings of a large gallery have been computed once. Then given a query image,  we extract its features and compare them to the gallery features collection. For example, I take a picture of a shirt and want to know what are the most similar clothes available in a store.</p>
+
 <p>A problem arises when a new model is trained. This model may be different from the previous one because the data is was trained on or because the architecture and losses were changed. The gallery features collection is not up-to-date anymore and we need to extract gain the features of the whole collection with the new model. This can be very costly when the gallery is made of billions of images.</p>
+
 <p>The authors propose to make the features extractor &ldquo;backward-compatible&rdquo;. It&rsquo;s mean that query features extracted by the new model are in the same latent space of the old model:</p>
-<p><img src="202006181635.png" alt="image 15"></p>
+
+<p><img src="202006181635.png" alt="image 15" /></p>
+
 <p>To produce a new model backward-compatible with a previous model that may be different, the authors add a loss over the classification loss:</p>
-<p><img src="202006181639.png" alt="image 16"></p>
-<p>The first part of the loss update the new model on new $t$ dataset $T_{\text{new}}$. For the second part, the best alternative proposed is training the old classifier $w_{c,\text{old}}$ with the new features extractor $w_\theta$ on the new dataset $T_\text{new} = T_\text{BCT}$. Because the new dataset can contain new classes, the old classifier is extended with new weights. They are initialized with the mean features extracted by $w_{\theta, \text{old}}$ like Weight Imprinting did in Metric-Learning (<a href="https://arxiv.org/abs/1712.07136">Qi et al., 2018</a>).</p>
-<p>Overall, their model is still far from the upper-bound (recomputing the gallery with the new model) but they improve significantly over simple baselines and beat LwF (<a href="https://arxiv.org/abs/1606.09282">Li &amp; Hoiem, 2016</a>) by 3 points. I think this model is quite &ldquo;simple&rdquo; compared to SotA Continual Learning but it is interesting to see actual applications of the domain.</p>
+
+<p><img src="202006181639.png" alt="image 16" /></p>
+
+<p>The first part of the loss update the new model on new $t$ dataset $T_{\text{new}}$. For the second part, the best alternative proposed is training the old classifier $w_{c\,\text{old}}$ with the new features extractor $w_\theta$ on the new dataset $T_\text{new} = T_\text{BCT}$. Because the new dataset can contain new classes, the old classifier is extended with new weights. They are initialized with the mean features extracted by $w_{\theta\, \text{old}}$ like Weight Imprinting did in Metric-Learning (<a href="https://arxiv.org/abs/1712.07136" target="_blank">Qi et al., 2018</a>).</p>
+
+<p>Overall, their model is still far from the upper-bound (recomputing the gallery with the new model) but they improve significantly over simple baselines and beat LwF (<a href="https://arxiv.org/abs/1606.09282" target="_blank">Li &amp; Hoiem, 2016</a>) by 3 points. I think this model is quite &ldquo;simple&rdquo; compared to SotA Continual Learning but it is interesting to see actual applications of the domain.</p>
 
     </div>
 
@@ -624,7 +776,7 @@
   
 
   <p class="powered-by">
-    © 2018 &middot; 
+    &copy; 2018 &middot; 
 
     Powered by the
     <a href="https://sourcethemes.com/academic/" target="_blank" rel="noopener">Academic theme</a> for

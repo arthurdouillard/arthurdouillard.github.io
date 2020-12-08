@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="generator" content="Source Themes Academic 3.0.0">
-  <meta name="generator" content="Hugo 0.79.0" />
+  <meta name="generator" content="Hugo 0.49.2" />
   <meta name="author" content="Arthur Douillard">
 
   
@@ -387,153 +387,223 @@
   <div class="article-container">
 
     <div class="article-style" itemprop="articleBody">
-      <p>This post contains the notes taken from reading of the following paper:</p>
+      
+
+<p>This post contains the notes taken from reading of the following paper:</p>
+
 <ul>
-<li><a href="https://homes.cs.washington.edu/~pedrod/papers/cacm12.pdf">A few useful things to know about Machine Learning</a>
-by <a href="https://scholar.google.com/citations?user=KOrhfVMAAAAJ&amp;hl=en">Pedro Domingos</a>.</li>
+<li><a href="https://homes.cs.washington.edu/~pedrod/papers/cacm12.pdf" target="_blank">A few useful things to know about Machine Learning</a>
+by <a href="https://scholar.google.com/citations?user=KOrhfVMAAAAJ&amp;hl=en" target="_blank">Pedro Domingos</a>.</li>
 </ul>
+
 <p>This paper does not introduce any novelties in the field of Machine Learning, nor
 some kinds of benchmarks, but rather offers a overview of the <em>black art</em> of
 Machine Learning. Domingos covers a wide area of Machine Learning, but each
 parts are not explored in depth.</p>
+
 <h1 id="the-right-algorithm">The Right Algorithm</h1>
+
 <p>Domingos splits the problem of choosing the right algorithm in three sub-problems:</p>
+
 <ul>
 <li>Finding the good <strong>representation</strong> (<em>hyperplanes, rules, decision trees, etc.</em>)</li>
 <li>The <strong>objective function</strong> to optimize (<em>accuracy, likelihood, cross-entropy, etc.</em>)</li>
 <li>The <strong>optimization method</strong> (<em>quadratric, beam search, gradient descent, etc.</em>)</li>
 </ul>
+
 <p>The optimal combinations should be taken according to hyperparameters: The accuracy,
 the training time, the problem type, etc.</p>
+
 <h1 id="evaluating-the-algorithm">Evaluating The Algorithm</h1>
+
 <p>Domingos notes that while a high accuracy may seem <em>good</em>, it is not a sufficient
 indicator. A high score of accuracy on the <em>train data</em> may simply mean that the
 algorithm has an <em>overfit</em> problem, and thus generalize badly on new unseen data.</p>
+
 <p>A common pitfall would be to train the algorithm on the train data and tweak
 the hyperparameters in order to maximize our score on the <em>test data</em>. This may
 lead to an overfit on also the test data!</p>
+
 <p>The generalization problems (<em>how can I estimate my generalization?</em> and <em>how
 can I improve my generalization</em>) are detailed in the further sections.</p>
+
 <h1 id="the-bias-variance-trade-off">The Bias-Variance Trade-off</h1>
+
 <p>When building a model it is interesting to decompose the generalization error
 into two components: the <em>bias</em> and the <em>variance</em>.</p>
+
 <blockquote>
 <p><strong>Bias</strong> is a learner&rsquo;s tendency to consistently learn the same wrong thing.</p>
+
 <p><strong>Variance</strong> is the tendency to learn random things irrespective of the real signal.</p>
 </blockquote>
-<p><img src="/blog/bias-variance.png" alt="Bias-Variance trade-off in dart-throwing"></p>
+
+<p><img src="/blog/bias-variance.png" alt="Bias-Variance trade-off in dart-throwing" /></p>
+
 <p>This trade-off explains why a powerful learner may not be better than a weak learner.
 If my powerful learner has a low bias, he is performing well on the
 train data. However if my powerful learner has also a high variance, it may
 have learned noise from the train data that would be irrelevant for the test
 data and behave randomly.</p>
+
 <h1 id="reducing-the-variance">Reducing The Variance</h1>
+
 <p>There are several ways to reduce the variance:</p>
+
 <h3 id="train-validation-and-test">Train, Validation, and Test</h3>
+
 <p>Before training your model, the data should be split in three parts:</p>
+
 <ul>
 <li><strong>Train</strong>: On which the model will learn.</li>
 <li><strong>Validation</strong>: On which we will optimize model&rsquo;s performance by tweaking the parameters.</li>
 <li><strong>Test</strong>: To test the model, only at the end.</li>
 </ul>
-<p><img src="/blog/train-validation-test.png" alt="Train-Validation-Test split"></p>
+
+<p><img src="/blog/train-validation-test.png" alt="Train-Validation-Test split" /></p>
+
 <p>In a certain way, we are overfitting on <em>validation</em> by tweaking the parameters
 according to the <em>validation</em>&rsquo;s performance. In order to mitigate this we can
 use the cross-validation:</p>
+
 <h3 id="cross-validation">Cross-Validation</h3>
+
 <p>We are still training the model on <em>train</em>, and tweaking the parameters in order
 to optimize <em>validation</em>.</p>
+
 <p>However instead of evaluating a fixed validation set, we are evaluating the average
 performance of the different folds:</p>
-<p><img src="/blog/cross-validation.png" alt="k-fold cross-validations"></p>
+
+<p><img src="/blog/cross-validation.png" alt="k-fold cross-validations" /></p>
+
 <p>Note that if there is too many parameters choices, the cross-validation may
 not be able to avoid overfitting.</p>
+
 <h3 id="regularization">Regularization</h3>
+
 <p>Another way to way to avoid overfitting is to add <em>regularization</em>. It will force
 the model to be simpler.</p>
+
 <p>Let&rsquo;s say the model has a set of weights $W$, an evaluation function $f(X)$
 (that depends of the weights), and a loss function $L(X, Y)$.</p>
+
 <p>Without regularization the model will try to optimize:</p>
+
 <p>$$L(X, f(X))$$</p>
+
 <p>With a regularization $R(W)$:</p>
+
 <p>$$L(X, f(X)) + \lambda R(W)$$</p>
+
 <p>The regularization is multiplied by a factor $\lambda$ that is determined empirically,
 with cross-validation for example.</p>
+
 <p>There are several regularizations possible. The two most common are <strong>L1</strong>
 (also known as <em>LASSO</em>), and <strong>L2</strong> (also known as <em>Ridge</em>):</p>
+
 <p>L1 is the absolute norm:</p>
+
 <p>$$\Vert W \Vert_1 = \Sigma_{i=1}^n |w_i|$$</p>
+
 <p>While L2 is:</p>
+
 <p>$$\Vert W \Vert_2 = \Sigma_{i=1}^{n} w_i^2$$</p>
+
 <h1 id="the-curse-of-dimensionality">The Curse Of Dimensionality</h1>
+
 <p>In addition of overfitting, a model can also fail to learn high-dimensional
 data.</p>
+
 <p>For example, let&rsquo;s imagine that we want to use a decision tree to learn
 data which features are binary discrete values. If there are 10 features, it would
 mean that there is a thousand possible samples. If there are 100 features (which
 is common), there are a thousand billion of billion of billion possible samples.
 It is unlearnable, either because the model will never generalize correctly, or
 the model will take a non-practical amount of time to learn.</p>
+
 <p>Thankfully, the data&rsquo;s features are often not completely independent and many
 features are just noise. The <em>blessing of non-uniformity</em> as Domingos calls,
 implies the samples are often spread on a lower-dimensional manifold.</p>
-<p>To reduce the dimension, i.e. choosing the right features, <a href="https://en.wikipedia.org/wiki/Dimensionality_reduction">many algorithms</a> exist:
+
+<p>To reduce the dimension, i.e. choosing the right features, <a href="https://en.wikipedia.org/wiki/Dimensionality_reduction" target="_blank">many algorithms</a> exist:
 PCA, NMF, LDA, etc.</p>
+
 <p>The  reduction of dimensionality is an often necessary step before feeding the
 model with the data.</p>
+
 <h1 id="feature-engineering-is-the-key">Feature Engineering Is The Key</h1>
+
 <p>Feature Engineering is the action of transforming raw data into something that
 is more learnable by the model. It is dependant on the data&rsquo;s type, and here
 lies most of the <em>black art</em> of Machine Learning.</p>
+
 <p>Two examples:</p>
-<p>For text data, several processing are necessary:</p>
-<ul>
-<li><strong>tokenization</strong> to split the words of the sentence.</li>
-<li><strong>lemmatization</strong> to get the lemma (<em>loved, loving, lover -&gt; love</em>)</li>
-<li><strong>POS-Tagging</strong> to get the grammar label of a token (<em>be -&gt; verb, car -&gt; noun</em>)</li>
-</ul>
+
+<p>For text data, several processing are necessary:
+- <strong>tokenization</strong> to split the words of the sentence.
+- <strong>lemmatization</strong> to get the lemma (<em>loved, loving, lover -&gt; love</em>)
+- <strong>POS-Tagging</strong> to get the grammar label of a token (<em>be -&gt; verb, car -&gt; noun</em>)</p>
+
 <p>For image data, in the case of object detection we can extract interesting
-features with the <a href="https://www.learnopencv.com/histogram-of-oriented-gradients/">HOG algorithm</a>
-and feed these features to a SVM to <a href="https://github.com/Mougatine/human-recognition/blob/master/tirf_project.ipynb">improve significantly the performances</a>.</p>
+features with the <a href="https://www.learnopencv.com/histogram-of-oriented-gradients/" target="_blank">HOG algorithm</a>
+and feed these features to a SVM to <a href="https://github.com/Mougatine/human-recognition/blob/master/tirf_project.ipynb" target="_blank">improve significantly the performances</a>.</p>
+
 <p>While feature engineering is major part of Machine Learning, it is less important
 in Deep Learning: with Convolutional Neural Network (CNN) the model is learning
-by itself the <a href="https://cs.stanford.edu/people/karpathy/convnetjs/demo/cifar10.html">convolution kernels</a> extracting the interesting features.</p>
+by itself the <a href="https://cs.stanford.edu/people/karpathy/convnetjs/demo/cifar10.html" target="_blank">convolution kernels</a> extracting the interesting features.</p>
+
 <h1 id="model-ensembles">Model Ensembles</h1>
+
 <p>In order to achieve the best performance we want to decrease both bias and variance.
 It is often complicated to optimize this trade-off. A great way to achieve this
 is to combine different models, kind of like a <em>wisdom of the crowd</em>.</p>
+
 <p>There are three main categories of ensembles:</p>
+
 <h3 id="bagging">Bagging</h3>
+
 <p>Used in the <strong>Random Forest</strong>, bagging generates plenty of model. Each has a low
 bias but a high variance. A voting system is set up between them to choose the
 output, thus lowering the individual variances.</p>
+
 <h3 id="boosting">Boosting</h3>
+
 <p>Used in <strong>Adaboost</strong> or in <strong>Gradient Boosting</strong>, boosting generates at first
 a simple weak learner: It should just be a bit better than a random guess. At each
 iteration of the training, a new weak learner is added to the global learner. The
 new weak learner focuses on the previously poorly predicted data.</p>
+
 <p>At each iteration the bias is reduced as the overall model improves. There is a
 diminished risk of overfitting with boosting: Because each iteration&rsquo;s learner
 focuses on poorly predicted data, the risk of <em>over-learning</em> data is small.</p>
+
 <h3 id="stacking">Stacking</h3>
+
 <p>The stacking ensemble is the easiest to understand: Each model is connected to
 another: The output of one is the input of another.</p>
+
 <h1 id="data-data-and-data">Data, Data, And Data</h1>
+
 <p>While Domingos offers us great insights into Machine Learning, and various
 methods to improve our models, he notes one constant:</p>
+
 <blockquote>
 <p>More data beats a cleverer algorithm</p>
 </blockquote>
+
 <p>It is often more advisable to focus the efforts on getting as much data as
 possible, and begin with a simple model, than to expect a complex model to
 generalize from few data.</p>
+
 <h3 id="available-data">Available Data</h3>
+
 <p>There are plenty of resources available:</p>
+
 <ul>
-<li><a href="https://archive.ics.uci.edu/ml/datasets.html">UCL Datasets</a></li>
-<li><a href="https://www.kaggle.com/datasets">Kaggle Datasets</a></li>
-<li><a href="https://www.cs.toronto.edu/~kriz/cifar.html">CIFAR</a>,
-<a href="http://www.image-net.org/">ImageNet</a>, <a href="http://cocodataset.org/#home">COCO</a></li>
+<li><a href="https://archive.ics.uci.edu/ml/datasets.html" target="_blank">UCL Datasets</a></li>
+<li><a href="https://www.kaggle.com/datasets" target="_blank">Kaggle Datasets</a></li>
+<li><a href="https://www.cs.toronto.edu/~kriz/cifar.html" target="_blank">CIFAR</a>,
+<a href="http://www.image-net.org/" target="_blank">ImageNet</a>, <a href="http://cocodataset.org/#home" target="_blank">COCO</a></li>
 <li>&hellip;</li>
 </ul>
 
@@ -625,7 +695,7 @@ generalize from few data.</p>
   
 
   <p class="powered-by">
-    © 2018 &middot; 
+    &copy; 2018 &middot; 
 
     Powered by the
     <a href="https://sourcethemes.com/academic/" target="_blank" rel="noopener">Academic theme</a> for

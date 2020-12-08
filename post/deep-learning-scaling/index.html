@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="generator" content="Source Themes Academic 3.0.0">
-  <meta name="generator" content="Hugo 0.79.0" />
+  <meta name="generator" content="Hugo 0.49.2" />
   <meta name="author" content="Arthur Douillard">
 
   
@@ -389,49 +389,70 @@
   <div class="article-container">
 
     <div class="article-style" itemprop="articleBody">
-      <p>This post contains the notes taken from the following paper:</p>
+      
+
+<p>This post contains the notes taken from the following paper:</p>
+
 <ul>
-<li><a href="https://arxiv.org/abs/1712.00409">Deep Learning Scaling Is Predictable, Empirically</a>
+<li><a href="https://arxiv.org/abs/1712.00409" target="_blank">Deep Learning Scaling Is Predictable, Empirically</a>
 by Baidu Research.</li>
 </ul>
+
 <p>The last years in Deep Learning have seen a rush to gigantism:</p>
+
 <ul>
-<li>Models are becoming deeper and deeper from the 8 layers of <a href="https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf">AlexNet</a>
-to the <a href="https://arxiv.org/abs/1603.05027">1001-layer ResNet</a>.</li>
+<li>Models are becoming deeper and deeper from the 8 layers of <a href="https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf" target="_blank">AlexNet</a>
+to the <a href="https://arxiv.org/abs/1603.05027" target="_blank">1001-layer ResNet</a>.</li>
 <li>Training on large dataset is way quicker, ImageNet can now (with enough
-computing power) been <a href="https://arxiv.org/abs/1709.05011">trained in less than 20 minutes</a>.</li>
+computing power) been <a href="https://arxiv.org/abs/1709.05011" target="_blank">trained in less than 20 minutes</a>.</li>
 <li>Dataset size are increasing each year.</li>
 </ul>
+
 <p>As this paper rightly declare in its introduction:</p>
+
 <blockquote>
 <p>The Deep Learning (DL) community has created impactful advances across diverse
 application domains by following a straightforward recipe: search for improved
 model architectures, create large training data sets, and scale computation.</p>
 </blockquote>
+
 <p>However it also notes that new models and hyperparameters configuration are
 often depend on <em>epiphany</em> and <em>serendipity</em>.</p>
+
 <p>In order to harness the power of <em>big data</em> (more data, more computation power,
 etc.) models should not be designed to reduce error rate of an epsilon on
 Imagenet but be designed to be better with more data.</p>
+
 <p>Baidu Research introduce a <strong>power-law expononent</strong>, that measure the <em>steepness</em>
 of the learning curve:</p>
+
 <p>$$\epsilon(m) \propto \alpha m^{\beta_g}$$</p>
+
 <p>Where $\epsilon(m)$ is the generalization error on the number of train samples
 $m$; $\alpha$ a constant related to the problem; and $\beta_g$ the steepness
 of the learning curve.</p>
+
 <p>$\beta_g$ is said to settle between -0.07 and -0.35.</p>
+
 <h3 id="the-methodology">The Methodology</h3>
+
 <p>Baidu tested four domains: machine translation, language modeling, image
 classification, and speech recognition.</p>
+
 <p>For each domain, a variety of architectures, optimizers, and hyperparameters is
 tested. To see how models scale with dataset size, Baidu trained models on samples
 ranging from 0.1% of the original data to the whole data (minus the validation set).</p>
+
 <p>The paper&rsquo;s authors try to find the smallest model that is able to overfit each
 sample.</p>
+
 <p>Baidu also removed any regularizations, like weight decay, that might reduce
-the model&rsquo;s effective <a href="https://en.wikipedia.org/wiki/VC_dimension">capacity</a>.</p>
+the model&rsquo;s effective <a href="https://en.wikipedia.org/wiki/VC_dimension" target="_blank">capacity</a>.</p>
+
 <h3 id="results">Results</h3>
+
 <p>In all domain, they found that the model size growth with dataset size sublinearly.</p>
+
 <table>
 <thead>
 <tr>
@@ -439,70 +460,90 @@ the model&rsquo;s effective <a href="https://en.wikipedia.org/wiki/VC_dimension"
 <th>Learning Curve Steepness $\beta_g$</th>
 </tr>
 </thead>
+
 <tbody>
 <tr>
 <td>Machine Translation</td>
 <td>-0.128</td>
 </tr>
+
 <tr>
 <td>Language Modeling</td>
 <td>[-0.09, -0.06]</td>
 </tr>
+
 <tr>
 <td>Image (top-1)</td>
 <td>-0.309</td>
 </tr>
+
 <tr>
 <td>Image (top-5)</td>
 <td>-0.488</td>
 </tr>
+
 <tr>
 <td>Speech</td>
 <td>-0.299</td>
 </tr>
 </tbody>
 </table>
+
 <p>The first thing that we can conclude from these numbers is that text based
 problems (translation and language modeling) scale badly faced to image problems.</p>
+
 <p>It is worth noting that (current) models seem to scale better depending on the data
 dimension: Image and speech are of a higher dimensionality than text.</p>
+
 <p>You may also wonder why image has two entries in the table. One for top-1 generalization
 error, and one for top-5. This is one of the most interesting finding of this paper.
 Current models of image classification improve their top-5 faster than top-1 as data
 size increases! I wonder the reason why.</p>
+
 <h3 id="implications">Implications</h3>
-<p><img src="/figures/power_law_curve.png" alt="Power law curve"></p>
+
+<p><img src="/figures/power_law_curve.png" alt="Power law curve" /></p>
+
 <p>The authors separate the generalization error per data size in three areas:</p>
+
 <ul>
 <li><em>The small data region</em>, where models given so few data can only make random
 guessing.</li>
 <li><em>The power law region</em>, where models follow the power law. However the learning
 curve steepness may be improved.</li>
-<li><em>The irreductible error</em>, a combination of the <a href="https://en.wikipedia.org/wiki/Bayes_error_rate">Bayes error</a>
+<li><em>The irreductible error</em>, a combination of the <a href="https://en.wikipedia.org/wiki/Bayes_error_rate" target="_blank">Bayes error</a>
 (on which the model cannot be improved) and the dataset defects that may impair
 generalization.</li>
 </ul>
+
 <p>The authors also underline major implications of the power law:</p>
+
 <p>Given the power law, researchers can train their new architecture on a small dataset,
 and have a good estimation of how it would scale on a bigger dataset.
 It may also give a reasonable estimation of the hardware and time requirements
 to reach a chosen generalization error.</p>
+
 <p>Instead of simply trying to improve a model&rsquo;s accuracy, the authors suggest that
 beating the power law should be the end goal. Dataset size is going to grow
 each year, a scalable model would thrive in this situation. The authors advise
 methods that may help to <em>extract more info on less data</em>:</p>
+
 <blockquote>
 <p>We suggest that future work more deeply analyze learning curves when using data
 handling techniques, such as data filtering/augmentation, few-shot learning,
 experience replay, and generative adversarial networks.</p>
 </blockquote>
+
 <p>Baidu also recommends to search how to push the boundaries of the irreductible
 error. To do that we should be able to distinguish between what contributes to
 the <em>bayes error</em>, and what&rsquo;s not.</p>
+
 <h3 id="summary">Summary</h3>
+
 <p>Baidu Research showed that models follow a power law curve. They empirically
 determined the power law exponent, or <em>steepness of the learning curve</em>, for
 machine translation, language modeling, image classification, and speech recognition.</p>
+
 <p>This power law express how much a model can improve given more data.
 Models for text problems are currently the less scalable.</p>
 
@@ -594,7 +635,7 @@ Models for text problems are currently the less scalable.</p>
   
 
   <p class="powered-by">
-    © 2018 &middot; 
+    &copy; 2018 &middot; 
 
     Powered by the
     <a href="https://sourcethemes.com/academic/" target="_blank" rel="noopener">Academic theme</a> for
