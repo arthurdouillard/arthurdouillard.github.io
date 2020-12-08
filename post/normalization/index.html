@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="generator" content="Source Themes Academic 3.0.0">
-  <meta name="generator" content="Hugo 0.49.2" />
+  <meta name="generator" content="Hugo 0.79.0" />
   <meta name="author" content="Arthur Douillard">
 
   
@@ -389,38 +389,31 @@
   <div class="article-container">
 
     <div class="article-style" itemprop="articleBody">
-      
-
-<p>Deep Neural Networks (DNNs) are notorious for requiring less feature engineering than
+      <p>Deep Neural Networks (DNNs) are notorious for requiring less feature engineering than
 Machine Learning algorithms. For example convolutional networks learn by themselves
 the right convolution kernels to apply on an image. No need of carefully
 handcrafted kernels.</p>
-
 <p>However a common point to all kinds of neural networks is the <strong>need of normalization</strong>.
 Normalizing is often done on the input, but it can also take place inside the
 network. In this article I&rsquo;ll try to describe what the literature is saying about
 this.</p>
-
 <p>This article is not exhaustive but it tries to cover the major algorithms. If
 you feel I missed something important, tell me!</p>
-
 <h3 id="normalizing-the-input">Normalizing the input</h3>
-
 <p>It is <em>extremely</em> common to normalize the input
-<a href="http://yann.lecun.com/exdb/publis/pdf/lecun-98b.pdf" target="_blank">(lecun-98b)</a>, especially
+<a href="http://yann.lecun.com/exdb/publis/pdf/lecun-98b.pdf">(lecun-98b)</a>, especially
 for computer vision tasks. Three normalization schemes are often seen:</p>
-
 <ol>
 <li>Normalizing the pixel values between 0 and 1:</li>
 </ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">img <span style="color:#f92672">/=</span> <span style="color:#ae81ff">255.</span></code></pre></div>
-<ol>
-<li>Normalizing the pixel values between -1 and 1 (as <a href="https://github.com/keras-team/keras-applications/blob/master/keras_applications/imagenet_utils.py#L47-L50" target="_blank">Tensorflow does</a>):</li>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">img <span style="color:#f92672">/=</span> <span style="color:#ae81ff">255.</span>
+</code></pre></div><ol start="2">
+<li>Normalizing the pixel values between -1 and 1 (as <a href="https://github.com/keras-team/keras-applications/blob/master/keras_applications/imagenet_utils.py#L47-L50">Tensorflow does</a>):</li>
 </ol>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">img <span style="color:#f92672">/=</span> <span style="color:#ae81ff">127.5</span>
-img <span style="color:#f92672">-=</span> <span style="color:#ae81ff">1.</span></code></pre></div>
-<ol>
-<li>Normalizing according to the dataset mean &amp; standard deviation (as <a href="https://github.com/keras-team/keras-applications/blob/master/keras_applications/imagenet_utils.py#L52-L55" target="_blank">Torch does</a>):</li>
+img <span style="color:#f92672">-=</span> <span style="color:#ae81ff">1.</span>
+</code></pre></div><ol start="3">
+<li>Normalizing according to the dataset mean &amp; standard deviation (as <a href="https://github.com/keras-team/keras-applications/blob/master/keras_applications/imagenet_utils.py#L52-L55">Torch does</a>):</li>
 </ol>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">img <span style="color:#f92672">/=</span> <span style="color:#ae81ff">255.</span>
 mean <span style="color:#f92672">=</span> [<span style="color:#ae81ff">0.485</span>, <span style="color:#ae81ff">0.456</span>, <span style="color:#ae81ff">0.406</span>] <span style="color:#75715e"># Here it&#39;s ImageNet statistics</span>
@@ -428,46 +421,32 @@ std <span style="color:#f92672">=</span> [<span style="color:#ae81ff">0.229</spa
 
 <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">3</span>): <span style="color:#75715e"># Considering an ordering NCHW (batch, channel, height, width)</span>
     img[i, :, :] <span style="color:#f92672">-=</span> mean[i]
-    img[i, :, :] <span style="color:#f92672">/=</span> std[i]</code></pre></div>
-<p>Why is it recommended? Let&rsquo;s take a neuron, where:</p>
-
+    img[i, :, :] <span style="color:#f92672">/=</span> std[i]
+</code></pre></div><p>Why is it recommended? Let&rsquo;s take a neuron, where:</p>
 <p>$$y = w \cdot x$$</p>
-
 <p>The partial derivative of $y$ for $w$ that we use during backpropagation is:</p>
-
 <p>$$\frac{\partial y}{\partial w} = X^T$$</p>
-
 <p>The scale of the data has an effect on the magnitude of the gradient for
 the weights. If the gradient is big, you should reduce the learning rate.
 However you usually have different gradient magnitudes in a same batch. Normalizing
 the image to smaller pixel values is a cheap price to pay while making easier to
 tune an optimal learning rate for input images.</p>
-
 <h3 id="1-batch-normalization">1. Batch Normalization</h3>
-
 <p>We&rsquo;ve seen previously how to normalize the input, now let&rsquo;s see a normalization
 inside the network.</p>
-
-<p>(<a href="https://arxiv.org/abs/1502.03167" target="_blank">Ioffe &amp; Szegedy, 2015</a>) declared that DNN
+<p>(<a href="https://arxiv.org/abs/1502.03167">Ioffe &amp; Szegedy, 2015</a>) declared that DNN
 training was suffering from the <em>internal covariate shift</em>.</p>
-
 <p>The authors describe it as:</p>
-
 <blockquote>
 <p>[&hellip;] the distribution of each layer’s inputs changes during training, as the
 parameters of the previous layers change.</p>
 </blockquote>
-
 <p>Their answer to this problem was to apply to the pre-activation a Batch
 Normalization (BN):</p>
-
 <p>$$BN(x) = \gamma \frac{x - \mu_B}{\sigma_B} + \beta$$</p>
-
 <p>$\mu_B$ and $\sigma_B$ are the mean and the standard deviation of the batch.
 $\gamma$ and $\beta$ are learned parameters.</p>
-
 <p>The batch statistics are computed for a whole channel:</p>
-
 <figure>
 
 <img src="/figures/batch_norm.png" alt="*Statistics are computed for a whole batch, channel per channel.*" />
@@ -484,59 +463,42 @@ $\gamma$ and $\beta$ are learned parameters.</p>
 </figcaption>
 
 </figure>
-
 <p>$\gamma$ and $\beta$ are essential because they enable the BN to represent
 the identity transform if needed. If it couldn&rsquo;t, the resulting BN&rsquo;s transformation
 (with a mean of 0 and a variance of 1) fed to a sigmoid non-linearity would
 be constrained to its linear regime.</p>
-
 <p>While during training the mean and standard deviation are computed on the batch,
 during test time BN uses the whole dataset statistics using a moving average/std.</p>
-
 <p>Batch Normalization has showed a considerable training acceleration to existing
 architectures and is now an almost de facto layer. It has however for weakness
 to use the batch statistics at training time: With small batches or with a dataset
-non <a href="https://en.wikipedia.org/wiki/Independent_and_identically_distributed_random_variables" target="_blank">i.i.d</a>
+non <a href="https://en.wikipedia.org/wiki/Independent_and_identically_distributed_random_variables">i.i.d</a>
 it shows weak performance. In addition to that, the difference between training
 and test time of the mean and the std can be important, this can lead to a difference of performance between the two modes.</p>
-
-<h3 id="1-1-batch-renormalization">1.1. Batch ReNormalization</h3>
-
-<p><a href="https://arxiv.org/abs/1702.03275" target="_blank">(Ioffe, 2017)</a>&rsquo;s Batch Renormalization (BR)
+<h3 id="11-batch-renormalization">1.1. Batch ReNormalization</h3>
+<p><a href="https://arxiv.org/abs/1702.03275">(Ioffe, 2017)</a>&rsquo;s Batch Renormalization (BR)
 introduces an improvement over Batch Normalization.</p>
-
 <p>BN uses the statistics ($\mu_B$ &amp; $\sigma_B$) of the batch. BR introduces
 two new parameters $r$ &amp; $d$ aiming to constrain the mean and std of BN,
 reducing the extreme difference when the batch size is small.</p>
-
 <p>Ideally the normalization should be done with the instance&rsquo;s statistic:</p>
-
 <p>$$\hat{x} = \frac{x - \mu}{\sigma}$$</p>
-
 <p>By choosing $r = \frac{\sigma_B}{\sigma}$ and $d = \frac{\mu_B - \mu}{\sigma}$:</p>
-
 <p>$$\hat{x} = \frac{x - \mu}{\sigma} = \frac{x - \mu_B}{\sigma_B} \cdot r + d$$</p>
-
 <p>The authors advise to constrain the maximum absolute values of $r$ and $d$.
 At first to 1 and 0, behaving like BN, then to relax gradually those bounds.</p>
-
-<h3 id="1-2-internal-covariate-shift">1.2. Internal Covariate Shift?</h3>
-
+<h3 id="12-internal-covariate-shift">1.2. Internal Covariate Shift?</h3>
 <p>Ioffe &amp; Szegedy argued that the changing distribution of the pre-activation hurt
 the training. While Batch Norm is widely used in SotA research, there is still
-controversy (<a href="https://youtu.be/Qi1Yry33TQE?t=17m4s" target="_blank">Ali Rahami&rsquo;s Test of Time</a>)
+controversy (<a href="https://youtu.be/Qi1Yry33TQE?t=17m4s">Ali Rahami&rsquo;s Test of Time</a>)
 about what this algorithm is solving.</p>
-
-<p><a href="https://arxiv.org/abs/1805.11604" target="_blank">(Santurkar et al, 2018)</a> refuted the Internal
+<p><a href="https://arxiv.org/abs/1805.11604">(Santurkar et al, 2018)</a> refuted the Internal
 Covariate Shift influence. To do so, they compared three models, one baseline,
 one with BN, and one with random noise added <em>after</em> the normalization.</p>
-
 <p>Because of the random noise, the activation&rsquo;s input is not <em>normalized</em> anymore
 and its distribution change at every time test.</p>
-
 <p>As you can see on the following figure, they found that the random shift of distribution
 didn&rsquo;t produce extremely different results:</p>
-
 <figure>
 
 <img src="/figures/cmp_icf.png" alt="*Comparison between standard net, net with BN, and net with noisy BN.*" />
@@ -553,11 +515,9 @@ didn&rsquo;t produce extremely different results:</p>
 </figcaption>
 
 </figure>
-
 <p>On the other hand they found that the Batch Normalization improved the
-<a href="https://en.wikipedia.org/wiki/Lipschitz_continuity" target="_blank">Lipschitzness</a> of the loss
+<a href="https://en.wikipedia.org/wiki/Lipschitz_continuity">Lipschitzness</a> of the loss
 function. In simpler term, the loss is smoother, and thus its gradient as well.</p>
-
 <figure>
 
 <img src="/figures/smoothed_loss.png" alt="*Figure 3: Loss with and without Batch Normalization.*" />
@@ -574,9 +534,7 @@ function. In simpler term, the loss is smoother, and thus its gradient as well.<
 </figcaption>
 
 </figure>
-
 <p>According to the authors:</p>
-
 <blockquote>
 <p>Improved Lipschitzness of the gradients gives us confidence that when we take
 a larger step in a direction of a computed gradient, this gradient direction
@@ -586,15 +544,11 @@ take larger steps without the danger of running into a sudden change of the
 loss landscape such as flat region (corresponding to vanishing gradient) or
 sharp local minimum (causing exploding gradients).</p>
 </blockquote>
-
 <p>The authors also found that replacing BN by a $l_1$, $l_2$, or $l_{\infty}$
 lead to similar results.</p>
-
 <h3 id="2-computing-the-mean-and-variance-differently">2. Computing the mean and variance differently</h3>
-
 <p>Algorithms similar to Batch Norm have been developed where the mean &amp; variance
 are computed differently.</p>
-
 <figure>
 
 <img src="/figures/normalization.png" />
@@ -611,76 +565,51 @@ are computed differently.</p>
 </figcaption>
 
 </figure>
-
-<h3 id="2-1-layer-normalization">2.1. Layer Normalization</h3>
-
-<p><a href="https://arxiv.org/abs/1607.06450" target="_blank">(Ba et al, 2016)</a>&rsquo;s layer norm (LN) normalizes
+<h3 id="21-layer-normalization">2.1. Layer Normalization</h3>
+<p><a href="https://arxiv.org/abs/1607.06450">(Ba et al, 2016)</a>&rsquo;s layer norm (LN) normalizes
 each image of a batch independently using all the channels. The goal is have constant
 performance with a large batch or a single image. <strong>It&rsquo;s used in recurrent neural
 networks</strong> where the number of time steps can differ between tasks.</p>
-
 <p>While all time steps share the same weights, each should have its own statistic.
 BN needs previously computed batch statistics, which would be impossible if there
 are more time steps at test time than training time. LN is time steps independent
 by simply computing the statistics on the incoming input.</p>
-
-<h3 id="2-2-instance-normalization">2.2. Instance Normalization</h3>
-
-<p><a href="https://arxiv.org/abs/1607.08022" target="_blank">(Ulyanov et al, 2016)</a>&rsquo;s instance norm (IN)
+<h3 id="22-instance-normalization">2.2. Instance Normalization</h3>
+<p><a href="https://arxiv.org/abs/1607.08022">(Ulyanov et al, 2016)</a>&rsquo;s instance norm (IN)
 normalizes each channel of each batch&rsquo;s image independently. <strong>The goal is to
 normalize the constrast of the content image</strong>. According to the authors, only the
 style image contrast should matter.</p>
-
-<h3 id="2-3-group-normalization">2.3. Group Normalization</h3>
-
-<p>According to <a href="https://arxiv.org/abs/1803.08494" target="_blank">(Wu and He, 2018)</a>, convolution
+<h3 id="23-group-normalization">2.3. Group Normalization</h3>
+<p>According to <a href="https://arxiv.org/abs/1803.08494">(Wu and He, 2018)</a>, convolution
 filters tend to group in related tasks (frequency, shapes, illumination, textures).</p>
-
 <p>They normalize each image in a batch independently so the model is batch size
 independent. Moreover they normalize the channels per group arbitrarily defined
 (usually 32 channels per group). All filters of a same group should specialize
 in the same task.</p>
-
 <h3 id="3-normalization-on-the-network">3. Normalization on the network</h3>
-
 <p>Previously shown methods normalized the inputs, there are methods were the normalization
 happen in the network rather than on the data.</p>
-
-<h3 id="3-1-weight-normalization">3.1. Weight Normalization</h3>
-
-<p><a href="https://arxiv.org/abs/1602.07868" target="_blank">(Salimans and Kingma, 2016)</a> found that
+<h3 id="31-weight-normalization">3.1. Weight Normalization</h3>
+<p><a href="https://arxiv.org/abs/1602.07868">(Salimans and Kingma, 2016)</a> found that
 decoupling the length of the weight vectors from their direction accelerated the
 training.</p>
-
 <p>A fully connected layer does the following operation:</p>
-
 <p>$$y = \phi(W \cdot x + b)$$</p>
-
 <p>In weight normalization, the weight vectors is expressed the following way:</p>
-
 <p>$$W = \frac{g}{\Vert V \Vert}V$$</p>
-
 <p>$g$ and $V$ being respectively a learnable scalar and a learnable matrix.</p>
-
-<h3 id="3-2-cosine-normalization">3.2. Cosine Normalization</h3>
-
-<p><a href="https://arxiv.org/abs/1702.05870" target="_blank">(Luo et al, 2017)</a> normalizes both the weights
+<h3 id="32-cosine-normalization">3.2. Cosine Normalization</h3>
+<p><a href="https://arxiv.org/abs/1702.05870">(Luo et al, 2017)</a> normalizes both the weights
 and the input by replacing the classic dot product by a cosine similarity:</p>
-
 <p>$$y = \phi(\frac{W \cdot X}{\Vert W \Vert \Vert X \Vert})$$</p>
-
 <h3 id="4-conclusion">4. Conclusion</h3>
-
 <p>Batch normalization (BN) is still the most represented method among new
 architectures despite its defect: the dependence on the batch size. Batch
 renormalization (BR) fixes this problem by adding two new parameters to
 approximate instance statistics instead of batch statistics.</p>
-
 <p>Layer norm (LN), instance norm (IN), and group norm (GN), are similar to
 BN. Their difference lie in the way statistics are computed.</p>
-
 <p>LN was conceived for RNNs, IN for style transfer, and GN for CNNs.</p>
-
 <p>Finally weigh norm and cosine norm normalize the network&rsquo;s weight instead of simply
 the input data.</p>
 
@@ -772,7 +701,7 @@ the input data.</p>
   
 
   <p class="powered-by">
-    &copy; 2018 &middot; 
+    © 2018 &middot; 
 
     Powered by the
     <a href="https://sourcethemes.com/academic/" target="_blank" rel="noopener">Academic theme</a> for

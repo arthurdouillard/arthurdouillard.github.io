@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="generator" content="Source Themes Academic 3.0.0">
-  <meta name="generator" content="Hugo 0.49.2" />
+  <meta name="generator" content="Hugo 0.79.0" />
   <meta name="author" content="Arthur Douillard">
 
   
@@ -389,121 +389,85 @@
   <div class="article-container">
 
     <div class="article-style" itemprop="articleBody">
-      
-
-<p>Most CNN architectures have been developed to attain the best accuracy on
+      <p>Most CNN architectures have been developed to attain the best accuracy on
 ImageNet. Computing power is not limited for this competition, why bother?</p>
-
 <p>However you may want to run your model on an old laptop, maybe without GPU, or
 even on your mobile phone. Let’s see three CNN architectures that are efficient
 while sacrificing little accuracy performance.</p>
-
 <h3 id="1-mobilenet">1. MobileNet</h3>
-
-<p>Arxiv link: <a href="https://arxiv.org/abs/1704.04861" target="_blank">(Howard et al, 2017)</a></p>
-
+<p>Arxiv link: <a href="https://arxiv.org/abs/1704.04861">(Howard et al, 2017)</a></p>
 <p>MobileNet uses depthwise separable convolutions. This convolution block was at
-first introduced by Xception <a href="https://arxiv.org/abs/1610.02357" target="_blank">(Chollet, 2016)</a>.
+first introduced by Xception <a href="https://arxiv.org/abs/1610.02357">(Chollet, 2016)</a>.
 A depthwise separable convolution is made of two operations: a depthwise
 convolution and a pointwise convolution.</p>
-
 <p>A <strong>standard convolution</strong> works on the spatial dimension of the feature maps and on
 the input and output channels. It has a computational cost of
 $D_f^2 * M * N * D_k^2$; with $D_f$ the dimension of the input feature maps,
 $M$ and $N$ the number of input and output channels, and $D_k$ the kernel size.</p>
-
-<p><img src="/figures/convolution.png" alt="convolution" /></p>
-
+<p><img src="/figures/convolution.png" alt="convolution"></p>
 <p>A <strong>depthwise convolution</strong> maps a single convolution on each input channel separately.
 Therefore its number of output channels is the same of the number of input channels.
 Its computational cost is $D_f^2 * M * D_k^2$.</p>
-
-<p><img src="/figures/depthwise_conv.png" alt="depthwise conv" /></p>
-
+<p><img src="/figures/depthwise_conv.png" alt="depthwise conv"></p>
 <p>The last operation is a <strong>pointwise convolution</strong>. It is a convolution with a
 kernel size of 1x1 that simply combines the features created by the depthwise
 convolution. Its computational cost is $M * N * D_f^2$.</p>
-
-<p><img src="/figures/pointwise_conv.png" alt="pointwise conv" /></p>
-
+<p><img src="/figures/pointwise_conv.png" alt="pointwise conv"></p>
 <p>The computational cost of the <strong>depthwise separable convolution</strong> is the sum of
 the costs of the depthwise and pointwise operations. Compared to a standard
 convolution it offers a computation reduction of $\frac{1}{N} + \frac{1}{D_k^2}$.
 With a kernel size of 3x3, it results in 8 times less operations!</p>
-
 <p>MobileNet also provides two parameters allowing to reduce further more its
 number of operations:</p>
-
 <p>The <strong>width multiplier</strong> (between 0 and 1) thins the number of channels. At
 each layer instead of producing $N$ channels, it will produce $\alpha * N$.
 This multiplier can be used to handle a trade-off between the desired latency
 and the performance.</p>
-
 <p>Another multiplier exists: the <strong>resolution multiplier</strong>. It scales the input
 size of the image, between 224 to 128. Because the MobileNet uses a global
 average pooling instead of a flatten, you can train your MobileNet on
 224x224 images, then use it on 128x128 images! Indeed with a global pooling,
 the fully connected classifier at the end of the network depends only the number
 of channels not the feature maps spatial dimension.</p>
-
 <h3 id="2-shufflenet">2. ShuffleNet</h3>
-
-<p>Arxiv link: <a href="https://arxiv.org/abs/1707.01083" target="_blank">(Zhang et al, 2017)</a></p>
-
+<p>Arxiv link: <a href="https://arxiv.org/abs/1707.01083">(Zhang et al, 2017)</a></p>
 <p>ShuffleNet introduces the three variants of the Shuffle unit. It is composed
 of <strong>group convolutions</strong> and <strong>channel shuffles</strong>.</p>
-
-<p><img src="/figures/shufflenet.png" alt="shufflenet" /></p>
-
+<p><img src="/figures/shufflenet.png" alt="shufflenet"></p>
 <p>A <strong>group convolution</strong> is simply several convolutions, each taking a portion
 of the input channels. In the following image you can see a group convolution,
 with 3 groups, each taking one of the 3 input channels.</p>
-
-<p><img src="/figures/group_conv.png" alt="group conv" /></p>
-
-<p>It was at first introduced by AlexNet <a href="https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks" target="_blank">(Krizhevsky et al, 2012)</a>
+<p><img src="/figures/group_conv.png" alt="group conv"></p>
+<p>It was at first introduced by AlexNet <a href="https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks">(Krizhevsky et al, 2012)</a>
 to split a network into two GPUs.</p>
-
 <p>It greatly diminishes the computational cost. Let us take a practicable example:
 If there are 4 input channels, and 8 output channels and we choose to have
 two groups, each taking 2 input channels and 4 output channels.</p>
-
 <p>With one group the computational cost would be $D_f^2 * D_k^2 * 4 * 8$, while with
 two groups the cost is $(D_f^2 * D_k^2 * 2 * 4) * 2$ or $D_f^2 * D_k^2 * 4 * 4$.
 Half as many operations! The authors reached best results with 8 groups, thus the reduction is even more important.</p>
-
 <p>Finally the authors add a channel shuffle that randomly mix the output channels
 of the group convolution. The trick to produce this randomness can be seen
-<a href="https://github.com/arthurdouillard/keras-shufflenet/blob/master/shufflenet.py#L37-L48" target="_blank">here</a>.</p>
-
+<a href="https://github.com/arthurdouillard/keras-shufflenet/blob/master/shufflenet.py#L37-L48">here</a>.</p>
 <h3 id="3-effnet">3. EffNet</h3>
-
-<p>Arxiv link: <a href="https://arxiv.org/abs/1801.06434" target="_blank">(Freeman et al, 2018)</a></p>
-
+<p>Arxiv link: <a href="https://arxiv.org/abs/1801.06434">(Freeman et al, 2018)</a></p>
 <p>EffNet uses <strong>spatial separable convolutions</strong>. It is similar to
 MobileNet&rsquo;s depthwise separable convolutions.</p>
-
-<p><img src="/figures/effnet.png" alt="effnet" /></p>
-
+<p><img src="/figures/effnet.png" alt="effnet"></p>
 <p>The separable depthwise convolution is the rectangle colored in blue for
 EffNet block. It is made of depthwise convolution with a line kernel (1x3),
 followed by a separable pooling, and finished by a depthwise convolution with a
 column kernel (3x1)</p>
-
 <p>Let&rsquo;s see the computational gain. A normal depthwise with a 3x3 kernel would have
 a cost of $3^2 * D_f^2 * M$. The first depthwise with a 1x3 kernel has a
 computational cost of $3 * D_f^2 * M$. The separable pooling halves the feature
 maps height and has a marginal cost. The second depthwise, with a 3x1 kernel,
 has then a cost of $3 * \frac{D_f^2}{2} * M$. Thus the whole cost is
 $1.5 * (3 * D_f^2 * M)$. Half less than the normal depthwise!</p>
-
 <p>Another optimization done by EffNet over MobileNet and ShuffleNet, is the
 absence of &ldquo;normal convolution&rdquo; at the beginning:</p>
-
-<p><img src="/figures/effnet2.png" alt="effnet2" /></p>
-
+<p><img src="/figures/effnet2.png" alt="effnet2"></p>
 <p>To quote the authors (emphasis mine):</p>
-
 <blockquote>
 <p>Both MobileNet and ShuffleNet avoided replacing the first layer with the
 claim that this layer is already rather cheap to begin with. We respectfully
@@ -512,31 +476,24 @@ having optimised the rest of the layers in the network, the first layer
 becomes proportionally larger. In our experiments, <strong>replacing the first layer
 with our EffNet block saves ∼ 30% of the computations for the respective layer</strong>.</p>
 </blockquote>
-
 <h1 id="4-conclusion">4. Conclusion</h1>
-
 <p>MobileNet, ShuffleNet, and EffNet are CNN architectures conceived to optimize
 the number of operations. Each replaced the standard convolution with their
 own version.</p>
-
-<p><strong>MobileNet</strong> (<a href="https://github.com/arthurdouillard/keras-mobilenet" target="_blank">github</a>)
+<p><strong>MobileNet</strong> (<a href="https://github.com/arthurdouillard/keras-mobilenet">github</a>)
 depthwise separable convolution uses a depthwise
 convolution followed by a pointwise convolution. In a addition it introduces
 two hyperparameters: the width multiplier that thins the number of channels,
 and the resolution multiplier that reduces the feature maps spatial dimensions.</p>
-
-<p><strong>ShuffleNet</strong> (<a href="https://github.com/arthurdouillard/keras-shufflenet" target="_blank">github</a>)
+<p><strong>ShuffleNet</strong> (<a href="https://github.com/arthurdouillard/keras-shufflenet">github</a>)
 uses pointwise convolution in groups. In order to combine the features produced
 by each group, a shuffle layer is also introduced.</p>
-
-<p>Finally <strong>EffNet</strong> (<a href="https://github.com/arthurdouillard/keras-effnet" target="_blank">github</a>)
+<p>Finally <strong>EffNet</strong> (<a href="https://github.com/arthurdouillard/keras-effnet">github</a>)
 uses spatial separable convolution, which is simply a depthwise convolution
 splitted along spatial axis with a separable pooling between them.</p>
-
-<p><img src="/figures/efficient_cmp.png" alt="cmp" /></p>
-
-<p>This article was at first published in <a href="https://towardsdatascience.com/3-small-but-powerful-convolutional-networks-27ef86faa42d" target="_blank">Towards Data Science</a>
-and has also been <a href="https://yq.aliyun.com/articles/592935" target="_blank">translated in Chinese</a>!</p>
+<p><img src="/figures/efficient_cmp.png" alt="cmp"></p>
+<p>This article was at first published in <a href="https://towardsdatascience.com/3-small-but-powerful-convolutional-networks-27ef86faa42d">Towards Data Science</a>
+and has also been <a href="https://yq.aliyun.com/articles/592935">translated in Chinese</a>!</p>
 
     </div>
 
@@ -626,7 +583,7 @@ and has also been <a href="https://yq.aliyun.com/articles/592935" target="_blank
   
 
   <p class="powered-by">
-    &copy; 2018 &middot; 
+    © 2018 &middot; 
 
     Powered by the
     <a href="https://sourcethemes.com/academic/" target="_blank" rel="noopener">Academic theme</a> for

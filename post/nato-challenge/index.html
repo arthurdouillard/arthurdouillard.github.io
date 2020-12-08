@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="generator" content="Source Themes Academic 3.0.0">
-  <meta name="generator" content="Hugo 0.49.2" />
+  <meta name="generator" content="Hugo 0.79.0" />
   <meta name="author" content="Arthur Douillard">
 
   
@@ -389,62 +389,48 @@
   <div class="article-container">
 
     <div class="article-style" itemprop="articleBody">
-      
-
-<p><strong>Imagine you’re in a landlocked country, and an infection has spread. The
+      <p><strong>Imagine you’re in a landlocked country, and an infection has spread. The
 government has fallen, and rebels are roaming the country. If you’re the armed
 forces in this scenario, how do you make decisions in this environment? How can
 you fully understand the situation at hand?</strong></p>
-
-<p><img src="/figures/nato.png" alt="nato" /></p>
-
+<p><img src="/figures/nato.png" alt="nato"></p>
 <p>A few weeks ago, NATO organized an innovation challenge that posed these
 questions. We decided to take on the challenge with
 the goal of finding innovative solutions in the areas of data filtering/fusing,
 visualization, and predictive analytics.</p>
-
 <p>For those who don’t know, NATO is an intergovernmental military alliance between
 29 North American and European countries. It constitutes a system of collective
 defense whereby its independent member states agree to mutual defense in response
 to an attack by any external party.</p>
-
 <p>NATO did not provide any data for the challenge, so we had to find it ourselves.
 Ultimately, the solution we came up with used a variety of different techniques
 including computer vision on aerial imagery, natural language processing on
 press &amp; social media, geo data processing, and — of course — fancy graphs.</p>
-
 <p>In this post, we will focus on the most technical part: object detection for
 aerial imagery, walking through what kind of data we used, which architecture
 was employed, and how the solution works, and finally our results. If you’re
 interested in a higher-level look at the project, that’s over
-<a href="https://blog.dataiku.com/data-science-and-disease-outbreak-assistance-nato-act-innovation-challenge" target="_blank">here</a>.</p>
-
-<p>This challenge was done while I was an intern at <a href="https://www.dataiku.com/" target="_blank">Dataiku</a>.
+<a href="https://blog.dataiku.com/data-science-and-disease-outbreak-assistance-nato-act-innovation-challenge">here</a>.</p>
+<p>This challenge was done while I was an intern at <a href="https://www.dataiku.com/">Dataiku</a>.
 My team was composed of an commander, a salesman, and myself as the lead/sole scientist.</p>
-
 <h3 id="1-the-dataset">1. The dataset</h3>
-
 <p>For the object detection portion of the project, we used the
-<a href="https://gdo152.llnl.gov/cowc/" target="_blank">Cars Overhead With Context</a> (COWC) dataset,
+<a href="https://gdo152.llnl.gov/cowc/">Cars Overhead With Context</a> (COWC) dataset,
 which is provided by the Lawrence Livermore National Laboratory. It features
 aerial imagery taken in six distinct locations:</p>
-
 <ul>
 <li>Toronto, Canada</li>
 <li>Selwyn, New Zealand</li>
 <li>Potsdam and Vaihingen*, Germany</li>
 <li>Columbus (Ohio)* and Utah, USA</li>
 </ul>
-
 <p>* <em>We ultimately did not use the Columbus and Vaihingen data because the
 imagery was in grayscale.</em></p>
-
 <p>This dataset offers large imagery (up to 4 square kilometers) with good
 resolution (15cm per pixel) with the center localization of every car. As
-suggested in <a href="https://medium.com/the-downlinq/car-localization-and-counting-with-overhead-imagery-an-interactive-exploration-9d5a029a596b" target="_blank">this Medium post</a>, we assumed that cars have a mean size of
+suggested in <a href="https://medium.com/the-downlinq/car-localization-and-counting-with-overhead-imagery-an-interactive-exploration-9d5a029a596b">this Medium post</a>, we assumed that cars have a mean size of
 3 meters. We created boxes centered around each car center to achieve our
 ultimate goal of predicting box (i.e., car) locations in unseen images.</p>
-
 <figure>
 
 <img src="/figures/cowc_example1.png" alt="*Figure 1: An example image from the COWC dataset*" />
@@ -461,29 +447,22 @@ ultimate goal of predicting box (i.e., car) locations in unseen images.</p>
 </figcaption>
 
 </figure>
-
 <h3 id="2-the-architecture">2. The architecture</h3>
-
-<p>To detect cars in these large aerial images, we used the RetinaNet <a href="https://arxiv.org/abs/1708.02002" target="_blank">(Lin et al, 2017)</a> architecture. Published in 2017 by Facebook
+<p>To detect cars in these large aerial images, we used the RetinaNet <a href="https://arxiv.org/abs/1708.02002">(Lin et al, 2017)</a> architecture. Published in 2017 by Facebook
 FAIR, this paper won the Best Student Paper of ICCV 2017.</p>
-
 <p>Object detection architectures are split in two categories: single-stage and
 two-stage.</p>
-
 <p><strong>Two-stage architectures</strong> first categorize potential objects in two classes:
 foreground or background. Then all foreground’s potential objects are classified
 in more fine-grained classes: cats, dogs, cars, etc. This two-stage method is
 slow but also, and of course, produces the best accuracy. The most famous
-two-stage architecture is <a href="/post/faster-rcnn">Faster-RCNN</a> <a href="https://arxiv.org/abs/1506.01497" target="_blank">(Ren et al, 2015)</a>.</p>
-
+two-stage architecture is <a href="/post/faster-rcnn">Faster-RCNN</a> <a href="https://arxiv.org/abs/1506.01497">(Ren et al, 2015)</a>.</p>
 <p>On the other hand, <strong>single-stage architectures</strong> don’t have this pre-selection
 step of potential foreground objects. They are usually less accurate, but
 they are also faster. RetinaNet’s single-stage architecture is an exception:
 it reaches two-stage performance while having single-stage speed!</p>
-
 <p>On the figure 2 below, you can see a comparison of object detection
 architectures.</p>
-
 <figure>
 
 <img src="/figures/cmp_obj_detect.png" alt="*Figure 2: Performance of object detection algorithms*" />
@@ -500,10 +479,8 @@ architectures.</p>
 </figcaption>
 
 </figure>
-
 <p>RetinaNet is made of four components. We’ll try to describe how the data is
 transformed through every step.</p>
-
 <figure>
 
 <img src="/figures/retinanet.png" alt="*Figure 3: The RetinaNet architecture*" />
@@ -520,10 +497,8 @@ transformed through every step.</p>
 </figcaption>
 
 </figure>
-
-<h4 id="2-1-convolutional-network">2.1. Convolutional Network</h4>
-
-<p>First of all there is a <strong>ResNet-50</strong> <a href="https://arxiv.org/abs/1512.03385" target="_blank">(He et al., 2015)</a>.
+<h4 id="21-convolutional-network">2.1. Convolutional Network</h4>
+<p>First of all there is a <strong>ResNet-50</strong> <a href="https://arxiv.org/abs/1512.03385">(He et al., 2015)</a>.
 As every convolutional neural network (CNN),
 it takes an image as input and processes it through convolution kernels.
 Each kernel’s output is a feature map — the first feature maps capture high-level
@@ -533,18 +508,14 @@ are smaller, they also represent more fined-grained information (such as an eye,
 a dog ear, etc.). The input image has three channels (red, blue, green), but
 every subsequent feature map has dozens of channels! Each of them represents
 a different kind of feature that it captured.</p>
-
 <p>A common classifier takes the ResNet’s last feature maps (of shape <code>(7, 7, 2048)</code>),
 applies an average pooling on each channel (resulting in <code>(1, 1, 2048)</code>), and feeds
 it to a fully connected layer with a softmax.</p>
-
-<h4 id="2-2-feature-pyramid-network">2.2. Feature Pyramid Network</h4>
-
+<h4 id="22-feature-pyramid-network">2.2. Feature Pyramid Network</h4>
 <p>Instead of adding a classifier after ResNet, RetinaNet adds a
-<strong>Feature Pyramid Network</strong> (FPN) <a href="https://arxiv.org/abs/1612.03144" target="_blank">(Lin et al., 2016)</a>.
+<strong>Feature Pyramid Network</strong> (FPN) <a href="https://arxiv.org/abs/1612.03144">(Lin et al., 2016)</a>.
 By picking feature maps at different layers from the ResNet, it provides
 rich and multi-scale features.</p>
-
 <figure>
 
 <img src="/figures/fpn.png" alt="*Figure 4: The lateral connection between the backbone and the FPN*" />
@@ -561,29 +532,23 @@ rich and multi-scale features.</p>
 </figcaption>
 
 </figure>
-
 <p>However, ResNet’s first feature maps may be too crude to extract any useful
 information. As you can see in figure 4, the smaller and more precise feature
 maps are combined with the bigger feature maps. We first upsample the smaller
 ones and then sum it with the bigger ones. Several upsampling methods exist;
 here, the upsampling is done with the nearest neighbor method.</p>
-
 <p>Each level of the FPN encodes a different kind of information at a different
 scale. Thus, each of them should participate in the object detection task.
 The FPN takes as input the output of the third (512 channels), fourth
 (1024 channels), and fifth (2048 channels) blocks of ResNet. The third is half
 the size of the fourth, and the fourth is half of the fifth.</p>
-
 <p>We apply <a href="/post/3-small-but-powerful-cnn">pointwise convolution</a>
 (convolution with a 1x1 kernel) to uniformize the number of channels of each
 level to 256. Then we upsampled the smaller levels by a factor of two to match
 the dimension of the bigger levels.</p>
-
-<h4 id="2-3-anchors">2.3. Anchors</h4>
-
+<h4 id="23-anchors">2.3. Anchors</h4>
 <p>At each FPN level, <strong>anchors</strong> are moved around the FPN’s feature maps.
 An anchor is a rectangle with different sizes and ratios, like this:</p>
-
 <figure>
 
 <img src="/figures/anchors.svg" alt="*Figure 5: A sample of anchors of different sizes and ratios*" />
@@ -600,48 +565,35 @@ An anchor is a rectangle with different sizes and ratios, like this:</p>
 </figcaption>
 
 </figure>
-
 <p>These anchors are the base position of the potential objects. Five sizes and
 three ratios exist, thus there are 15 unique anchors. These anchors are also
 scaled according to the dimension of the FPN levels. These unique anchors are
 duplicated on all the possible positions in the feature maps. It results in $K$
 total anchors.</p>
-
 <p>Let’s put aside those anchors for the moment.</p>
-
-<h4 id="2-4-regression-classification">2.4. Regression &amp; classification</h4>
-
+<h4 id="24-regression--classification">2.4. Regression &amp; classification</h4>
 <p>Each FPN’s level is fed to two <strong>Fully Convolutional Networks</strong> (FCN), which are
 neural networks made only of convolutions and pooling. To fully exploit the fact
 that every FPN’s level holds different kind of information, the two FCNs are
 shared among all levels! Convolution layers are independent of the input size;
 only their kernel size matter. Thus while each FPN’s feature maps have different
 sizes, they can be all fed to the same FCNs.</p>
-
 <p>The first FCN is the <strong>regression branch</strong>. It predicts $K x 4$
 (<code>x1</code>, <code>y1</code>, <code>x2</code>, <code>y2</code> for each anchor) values. Those values are <strong>deltas</strong> that
 slightly modify the original anchors so they fit the potential objects
 better. All the potential objects will now have coordinates of the type:</p>
-
 <pre><code>(x1 + dx1, y1 + dy1, x2 + dx2, y2 + dy2)
-</code></pre>
-
-<p>With <code>x?</code> and <code>y?</code>, the fixed coordinates of the anchors, and <code>dx?</code>, <code>dy?</code>,
+</code></pre><p>With <code>x?</code> and <code>y?</code>, the fixed coordinates of the anchors, and <code>dx?</code>, <code>dy?</code>,
 the deltas produced by the regression branch.</p>
-
 <p>We now have the final coordinates for all objects — that is, all potential
 objects. They are not yet classified as background or car, truck, etc.</p>
-
 <p>The second FCN is the <strong>classification branch</strong>. It is a multi-label problem
 where the classifier predicts $K x N$ ($N$ being the number of classes) potential
 objects with sigmoid.</p>
-
-<h4 id="2-5-removing-duplicates">2.5. Removing duplicates</h4>
-
+<h4 id="25-removing-duplicates">2.5. Removing duplicates</h4>
 <p>At this point we have $K x 4$ coordinates and $K x N$ class scores. We now have
 a problem: it is common to detect, for the same class, several boxes for a
 same object!</p>
-
 <figure>
 
 <img src="/figures/nms_before.png" alt="*Figure 6: Several boxes have been detected for a single car.*" />
@@ -658,21 +610,16 @@ same object!</p>
 </figcaption>
 
 </figure>
-
 <p>Therefore, for each class (even if it’s not the highest scoring class)
-we apply a <strong>Non-max suppression</strong>. Tensorflow provides a <a href="https://www.tensorflow.org/api_docs/python/tf/image/non_max_suppression" target="_blank">function</a> to do it:</p>
-
+we apply a <strong>Non-max suppression</strong>. Tensorflow provides a <a href="https://www.tensorflow.org/api_docs/python/tf/image/non_max_suppression">function</a> to do it:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">tf<span style="color:#f92672">.</span>image<span style="color:#f92672">.</span>non_max_suppression(boxes, scores, max_output_size, iou_threshold)</code></pre></div>
-
 <p>The main gist of this method is that it will remove overlapping boxes
 (such as in Figure 6) to keep only one. It also using the <code>scores</code> to keep the
 most probable box.</p>
-
 <p>A general comment on the input parameter of the Tensorflow method above:
 The <code>max_output_size</code> corresponds to the maximum number of boxes we want at the
 end — let’s say 300. The <code>iou_threshold</code> is a float between 0 and 1, describing
 the maximum ratio of overlapping that is accepted.</p>
-
 <figure>
 
 <img src="/figures/nms_after.png" alt="*Figure 7: Figure 6 after the non-max-suppression has been applied.*" />
@@ -689,23 +636,18 @@ the maximum ratio of overlapping that is accepted.</p>
 </figcaption>
 
 </figure>
-
-<h4 id="2-6-keeping-the-most-probable-class">2.6. Keeping the most probable class</h4>
-
+<h4 id="26-keeping-the-most-probable-class">2.6. Keeping the most probable class</h4>
 <p>Duplicate boxes for the same class at the same place are now removed. For each
 of the remaining boxes, we are keeping only the highest-scoring class
 (car, truck, etc.). If none of the classes have a score above a fixed threshold
 (we used $0.4$), it’s considered to be part of the background.</p>
-
-<h4 id="2-7-the-focal-loss">2.7. The Focal Loss</h4>
-
+<h4 id="27-the-focal-loss">2.7. The Focal Loss</h4>
 <p>All this may sound complicated, but it’s nothing new — it’s not enough to
 have good accuracy. The real improvement from RetinaNet is its loss: the
 <strong>Focal Loss</strong>. Single-stage architectures that don’t have potential objects
 pre-selection are overwhelmed with the high frequency of background objects.
 The Focal Loss deals with it by according a low weight to well-classified
 examples, usually the background.</p>
-
 <figure>
 
 <img src="/figures/focal_loss1.png" alt="*Figure 8: We define Pt, the confidence to be right*" />
@@ -722,10 +664,8 @@ examples, usually the background.</p>
 </figcaption>
 
 </figure>
-
 <p>In Figure 8, we define $p_t$, the confidence to be right in a binary
 classification.</p>
-
 <figure>
 
 <img src="/figures/focal_loss2.png" alt="*Figure 9: The Focal Loss*" />
@@ -742,14 +682,12 @@ classification.</p>
 </figcaption>
 
 </figure>
-
 <p>In Figure 9, we module the cross entropy loss $-\log(p_t)$ by a factor
 $(1 — p_t)^\gamma$. Here, $\gamma$ is a modulating factor oscillating between
 0 and 5. The well-classified examples have a high $p_t$ , and thus a low factor.
 Therefore, the loss for well-classified examples is low and forces the
 model learn on harder examples. You can see in Figure 10 how much the loss is
 affected.</p>
-
 <figure>
 
 <img src="/figures/focal_loss3.png" alt="*Figure 10: The focal loss under various modulating factors*" />
@@ -766,13 +704,10 @@ affected.</p>
 </figcaption>
 
 </figure>
-
 <h3 id="3-implementation">3. Implementation</h3>
-
-<p>We used the excellent Keras <a href="https://github.com/fizyr/keras-retinanet" target="_blank">implementation</a>
+<p>We used the excellent Keras <a href="https://github.com/fizyr/keras-retinanet">implementation</a>
 of RetinaNet by Fizyr. We also wrote a new generator, taking Pandas’ DataFrames
 instead of CSV files.</p>
-
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">DfGenerator</span>(CSVGenerator):
     <span style="color:#66d9ef">def</span> __init__(self, df, class_mapping, cols, base_dir<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;&#39;</span>, <span style="color:#f92672">**</span>kwargs):
         <span style="color:#e6db74">&#34;&#34;&#34;Custom generator intended to work with in-memory Pandas&#39; dataframe.
@@ -819,20 +754,16 @@ instead of CSV files.</p>
             })
 
 <span style="color:#66d9ef">return</span> data</code></pre></div>
-
 <p>As you can see, <strong>images without annotations are kept in the training phase</strong>.
 They still help the training of our algorithm, as it forces the algorithm to
 not see cars everywhere (even where there aren’t any).</p>
-
-<p>We used a pre-trained RetinaNet on <a href="http://cocodataset.org/" target="_blank">COCO</a> and then
+<p>We used a pre-trained RetinaNet on <a href="http://cocodataset.org/">COCO</a> and then
 fine-tuned it for the COWC dataset. Only the two FCNs are retrained for this
 new task, while the ResNet backbone and the FPN are frozen.</p>
-
 <p>You can see in the code block below how to load the RetinaNet and compile it.
 Note that it is important to add <code>skip_mismatch=True</code> when loading the weights!
 The weights were created on COCO with 80 classes, but in our case we only have
 1 class, thus the number of anchors is not the same.</p>
-
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">load_retinanet</span>(weights, n_classes, freeze<span style="color:#f92672">=</span>True):
     modifier <span style="color:#f92672">=</span> freeze_model <span style="color:#66d9ef">if</span> freeze <span style="color:#66d9ef">else</span> None
 
@@ -863,25 +794,21 @@ The weights were created on COCO with 80 classes, but in our case we only have
         epochs<span style="color:#f92672">=</span>n_epochs,
         verbose<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>
 )</code></pre></div>
-
 <p>There is something we still need to deal with, which is the <strong>massive weight
 of each image</strong>. Images from the COWC dataset are up to 4 square kilometers,
 or 13k pixel wide and high. Those big images weigh 300mb. It is impracticable
 to feed such large images to our RetinaNet. Therefore, we cut the images in
 patches of 1000x1000 pixels (or 150x150 meters).</p>
-
 <p>However, it would be stupid to miss cars because they’d been cut between two
 patches. So to avoid this problem, we made a sliding window of 1000x1000 pixels
 that moves by steps of 800 pixels. That way, there is a 200-pixel-wide overlap
 between two adjacent patches.</p>
-
 <p>This leads to another problem: we may detect cars twice. To remove duplicates,
 we applied non-max suppression when binding together the small patches. Indeed,
 that means we have a non-max suppression twice: after the RetinaNet and when
 binding together the small patches. For the second non-max suppression, we used
-a Numpy version of the algorithm. You can either use a <a href="https://www.pyimagesearch.com/2015/02/16/faster-non-maximum-suppression-python/" target="_blank">fast &amp; vectorized version</a>
+a Numpy version of the algorithm. You can either use a <a href="https://www.pyimagesearch.com/2015/02/16/faster-non-maximum-suppression-python/">fast &amp; vectorized version</a>
 by PyImageSearch, or the following naive version:</p>
-
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">jaccard</span>(a, b):
     <span style="color:#e6db74">&#34;&#34;&#34;Compute the jaccard score between box a and box b.&#34;&#34;&#34;</span>
     side1 <span style="color:#f92672">=</span> max(<span style="color:#ae81ff">0</span>, min(a[<span style="color:#ae81ff">2</span>], b[<span style="color:#ae81ff">2</span>]) <span style="color:#f92672">-</span> max(a[<span style="color:#ae81ff">0</span>], b[<span style="color:#ae81ff">0</span>]))
@@ -912,18 +839,14 @@ by PyImageSearch, or the following naive version:</p>
     mask <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>ones(boxes<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">0</span>], np<span style="color:#f92672">.</span>bool)
     mask[np<span style="color:#f92672">.</span>array(list(indices_to_skip))] <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
     <span style="color:#66d9ef">return</span> boxes[mask]</code></pre></div>
-
 <p>When dealing with aerial imagery, we can use a lot of data augmentation.
 First of all, we can flip the horizontal axis and the vertical axis. We can also
 rotate the image by any angle. If the imagery’s scale is not uniform (the
 distance drone-to-ground may not be constant), it is also useful to randomly
 scale down and up the pictures.</p>
-
 <h3 id="4-results">4. Results</h3>
-
 <p>You can see on Figures 11 and 12 below how our RetinaNet behaves on this
 unseen image of Salt Lake City.</p>
-
 <figure>
 
 <img src="/figures/nato_result_large.png" alt="*Figure 11: 13,000 detected cars in a 4 square kilometer area of Salt Lake City*" />
@@ -940,7 +863,6 @@ unseen image of Salt Lake City.</p>
 </figcaption>
 
 </figure>
-
 <figure>
 
 <img src="/figures/nato_result_zoom.png" alt="*Figure 12: A zoom in of Figure 11*" />
@@ -957,18 +879,13 @@ unseen image of Salt Lake City.</p>
 </figcaption>
 
 </figure>
-
 <h3 id="5-are-we-good">5. Are we good?</h3>
-
 <p>How can we evaluate our performance?</p>
-
 <p>Accuracy is not enough; we need to see how many <strong>false positives</strong> and <strong>false
 negatives</strong> we get. If we detect cars everywhere, we’d have a lot of false
 positive, but if we miss most of the cars, that’s a lot of false negative.</p>
-
 <p>The <strong>recall</strong> measures the former while the <strong>precision</strong> measures the latter. Finally,
 the <strong>f1-score</strong> is a combination of those two metrics.</p>
-
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">compute_metrics</span>(true_pos, false_pos, false_neg):
     <span style="color:#e6db74">&#34;&#34;&#34;Compute the precision, recall, and f1 score.&#34;&#34;&#34;</span>
     precision <span style="color:#f92672">=</span> true_pos <span style="color:#f92672">/</span> (true_pos <span style="color:#f92672">+</span> false_pos)
@@ -979,13 +896,11 @@ the <strong>f1-score</strong> is a combination of those two metrics.</p>
 
     f1 <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">/</span> (<span style="color:#ae81ff">1</span> <span style="color:#f92672">/</span> precision <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span> <span style="color:#f92672">/</span> recall)
     <span style="color:#66d9ef">return</span> precision, recall, f1</code></pre></div>
-
 <p>However, we are not expecting our RetinaNet to detect the cars at the exact
 right pixels. Therefore, we are computing the <strong>Jaccard Index</strong> of the detected
 cars and the ground-truth cars, and if it is more than a chosen threshold, we
 consider that the car was rightfully detected. Note that the Jaccard index is
 often also (blandly) called <strong>Intersection-over-Union</strong> (IoU):</p>
-
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">jaccard</span>(box_a, box_b):
     <span style="color:#e6db74">&#34;&#34;&#34;box_X is a tuple of the shape (x1, y1, x2, y2).&#34;&#34;&#34;</span>
     side1 <span style="color:#f92672">=</span> max(<span style="color:#ae81ff">0</span>, min(a[<span style="color:#ae81ff">2</span>], b[<span style="color:#ae81ff">2</span>]) <span style="color:#f92672">-</span> max(a[<span style="color:#ae81ff">0</span>], b[<span style="color:#ae81ff">0</span>]))
@@ -1001,7 +916,6 @@ often also (blandly) called <strong>Intersection-over-Union</strong> (IoU):</p>
 
 <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">is_valid</span>(box_pred, box_true, threshold<span style="color:#f92672">=</span><span style="color:#ae81ff">0.3</span>):
     <span style="color:#66d9ef">return</span> jaccard(box_red, box_true) <span style="color:#f92672">&gt;=</span> threshold</code></pre></div>
-
 <figure>
 
 <img src="/figures/nato_result_color.png" alt="*Figure 13: True Positive (green), False Positive (yellow), and False Negative (red)*" />
@@ -1018,31 +932,22 @@ often also (blandly) called <strong>Intersection-over-Union</strong> (IoU):</p>
 </figcaption>
 
 </figure>
-
 <p>You can see a sample on Figure 13 where true positives, false positives, and
 false negatives have been plotted.</p>
-
 <p>Note that among the four false positives, two of them are garbage bins, one is
 a duplicate, and one is actually&hellip; a car! Indeed, as in every dataset, there
 may be some errors in the ground-truth annotations.</p>
-
 <p>On Figure 12, the f1-score is $0.91$. Usually in more urban environments the
 f1-score is around $0.95$. The main mistake our model makes is considering
 ventilation shafts on tops of buildings to be cars. To the model’s defense,
 without knowledge of building, it’s quite hard to see that.</p>
-
 <h3 id="6-conclusion">6. Conclusion</h3>
-
 <p>For the NATO challenge, we didn’t only use car detection from aerial imagery,
 but it was the main technical part of the project.</p>
-
 <p>Oh&hellip; Did we forget to tell you the challenge results?</p>
-
 <p>Three prizes were awarded: The NATO prize (with a trip to Norfolk), the
 France prize (with $25k), and the Germany prize (with a trip to Berlin).</p>
-
 <p>We won both the NATO and France prize!</p>
-
 <figure>
 
 <img src="/figures/nato_award.png" alt="*Figure 14: General Maurice, Supreme Commander Mercier, and our team*" />
@@ -1059,14 +964,11 @@ France prize (with $25k), and the Germany prize (with a trip to Berlin).</p>
 </figcaption>
 
 </figure>
-
-<p>Thanks to <a href="https://medium.com/@HichamEB?source=post_page" target="_blank">Hicham El Boukkouri</a> &amp;
-<a href="https://medium.com/@dsleo?source=post_page" target="_blank">Léo Dreyfus-Schmidt</a> for their review
+<p>Thanks to <a href="https://medium.com/@HichamEB?source=post_page">Hicham El Boukkouri</a> &amp;
+<a href="https://medium.com/@dsleo?source=post_page">Léo Dreyfus-Schmidt</a> for their review
 of this blog post.</p>
-
-<p>Note that this post was at first published on <a href="https://medium.com/data-from-the-trenches/object-detection-with-deep-learning-on-aerial-imagery-2465078db8a9" target="_blank">Dataiku&rsquo;s technical blog on Medium</a>.</p>
-
-<p><strong>Update</strong>: Our model has been improved recently by <a href="https://www.mdpi.com/1424-8220/20/22/6485" target="_blank">Stuparu et al. 2020</a> and published in Sensors!</p>
+<p>Note that this post was at first published on <a href="https://medium.com/data-from-the-trenches/object-detection-with-deep-learning-on-aerial-imagery-2465078db8a9">Dataiku&rsquo;s technical blog on Medium</a>.</p>
+<p><strong>Update</strong>: Our model has been improved recently by <a href="https://www.mdpi.com/1424-8220/20/22/6485">Stuparu et al. 2020</a> and published in Sensors!</p>
 
     </div>
 
@@ -1156,7 +1058,7 @@ of this blog post.</p>
   
 
   <p class="powered-by">
-    &copy; 2018 &middot; 
+    © 2018 &middot; 
 
     Powered by the
     <a href="https://sourcethemes.com/academic/" target="_blank" rel="noopener">Academic theme</a> for

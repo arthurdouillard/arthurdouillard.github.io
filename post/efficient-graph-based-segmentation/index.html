@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="generator" content="Source Themes Academic 3.0.0">
-  <meta name="generator" content="Hugo 0.49.2" />
+  <meta name="generator" content="Hugo 0.79.0" />
   <meta name="author" content="Arthur Douillard">
 
   
@@ -389,77 +389,54 @@
   <div class="article-container">
 
     <div class="article-style" itemprop="articleBody">
-      
-
-<p>This post contains the notes taken from reading of the following paper:</p>
-
+      <p>This post contains the notes taken from reading of the following paper:</p>
 <ul>
-<li><a href="https://cs.brown.edu/~pff/papers/seg-ijcv.pdf" target="_blank">Efficient Graph-Based Segmentation</a>
-by <a href="https://scholar.google.com/citations?user=k1hJzF0AAAAJ&amp;hl=en" target="_blank">Pedro Felzenszwalb</a>
-and <a href="https://scholar.google.com/citations?user=q16KVs0AAAAJ&amp;hl=en" target="_blank">Daniel Huttenlocher</a>.</li>
+<li><a href="https://cs.brown.edu/~pff/papers/seg-ijcv.pdf">Efficient Graph-Based Segmentation</a>
+by <a href="https://scholar.google.com/citations?user=k1hJzF0AAAAJ&amp;hl=en">Pedro Felzenszwalb</a>
+and <a href="https://scholar.google.com/citations?user=q16KVs0AAAAJ&amp;hl=en">Daniel Huttenlocher</a>.</li>
 </ul>
-
-<p>I was also helped by the slides of Stanford&rsquo;s <a href="http://vision.stanford.edu/teaching/cs231b_spring1415/slides/ranjay_pres.pdf" target="_blank">CS231b</a>.</p>
-
+<p>I was also helped by the slides of Stanford&rsquo;s <a href="http://vision.stanford.edu/teaching/cs231b_spring1415/slides/ranjay_pres.pdf">CS231b</a>.</p>
 <p><strong>Fast-RCNN</strong> was the state-of-the-art algorithm for object detection in 2015; its
 object proposal used <strong>Selective Search</strong> that itself used <strong>Efficient Graph-Based
 Segmentation</strong>.</p>
-
 <p>The reason this segmentation was still useful almost 10 years later is
 because the algorithm is fast, while remaining efficient.
 Its goal is to segment the objects in an image.</p>
-
 <h1 id="a-graph-based-algorithm">A Graph-Based Algorithm</h1>
-
 <p>The algorithm sees an image as a graph, and every pixels as vertices. Making of
 good segmentation for an image is thus equivalent to finding communities in a
 graph.</p>
-
 <p>What separates two communities of pixels is a boundary based on where similarity
 ends and dissimilarity begins. A segmentation <strong>too fine</strong> would result in
 communities separated without real boundary between them; in a segmentation
 <strong>too coarse</strong> communities should be splitted.</p>
-
-<p><img src="/figures/too_fine_coarse.svg" alt="Too fine vs too coarse segmentation" /></p>
-
+<p><img src="/figures/too_fine_coarse.svg" alt="Too fine vs too coarse segmentation"></p>
 <p>The authors of the papers argue that their algorithm always find the right
 segmentation, neither too fine nor too coarse.</p>
-
 <h1 id="predicate-of-a-boundary">Predicate Of A Boundary</h1>
-
 <p>The authors define their algorithm with a <strong>predicate</strong> $D$ that measures
 dissimilarity: That predicate takes two components and returns true if a boundary
 exists between them. A component is a segmentation of one or more
 vertice.</p>
-
 <p>With $C1$ and $C2$ two components:</p>
-
 <p>$$
 D(C1, C2) = \begin{cases}
-    true    &amp; \text{if } \text{Dif}(C1, C2) &gt; \text{MInt}(C1, C2)\newline
-    false   &amp; \text{otherwise}
+true    &amp; \text{if } \text{Dif}(C1, C2) &gt; \text{MInt}(C1, C2)\newline
+false   &amp; \text{otherwise}
 \end{cases}
 $$</p>
-
 <p>With:</p>
-
 <p>$$\text{Dif}(C1, C2) = \min_{\substack{v_i \in C1, v_j \in C2 \newline (v_i, v_j) \in E_{ij}}} w(v_i, v_j)$$</p>
-
 <p>The function $Dif(C1, C2)$ returns the minimum <strong>weight</strong> $w(.)$ edge that
 connects a vertice $v_i$ to $v_j$, each of them being in two different
 components. $E_{ij}$ is the set of edges connecting two vertices between components
 $C1$ and $C2$. This function $Dif$ measures the <strong>difference between two components</strong>.</p>
-
 <p>And with:</p>
-
 <p>$$\text{MInt}(C1, C2) = min (\text{Int}(C1) + \tau(C1), \text{Int}(C2) + \tau(C2))$$</p>
-
 <p>$$\tau(C) = \frac{k}{|C|}$$</p>
-
 <p>$$\text{Int}(C) = \max_{\substack{e \in \text{MST}(C, E)}} w(e)$$</p>
-
 <p>The function $\text{Int}(C)$ returns the edge with maximum weight that connects two
-vertices in the <a href="https://en.wikipedia.org/wiki/Minimum_spanning_tree" target="_blank">Minimum Spanning Tree</a>
+vertices in the <a href="https://en.wikipedia.org/wiki/Minimum_spanning_tree">Minimum Spanning Tree</a>
 (<em>MST</em>) of a same component. Looking only in the MST reduces considerably the
 number of possible edges to consider: A spanning tree has $n - 1$ edges instead
 of the $\frac{n(n - 1)}{2}$ total edges. Moreover, using the <em>minimum</em>
@@ -467,110 +444,78 @@ spanning tree and not just a common spanning tree allows to have segmentation
 with high-variability (but still progressive). This function $\text{Int}$ measures the
 <strong>internal difference of a component</strong>. A low $\text{Int}$ means that the component
 is homogeneous.</p>
-
 <p>The function $\tau(C)$ is a threshold function, that <strong>imposes a stronger
 evidence of boundary for small components</strong>. A large $k$ creates a segmentation
 with large components. The authors set $k = 300$ for wide images, and $k = 150$
 for detailed images.</p>
-
 <p>Finally $\text{MInt}(C1, C2)$ is the <strong>minimum of internal difference of two
 components</strong>.</p>
-
 <p>To summarize the predicate $D$: A large difference between two internally
 homogeneous components is evidence of a boundary between them. However, if the
 two components are internally heterogeneous it would be harder to prove
 a boundary. <strong>Therefore <em>details</em> are ignored in high-variability regions but
 are preserved in low-variability regions</strong>:</p>
-
-<p><img src="/figures/seg1.png" alt="Segmentation" /></p>
-
+<p><img src="/figures/seg1.png" alt="Segmentation"></p>
 <p><em>Notice how the highly-variable grass is correctly segmented while details like
 numbers on the back of the first player are preserved.</em></p>
-
 <h1 id="different-weight-functions">Different Weight Functions</h1>
-
 <p>The predicate uses a function $w(v_i, v_j)$ that measures the edge&rsquo;s weight
 between two vertices $v_i$ and $v_j$.</p>
-
 <p>The authors provide two alternatives for this weight function:</p>
-
 <h2 id="grid-graph-weight">Grid Graph Weight</h2>
-
 <p>To correctly use this weight function, the authors smooth the image using a
-<a href="https://en.wikipedia.org/wiki/Gaussian_filter" target="_blank">Gaussian filter</a> with $\sigma = 0.8$.</p>
-
+<a href="https://en.wikipedia.org/wiki/Gaussian_filter">Gaussian filter</a> with $\sigma = 0.8$.</p>
 <p>The Grid Graph Weight function is:</p>
-
 <p>$$w(v_j, v_i) = |I(p_i) - I(p_j)|$$</p>
-
 <p>It is the intensity&rsquo;s difference of the pixel neighbourhood. Indeed, the authors
 choose to not only use the pixel intensity, but also its 8 neighbours.</p>
-
-<p><img src="/figures/gridgraph_weight.svg" alt="The eight neighbours" />
+<p><img src="/figures/gridgraph_weight.svg" alt="The eight neighbours">
 <em>The intensity is the pixel-value of the central pixel $p_i$ and its 8
 neighbours.</em></p>
-
 <p>Using this weight function, they run the algorithm three times (for <em>red</em>, <em>blue</em>,
 and <em>green</em>) and choose the intersection of the three segmentations as result.</p>
-
 <h2 id="nearest-neighbours-graph-weight">Nearest Neighbours Graph Weight</h2>
-
-<p>The second weight function is based on the <a href="https://en.wikipedia.org/wiki/Nearest_neighbor_search#Approximate_nearest_neighbor" target="_blank">Approximate Nearest Neighbours Search</a>.</p>
-
+<p>The second weight function is based on the <a href="https://en.wikipedia.org/wiki/Nearest_neighbor_search#Approximate_nearest_neighbor">Approximate Nearest Neighbours Search</a>.</p>
 <p>It tries to find a good approximation of what could be the <em>closest</em> pixel. The
 features space is both the spatial coordinates and the pixel&rsquo;s RGB.</p>
-
 <p>Features Space = $(x, y, r, g, b)$.</p>
-
 <h1 id="the-actual-algorithm">The Actual Algorithm</h1>
-
 <p>Now that every sub-function of the algorithm has been defined, let&rsquo;s see the
 actual algorithm:</p>
-
 <p>For the Graph $G = (V, E)$ composed of the vertices $V$ and the edges $E$,
 and a segmentation $S = (C_1, C_2, &hellip;)$:</p>
-
-<ol>
+<ol start="0">
 <li>Sort E into $\pi$ = ($o_1$, &hellip;, $o_m$) by increasing edge weight order.</li>
 <li>Each vertice is alone in its own component. This is the initial segmentation
 $S^0$.</li>
 <li>For $q = 1, &hellip;, m$:
-
 <ul>
 <li>Current segmentation is $S^q$</li>
 <li>($v_i$, $v_j$) $= o_q$</li>
 <li>If $v_i$ and $v_j$ are not in the same component, <em>and</em> the predicate
 $D(C_i^{q - 1}, C_j^{q - 1})$ is false then:
-
 <ul>
 <li>Merge $C_i$ and $C_j$ into a single component.</li>
-</ul></li>
-</ul></li>
+</ul>
+</li>
+</ul>
+</li>
 <li>Return $S^m$.</li>
 </ol>
-
 <p>The superscript $q$ in $S^q$ or $C_x^Q$ simply denotes a version of
 the segmentation or of the component at the instant $q$ of the algorithm.</p>
-
 <p>Basically what the algorithm is doing is a bottom-up merging of at first
 individual pixels into larger and larger components. At the end, the segmentation
 $S^m$ will neither be too fine nor too coarse.</p>
-
-<p><img src="/figures/seg_algo.svg" alt="The seg algo" /></p>
-
+<p><img src="/figures/seg_algo.svg" alt="The seg algo"></p>
 <h1 id="conclusion">Conclusion</h1>
-
 <p>As you have seen, the algorithm of this paper is quite simple. What makes it
 efficient is the chosen metrics and the predicate defined beforehand.</p>
-
 <p>If you have read until the bottom of the page, congrats! To thank you, here is
 some demonstrations by the authors:</p>
-
-<p><img src="/figures/seg2.png" alt="Some demo" /></p>
-
-<p><img src="/figures/seg3.png" alt="Some demo" /></p>
-
-<p><img src="/figures/seg4.png" alt="Some demo" /></p>
+<p><img src="/figures/seg2.png" alt="Some demo"></p>
+<p><img src="/figures/seg3.png" alt="Some demo"></p>
+<p><img src="/figures/seg4.png" alt="Some demo"></p>
 
     </div>
 
@@ -660,7 +605,7 @@ some demonstrations by the authors:</p>
   
 
   <p class="powered-by">
-    &copy; 2018 &middot; 
+    © 2018 &middot; 
 
     Powered by the
     <a href="https://sourcethemes.com/academic/" target="_blank" rel="noopener">Academic theme</a> for
