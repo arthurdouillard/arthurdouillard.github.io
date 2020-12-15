@@ -50,6 +50,8 @@ quelques liens pour rappel, ou pour vous familiariser en avance:&lt;/p&gt;
 
 &lt;p&gt;Les cours seront ajoutés au fur et à mesure.&lt;/p&gt;
 
+&lt;p&gt;Calendrier où les cours de RDFIA sont indiqués: &lt;a href=&#34;https://sucal.aminedjeghri.tk/calendar/M2_IMA&#34; target=&#34;_blank&#34;&gt;calendrier&lt;/a&gt;&lt;/p&gt;
+
 &lt;h2 id=&#34;tp-1-2-sift-bag-of-words&#34;&gt;TP 1 - 2 : SIFT / Bag of words&lt;/h2&gt;
 
 &lt;p&gt;&lt;em&gt;7 &amp;amp; 14 &amp;amp; 21 Octobre 2020&lt;/em&gt;&lt;/p&gt;
@@ -121,8 +123,28 @@ avec plus de points, les questions bonus seront, comme précisé dès le départ
 &lt;ul&gt;
 &lt;li&gt;Énoncé: &lt;a href=&#34;/files/rdfia_resources/tp7.pdf&#34;&gt;TP7.pdf&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;Colab: &lt;a href=&#34;https://colab.research.google.com/drive/1_RnEZX1Fp1z6seRM2c3mpHHowvDeQ1ka?usp=sharing&#34; target=&#34;_blank&#34;&gt;colab&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;Zoom 16: &lt;a href=&#34;https://zoom.us/j/93572572065?pwd=STlWM0JwLzZJUTE5aXNldEhUeFUyZz09&#34; target=&#34;_blank&#34;&gt;zoom link&lt;/a&gt;, password &lt;strong&gt;rdfia&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;Zoom: &lt;a href=&#34;https://zoom.us/j/93572572065?pwd=STlWM0JwLzZJUTE5aXNldEhUeFUyZz09&#34; target=&#34;_blank&#34;&gt;zoom link&lt;/a&gt;, password &lt;strong&gt;rdfia&lt;/strong&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://alexrame.github.io/&#34; target=&#34;_blank&#34;&gt;Alex&lt;/a&gt;&amp;rsquo;s slides: &lt;a href=&#34;/files/rdfia_resources/alex_slides_tp7.pdf&#34;&gt;slides.pdf&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;tp-8-visualization&#34;&gt;TP 8: Visualization&lt;/h2&gt;
+
+&lt;p&gt;&lt;em&gt;16 Décembre 2020&lt;/em&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Énoncé: &lt;a href=&#34;/files/rdfia_resources/tp8.pdf&#34;&gt;TP8.pdf&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Colab: &lt;a href=&#34;https://colab.research.google.com/drive/1ubvt5LuJ0SNqsw3rnHRbYHL3Ycp3f3rk?usp=sharing&#34; target=&#34;_blank&#34;&gt;colab&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Zoom: &lt;a href=&#34;https://zoom.us/j/96910655374?pwd=eWt2ZWoydXEvZHJwSEFEZHY1U3c1QT09&#34; target=&#34;_blank&#34;&gt;zoom link&lt;/a&gt;, password &lt;strong&gt;rdfia&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;tp-9-10-gan&#34;&gt;TP 9-10: GAN&lt;/h2&gt;
+
+&lt;p&gt;&lt;em&gt;6 &amp;amp; 13 Janvier 2021&lt;/em&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Énoncé: &lt;a href=&#34;/files/rdfia_resources/tp9-10.pdf&#34;&gt;TP9-10.pdf&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Colab 1ère séance: &lt;a href=&#34;https://colab.research.google.com/drive/1judQvIGv965KBdmVRgrkHzGQICVzyA5s?usp=sharing&#34; target=&#34;_blank&#34;&gt;colab 1&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Colab 2ème séance: &lt;a href=&#34;https://colab.research.google.com/drive/1t1N3-EtzWu6mY_-5Hr7Bb0jTgMTC-S4I?usp=sharing&#34; target=&#34;_blank&#34;&gt;colab 2&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h4 id=&#34;mises-à-jour&#34;&gt;Mises à jour:&lt;/h4&gt;
