@@ -11,11 +11,20 @@
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
-      <title>PLOP: Learning without Forgetting for Continual Semantic Segmentation</title>
+      <title>Continuum: Simple Management of Complex Continual Learning Scenarios</title>
       <link>/publication/plop/</link>
       <pubDate>Sun, 01 Nov 2020 00:00:00 +0100</pubDate>
       
       <guid>/publication/plop/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>PLOP: Learning without Forgetting for Continual Semantic Segmentation</title>
+      <link>/publication/continuum/</link>
+      <pubDate>Sun, 01 Nov 2020 00:00:00 +0100</pubDate>
+      
+      <guid>/publication/continuum/</guid>
       <description></description>
     </item>
     
@@ -2474,23 +2483,6 @@ splitted along spatial axis with a separable pooling between them.&lt;/p&gt;
 
 &lt;p&gt;This article was at first published in &lt;a href=&#34;https://towardsdatascience.com/3-small-but-powerful-convolutional-networks-27ef86faa42d&#34; target=&#34;_blank&#34;&gt;Towards Data Science&lt;/a&gt;
 and has also been &lt;a href=&#34;https://yq.aliyun.com/articles/592935&#34; target=&#34;_blank&#34;&gt;translated in Chinese&lt;/a&gt;!&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Ball Lightning</title>
-      <link>/books/ball-lightning/</link>
-      <pubDate>Sun, 13 May 2018 00:00:00 +0200</pubDate>
-      
-      <guid>/books/ball-lightning/</guid>
-      <description>&lt;p&gt;Ball Lightning is an early book of Cixin Liu, the Three-Body Problem trilogy author.
-While not as good as its trilogy, the book was interesting to read because of its theme:
-Science.&lt;/p&gt;
-
-&lt;p&gt;The protagonists try to understand the ball lightning (&lt;a href=&#34;https://en.wikipedia.org/wiki/Ball_lightning&#34; target=&#34;_blank&#34;&gt;a real phenomenon&lt;/a&gt;).
-The whole book is structured around their experiments, their thoughts, and failures.
-The end of the book goes a bit far, and is clearly &amp;ldquo;science-fiction&amp;rdquo;, but still in a &amp;ldquo;hard&amp;rdquo;, plausible way.
-This won&amp;rsquo;t surprise those who read the trilogy.&lt;/p&gt;
 </description>
     </item>
     

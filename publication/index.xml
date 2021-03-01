@@ -13,11 +13,20 @@
     
     
     <item>
-      <title>PLOP: Learning without Forgetting for Continual Semantic Segmentation</title>
+      <title>Continuum: Simple Management of Complex Continual Learning Scenarios</title>
       <link>/publication/plop/</link>
       <pubDate>Sun, 01 Nov 2020 00:00:00 +0100</pubDate>
       
       <guid>/publication/plop/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>PLOP: Learning without Forgetting for Continual Semantic Segmentation</title>
+      <link>/publication/continuum/</link>
+      <pubDate>Sun, 01 Nov 2020 00:00:00 +0100</pubDate>
+      
+      <guid>/publication/continuum/</guid>
       <description></description>
     </item>
     
