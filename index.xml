@@ -238,7 +238,7 @@ the global reach of the self-attention.&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&#34;convit_efficiency.png&#34; alt=&#34;convit efficiency per sample&#34; /&gt;&lt;/p&gt;
 
-&lt;h2 id=&#34;cait-further-refinements-of-deit&#34;&gt;CaiT: Further Refinements of DeiT&lt;/h2&gt;
+&lt;h1 id=&#34;cait-further-refinements-of-deit&#34;&gt;CaiT: Further Refinements of DeiT&lt;/h1&gt;
 
 &lt;p&gt;The authors from DeiT later released CaiT (&lt;a href=&#34;https://arxiv.org/abs/2103.17239&#34; target=&#34;_blank&#34;&gt;Touvron et al.&lt;/a&gt;),
 a refinement of of DeiT.&lt;/p&gt;
