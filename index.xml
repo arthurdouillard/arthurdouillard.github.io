@@ -250,7 +250,7 @@ transformers, those parameters are either the MLP or the Multi-headed Self-Atten
 
 &lt;p&gt;Previous works (ReZero &lt;a href=&#34;https://arxiv.org/abs/2003.04887&#34; target=&#34;_blank&#34;&gt;Bachlenchner et al.&lt;/a&gt;,
 SkipInit &lt;a href=&#34;https://arxiv.org/abs/2002.10444&#34; target=&#34;_blank&#34;&gt;De et al.&lt;/a&gt;, and FixUp &lt;a href=&#34;https://arxiv.org/abs/1901.09321&#34; target=&#34;_blank&#34;&gt;Zhang et al.&lt;/a&gt;)
-wondered if we could train a ResNet without batch normalization. They all found, with minor
+wondered if we could train a very deep ResNet without batch normalization. They all found, with minor
 variations, that it was possible if main branch of a ResNet block was weighted by
 a learned scalar $\in \mathbb{R}$. LayerScale proposes more or less the same, but
 with one scale per dimension $\in \mathbb{R}^D$, initialized to a small $\epsilon$ value:&lt;/p&gt;
