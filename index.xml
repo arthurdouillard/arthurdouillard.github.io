@@ -261,7 +261,7 @@ with one scale per dimension $\in \mathbb{R}^D$, initialized to a small $\epsilo
 are partially the same): CaiT also introduces the class token after several blocks.
 The last few blocks with class tokens implement a &lt;strong&gt;Class Attention&lt;/strong&gt;.&lt;/p&gt;
 
-&lt;p&gt;Contrary to &lt;strong&gt;Self-Attention&lt;/strong&gt;, this Class Attention &lt;em&gt;freeze&lt;/em&gt; the patch tokens:&lt;/p&gt;
+&lt;p&gt;Contrary to &lt;strong&gt;Self-Attention&lt;/strong&gt;, this Class Attention &lt;em&gt;freezes&lt;/em&gt; the patch tokens:&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&#34;cait.png&#34; alt=&#34;cait architecture&#34; /&gt;&lt;/p&gt;
 
