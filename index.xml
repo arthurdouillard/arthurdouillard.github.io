@@ -11,6 +11,291 @@
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>Visual Transformers</title>
+      <link>/post/visual_transformers/</link>
+      <pubDate>Thu, 20 May 2021 00:00:00 +0200</pubDate>
+      
+      <guid>/post/visual_transformers/</guid>
+      <description>
+
+&lt;p&gt;There are currently two broads axis of research in Deep Learning: finding better
+architectures, or finding better losses to train them. Since AlexNet
+(&lt;a href=&#34;https://papers.nips.cc/paper/2012/file/c399862d3b9d6b76c8436e924a68c45b-Paper.pdf&#34; target=&#34;_blank&#34;&gt;Kriwhevsky et al.&lt;/a&gt;),
+Convolutional Neural Network is the main architecture used in Computer Vision.
+Through convolutions, with its efficient patch prior, many visual tasks were unlocked.&lt;/p&gt;
+
+&lt;p&gt;Many variations of AlexNet were invented, but if we were to name only one, it would be
+the ResNet (&lt;a href=&#34;https://arxiv.org/abs/1512.03385&#34; target=&#34;_blank&#34;&gt;He et al.&lt;/a&gt;) and its residual shortcut.&lt;/p&gt;
+
+&lt;p&gt;The main drawback of convolutions is their lack of global reach. A problem, relatively similar
+to the difficulty of Recurent Neural Networks (e.g. RNN, LSTM, GRU) to model long series of tokens.
+The NLP community saw its &amp;ldquo;imagenet&amp;rdquo; moment when the Transformer (&lt;a href=&#34;https://arxiv.org/abs/1706.03762&#34; target=&#34;_blank&#34;&gt;Vaswani et al.&lt;/a&gt;)
+architecture was unveiled. First designed with a somewhat complex encoder-decoder complex,
+it was later refined in a serie of identical blocks in the BERT (&lt;a href=&#34;https://arxiv.org/abs/1810.04805&#34; target=&#34;_blank&#34;&gt;Devlin et al.&lt;/a&gt;)
+model. Using transfer learning, most (all?) tasks of NLP were attacked via a BERT-like
+architecture.&lt;/p&gt;
+
+&lt;p&gt;Two questions:
+- What are exactly transformers?
+- And can (should?) we apply them to Computer Vision?&lt;/p&gt;
+
+&lt;h1 id=&#34;what-are-transformers&#34;&gt;What are Transformers?&lt;/h1&gt;
+
+&lt;p&gt;I can only recommend the excellent blog post of Jay Alammar &amp;ldquo;&lt;a href=&#34;https://jalammar.github.io/illustrated-transformer/&#34; target=&#34;_blank&#34;&gt;The Illustrated Transformer&lt;/a&gt;&amp;ldquo;
+which explain very well this architecture. But here is a quick recap, a transformer is basically that:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;transformer.png&#34; alt=&#34;transformer diagram&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;This whole &lt;strong&gt;block&lt;/strong&gt; is repeated multiple times, the output of the first goes into the second and so on.
+Contrary to CNNs or MLPs, the number of dimensions doesn&amp;rsquo;t change across blocks.&lt;/p&gt;
+
+&lt;p&gt;You can also notice &lt;strong&gt;residuals&lt;/strong&gt; twice. They are no different from the residuals in a ResNet, I guess that
+a trick so good it is found everywhere.&lt;/p&gt;
+
+&lt;h2 id=&#34;tokens&#34;&gt;Tokens&lt;/h2&gt;
+
+&lt;p&gt;The four red squares on the left are the &lt;strong&gt;tokens&lt;/strong&gt;. There are only four on the image, but actually
+you can use as much as you (and your RAM) want. A token is simply an piece of data that
+was embedded. For example in NLP, you could have one token per word of your sentence. From
+this word, we can use its &lt;strong&gt;word2vec&lt;/strong&gt; correspondence giving a latent vector. To also indicate
+where this word is located in the sentence, we add a positional encoding.&lt;/p&gt;
+
+&lt;p&gt;In this image, there is four tokens entering the block, and four tokens exiting the block. Therefore
+at the end of the N blocks, we will still have four tokens, but only one of them will
+be useful! The first token, here denoted by a &amp;lsquo;C&amp;rsquo;, is a special token called &lt;strong&gt;class token&lt;/strong&gt;. It doesn&amp;rsquo;t
+belong to any word of the sentence, but is actually a vector that is learned during gradient descent.
+Once this class token has gone through the N blocks, it will be finally given to
+a classifier that will predict whatever you training for.&lt;/p&gt;
+
+&lt;p&gt;Put it simply, this class token will goes through the network and will extract as
+much as possible useful information from the &lt;em&gt;word&lt;/em&gt; tokens, in order to produce
+a good representation for the classifier.&lt;/p&gt;
+
+&lt;h2 id=&#34;multi-headed-self-attention&#34;&gt;Multi-Headed Self-Attention&lt;/h2&gt;
+
+&lt;p&gt;This is the main part of the transformer. First, let&amp;rsquo;s concentrate on the &amp;lsquo;self-attention&amp;rsquo;.&lt;/p&gt;
+
+&lt;p&gt;We start with the matrix $X \in \mathbb{R}^{T \times d}$ containing all $T$ tokens. This matrix
+is going to be linearly transformed (aka matrix multiplcation, aka go to a fully-connected layer)
+three times in parallel:&lt;/p&gt;
+
+&lt;p&gt;$$Q = X W_q$$
+$$K = X W_k$$
+$$V = X W_v$$&lt;/p&gt;
+
+&lt;p&gt;They represent respectively the &lt;strong&gt;Q&lt;/strong&gt;uery, the &lt;strong&gt;K&lt;/strong&gt;ey, and the &lt;strong&gt;V&lt;/strong&gt;alue.&lt;/p&gt;
+
+&lt;p&gt;We compute the attention $A \in \mathbb{R}^{T \times T}$:&lt;/p&gt;
+
+&lt;p&gt;$$A = \operatorname{softmax}(\frac{Q K^T}{\sqrt{d}})$$&lt;/p&gt;
+
+&lt;p&gt;As the name imply, this attention will determine how much a token correspond to another.
+Notice that the shape of attention matrix $A$ is $T \times T$. For each row $i$, the value
+of the column $j$ is the strength of the relationship between the word $i$ and word $j$.&lt;/p&gt;
+
+&lt;p&gt;We then multiply this attention matrix with the value matrix to &lt;em&gt;select&lt;/em&gt; the data:&lt;/p&gt;
+
+&lt;p&gt;$$Z = A V$$&lt;/p&gt;
+
+&lt;p&gt;Where $Z \in \mathbb{R}^{T \times d}$ which has the original shape.&lt;/p&gt;
+
+&lt;p&gt;However, the attention matrix is quite restrictive: if the attention weight between
+tokens $i$ and $j$ is large, then because of the softmax it will be low between
+tokens $i$ and $u$. In order to model multiple kinds of attention, we use &lt;strong&gt;multiple heads&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s say we have two heads, then we do the previous self-attention but with different linear transformations:&lt;/p&gt;
+
+&lt;p&gt;$$Q_1 = X W_{q_1}\,\, \text{and}\,\, Q_2 = X W_{q_2}$$
+$$K_1 = X W_{k_1}\,\, \text{and}\,\, K_2 = X W_{k_2}$$
+$$V_1 = X W_{v_1}\,\, \text{and}\,\, V_2 = X W_{v_2}$$&lt;/p&gt;
+
+&lt;p&gt;$$Z_1 = \operatorname{softmax}(\frac{Q_1 K_1^T}{\sqrt{d}})\,\, \text{and}\,\, Z_2 = \operatorname{softmax}(\frac{Q_2 K_2^T}{\sqrt{d}})$$&lt;/p&gt;
+
+&lt;p&gt;But then, we have a matrix $Z&amp;rsquo; = [Z_1 Z_2] \in \mathbb{R}^{T \times 2d}$ that is
+bigger than expected. We simply use again a linear transformation $W_o \in \mathbb{R}^{2d \times d}$:&lt;/p&gt;
+
+&lt;p&gt;$$Z = Z&amp;rsquo; W_o$$&lt;/p&gt;
+
+&lt;p&gt;Here is a simplified version in PyTorch:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;SelfAttention&lt;/span&gt;(nn&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;Module):
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; __init__(self, dim, num_heads&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;8&lt;/span&gt;):
+        super()&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;__init__()
+        self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;Wq &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; nn&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;Linear(dim, num_heads &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; dim, bias&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;False)
+        self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;Wk &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; nn&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;Linear(dim, num_heads &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; dim, bias&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;False)
+        self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;Wv &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; nn&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;Linear(dim, num_heads &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; dim, bias&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;False)
+        self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;Wo &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; nn&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;Linear(num_heads &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; dim, dim)
+
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;forward&lt;/span&gt;(self, x):
+        &lt;span style=&#34;color:#75715e&#34;&gt;# X is of shape (Batch size, number of tokens, embedding dimension)&lt;/span&gt;
+        B, T, D &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; x&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;shape
+
+        q &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;Wq(x) &lt;span style=&#34;color:#75715e&#34;&gt;# (Batch size, number of tokens, number of heads * embedding dimension)&lt;/span&gt;
+        k &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;Wk(x)
+        v &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;Wv(x)
+
+        a &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; torch&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;softmax(torch&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;bmm(q, k&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;permute(&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;)) &lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt; math&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;sqrt(D), dim&lt;span style=&#34;color:#f92672&#34;&gt;=-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)
+        z &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; torch&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;bmm(a, v)
+
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;Wo(z)  &lt;span style=&#34;color:#75715e&#34;&gt;# (Batch size, number of tokens, embedding dimension)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;em&gt;Note that in practice, to make the dimension of $Q$/$K$/$V$ independent to the number
+of heads, we usually fix the maximum embedding size and split it equally between heads some space.&lt;/em&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;layer-norm-and-mlp&#34;&gt;Layer Norm and MLP&lt;/h2&gt;
+
+&lt;p&gt;The rest of the transformer is made of a MLP and two layers norms. The former
+is simply several fully-connected layers with non-linear activations. The latter
+are a form of &lt;a href=&#34;https://arthurdouillard.com/post/normalization/&#34; target=&#34;_blank&#34;&gt;normalization layer&lt;/a&gt;
+where the input is subtracted by its mean and divided by its standard deviation, and
+then is linearly transformed by a set of weights and bias.&lt;/p&gt;
+
+&lt;h1 id=&#34;vit-vision-transformer&#34;&gt;ViT: Vision Transformer&lt;/h1&gt;
+
+&lt;p&gt;Contrary to convolutions and recurrent networks, transformers don&amp;rsquo;t really have a prior
+of the input data. So we should easily apply it on images, right?&lt;/p&gt;
+
+&lt;p&gt;Some have incorporated part of the self-attention, as Axial-DeepLab (&lt;a href=&#34;https://arxiv.org/abs/2003.07853&#34; target=&#34;_blank&#34;&gt;Wang et al.&lt;/a&gt;).
+But none to the best of my knowledge, used the whole transformer architecture on images before
+ViT (&lt;a href=&#34;https://arxiv.org/abs/2010.11929&#34; target=&#34;_blank&#34;&gt;Dosovitskiy et al.&lt;/a&gt;).
+Why? Well, in the case of images the number of tokens is huge. A $224 \times 224$ image
+has $50,176$ pixels/tokens. This is too big to fit on a GPU.&lt;/p&gt;
+
+&lt;p&gt;The key idea, maybe inspired by BagNet (&lt;a href=&#34;https://arxiv.org/abs/1904.00760&#34; target=&#34;_blank&#34;&gt;Brendel et al.&lt;/a&gt;),
+is to consider a group of pixels as a patch. Instead of thousands of tokens, the image is
+split into $14 \times 14 = 196$ tokens/patches, each made of $16 \times 16$ pixels.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;vit.png&#34; alt=&#34;vit architecture&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The transformer architecture is exactly the same as one you could find in NLP. The
+only difference is how to embed the tokens. In this case, it&amp;rsquo;s simply a convolution applied
+patch per patch (called &amp;lsquo;linear projection&amp;rsquo; in the image). In addition of positional encoding
+based on the position of the patch in the image is used.&lt;/p&gt;
+
+&lt;p&gt;The performances of ViT are very impressive. But a major drawback is that this architecture
+has almost no prior for images. Therefore, while it can potentially reach better results given
+infinitely large amount of data, it is very hard to train it with few images. The authors of ViT,
+all from Google, use JFT-300M a large private dataset to pretrain their model on it before
+transferring the knowledge to ImageNet-{21/1k}.&lt;/p&gt;
+
+&lt;h1 id=&#34;deit-a-more-efficient-training-of-vision-transformer&#34;&gt;DeiT: A more efficient training of Vision Transformer&lt;/h1&gt;
+
+&lt;p&gt;DeiT (&lt;a href=&#34;https://arxiv.org/abs/2012.12877&#34; target=&#34;_blank&#34;&gt;Touvron et al.&lt;/a&gt;) is an extention of ViT with two
+main contributions: a more efficient training and a transformer-based knowledge distillation.&lt;/p&gt;
+
+&lt;p&gt;Through tons of regularization, the authors manage to train a DeiT from scratch on ImageNet with
+good performance. Two crucial regularizations are random erasing of the image pixels,
+and stochastic depth (&lt;a href=&#34;https://arxiv.org/abs/1603.09382&#34; target=&#34;_blank&#34;&gt;Huang et al.&lt;/a&gt;). The latter is
+a kind of dropout, but where a whole transformer block is dropped with only the residual used.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;deit_reg.png&#34; alt=&#34;deit regularization ablation, table 8 of paper&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The second contribution of DeiT is to propose to improve the training of the transformer
+by using a teacher model. The teacher/student strategy is often seen where a large trained
+teacher model produces novel targets to the student through knowledge distillation
+(&lt;a href=&#34;https://arxiv.org/abs/1503.02531&#34; target=&#34;_blank&#34;&gt;Hinton et al.&lt;/a&gt;). Basically, the student is train
+to predict the labels of the image but also to mimick the probabilities of the teacher.&lt;/p&gt;
+
+&lt;p&gt;The first interesting conclusion is that it&amp;rsquo;s better to use a large CNN
+(a RegNet (&lt;a href=&#34;https://arxiv.org/abs/2003.13678&#34; target=&#34;_blank&#34;&gt;Radosavovic et al.&lt;/a&gt;)) as a teacher than
+a large vision transformer. Intuitively, we may hypothesize that is because a convolution-based
+teacher has learned different knowledge and thus may diversify better the predictions of the student.&lt;/p&gt;
+
+&lt;p&gt;The second conclusion is that using the output of the student classifier is not the best way
+to do knowledge distillation. Recall that the transformer&amp;rsquo;s classifier input is the class token that
+has gone through all blocks. DeiT instead add a new token, called a &lt;strong&gt;distillation token&lt;/strong&gt;,
+and with it a new classifier. This classifier will be solely devoted to the task of distillation
+with the teacher, while the original classifier with class token will resume the image classification task.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;deit.png&#34; alt=&#34;deit architecture&#34; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;convit-make-prior-great-again&#34;&gt;ConViT: Make Prior Great Again&lt;/h1&gt;
+
+&lt;p&gt;ViT needs a 300M dataset to train. DeiT &lt;em&gt;only&lt;/em&gt; needs a 1.2M dataset (ImageNet) to train.
+But can&amp;rsquo;t we learn with a few thousand of images like a good old resNet can?&lt;/p&gt;
+
+&lt;p&gt;You need a prior to learn with few data point.&lt;/p&gt;
+
+&lt;p&gt;This is the message of ConViT (&lt;a href=&#34;https://arxiv.org/abs/2103.10697&#34; target=&#34;_blank&#34;&gt;D&amp;rsquo;Ascoli et al.&lt;/a&gt;). They
+modify the usual Self-Attention (SA) into a &lt;strong&gt;Gated Positional Self-Attention&lt;/strong&gt; (GPSA):&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;convit.png&#34; alt=&#34;convit architecture&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;As shown on the diagram, only the attention part is modified, while the multiplication
+with the value matrix is left unchanged. This attention is now a linear combination
+between the self-attention and a positional prior. A &lt;strong&gt;learned gate&lt;/strong&gt; (aka a learned vector followed
+by a sigmoid) balances between both branch, although its initialization enforces at first
+a strong emphasis on the positional prior. This positional prior, initialized the
+right way, can mimick a convolutional kernel.&lt;/p&gt;
+
+&lt;p&gt;A locality strength factor $\alpha$ can modulate how big this kernel should be:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;convit_locality.png&#34; alt=&#34;convit locality factor&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The authors find that at the training end, the early transformer blocks (2 - 7)
+mainly use the positional prior, while the first and final blocks (8 - 10) use
+the global reach of the self-attention.&lt;/p&gt;
+
+&lt;p&gt;With few data, the positional prior has an important role as the following graph shows:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;convit_efficiency.png&#34; alt=&#34;convit efficiency per sample&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;cait-further-refinements-of-deit&#34;&gt;CaiT: Further Refinements of DeiT&lt;/h2&gt;
+
+&lt;p&gt;The authors from DeiT later released CaiT (&lt;a href=&#34;https://arxiv.org/abs/2103.17239&#34; target=&#34;_blank&#34;&gt;Touvron et al.&lt;/a&gt;),
+a refinement of of DeiT.&lt;/p&gt;
+
+&lt;p&gt;The first contribution is LayerScale, a ponderation scheme for the main branch in
+the residual architecture. As for ResNet, each block has two branches: an identity
+branch that often does nothing, and the branch with learnable parameters. In the case of
+transformers, those parameters are either the MLP or the Multi-headed Self-Attention.&lt;/p&gt;
+
+&lt;p&gt;Previous works (ReZero &lt;a href=&#34;https://arxiv.org/abs/2003.04887&#34; target=&#34;_blank&#34;&gt;Bachlenchner et al.&lt;/a&gt;,
+SkipInit &lt;a href=&#34;https://arxiv.org/abs/2002.10444&#34; target=&#34;_blank&#34;&gt;De et al.&lt;/a&gt;, and FixUp &lt;a href=&#34;https://arxiv.org/abs/1901.09321&#34; target=&#34;_blank&#34;&gt;Zhang et al.&lt;/a&gt;)
+wondered if we could train a ResNet without batch normalization. They all found, with minor
+variations, that it was possible if main branch of a ResNet block was weighted by
+a learned scalar $\in \mathbb{R}$. LayerScale proposes more or less the same, but
+with one scale per dimension $\in \mathbb{R}^D$, initialized to a small $\epsilon$ value:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;layer_scale.png&#34; alt=&#34;layer scale&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The second contribution of CaiT, is very similar to a contribution of ConViT (authors
+are partially the same): CaiT also introduces the class token after several blocks.
+The last few blocks with class tokens implement a &lt;strong&gt;Class Attention&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;Contrary to &lt;strong&gt;Self-Attention&lt;/strong&gt;, this Class Attention &lt;em&gt;freeze&lt;/em&gt; the patch tokens:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;cait.png&#34; alt=&#34;cait architecture&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Put it more simply, the patch tokens aren&amp;rsquo;t updated anymore after each block of Class Attention.
+Moreover, the attention is not done between all patches tokens $X_p \in \mathbb{R}^{(T-1) \times D}$ anymore (at a quadratic cost $T^2$),
+but only with the class token $X_c \in \mathbb{R}^{1 \times D}$ (at a linear cost $T$):&lt;/p&gt;
+
+&lt;p&gt;$$Q = X_c W_q$$&lt;/p&gt;
+
+&lt;p&gt;$$K = [X_c\, X_p] W_k$$&lt;/p&gt;
+
+&lt;p&gt;$$V = [X_c X_p] W_v$$&lt;/p&gt;
+
+&lt;p&gt;The computational speed up is easily seen as the attention product is not anymore quadratic
+w.r.t the number of patches. Furthermore, it gives a nice performance gain, as the Self-Attention
+layers are now allowed to focus on extracting class-agnostic features.&lt;/p&gt;
+
+&lt;h1 id=&#34;the-future-of-vision-transformers&#34;&gt;The Future of Vision Transformers&lt;/h1&gt;
+
+&lt;p&gt;ViT first proves that it was possible to train transformers on visual tasks. DeiT then showed
+that with carefully designed regularizations, the training could be done on relatively
+small scale datasets. This contribution, and the fantastic &lt;a href=&#34;https://github.com/rwightman/pytorch-image-models&#34; target=&#34;_blank&#34;&gt;Timm library&lt;/a&gt;,
+opened a gold rush on transformers.&lt;/p&gt;
+
+&lt;p&gt;I won&amp;rsquo;t enumerate all variants here. Some may be only a sligth tweak and will be forgotten,
+others may prove to be a stepping stone in the transformers world. Only time will tell.&lt;/p&gt;
+
+&lt;p&gt;But, that&amp;rsquo;s assuming that transformers is indeed the right solution. Attention is all we need?
+Recent research on MLPs (yes, you read correctly) indicates that maybe attention is
+only a special case of a more general framework. I&amp;rsquo;ll cover it in a later post!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
       <title>Continuum: Simple Management of Complex Continual Learning Scenarios</title>
       <link>/publication/continuum/</link>
       <pubDate>Sun, 01 Nov 2020 00:00:00 +0100</pubDate>
@@ -2326,163 +2611,6 @@ and success (spoiler: there is a happy ending.)&lt;/p&gt;
 
 &lt;p&gt;If I find motivation, and time, I would like to write such memoir about my own
 thesis.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>3 Small but Powerful Convolutional Neural Networks</title>
-      <link>/post/3-small-but-powerful-cnn/</link>
-      <pubDate>Sun, 13 May 2018 00:00:00 +0200</pubDate>
-      
-      <guid>/post/3-small-but-powerful-cnn/</guid>
-      <description>
-
-&lt;p&gt;Most CNN architectures have been developed to attain the best accuracy on
-ImageNet. Computing power is not limited for this competition, why bother?&lt;/p&gt;
-
-&lt;p&gt;However you may want to run your model on an old laptop, maybe without GPU, or
-even on your mobile phone. Let’s see three CNN architectures that are efficient
-while sacrificing little accuracy performance.&lt;/p&gt;
-
-&lt;h3 id=&#34;1-mobilenet&#34;&gt;1. MobileNet&lt;/h3&gt;
-
-&lt;p&gt;Arxiv link: &lt;a href=&#34;https://arxiv.org/abs/1704.04861&#34; target=&#34;_blank&#34;&gt;(Howard et al, 2017)&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;MobileNet uses depthwise separable convolutions. This convolution block was at
-first introduced by Xception &lt;a href=&#34;https://arxiv.org/abs/1610.02357&#34; target=&#34;_blank&#34;&gt;(Chollet, 2016)&lt;/a&gt;.
-A depthwise separable convolution is made of two operations: a depthwise
-convolution and a pointwise convolution.&lt;/p&gt;
-
-&lt;p&gt;A &lt;strong&gt;standard convolution&lt;/strong&gt; works on the spatial dimension of the feature maps and on
-the input and output channels. It has a computational cost of
-$D_f^2 * M * N * D_k^2$; with $D_f$ the dimension of the input feature maps,
-$M$ and $N$ the number of input and output channels, and $D_k$ the kernel size.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;/figures/convolution.png&#34; alt=&#34;convolution&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;A &lt;strong&gt;depthwise convolution&lt;/strong&gt; maps a single convolution on each input channel separately.
-Therefore its number of output channels is the same of the number of input channels.
-Its computational cost is $D_f^2 * M * D_k^2$.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;/figures/depthwise_conv.png&#34; alt=&#34;depthwise conv&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;The last operation is a &lt;strong&gt;pointwise convolution&lt;/strong&gt;. It is a convolution with a
-kernel size of 1x1 that simply combines the features created by the depthwise
-convolution. Its computational cost is $M * N * D_f^2$.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;/figures/pointwise_conv.png&#34; alt=&#34;pointwise conv&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;The computational cost of the &lt;strong&gt;depthwise separable convolution&lt;/strong&gt; is the sum of
-the costs of the depthwise and pointwise operations. Compared to a standard
-convolution it offers a computation reduction of $\frac{1}{N} + \frac{1}{D_k^2}$.
-With a kernel size of 3x3, it results in 8 times less operations!&lt;/p&gt;
-
-&lt;p&gt;MobileNet also provides two parameters allowing to reduce further more its
-number of operations:&lt;/p&gt;
-
-&lt;p&gt;The &lt;strong&gt;width multiplier&lt;/strong&gt; (between 0 and 1) thins the number of channels. At
-each layer instead of producing $N$ channels, it will produce $\alpha * N$.
-This multiplier can be used to handle a trade-off between the desired latency
-and the performance.&lt;/p&gt;
-
-&lt;p&gt;Another multiplier exists: the &lt;strong&gt;resolution multiplier&lt;/strong&gt;. It scales the input
-size of the image, between 224 to 128. Because the MobileNet uses a global
-average pooling instead of a flatten, you can train your MobileNet on
-224x224 images, then use it on 128x128 images! Indeed with a global pooling,
-the fully connected classifier at the end of the network depends only the number
-of channels not the feature maps spatial dimension.&lt;/p&gt;
-
-&lt;h3 id=&#34;2-shufflenet&#34;&gt;2. ShuffleNet&lt;/h3&gt;
-
-&lt;p&gt;Arxiv link: &lt;a href=&#34;https://arxiv.org/abs/1707.01083&#34; target=&#34;_blank&#34;&gt;(Zhang et al, 2017)&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;ShuffleNet introduces the three variants of the Shuffle unit. It is composed
-of &lt;strong&gt;group convolutions&lt;/strong&gt; and &lt;strong&gt;channel shuffles&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;/figures/shufflenet.png&#34; alt=&#34;shufflenet&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;A &lt;strong&gt;group convolution&lt;/strong&gt; is simply several convolutions, each taking a portion
-of the input channels. In the following image you can see a group convolution,
-with 3 groups, each taking one of the 3 input channels.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;/figures/group_conv.png&#34; alt=&#34;group conv&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;It was at first introduced by AlexNet &lt;a href=&#34;https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks&#34; target=&#34;_blank&#34;&gt;(Krizhevsky et al, 2012)&lt;/a&gt;
-to split a network into two GPUs.&lt;/p&gt;
-
-&lt;p&gt;It greatly diminishes the computational cost. Let us take a practicable example:
-If there are 4 input channels, and 8 output channels and we choose to have
-two groups, each taking 2 input channels and 4 output channels.&lt;/p&gt;
-
-&lt;p&gt;With one group the computational cost would be $D_f^2 * D_k^2 * 4 * 8$, while with
-two groups the cost is $(D_f^2 * D_k^2 * 2 * 4) * 2$ or $D_f^2 * D_k^2 * 4 * 4$.
-Half as many operations! The authors reached best results with 8 groups, thus the reduction is even more important.&lt;/p&gt;
-
-&lt;p&gt;Finally the authors add a channel shuffle that randomly mix the output channels
-of the group convolution. The trick to produce this randomness can be seen
-&lt;a href=&#34;https://github.com/arthurdouillard/keras-shufflenet/blob/master/shufflenet.py#L37-L48&#34; target=&#34;_blank&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h3 id=&#34;3-effnet&#34;&gt;3. EffNet&lt;/h3&gt;
-
-&lt;p&gt;Arxiv link: &lt;a href=&#34;https://arxiv.org/abs/1801.06434&#34; target=&#34;_blank&#34;&gt;(Freeman et al, 2018)&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;EffNet uses &lt;strong&gt;spatial separable convolutions&lt;/strong&gt;. It is similar to
-MobileNet&amp;rsquo;s depthwise separable convolutions.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;/figures/effnet.png&#34; alt=&#34;effnet&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;The separable depthwise convolution is the rectangle colored in blue for
-EffNet block. It is made of depthwise convolution with a line kernel (1x3),
-followed by a separable pooling, and finished by a depthwise convolution with a
-column kernel (3x1)&lt;/p&gt;
-
-&lt;p&gt;Let&amp;rsquo;s see the computational gain. A normal depthwise with a 3x3 kernel would have
-a cost of $3^2 * D_f^2 * M$. The first depthwise with a 1x3 kernel has a
-computational cost of $3 * D_f^2 * M$. The separable pooling halves the feature
-maps height and has a marginal cost. The second depthwise, with a 3x1 kernel,
-has then a cost of $3 * \frac{D_f^2}{2} * M$. Thus the whole cost is
-$1.5 * (3 * D_f^2 * M)$. Half less than the normal depthwise!&lt;/p&gt;
-
-&lt;p&gt;Another optimization done by EffNet over MobileNet and ShuffleNet, is the
-absence of &amp;ldquo;normal convolution&amp;rdquo; at the beginning:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;/figures/effnet2.png&#34; alt=&#34;effnet2&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;To quote the authors (emphasis mine):&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Both MobileNet and ShuffleNet avoided replacing the first layer with the
-claim that this layer is already rather cheap to begin with. We respectfully
-disagree with this claim and believe that every optimisation counts. After
-having optimised the rest of the layers in the network, the first layer
-becomes proportionally larger. In our experiments, &lt;strong&gt;replacing the first layer
-with our EffNet block saves ∼ 30% of the computations for the respective layer&lt;/strong&gt;.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;h1 id=&#34;4-conclusion&#34;&gt;4. Conclusion&lt;/h1&gt;
-
-&lt;p&gt;MobileNet, ShuffleNet, and EffNet are CNN architectures conceived to optimize
-the number of operations. Each replaced the standard convolution with their
-own version.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;MobileNet&lt;/strong&gt; (&lt;a href=&#34;https://github.com/arthurdouillard/keras-mobilenet&#34; target=&#34;_blank&#34;&gt;github&lt;/a&gt;)
-depthwise separable convolution uses a depthwise
-convolution followed by a pointwise convolution. In a addition it introduces
-two hyperparameters: the width multiplier that thins the number of channels,
-and the resolution multiplier that reduces the feature maps spatial dimensions.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;ShuffleNet&lt;/strong&gt; (&lt;a href=&#34;https://github.com/arthurdouillard/keras-shufflenet&#34; target=&#34;_blank&#34;&gt;github&lt;/a&gt;)
-uses pointwise convolution in groups. In order to combine the features produced
-by each group, a shuffle layer is also introduced.&lt;/p&gt;
-
-&lt;p&gt;Finally &lt;strong&gt;EffNet&lt;/strong&gt; (&lt;a href=&#34;https://github.com/arthurdouillard/keras-effnet&#34; target=&#34;_blank&#34;&gt;github&lt;/a&gt;)
-uses spatial separable convolution, which is simply a depthwise convolution
-splitted along spatial axis with a separable pooling between them.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;/figures/efficient_cmp.png&#34; alt=&#34;cmp&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;This article was at first published in &lt;a href=&#34;https://towardsdatascience.com/3-small-but-powerful-convolutional-networks-27ef86faa42d&#34; target=&#34;_blank&#34;&gt;Towards Data Science&lt;/a&gt;
-and has also been &lt;a href=&#34;https://yq.aliyun.com/articles/592935&#34; target=&#34;_blank&#34;&gt;translated in Chinese&lt;/a&gt;!&lt;/p&gt;
 </description>
     </item>
     

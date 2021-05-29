@@ -13,6 +13,16 @@
     
     
     <item>
+      <title>Visual Transformers</title>
+      <link>/post/visual_transformers/</link>
+      <pubDate>Thu, 20 May 2021 00:00:00 +0200</pubDate>
+      
+      <guid>/post/visual_transformers/</guid>
+      <description>There are currently two broads axis of research in Deep Learning: finding better architectures, or finding better losses to train them. Since AlexNet (Kriwhevsky et al.), Convolutional Neural Network is the main architecture used in Computer Vision. Through convolutions, with its efficient patch prior, many visual tasks were unlocked.
+Many variations of AlexNet were invented, but if we were to name only one, it would be the ResNet (He et al.</description>
+    </item>
+    
+    <item>
       <title>Review of Continual Learning at CVPR&#39;20</title>
       <link>/post/cvpr20-continual/</link>
       <pubDate>Sun, 21 Jun 2020 00:00:00 +0200</pubDate>
