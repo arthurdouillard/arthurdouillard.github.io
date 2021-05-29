@@ -286,10 +286,10 @@ that with carefully designed regularizations, the training could be done on rela
 small scale datasets. This contribution, and the fantastic &lt;a href=&#34;https://github.com/rwightman/pytorch-image-models&#34; target=&#34;_blank&#34;&gt;Timm library&lt;/a&gt;,
 opened a gold rush on transformers.&lt;/p&gt;
 
-&lt;p&gt;I won&amp;rsquo;t enumerate all variants here. Some may be only a sligth tweak and will be forgotten,
+&lt;p&gt;I won&amp;rsquo;t enumerate all variants here. Some may be only a slight tweak and will be forgotten,
 others may prove to be a stepping stone in the transformers world. Only time will tell.&lt;/p&gt;
 
-&lt;p&gt;But, that&amp;rsquo;s assuming that transformers is indeed the right solution. Attention is all we need?
+&lt;p&gt;But, that&amp;rsquo;s assuming that transformer is indeed the right solution. &lt;strong&gt;Attention is all we need?&lt;/strong&gt;
 Recent research on MLPs (yes, you read correctly) indicates that maybe attention is
 only a special case of a more general framework. I&amp;rsquo;ll cover it in a later post!&lt;/p&gt;
 </description>
