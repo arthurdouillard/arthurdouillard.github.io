@@ -30,7 +30,7 @@ the ResNet (&lt;a href=&#34;https://arxiv.org/abs/1512.03385&#34; target=&#34;_b
 &lt;p&gt;The main drawback of convolutions is their lack of global reach. A problem, relatively similar
 to the difficulty of Recurent Neural Networks (e.g. RNN, LSTM, GRU) to model long series of tokens.
 The NLP community saw its &amp;ldquo;imagenet&amp;rdquo; moment when the Transformer (&lt;a href=&#34;https://arxiv.org/abs/1706.03762&#34; target=&#34;_blank&#34;&gt;Vaswani et al.&lt;/a&gt;)
-architecture was unveiled. First designed with a somewhat complex encoder-decoder complex,
+architecture was unveiled. First designed with a somewhat complex encoder-decoder,
 it was later refined in a serie of identical blocks in the BERT (&lt;a href=&#34;https://arxiv.org/abs/1810.04805&#34; target=&#34;_blank&#34;&gt;Devlin et al.&lt;/a&gt;)
 model. Using transfer learning, most (all?) tasks of NLP were attacked via a BERT-like
 architecture.&lt;/p&gt;
@@ -42,7 +42,7 @@ architecture.&lt;/p&gt;
 &lt;h1 id=&#34;what-are-transformers&#34;&gt;What are Transformers?&lt;/h1&gt;
 
 &lt;p&gt;I can only recommend the excellent blog post of Jay Alammar &amp;ldquo;&lt;a href=&#34;https://jalammar.github.io/illustrated-transformer/&#34; target=&#34;_blank&#34;&gt;The Illustrated Transformer&lt;/a&gt;&amp;ldquo;
-which explain very well this architecture. But here is a quick recap, a transformer is basically that:&lt;/p&gt;
+which explains very well this architecture. But here is a quick recap, a transformer is basically that:&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&#34;transformer.png&#34; alt=&#34;transformer diagram&#34; /&gt;&lt;/p&gt;
 
@@ -67,7 +67,7 @@ belong to any word of the sentence, but is actually a vector that is learned dur
 Once this class token has gone through the N blocks, it will be finally given to
 a classifier that will predict whatever you training for.&lt;/p&gt;
 
-&lt;p&gt;Put it simply, this class token will goes through the network and will extract as
+&lt;p&gt;Put it simply, this class token will go through the network and will extract as
 much as possible useful information from the &lt;em&gt;word&lt;/em&gt; tokens, in order to produce
 a good representation for the classifier.&lt;/p&gt;
 
@@ -76,7 +76,7 @@ a good representation for the classifier.&lt;/p&gt;
 &lt;p&gt;This is the main part of the transformer. First, let&amp;rsquo;s concentrate on the &amp;lsquo;self-attention&amp;rsquo;.&lt;/p&gt;
 
 &lt;p&gt;We start with the matrix $X \in \mathbb{R}^{T \times d}$ containing all $T$ tokens. This matrix
-is going to be linearly transformed (aka matrix multiplcation, aka go to a fully-connected layer)
+is going to be linearly transformed (aka matrix multiplication, aka go to a fully-connected layer)
 three times in parallel:&lt;/p&gt;
 
 &lt;p&gt;$$Q = X W_q$$
@@ -191,7 +191,7 @@ a kind of dropout, but where a whole transformer block is dropped with only the 
 &lt;p&gt;The second contribution of DeiT is to propose to improve the training of the transformer
 by using a teacher model. The teacher/student strategy is often seen where a large trained
 teacher model produces novel targets to the student through knowledge distillation
-(&lt;a href=&#34;https://arxiv.org/abs/1503.02531&#34; target=&#34;_blank&#34;&gt;Hinton et al.&lt;/a&gt;). Basically, the student is train
+(&lt;a href=&#34;https://arxiv.org/abs/1503.02531&#34; target=&#34;_blank&#34;&gt;Hinton et al.&lt;/a&gt;). Basically, the student is trained
 to predict the labels of the image but also to mimick the probabilities of the teacher.&lt;/p&gt;
 
 &lt;p&gt;The first interesting conclusion is that it&amp;rsquo;s better to use a large CNN
