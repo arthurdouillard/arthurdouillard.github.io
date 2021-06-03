@@ -1241,9 +1241,7 @@ step on all data. Current solutions are considerably worse than this.&lt;/p&gt;
 
 &lt;p&gt;On a personal note, my team and I have submitted an article for a conference on this
 subject. If it&amp;rsquo;s accepted, I&amp;rsquo;ll make a blog article on it. Furthermore I have made
-a library to train incremental model: &lt;a href=&#34;https://github.com/arthurdouillard/incremental_learning.pytorch&#34; target=&#34;_blank&#34;&gt;inclearn&lt;/a&gt;.
-The library wasn&amp;rsquo;t updated since a few months as I&amp;rsquo;m currently cleaning my code. Be sure
-to check it out later.&lt;/p&gt;
+a library to train incremental model: &lt;a href=&#34;https://github.com/arthurdouillard/incremental_learning.pytorch&#34; target=&#34;_blank&#34;&gt;inclearn&lt;/a&gt;.&lt;/p&gt;
 </description>
     </item>
     
