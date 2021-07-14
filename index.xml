@@ -1498,7 +1498,7 @@ you feel I missed something important, tell me!&lt;/p&gt;
 for computer vision tasks. Three normalization schemes are often seen:&lt;/p&gt;
 
 &lt;ol&gt;
-&lt;li&gt;Normalizing the pixel values between 0 and 1:&lt;/li&gt;
+&lt;li&gt;Normalizing the pixel values between 0 and 1 (as &lt;a href=&#34;https://pytorch.org/vision/stable/transforms.html&#34; target=&#34;_blank&#34;&gt;Torch&amp;rsquo;s ToTensor does&lt;/a&gt;):&lt;/li&gt;
 &lt;/ol&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;img &lt;span style=&#34;color:#f92672&#34;&gt;/=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;255.&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;ol&gt;
@@ -1506,16 +1506,6 @@ for computer vision tasks. Three normalization schemes are often seen:&lt;/p&gt;
 &lt;/ol&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;img &lt;span style=&#34;color:#f92672&#34;&gt;/=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;127.5&lt;/span&gt;
 img &lt;span style=&#34;color:#f92672&#34;&gt;-=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1.&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;ol&gt;
-&lt;li&gt;Normalizing according to the dataset mean &amp;amp; standard deviation (as &lt;a href=&#34;https://github.com/keras-team/keras-applications/blob/master/keras_applications/imagenet_utils.py#L52-L55&#34; target=&#34;_blank&#34;&gt;Torch does&lt;/a&gt;):&lt;/li&gt;
-&lt;/ol&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;img &lt;span style=&#34;color:#f92672&#34;&gt;/=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;255.&lt;/span&gt;
-mean &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#ae81ff&#34;&gt;0.485&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0.456&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0.406&lt;/span&gt;] &lt;span style=&#34;color:#75715e&#34;&gt;# Here it&amp;#39;s ImageNet statistics&lt;/span&gt;
-std &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#ae81ff&#34;&gt;0.229&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0.224&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0.225&lt;/span&gt;]
-
-&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;): &lt;span style=&#34;color:#75715e&#34;&gt;# Considering an ordering NCHW (batch, channel, height, width)&lt;/span&gt;
-    img[i, :, :] &lt;span style=&#34;color:#f92672&#34;&gt;-=&lt;/span&gt; mean[i]
-    img[i, :, :] &lt;span style=&#34;color:#f92672&#34;&gt;/=&lt;/span&gt; std[i]&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;Why is it recommended? Let&amp;rsquo;s take a neuron, where:&lt;/p&gt;
 
 &lt;p&gt;$$y = w \cdot x$$&lt;/p&gt;
@@ -1530,6 +1520,16 @@ However you usually have different gradient magnitudes in a same batch. Normaliz
 the image to smaller pixel values is a cheap price to pay while making easier to
 tune an optimal learning rate for input images.&lt;/p&gt;
 
+&lt;p&gt;Furthermore, we usually apply a second type of normalization after the first one, called &lt;strong&gt;constrast normalization&lt;/strong&gt;.
+As the name imply it normalize the contrast so that the model doesn&amp;rsquo;t learn this spurious correlation.
+To do so, we normalize according to the dataset mean &amp;amp; standard deviation (as &lt;a href=&#34;https://github.com/keras-team/keras-applications/blob/master/keras_applications/imagenet_utils.py#L52-L55&#34; target=&#34;_blank&#34;&gt;Torch does&lt;/a&gt;):&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;img &lt;span style=&#34;color:#f92672&#34;&gt;/=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;255.&lt;/span&gt;
+mean &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#ae81ff&#34;&gt;0.485&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0.456&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0.406&lt;/span&gt;] &lt;span style=&#34;color:#75715e&#34;&gt;# Here it&amp;#39;s ImageNet statistics&lt;/span&gt;
+std &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#ae81ff&#34;&gt;0.229&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0.224&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0.225&lt;/span&gt;]
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;): &lt;span style=&#34;color:#75715e&#34;&gt;# Considering an ordering NCHW (batch, channel, height, width)&lt;/span&gt;
+    img[i, :, :] &lt;span style=&#34;color:#f92672&#34;&gt;-=&lt;/span&gt; mean[i]
+    img[i, :, :] &lt;span style=&#34;color:#f92672&#34;&gt;/=&lt;/span&gt; std[i]&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h3 id=&#34;1-batch-normalization&#34;&gt;1. Batch Normalization&lt;/h3&gt;
 
 &lt;p&gt;We&amp;rsquo;ve seen previously how to normalize the input, now let&amp;rsquo;s see a normalization
@@ -1770,6 +1770,8 @@ BN. Their difference lie in the way statistics are computed.&lt;/p&gt;
 
 &lt;p&gt;Finally weigh norm and cosine norm normalize the network&amp;rsquo;s weight instead of simply
 the input data.&lt;/p&gt;
+
+&lt;p&gt;EDIT: this post has been recommended by &lt;a href=&#34;https://forums.fast.ai/t/lesson-6-official-resources-and-updates/31441&#34; target=&#34;_blank&#34;&gt;FastAI&lt;/a&gt;!&lt;/p&gt;
 </description>
     </item>
     

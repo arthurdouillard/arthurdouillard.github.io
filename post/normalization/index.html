@@ -411,7 +411,7 @@ you feel I missed something important, tell me!</p>
 for computer vision tasks. Three normalization schemes are often seen:</p>
 
 <ol>
-<li>Normalizing the pixel values between 0 and 1:</li>
+<li>Normalizing the pixel values between 0 and 1 (as <a href="https://pytorch.org/vision/stable/transforms.html" target="_blank">Torch&rsquo;s ToTensor does</a>):</li>
 </ol>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">img <span style="color:#f92672">/=</span> <span style="color:#ae81ff">255.</span></code></pre></div>
 <ol>
@@ -419,16 +419,6 @@ for computer vision tasks. Three normalization schemes are often seen:</p>
 </ol>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">img <span style="color:#f92672">/=</span> <span style="color:#ae81ff">127.5</span>
 img <span style="color:#f92672">-=</span> <span style="color:#ae81ff">1.</span></code></pre></div>
-<ol>
-<li>Normalizing according to the dataset mean &amp; standard deviation (as <a href="https://github.com/keras-team/keras-applications/blob/master/keras_applications/imagenet_utils.py#L52-L55" target="_blank">Torch does</a>):</li>
-</ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">img <span style="color:#f92672">/=</span> <span style="color:#ae81ff">255.</span>
-mean <span style="color:#f92672">=</span> [<span style="color:#ae81ff">0.485</span>, <span style="color:#ae81ff">0.456</span>, <span style="color:#ae81ff">0.406</span>] <span style="color:#75715e"># Here it&#39;s ImageNet statistics</span>
-std <span style="color:#f92672">=</span> [<span style="color:#ae81ff">0.229</span>, <span style="color:#ae81ff">0.224</span>, <span style="color:#ae81ff">0.225</span>]
-
-<span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">3</span>): <span style="color:#75715e"># Considering an ordering NCHW (batch, channel, height, width)</span>
-    img[i, :, :] <span style="color:#f92672">-=</span> mean[i]
-    img[i, :, :] <span style="color:#f92672">/=</span> std[i]</code></pre></div>
 <p>Why is it recommended? Let&rsquo;s take a neuron, where:</p>
 
 <p>$$y = w \cdot x$$</p>
@@ -443,6 +433,16 @@ However you usually have different gradient magnitudes in a same batch. Normaliz
 the image to smaller pixel values is a cheap price to pay while making easier to
 tune an optimal learning rate for input images.</p>
 
+<p>Furthermore, we usually apply a second type of normalization after the first one, called <strong>constrast normalization</strong>.
+As the name imply it normalize the contrast so that the model doesn&rsquo;t learn this spurious correlation.
+To do so, we normalize according to the dataset mean &amp; standard deviation (as <a href="https://github.com/keras-team/keras-applications/blob/master/keras_applications/imagenet_utils.py#L52-L55" target="_blank">Torch does</a>):</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">img <span style="color:#f92672">/=</span> <span style="color:#ae81ff">255.</span>
+mean <span style="color:#f92672">=</span> [<span style="color:#ae81ff">0.485</span>, <span style="color:#ae81ff">0.456</span>, <span style="color:#ae81ff">0.406</span>] <span style="color:#75715e"># Here it&#39;s ImageNet statistics</span>
+std <span style="color:#f92672">=</span> [<span style="color:#ae81ff">0.229</span>, <span style="color:#ae81ff">0.224</span>, <span style="color:#ae81ff">0.225</span>]
+
+<span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">3</span>): <span style="color:#75715e"># Considering an ordering NCHW (batch, channel, height, width)</span>
+    img[i, :, :] <span style="color:#f92672">-=</span> mean[i]
+    img[i, :, :] <span style="color:#f92672">/=</span> std[i]</code></pre></div>
 <h3 id="1-batch-normalization">1. Batch Normalization</h3>
 
 <p>We&rsquo;ve seen previously how to normalize the input, now let&rsquo;s see a normalization
@@ -683,6 +683,8 @@ BN. Their difference lie in the way statistics are computed.</p>
 
 <p>Finally weigh norm and cosine norm normalize the network&rsquo;s weight instead of simply
 the input data.</p>
+
+<p>EDIT: this post has been recommended by <a href="https://forums.fast.ai/t/lesson-6-official-resources-and-updates/31441" target="_blank">FastAI</a>!</p>
 
     </div>
 
