@@ -11,6 +11,15 @@
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
+      <title></title>
+      <link>/publication/dytox/</link>
+      <pubDate>Wed, 24 Nov 2021 00:00:00 +0100</pubDate>
+      
+      <guid>/publication/dytox/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Tackling Catastrophic Forgetting and Background Shift in Continual Semantic Segmentation</title>
       <link>/publication/objectrehearsal/</link>
       <pubDate>Wed, 01 Sep 2021 00:00:00 +0200</pubDate>
@@ -1790,136 +1799,6 @@ BN. Their difference lie in the way statistics are computed.&lt;/p&gt;
 the input data.&lt;/p&gt;
 
 &lt;p&gt;EDIT: this post has been recommended by &lt;a href=&#34;https://forums.fast.ai/t/lesson-6-official-resources-and-updates/31441&#34; target=&#34;_blank&#34;&gt;FastAI&lt;/a&gt;!&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>TP Deep Learning RDFIA</title>
-      <link>/rdfia_2019/</link>
-      <pubDate>Thu, 28 Jun 2018 00:00:00 +0200</pubDate>
-      
-      <guid>/rdfia_2019/</guid>
-      <description>
-
-&lt;h1 id=&#34;tp-deep-learning-rdfia&#34;&gt;TP Deep Learning RDFIA&lt;/h1&gt;
-
-&lt;p&gt;RDFIA / Master DAC &amp;amp; IMA / Sorbonne&lt;/p&gt;
-
-&lt;p&gt;Le cours est organisé par le professeur Matthieu Cord. Vos assistants de TPs auquels
-vous devrez envoyer vos travaux sont Yifu Chen (yifu.chen@lip6.fr) et moi-même Arthur
-Douillard (arthur.douillard@lip6.fr).&lt;/p&gt;
-
-&lt;p&gt;Pour simplifier notre tâche vous êtes priés de nous adresser les mails avec pour objet
-&lt;code&gt;[RDFIA][TP-&amp;lt;numero&amp;gt;]&lt;/code&gt;.&lt;/p&gt;
-
-&lt;h2 id=&#34;rappels&#34;&gt;Rappels&lt;/h2&gt;
-
-&lt;p&gt;Les TPs seront en Python3 et plusieurs bibliothèques seront utilisées. Voici
-quelques liens pour rappel, ou pour vous familiariser en avance:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://learnxinyminutes.com/docs/python/&#34; target=&#34;_blank&#34;&gt;Rappel de Python&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://docs.scipy.org/doc/numpy/user/quickstart.html&#34; target=&#34;_blank&#34;&gt;Rappel de Numpy&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://scikit-learn.org/stable/tutorial/basic/tutorial.html&#34; target=&#34;_blank&#34;&gt;Introduction de Scikit-Learn&lt;/a&gt;. L&amp;rsquo;api est très similaire quelque soit l&amp;rsquo;algorithme (init / fit / predict)&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://pytorch.org/tutorials/beginner/deep_learning_60min_blitz.html&#34; target=&#34;_blank&#34;&gt;Introduction de Pytorch&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Les cours seront ajoutés au fur et à mesure.&lt;/p&gt;
-
-&lt;h2 id=&#34;tp-1-2-sift-bag-of-words&#34;&gt;TP 1 - 2 : SIFT / Bag of words&lt;/h2&gt;
-
-&lt;p&gt;&lt;em&gt;18 &amp;amp; 25 Septembre 2019&lt;/em&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Énoncé: &lt;a href=&#34;/files/rdfia_resources/tp1-2.pdf&#34;&gt;TP1-2.pdf&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;Code et data: &lt;a href=&#34;https://webia.lip6.fr/~douillard/rdfia/tp1-2.zip&#34; target=&#34;_blank&#34;&gt;TP1-2.zip&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Pour ceux n&amp;rsquo;ayant pas réussi à calculer tous les descriptors SIFT du dataset fourni: voici un zip
-les contenant: &lt;a href=&#34;https://webia.lip6.fr/~douillard/rdfia/sift.zip&#34; target=&#34;_blank&#34;&gt;sift.zip&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;Voici le genre de résultat que vous aurez pu obtenir:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;/figures/rdfia_sift_1.png&#34; alt=&#34;Image sift résultat&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;/figures/rdfia_sift_2.png&#34; alt=&#34;Image sift résultat&#34; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;tp-3-svm&#34;&gt;TP 3 : SVM&lt;/h2&gt;
-
-&lt;p&gt;&lt;em&gt;2 Octobre 2019&lt;/em&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Énoncé: &lt;a href=&#34;/files/rdfia_resources/tp3.pdf&#34;&gt;TP3.pdf&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;Bow &lt;a href=&#34;https://webia.lip6.fr/~douillard/rdfia/15_scenes_Xy.npz&#34; target=&#34;_blank&#34;&gt;15_scenes_Xy.npz&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;tp-4-5-introduction-aux-réseaux-de-neurones&#34;&gt;TP 4-5 : Introduction aux réseaux de neurones&lt;/h2&gt;
-
-&lt;p&gt;&lt;em&gt;9 &amp;amp; 16 Octobre 2019&lt;/em&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Énoncé: &lt;a href=&#34;/files/rdfia_resources/tp4-5.pdf&#34;&gt;TP4-5.pdf&lt;/a&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;Code: &lt;a href=&#34;https://webia.lip6.fr/~douillard/rdfia/tp4-5.zip&#34; target=&#34;_blank&#34;&gt;TP4-5.zip&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;Math formules: &lt;a href=&#34;/files/rdfia_resources/tp4-5_math.pdf&#34;&gt;TP4-5_formula.pdf&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;tp-6-7-réseaux-convolutionnels-pour-l-image&#34;&gt;TP 6-7 : Réseaux convolutionnels pour l&amp;rsquo;image&lt;/h2&gt;
-
-&lt;p&gt;&lt;em&gt;23 &amp;amp; 30 Octobre 2019&lt;/em&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Énoncé: &lt;a href=&#34;/files/rdfia_resources/tp6-7.pdf&#34;&gt;TP6-7.pdf&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;Code: &lt;a href=&#34;https://webia.lip6.fr/~douillard/rdfia/tp6-7.zip&#34; target=&#34;_blank&#34;&gt;TP6-7.zip&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;tp-8-transfer-learning-par-extraction-de-features-dans-un-cnn&#34;&gt;TP 8: Transfer Learning par extraction de features dans un CNN&lt;/h2&gt;
-
-&lt;p&gt;&lt;em&gt;27 Novembre 2019&lt;/em&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Énoncé: &lt;a href=&#34;/files/rdfia_resources/tp8.pdf&#34;&gt;TP8.pdf&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;Code: &lt;a href=&#34;https://webia.lip6.fr/~douillard/rdfia/tp8.zip&#34; target=&#34;_blank&#34;&gt;TP8.zip&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;tp-9-visualisation-des-réseaux-de-neurones&#34;&gt;TP 9: Visualisation des réseaux de neurones&lt;/h2&gt;
-
-&lt;p&gt;&lt;em&gt;4 Décembre 2019&lt;/em&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Énoncé: &lt;a href=&#34;/files/rdfia_resources/tp9.pdf&#34;&gt;TP9.pdf&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;Code: &lt;a href=&#34;https://webia.lip6.fr/~douillard/rdfia/tp9.zip&#34; target=&#34;_blank&#34;&gt;TP9.zip&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;tp-10-11-generative-adversarial-networks&#34;&gt;TP 10-11: Generative Adversarial Networks&lt;/h2&gt;
-
-&lt;p&gt;&lt;em&gt;11 Décembre 2019&lt;/em&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Énoncé: &lt;a href=&#34;/files/rdfia_resources/tp10-11.pdf&#34;&gt;TP10-11.pdf&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;Code: &lt;a href=&#34;https://webia.lip6.fr/~douillard/rdfia/tp10-11.zip&#34; target=&#34;_blank&#34;&gt;TP10-11.zip&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h4 id=&#34;mises-à-jour&#34;&gt;Mises à jour:&lt;/h4&gt;
-
-&lt;p&gt;2019-09-25, 14:16: Ajout d&amp;rsquo;un zip sift + deux images résultats&lt;/p&gt;
-
-&lt;p&gt;2019-10-02, 11:15: Ajout du TP 3 + BoW data.&lt;/p&gt;
-
-&lt;p&gt;2019-10-09, 11:07: Ajout du TP 4-5.&lt;/p&gt;
-
-&lt;p&gt;2019-10-16, 12:52: Ajout des formules forward / backward.&lt;/p&gt;
-
-&lt;p&gt;2019-10-23, 12:42: Ajout du TP 6-7.&lt;/p&gt;
-
-&lt;p&gt;2019-10-26, 17:15: Modification de la date du TP 7 + report de la date de rendu.&lt;/p&gt;
-
-&lt;p&gt;2019-11-27, 13:27: Ajout du TP 8.&lt;/p&gt;
-
-&lt;p&gt;2019-12-04, 12:50: Ajout du TP 9, correction de typo + env var pour le TP 8.&lt;/p&gt;
-
-&lt;p&gt;2019-12-11, 13:15: Ajout du TP 10-11.&lt;/p&gt;
 </description>
     </item>
     

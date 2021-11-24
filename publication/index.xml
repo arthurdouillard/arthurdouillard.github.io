@@ -13,6 +13,15 @@
     
     
     <item>
+      <title></title>
+      <link>/publication/dytox/</link>
+      <pubDate>Wed, 24 Nov 2021 00:00:00 +0100</pubDate>
+      
+      <guid>/publication/dytox/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Tackling Catastrophic Forgetting and Background Shift in Continual Semantic Segmentation</title>
       <link>/publication/objectrehearsal/</link>
       <pubDate>Wed, 01 Sep 2021 00:00:00 +0200</pubDate>
