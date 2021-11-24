@@ -11,7 +11,7 @@
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
-      <title></title>
+      <title>DyTox: Transformers for Continual Learning with DYnamic TOken eXpansion</title>
       <link>/publication/dytox/</link>
       <pubDate>Wed, 24 Nov 2021 00:00:00 +0100</pubDate>
       
