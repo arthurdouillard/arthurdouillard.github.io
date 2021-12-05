@@ -489,27 +489,70 @@ bigger than expected. We simply use again a linear transformation $W_o \in \math
 
 <p>$$Z = Z&rsquo; W_o$$</p>
 
-<p>Here is a simplified version in PyTorch:</p>
+<p>Here is a simplified version in PyTorch, first with a single head:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">SelfAttention</span>(nn<span style="color:#f92672">.</span>Module):
-    <span style="color:#66d9ef">def</span> __init__(self, dim, num_heads<span style="color:#f92672">=</span><span style="color:#ae81ff">8</span>):
-        super()<span style="color:#f92672">.</span>__init__()
-        self<span style="color:#f92672">.</span>Wq <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Linear(dim, num_heads <span style="color:#f92672">*</span> dim, bias<span style="color:#f92672">=</span>False)
-        self<span style="color:#f92672">.</span>Wk <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Linear(dim, num_heads <span style="color:#f92672">*</span> dim, bias<span style="color:#f92672">=</span>False)
-        self<span style="color:#f92672">.</span>Wv <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Linear(dim, num_heads <span style="color:#f92672">*</span> dim, bias<span style="color:#f92672">=</span>False)
-        self<span style="color:#f92672">.</span>Wo <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Linear(num_heads <span style="color:#f92672">*</span> dim, dim)
+  <span style="color:#66d9ef">def</span> __init__(self, embed_dim):
+    super()<span style="color:#f92672">.</span>__init__()
 
-    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">forward</span>(self, x):
-        <span style="color:#75715e"># X is of shape (Batch size, number of tokens, embedding dimension)</span>
-        B, T, D <span style="color:#f92672">=</span> x<span style="color:#f92672">.</span>shape
+    self<span style="color:#f92672">.</span>scale <span style="color:#f92672">=</span> embed_dim <span style="color:#f92672">**</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5</span>
+    self<span style="color:#f92672">.</span>W_q <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Linear(embed_dim, embed_dim, bias<span style="color:#f92672">=</span>False)
+    self<span style="color:#f92672">.</span>W_k <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Linear(embed_dim, embed_dim, bias<span style="color:#f92672">=</span>False)
+    self<span style="color:#f92672">.</span>W_v <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Linear(embed_dim, embed_dim, bias<span style="color:#f92672">=</span>False)
+    self<span style="color:#f92672">.</span>W_o <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Linear(embed_dim, embed_dim)
 
-        q <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>Wq(x) <span style="color:#75715e"># (Batch size, number of tokens, number of heads * embedding dimension)</span>
-        k <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>Wk(x)
-        v <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>Wv(x)
+  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">forward</span>(self, x):
+    <span style="color:#75715e"># x is of shape (Batch size, nb of tokens, embedding dimension)</span>
+    B, N, C <span style="color:#f92672">=</span> x<span style="color:#f92672">.</span>shape
 
-        a <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>softmax(torch<span style="color:#f92672">.</span>bmm(q, k<span style="color:#f92672">.</span>permute(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>)) <span style="color:#f92672">/</span> math<span style="color:#f92672">.</span>sqrt(D), dim<span style="color:#f92672">=-</span><span style="color:#ae81ff">1</span>)
-        z <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>bmm(a, v)
+    q <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>W_q(x)  <span style="color:#75715e"># (Batch size, nb of tokens, embedding dimension)</span>
+    k <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>W_k(x)
+    v <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>W_v(x)
 
-        <span style="color:#66d9ef">return</span> self<span style="color:#f92672">.</span>Wo(z)  <span style="color:#75715e"># (Batch size, number of tokens, embedding dimension)</span></code></pre></div>
+    attention <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>matmul(q, k<span style="color:#f92672">.</span>transpose(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>)) <span style="color:#f92672">*</span> self<span style="color:#f92672">.</span>scale
+    attention <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>softmax(attention, dim<span style="color:#f92672">=-</span><span style="color:#ae81ff">1</span>)  <span style="color:#75715e"># (Batch size, nb of tokens, nb of tokens)</span>
+
+    x <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>matmul(attention, v)  <span style="color:#75715e"># (Batch size, nb of tokens, embedding dimension)</span>
+    x <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>W_o(x)
+
+    <span style="color:#66d9ef">return</span> x</code></pre></div>
+<p>And then, slightly more complex, with multi-heads:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">MultiHeadsSelfAttention</span>(nn<span style="color:#f92672">.</span>Module):
+  <span style="color:#66d9ef">def</span> __init__(self, embed_dim, num_heads):
+    super()<span style="color:#f92672">.</span>__init__()
+
+    head_dim <span style="color:#f92672">=</span> embed_dim <span style="color:#f92672">//</span> num_heads
+    self<span style="color:#f92672">.</span>scale <span style="color:#f92672">=</span> head_dim <span style="color:#f92672">**</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5</span>
+    self<span style="color:#f92672">.</span>num_heads <span style="color:#f92672">=</span> num_heads
+
+    self<span style="color:#f92672">.</span>q <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Linear(embed_dim, embed_dim, bias<span style="color:#f92672">=</span>False)
+    self<span style="color:#f92672">.</span>k <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Linear(embed_dim, embed_dim, bias<span style="color:#f92672">=</span>False)
+    self<span style="color:#f92672">.</span>v <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Linear(embed_dim, embed_dim, bias<span style="color:#f92672">=</span>False)
+    self<span style="color:#f92672">.</span>projection <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Linear(embed_dim, embed_dim)
+
+  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">forward</span>(self, x):
+    B, N, C <span style="color:#f92672">=</span> x<span style="color:#f92672">.</span>shape
+
+    q <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>q(x)
+    k <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>k(x)
+    v <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>v(x)
+
+    q <span style="color:#f92672">=</span> q<span style="color:#f92672">.</span>reshape(B, N, self<span style="color:#f92672">.</span>num_heads, C <span style="color:#f92672">//</span> self<span style="color:#f92672">.</span>num_heads)
+    k <span style="color:#f92672">=</span> k<span style="color:#f92672">.</span>reshape(B, N, self<span style="color:#f92672">.</span>num_heads, C <span style="color:#f92672">//</span> self<span style="color:#f92672">.</span>num_heads)
+    v <span style="color:#f92672">=</span> v<span style="color:#f92672">.</span>reshape(B, N, self<span style="color:#f92672">.</span>num_heads, C <span style="color:#f92672">//</span> self<span style="color:#f92672">.</span>num_heads)
+
+    q <span style="color:#f92672">=</span> q<span style="color:#f92672">.</span>permute(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">3</span>)
+    k <span style="color:#f92672">=</span> k<span style="color:#f92672">.</span>permute(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">3</span>)
+    v <span style="color:#f92672">=</span> v<span style="color:#f92672">.</span>permute(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">3</span>)
+
+    attention <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>matmul(q, k<span style="color:#f92672">.</span>transpose(<span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>)) <span style="color:#f92672">*</span> self<span style="color:#f92672">.</span>scale
+    attention <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>softmax(attention, dim<span style="color:#f92672">=-</span><span style="color:#ae81ff">1</span>)
+
+    x <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>matmul(attention, v)  <span style="color:#75715e"># B, H, N, Hd</span>
+    x <span style="color:#f92672">=</span> x<span style="color:#f92672">.</span>permute(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">3</span>)
+    x <span style="color:#f92672">=</span> x<span style="color:#f92672">.</span>reshape(B, N, C)
+    x <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>projection(x)
+
+    <span style="color:#66d9ef">return</span> x</code></pre></div>
 <p><em>Note that in practice, to make the dimension of $Q$/$K$/$V$ independent to the number
 of heads, we usually fix the maximum embedding size and split it equally between heads some space.</em></p>
 

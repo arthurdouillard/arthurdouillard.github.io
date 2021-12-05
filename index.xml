@@ -143,27 +143,70 @@ bigger than expected. We simply use again a linear transformation $W_o \in \math
 
 &lt;p&gt;$$Z = Z&amp;rsquo; W_o$$&lt;/p&gt;
 
-&lt;p&gt;Here is a simplified version in PyTorch:&lt;/p&gt;
+&lt;p&gt;Here is a simplified version in PyTorch, first with a single head:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;SelfAttention&lt;/span&gt;(nn&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;Module):
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; __init__(self, dim, num_heads&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;8&lt;/span&gt;):
-        super()&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;__init__()
-        self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;Wq &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; nn&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;Linear(dim, num_heads &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; dim, bias&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;False)
-        self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;Wk &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; nn&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;Linear(dim, num_heads &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; dim, bias&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;False)
-        self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;Wv &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; nn&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;Linear(dim, num_heads &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; dim, bias&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;False)
-        self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;Wo &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; nn&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;Linear(num_heads &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; dim, dim)
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; __init__(self, embed_dim):
+    super()&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;__init__()
 
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;forward&lt;/span&gt;(self, x):
-        &lt;span style=&#34;color:#75715e&#34;&gt;# X is of shape (Batch size, number of tokens, embedding dimension)&lt;/span&gt;
-        B, T, D &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; x&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;shape
+    self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;scale &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; embed_dim &lt;span style=&#34;color:#f92672&#34;&gt;**&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.5&lt;/span&gt;
+    self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;W_q &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; nn&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;Linear(embed_dim, embed_dim, bias&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;False)
+    self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;W_k &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; nn&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;Linear(embed_dim, embed_dim, bias&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;False)
+    self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;W_v &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; nn&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;Linear(embed_dim, embed_dim, bias&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;False)
+    self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;W_o &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; nn&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;Linear(embed_dim, embed_dim)
 
-        q &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;Wq(x) &lt;span style=&#34;color:#75715e&#34;&gt;# (Batch size, number of tokens, number of heads * embedding dimension)&lt;/span&gt;
-        k &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;Wk(x)
-        v &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;Wv(x)
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;forward&lt;/span&gt;(self, x):
+    &lt;span style=&#34;color:#75715e&#34;&gt;# x is of shape (Batch size, nb of tokens, embedding dimension)&lt;/span&gt;
+    B, N, C &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; x&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;shape
 
-        a &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; torch&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;softmax(torch&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;bmm(q, k&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;permute(&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;)) &lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt; math&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;sqrt(D), dim&lt;span style=&#34;color:#f92672&#34;&gt;=-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)
-        z &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; torch&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;bmm(a, v)
+    q &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;W_q(x)  &lt;span style=&#34;color:#75715e&#34;&gt;# (Batch size, nb of tokens, embedding dimension)&lt;/span&gt;
+    k &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;W_k(x)
+    v &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;W_v(x)
 
-        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;Wo(z)  &lt;span style=&#34;color:#75715e&#34;&gt;# (Batch size, number of tokens, embedding dimension)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+    attention &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; torch&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;matmul(q, k&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;transpose(&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;)) &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;scale
+    attention &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; torch&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;softmax(attention, dim&lt;span style=&#34;color:#f92672&#34;&gt;=-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)  &lt;span style=&#34;color:#75715e&#34;&gt;# (Batch size, nb of tokens, nb of tokens)&lt;/span&gt;
+
+    x &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; torch&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;matmul(attention, v)  &lt;span style=&#34;color:#75715e&#34;&gt;# (Batch size, nb of tokens, embedding dimension)&lt;/span&gt;
+    x &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;W_o(x)
+
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; x&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;And then, slightly more complex, with multi-heads:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;MultiHeadsSelfAttention&lt;/span&gt;(nn&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;Module):
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; __init__(self, embed_dim, num_heads):
+    super()&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;__init__()
+
+    head_dim &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; embed_dim &lt;span style=&#34;color:#f92672&#34;&gt;//&lt;/span&gt; num_heads
+    self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;scale &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; head_dim &lt;span style=&#34;color:#f92672&#34;&gt;**&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.5&lt;/span&gt;
+    self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;num_heads &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; num_heads
+
+    self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;q &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; nn&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;Linear(embed_dim, embed_dim, bias&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;False)
+    self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;k &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; nn&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;Linear(embed_dim, embed_dim, bias&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;False)
+    self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;v &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; nn&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;Linear(embed_dim, embed_dim, bias&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;False)
+    self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;projection &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; nn&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;Linear(embed_dim, embed_dim)
+
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;forward&lt;/span&gt;(self, x):
+    B, N, C &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; x&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;shape
+
+    q &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;q(x)
+    k &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;k(x)
+    v &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;v(x)
+
+    q &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; q&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;reshape(B, N, self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;num_heads, C &lt;span style=&#34;color:#f92672&#34;&gt;//&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;num_heads)
+    k &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; k&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;reshape(B, N, self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;num_heads, C &lt;span style=&#34;color:#f92672&#34;&gt;//&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;num_heads)
+    v &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; v&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;reshape(B, N, self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;num_heads, C &lt;span style=&#34;color:#f92672&#34;&gt;//&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;num_heads)
+
+    q &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; q&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;permute(&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;)
+    k &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; k&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;permute(&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;)
+    v &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; v&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;permute(&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;)
+
+    attention &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; torch&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;matmul(q, k&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;transpose(&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;)) &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;scale
+    attention &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; torch&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;softmax(attention, dim&lt;span style=&#34;color:#f92672&#34;&gt;=-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)
+
+    x &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; torch&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;matmul(attention, v)  &lt;span style=&#34;color:#75715e&#34;&gt;# B, H, N, Hd&lt;/span&gt;
+    x &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; x&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;permute(&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;)
+    x &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; x&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;reshape(B, N, C)
+    x &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;projection(x)
+
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; x&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;&lt;em&gt;Note that in practice, to make the dimension of $Q$/$K$/$V$ independent to the number
 of heads, we usually fix the maximum embedding size and split it equally between heads some space.&lt;/em&gt;&lt;/p&gt;
 
