@@ -7,7 +7,7 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; 2018</copyright>
-    <lastBuildDate>Thu, 26 Aug 2021 00:00:00 +0200</lastBuildDate>
+    <lastBuildDate>Thu, 26 Aug 2021 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/project/index.xml" rel="self" type="application/rss+xml" />
     
@@ -15,7 +15,7 @@
     <item>
       <title>DeepCourse</title>
       <link>/project/deepcourse/</link>
-      <pubDate>Thu, 26 Aug 2021 00:00:00 +0200</pubDate>
+      <pubDate>Thu, 26 Aug 2021 00:00:00 +0000</pubDate>
       
       <guid>/project/deepcourse/</guid>
       <description></description>
@@ -24,7 +24,7 @@
     <item>
       <title>Continuum</title>
       <link>/project/continuum/</link>
-      <pubDate>Mon, 27 Apr 2020 00:00:00 +0200</pubDate>
+      <pubDate>Mon, 27 Apr 2020 00:00:00 +0000</pubDate>
       
       <guid>/project/continuum/</guid>
       <description></description>
@@ -33,7 +33,7 @@
     <item>
       <title>Inclearn</title>
       <link>/project/inclearn/</link>
-      <pubDate>Mon, 27 Apr 2020 00:00:00 +0200</pubDate>
+      <pubDate>Mon, 27 Apr 2020 00:00:00 +0000</pubDate>
       
       <guid>/project/inclearn/</guid>
       <description></description>

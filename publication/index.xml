@@ -7,7 +7,7 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; 2018</copyright>
-    <lastBuildDate>Sun, 01 Jan 2017 00:00:00 +0100</lastBuildDate>
+    <lastBuildDate>Sun, 01 Jan 2017 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/publication/index.xml" rel="self" type="application/rss+xml" />
     
@@ -15,7 +15,7 @@
     <item>
       <title>DyTox: Transformers for Continual Learning with DYnamic TOken eXpansion</title>
       <link>/publication/dytox/</link>
-      <pubDate>Wed, 24 Nov 2021 00:00:00 +0100</pubDate>
+      <pubDate>Wed, 24 Nov 2021 00:00:00 +0000</pubDate>
       
       <guid>/publication/dytox/</guid>
       <description></description>
@@ -24,7 +24,7 @@
     <item>
       <title>Tackling Catastrophic Forgetting and Background Shift in Continual Semantic Segmentation</title>
       <link>/publication/objectrehearsal/</link>
-      <pubDate>Wed, 01 Sep 2021 00:00:00 +0200</pubDate>
+      <pubDate>Wed, 01 Sep 2021 00:00:00 +0000</pubDate>
       
       <guid>/publication/objectrehearsal/</guid>
       <description></description>
@@ -33,7 +33,7 @@
     <item>
       <title>Continuum: Simple Management of Complex Continual Learning Scenarios</title>
       <link>/publication/continuum/</link>
-      <pubDate>Sun, 01 Nov 2020 00:00:00 +0100</pubDate>
+      <pubDate>Sun, 01 Nov 2020 00:00:00 +0000</pubDate>
       
       <guid>/publication/continuum/</guid>
       <description></description>
@@ -42,7 +42,7 @@
     <item>
       <title>PLOP: Learning without Forgetting for Continual Semantic Segmentation</title>
       <link>/publication/plop/</link>
-      <pubDate>Sun, 01 Nov 2020 00:00:00 +0100</pubDate>
+      <pubDate>Sun, 01 Nov 2020 00:00:00 +0000</pubDate>
       
       <guid>/publication/plop/</guid>
       <description></description>
@@ -51,7 +51,7 @@
     <item>
       <title>Insights from the Future for Continual Learning</title>
       <link>/publication/ghost/</link>
-      <pubDate>Sat, 01 Aug 2020 00:00:00 +0200</pubDate>
+      <pubDate>Sat, 01 Aug 2020 00:00:00 +0000</pubDate>
       
       <guid>/publication/ghost/</guid>
       <description>https://arxiv.org/abs/2004.13513</description>
@@ -60,7 +60,7 @@
     <item>
       <title>PODNet: Pooled Outputs Distillation for Small-Tasks Incremental Learning</title>
       <link>/publication/podnet/</link>
-      <pubDate>Wed, 01 Jan 2020 00:00:00 +0100</pubDate>
+      <pubDate>Wed, 01 Jan 2020 00:00:00 +0000</pubDate>
       
       <guid>/publication/podnet/</guid>
       <description>https://arxiv.org/abs/2004.13513</description>

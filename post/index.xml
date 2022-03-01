@@ -7,7 +7,7 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; 2018</copyright>
-    <lastBuildDate>Sun, 01 Jan 2017 00:00:00 +0100</lastBuildDate>
+    <lastBuildDate>Sun, 01 Jan 2017 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     
@@ -15,7 +15,7 @@
     <item>
       <title>Vision Transformers</title>
       <link>/post/visual_transformers/</link>
-      <pubDate>Thu, 20 May 2021 00:00:00 +0200</pubDate>
+      <pubDate>Thu, 20 May 2021 00:00:00 +0000</pubDate>
       
       <guid>/post/visual_transformers/</guid>
       <description>There are currently two broads axis of research in Deep Learning: finding better architectures, or finding better losses to train them. Since AlexNet (Kriwhevsky et al.), Convolutional Neural Network is the main architecture used in Computer Vision. Through convolutions, with its efficient patch prior, many visual tasks were unlocked.
@@ -25,7 +25,7 @@ Many variations of AlexNet were invented, but if we were to name only one, it wo
     <item>
       <title>Review of Continual Learning at CVPR&#39;20</title>
       <link>/post/cvpr20-continual/</link>
-      <pubDate>Sun, 21 Jun 2020 00:00:00 +0200</pubDate>
+      <pubDate>Sun, 21 Jun 2020 00:00:00 +0000</pubDate>
       
       <guid>/post/cvpr20-continual/</guid>
       <description>I review in this article, papers published at CVPR 2020 about Continual Learning. If you think I made a mistake or miss an important paper, please tell me!
@@ -35,7 +35,7 @@ Table of Contents    1. Few-Shots  1.1. Few-Shot Class-Incremental Learning 1.2.
     <item>
       <title>Learning Deep Neural Networks incrementally forever</title>
       <link>/post/incremental-learning/</link>
-      <pubDate>Wed, 11 Dec 2019 00:00:00 +0100</pubDate>
+      <pubDate>Wed, 11 Dec 2019 00:00:00 +0000</pubDate>
       
       <guid>/post/incremental-learning/</guid>
       <description>The hallmark of human intelligence is the capacity to learn. A toddler has comparable aptitudes to reason about space, quantities, or causality than other ape species (source). The difference of our cousins and us is the ability to learn from others.
@@ -45,7 +45,7 @@ The recent deep learning hype aims to reach the Artificial General Intelligence 
     <item>
       <title>How To Be Confident In Your Neural Network Confidence</title>
       <link>/post/miscalibration/</link>
-      <pubDate>Thu, 30 May 2019 00:00:00 +0200</pubDate>
+      <pubDate>Thu, 30 May 2019 00:00:00 +0000</pubDate>
       
       <guid>/post/miscalibration/</guid>
       <description>Those notes are based on the research paper &amp;ldquo;On Calibration of Modern Neural Networks&amp;rdquo; by (Guo et al, 2017.).
@@ -56,7 +56,7 @@ Most neural networks for classification uses as last activation a softmax: it pr
     <item>
       <title>Normalization in Deep Learning</title>
       <link>/post/normalization/</link>
-      <pubDate>Fri, 10 Aug 2018 00:00:00 +0200</pubDate>
+      <pubDate>Fri, 10 Aug 2018 00:00:00 +0000</pubDate>
       
       <guid>/post/normalization/</guid>
       <description>Deep Neural Networks (DNNs) are notorious for requiring less feature engineering than Machine Learning algorithms. For example convolutional networks learn by themselves the right convolution kernels to apply on an image. No need of carefully handcrafted kernels.
@@ -66,7 +66,7 @@ However a common point to all kinds of neural networks is the need of normalizat
     <item>
       <title>Detecting cars from aerial imagery for the NATO Innovation Challenge</title>
       <link>/post/nato-challenge/</link>
-      <pubDate>Fri, 22 Jun 2018 00:00:00 +0200</pubDate>
+      <pubDate>Fri, 22 Jun 2018 00:00:00 +0000</pubDate>
       
       <guid>/post/nato-challenge/</guid>
       <description>Imagine you’re in a landlocked country, and an infection has spread. The government has fallen, and rebels are roaming the country. If you’re the armed forces in this scenario, how do you make decisions in this environment? How can you fully understand the situation at hand?
@@ -76,7 +76,7 @@ A few weeks ago, NATO organized an innovation challenge that posed these questio
     <item>
       <title>3 Small but Powerful Convolutional Neural Networks</title>
       <link>/post/3-small-but-powerful-cnn/</link>
-      <pubDate>Sun, 13 May 2018 00:00:00 +0200</pubDate>
+      <pubDate>Sun, 13 May 2018 00:00:00 +0000</pubDate>
       
       <guid>/post/3-small-but-powerful-cnn/</guid>
       <description>Most CNN architectures have been developed to attain the best accuracy on ImageNet. Computing power is not limited for this competition, why bother?
@@ -88,7 +88,7 @@ MobileNet uses depthwise separable convolutions.</description>
     <item>
       <title>Densely Connected Convolutional Networks</title>
       <link>/post/densenet/</link>
-      <pubDate>Mon, 07 May 2018 00:00:00 +0200</pubDate>
+      <pubDate>Mon, 07 May 2018 00:00:00 +0000</pubDate>
       
       <guid>/post/densenet/</guid>
       <description>This article contains note of the research paper:
@@ -100,7 +100,7 @@ Thanks to its new use of residual it can be deeper than the usual networks and s
     <item>
       <title>Deep Learning Scaling Is Predictable, Empirically</title>
       <link>/post/deep-learning-scaling/</link>
-      <pubDate>Fri, 20 Apr 2018 00:00:00 +0200</pubDate>
+      <pubDate>Fri, 20 Apr 2018 00:00:00 +0000</pubDate>
       
       <guid>/post/deep-learning-scaling/</guid>
       <description>This post contains the notes taken from the following paper:
@@ -111,7 +111,7 @@ Thanks to its new use of residual it can be deeper than the usual networks and s
     <item>
       <title>Fast and Faster Region-based Convolutional Network</title>
       <link>/post/faster-rcnn/</link>
-      <pubDate>Mon, 26 Mar 2018 00:00:00 +0200</pubDate>
+      <pubDate>Mon, 26 Mar 2018 00:00:00 +0000</pubDate>
       
       <guid>/post/faster-rcnn/</guid>
       <description>This post contains the notes taken from the following paper:
@@ -126,7 +126,7 @@ Fast-RCNN In Fast-RCNN, Girshick ditched the SVM used previously. It resulted in
     <item>
       <title>Selective Search for Object Recognition</title>
       <link>/post/selective-search/</link>
-      <pubDate>Fri, 09 Mar 2018 00:00:00 +0100</pubDate>
+      <pubDate>Fri, 09 Mar 2018 00:00:00 +0000</pubDate>
       
       <guid>/post/selective-search/</guid>
       <description>This post contains the notes taken from reading of the following paper:
@@ -138,7 +138,7 @@ Motivations The authors divide the domain of object recognition in three categor
     <item>
       <title>Efficient Graph-Based Segmentation</title>
       <link>/post/efficient-graph-based-segmentation/</link>
-      <pubDate>Wed, 07 Mar 2018 00:00:00 +0100</pubDate>
+      <pubDate>Wed, 07 Mar 2018 00:00:00 +0000</pubDate>
       
       <guid>/post/efficient-graph-based-segmentation/</guid>
       <description>This post contains the notes taken from reading of the following paper:
@@ -150,7 +150,7 @@ The reason this segmentation was still useful almost 10 years later is because t
     <item>
       <title>A Few Useful Things To Know About Machine Learning</title>
       <link>/post/useful-things-to-know-about-ml/</link>
-      <pubDate>Tue, 06 Feb 2018 00:00:00 +0100</pubDate>
+      <pubDate>Tue, 06 Feb 2018 00:00:00 +0000</pubDate>
       
       <guid>/post/useful-things-to-know-about-ml/</guid>
       <description>This post contains the notes taken from reading of the following paper:
@@ -160,7 +160,7 @@ The reason this segmentation was still useful almost 10 years later is because t
     <item>
       <title>How To Read A Paper</title>
       <link>/post/how-to-read-a-paper/</link>
-      <pubDate>Tue, 06 Feb 2018 00:00:00 +0100</pubDate>
+      <pubDate>Tue, 06 Feb 2018 00:00:00 +0000</pubDate>
       
       <guid>/post/how-to-read-a-paper/</guid>
       <description>Preambule During my master in Data Science I have read a few papers. While I am a good reader, reading a scientific paper is still a strugle. For the year 2018, and hopefuly the next years, I have decided to read more papers. At least one a week.

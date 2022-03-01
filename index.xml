@@ -7,13 +7,13 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; 2018</copyright>
-    <lastBuildDate>Wed, 20 Apr 2016 00:00:00 +0200</lastBuildDate>
+    <lastBuildDate>Wed, 20 Apr 2016 00:00:00 +0000</lastBuildDate>
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
       <title>DyTox: Transformers for Continual Learning with DYnamic TOken eXpansion</title>
       <link>/publication/dytox/</link>
-      <pubDate>Wed, 24 Nov 2021 00:00:00 +0100</pubDate>
+      <pubDate>Wed, 24 Nov 2021 00:00:00 +0000</pubDate>
       
       <guid>/publication/dytox/</guid>
       <description></description>
@@ -22,7 +22,7 @@
     <item>
       <title>Tackling Catastrophic Forgetting and Background Shift in Continual Semantic Segmentation</title>
       <link>/publication/objectrehearsal/</link>
-      <pubDate>Wed, 01 Sep 2021 00:00:00 +0200</pubDate>
+      <pubDate>Wed, 01 Sep 2021 00:00:00 +0000</pubDate>
       
       <guid>/publication/objectrehearsal/</guid>
       <description></description>
@@ -31,7 +31,7 @@
     <item>
       <title>DeepCourse</title>
       <link>/project/deepcourse/</link>
-      <pubDate>Thu, 26 Aug 2021 00:00:00 +0200</pubDate>
+      <pubDate>Thu, 26 Aug 2021 00:00:00 +0000</pubDate>
       
       <guid>/project/deepcourse/</guid>
       <description></description>
@@ -40,7 +40,7 @@
     <item>
       <title>Vision Transformers</title>
       <link>/post/visual_transformers/</link>
-      <pubDate>Thu, 20 May 2021 00:00:00 +0200</pubDate>
+      <pubDate>Thu, 20 May 2021 00:00:00 +0000</pubDate>
       
       <guid>/post/visual_transformers/</guid>
       <description>
@@ -368,7 +368,7 @@ only a special case of a more general framework. I&amp;rsquo;ll cover it in a la
     <item>
       <title>Continuum: Simple Management of Complex Continual Learning Scenarios</title>
       <link>/publication/continuum/</link>
-      <pubDate>Sun, 01 Nov 2020 00:00:00 +0100</pubDate>
+      <pubDate>Sun, 01 Nov 2020 00:00:00 +0000</pubDate>
       
       <guid>/publication/continuum/</guid>
       <description></description>
@@ -377,7 +377,7 @@ only a special case of a more general framework. I&amp;rsquo;ll cover it in a la
     <item>
       <title>PLOP: Learning without Forgetting for Continual Semantic Segmentation</title>
       <link>/publication/plop/</link>
-      <pubDate>Sun, 01 Nov 2020 00:00:00 +0100</pubDate>
+      <pubDate>Sun, 01 Nov 2020 00:00:00 +0000</pubDate>
       
       <guid>/publication/plop/</guid>
       <description></description>
@@ -386,7 +386,7 @@ only a special case of a more general framework. I&amp;rsquo;ll cover it in a la
     <item>
       <title>TP Deep Learning RDFIA</title>
       <link>/rdfia/</link>
-      <pubDate>Mon, 05 Oct 2020 00:00:00 +0200</pubDate>
+      <pubDate>Mon, 05 Oct 2020 00:00:00 +0000</pubDate>
       
       <guid>/rdfia/</guid>
       <description>
@@ -563,7 +563,7 @@ avec plus de points, les questions bonus seront, comme précisé dès le départ
     <item>
       <title>Insights from the Future for Continual Learning</title>
       <link>/publication/ghost/</link>
-      <pubDate>Sat, 01 Aug 2020 00:00:00 +0200</pubDate>
+      <pubDate>Sat, 01 Aug 2020 00:00:00 +0000</pubDate>
       
       <guid>/publication/ghost/</guid>
       <description>&lt;p&gt;&lt;a href=&#34;https://arxiv.org/abs/2004.13513&#34; target=&#34;_blank&#34;&gt;https://arxiv.org/abs/2004.13513&lt;/a&gt;&lt;/p&gt;
@@ -573,7 +573,7 @@ avec plus de points, les questions bonus seront, comme précisé dès le départ
     <item>
       <title>Review of Continual Learning at CVPR&#39;20</title>
       <link>/post/cvpr20-continual/</link>
-      <pubDate>Sun, 21 Jun 2020 00:00:00 +0200</pubDate>
+      <pubDate>Sun, 21 Jun 2020 00:00:00 +0000</pubDate>
       
       <guid>/post/cvpr20-continual/</guid>
       <description>
@@ -885,7 +885,7 @@ avec plus de points, les questions bonus seront, comme précisé dès le départ
     <item>
       <title>Continuum</title>
       <link>/project/continuum/</link>
-      <pubDate>Mon, 27 Apr 2020 00:00:00 +0200</pubDate>
+      <pubDate>Mon, 27 Apr 2020 00:00:00 +0000</pubDate>
       
       <guid>/project/continuum/</guid>
       <description></description>
@@ -894,7 +894,7 @@ avec plus de points, les questions bonus seront, comme précisé dès le départ
     <item>
       <title>Inclearn</title>
       <link>/project/inclearn/</link>
-      <pubDate>Mon, 27 Apr 2020 00:00:00 +0200</pubDate>
+      <pubDate>Mon, 27 Apr 2020 00:00:00 +0000</pubDate>
       
       <guid>/project/inclearn/</guid>
       <description></description>
@@ -903,7 +903,7 @@ avec plus de points, les questions bonus seront, comme précisé dès le départ
     <item>
       <title>PODNet: Pooled Outputs Distillation for Small-Tasks Incremental Learning</title>
       <link>/publication/podnet/</link>
-      <pubDate>Wed, 01 Jan 2020 00:00:00 +0100</pubDate>
+      <pubDate>Wed, 01 Jan 2020 00:00:00 +0000</pubDate>
       
       <guid>/publication/podnet/</guid>
       <description>&lt;p&gt;&lt;a href=&#34;https://arxiv.org/abs/2004.13513&#34; target=&#34;_blank&#34;&gt;https://arxiv.org/abs/2004.13513&lt;/a&gt;&lt;/p&gt;
@@ -913,7 +913,7 @@ avec plus de points, les questions bonus seront, comme précisé dès le départ
     <item>
       <title>Learning Deep Neural Networks incrementally forever</title>
       <link>/post/incremental-learning/</link>
-      <pubDate>Wed, 11 Dec 2019 00:00:00 +0100</pubDate>
+      <pubDate>Wed, 11 Dec 2019 00:00:00 +0000</pubDate>
       
       <guid>/post/incremental-learning/</guid>
       <description>
@@ -1318,7 +1318,7 @@ a library to train incremental model: &lt;a href=&#34;https://github.com/arthurd
     <item>
       <title>How To Be Confident In Your Neural Network Confidence</title>
       <link>/post/miscalibration/</link>
-      <pubDate>Thu, 30 May 2019 00:00:00 +0200</pubDate>
+      <pubDate>Thu, 30 May 2019 00:00:00 +0000</pubDate>
       
       <guid>/post/miscalibration/</guid>
       <description>
@@ -1543,7 +1543,7 @@ the accuracy remains unchanged!&lt;/p&gt;
     <item>
       <title>Normalization in Deep Learning</title>
       <link>/post/normalization/</link>
-      <pubDate>Fri, 10 Aug 2018 00:00:00 +0200</pubDate>
+      <pubDate>Fri, 10 Aug 2018 00:00:00 +0000</pubDate>
       
       <guid>/post/normalization/</guid>
       <description>
