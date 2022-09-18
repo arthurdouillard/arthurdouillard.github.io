@@ -7,13 +7,52 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; 2018</copyright>
-    <lastBuildDate>Wed, 20 Apr 2016 00:00:00 +0200</lastBuildDate>
+    <lastBuildDate>Wed, 20 Apr 2016 00:00:00 +0100</lastBuildDate>
     <atom:link href="/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Continual Learning and its many settings</title>
+      <link>/post/continuum/</link>
+      <pubDate>Thu, 01 Sep 2022 00:00:00 +0100</pubDate>
+      
+      <guid>/post/continuum/</guid>
+      <description>
+
+&lt;p&gt;Continual Learning has many names. You may know it under the names of Incremental
+Learning, Lifelong Learning, or Online Learning. Those names may defines the same
+concept, or a slightly different concept depending of the speaker.&lt;/p&gt;
+
+&lt;p&gt;To put it simple: it&amp;rsquo;s the act of learning an ever-growing amount of knowledge, while
+trying to forget as little as possible. Look &lt;a href=&#34;https://arthurdouillard.com/post/incremental-learning/&#34; target=&#34;_blank&#34;&gt;this article&lt;/a&gt; for more details.&lt;/p&gt;
+
+&lt;p&gt;One implementation difficulty in Continual Learning is how to create the stream
+of data. &lt;strong&gt;Continuum&lt;/strong&gt; aims to solve this problem. Do not waste time anymore to
+reproduce the data setting, and starts directly to work on the model.&lt;/p&gt;
+
+&lt;p&gt;In this article, we aim to catalog some of the main settings of Continual Learning.
+We detail the different settings from research papers, and show how to easily code
+them with our library &lt;a href=&#34;https://github.com/Continvvm/continuum&#34; target=&#34;_blank&#34;&gt;Continuum&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;three-broads-settings&#34;&gt;Three broads settings&lt;/h2&gt;
+
+&lt;p&gt;The field of Continual Learning can be crudely split in three settings (&lt;a href=&#34;https://arxiv.org/abs/1705.03550&#34; target=&#34;_blank&#34;&gt;Lomonaco and Maltoni, 2017&lt;/a&gt;):&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Learning new classes (&lt;em&gt;NC&lt;/em&gt;)&lt;/li&gt;
+&lt;li&gt;Learning new instances (&lt;em&gt;NI&lt;/em&gt;)&lt;/li&gt;
+&lt;li&gt;Learning new instances and new classes (&lt;em&gt;NIC&lt;/em&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;learning-new-classes&#34;&gt;Learning New Classes&lt;/h3&gt;
+
+&lt;p&gt;In the NC setting,&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>DyTox: Transformers for Continual Learning with DYnamic TOken eXpansion</title>
       <link>/publication/dytox/</link>
-      <pubDate>Wed, 24 Nov 2021 00:00:00 +0100</pubDate>
+      <pubDate>Wed, 24 Nov 2021 00:00:00 +0000</pubDate>
       
       <guid>/publication/dytox/</guid>
       <description></description>
@@ -22,7 +61,7 @@
     <item>
       <title>Tackling Catastrophic Forgetting and Background Shift in Continual Semantic Segmentation</title>
       <link>/publication/objectrehearsal/</link>
-      <pubDate>Wed, 01 Sep 2021 00:00:00 +0200</pubDate>
+      <pubDate>Wed, 01 Sep 2021 00:00:00 +0100</pubDate>
       
       <guid>/publication/objectrehearsal/</guid>
       <description></description>
@@ -31,7 +70,7 @@
     <item>
       <title>DeepCourse</title>
       <link>/project/deepcourse/</link>
-      <pubDate>Thu, 26 Aug 2021 00:00:00 +0200</pubDate>
+      <pubDate>Thu, 26 Aug 2021 00:00:00 +0100</pubDate>
       
       <guid>/project/deepcourse/</guid>
       <description></description>
@@ -40,7 +79,7 @@
     <item>
       <title>Vision Transformers</title>
       <link>/post/visual_transformers/</link>
-      <pubDate>Thu, 20 May 2021 00:00:00 +0200</pubDate>
+      <pubDate>Thu, 20 May 2021 00:00:00 +0100</pubDate>
       
       <guid>/post/visual_transformers/</guid>
       <description>
@@ -368,7 +407,7 @@ only a special case of a more general framework. I&amp;rsquo;ll cover it in a la
     <item>
       <title>Continuum: Simple Management of Complex Continual Learning Scenarios</title>
       <link>/publication/continuum/</link>
-      <pubDate>Sun, 01 Nov 2020 00:00:00 +0100</pubDate>
+      <pubDate>Sun, 01 Nov 2020 00:00:00 +0000</pubDate>
       
       <guid>/publication/continuum/</guid>
       <description></description>
@@ -377,7 +416,7 @@ only a special case of a more general framework. I&amp;rsquo;ll cover it in a la
     <item>
       <title>PLOP: Learning without Forgetting for Continual Semantic Segmentation</title>
       <link>/publication/plop/</link>
-      <pubDate>Sun, 01 Nov 2020 00:00:00 +0100</pubDate>
+      <pubDate>Sun, 01 Nov 2020 00:00:00 +0000</pubDate>
       
       <guid>/publication/plop/</guid>
       <description></description>
@@ -386,7 +425,7 @@ only a special case of a more general framework. I&amp;rsquo;ll cover it in a la
     <item>
       <title>TP Deep Learning RDFIA</title>
       <link>/rdfia/</link>
-      <pubDate>Mon, 05 Oct 2020 00:00:00 +0200</pubDate>
+      <pubDate>Mon, 05 Oct 2020 00:00:00 +0100</pubDate>
       
       <guid>/rdfia/</guid>
       <description>
@@ -563,7 +602,7 @@ avec plus de points, les questions bonus seront, comme précisé dès le départ
     <item>
       <title>Insights from the Future for Continual Learning</title>
       <link>/publication/ghost/</link>
-      <pubDate>Sat, 01 Aug 2020 00:00:00 +0200</pubDate>
+      <pubDate>Sat, 01 Aug 2020 00:00:00 +0100</pubDate>
       
       <guid>/publication/ghost/</guid>
       <description>&lt;p&gt;&lt;a href=&#34;https://arxiv.org/abs/2004.13513&#34; target=&#34;_blank&#34;&gt;https://arxiv.org/abs/2004.13513&lt;/a&gt;&lt;/p&gt;
@@ -573,7 +612,7 @@ avec plus de points, les questions bonus seront, comme précisé dès le départ
     <item>
       <title>Review of Continual Learning at CVPR&#39;20</title>
       <link>/post/cvpr20-continual/</link>
-      <pubDate>Sun, 21 Jun 2020 00:00:00 +0200</pubDate>
+      <pubDate>Sun, 21 Jun 2020 00:00:00 +0100</pubDate>
       
       <guid>/post/cvpr20-continual/</guid>
       <description>
@@ -885,7 +924,7 @@ avec plus de points, les questions bonus seront, comme précisé dès le départ
     <item>
       <title>Continuum</title>
       <link>/project/continuum/</link>
-      <pubDate>Mon, 27 Apr 2020 00:00:00 +0200</pubDate>
+      <pubDate>Mon, 27 Apr 2020 00:00:00 +0100</pubDate>
       
       <guid>/project/continuum/</guid>
       <description></description>
@@ -894,7 +933,7 @@ avec plus de points, les questions bonus seront, comme précisé dès le départ
     <item>
       <title>Inclearn</title>
       <link>/project/inclearn/</link>
-      <pubDate>Mon, 27 Apr 2020 00:00:00 +0200</pubDate>
+      <pubDate>Mon, 27 Apr 2020 00:00:00 +0100</pubDate>
       
       <guid>/project/inclearn/</guid>
       <description></description>
@@ -903,7 +942,7 @@ avec plus de points, les questions bonus seront, comme précisé dès le départ
     <item>
       <title>PODNet: Pooled Outputs Distillation for Small-Tasks Incremental Learning</title>
       <link>/publication/podnet/</link>
-      <pubDate>Wed, 01 Jan 2020 00:00:00 +0100</pubDate>
+      <pubDate>Wed, 01 Jan 2020 00:00:00 +0000</pubDate>
       
       <guid>/publication/podnet/</guid>
       <description>&lt;p&gt;&lt;a href=&#34;https://arxiv.org/abs/2004.13513&#34; target=&#34;_blank&#34;&gt;https://arxiv.org/abs/2004.13513&lt;/a&gt;&lt;/p&gt;
@@ -913,7 +952,7 @@ avec plus de points, les questions bonus seront, comme précisé dès le départ
     <item>
       <title>Learning Deep Neural Networks incrementally forever</title>
       <link>/post/incremental-learning/</link>
-      <pubDate>Wed, 11 Dec 2019 00:00:00 +0100</pubDate>
+      <pubDate>Wed, 11 Dec 2019 00:00:00 +0000</pubDate>
       
       <guid>/post/incremental-learning/</guid>
       <description>
@@ -1318,7 +1357,7 @@ a library to train incremental model: &lt;a href=&#34;https://github.com/arthurd
     <item>
       <title>How To Be Confident In Your Neural Network Confidence</title>
       <link>/post/miscalibration/</link>
-      <pubDate>Thu, 30 May 2019 00:00:00 +0200</pubDate>
+      <pubDate>Thu, 30 May 2019 00:00:00 +0100</pubDate>
       
       <guid>/post/miscalibration/</guid>
       <description>
@@ -1537,311 +1576,6 @@ Expected Calibration Error on the validation set.&lt;/p&gt;
 &lt;p&gt;Another cool feature of Temperature Scaling: because all logits are divided by the
 same value, and that softmax is a &lt;a href=&#34;https://en.wikipedia.org/wiki/Monotonic_function&#34; target=&#34;_blank&#34;&gt;monotone function&lt;/a&gt;,
 the accuracy remains unchanged!&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Normalization in Deep Learning</title>
-      <link>/post/normalization/</link>
-      <pubDate>Fri, 10 Aug 2018 00:00:00 +0200</pubDate>
-      
-      <guid>/post/normalization/</guid>
-      <description>
-
-&lt;p&gt;Deep Neural Networks (DNNs) are notorious for requiring less feature engineering than
-Machine Learning algorithms. For example convolutional networks learn by themselves
-the right convolution kernels to apply on an image. No need of carefully
-handcrafted kernels.&lt;/p&gt;
-
-&lt;p&gt;However a common point to all kinds of neural networks is the &lt;strong&gt;need of normalization&lt;/strong&gt;.
-Normalizing is often done on the input, but it can also take place inside the
-network. In this article I&amp;rsquo;ll try to describe what the literature is saying about
-this.&lt;/p&gt;
-
-&lt;p&gt;This article is not exhaustive but it tries to cover the major algorithms. If
-you feel I missed something important, tell me!&lt;/p&gt;
-
-&lt;h3 id=&#34;normalizing-the-input&#34;&gt;Normalizing the input&lt;/h3&gt;
-
-&lt;p&gt;It is &lt;em&gt;extremely&lt;/em&gt; common to normalize the input
-&lt;a href=&#34;http://yann.lecun.com/exdb/publis/pdf/lecun-98b.pdf&#34; target=&#34;_blank&#34;&gt;(lecun-98b)&lt;/a&gt;, especially
-for computer vision tasks. Three normalization schemes are often seen:&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;Normalizing the pixel values between 0 and 1 (as &lt;a href=&#34;https://pytorch.org/vision/stable/transforms.html&#34; target=&#34;_blank&#34;&gt;Torch&amp;rsquo;s ToTensor does&lt;/a&gt;):&lt;/li&gt;
-&lt;/ol&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;img &lt;span style=&#34;color:#f92672&#34;&gt;/=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;255.&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;ol&gt;
-&lt;li&gt;Normalizing the pixel values between -1 and 1 (as &lt;a href=&#34;https://github.com/keras-team/keras-applications/blob/master/keras_applications/imagenet_utils.py#L47-L50&#34; target=&#34;_blank&#34;&gt;Tensorflow does&lt;/a&gt;):&lt;/li&gt;
-&lt;/ol&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;img &lt;span style=&#34;color:#f92672&#34;&gt;/=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;127.5&lt;/span&gt;
-img &lt;span style=&#34;color:#f92672&#34;&gt;-=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1.&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;Why is it recommended? Let&amp;rsquo;s take a neuron, where:&lt;/p&gt;
-
-&lt;p&gt;$$y = w \cdot x$$&lt;/p&gt;
-
-&lt;p&gt;The partial derivative of $y$ for $w$ that we use during backpropagation is:&lt;/p&gt;
-
-&lt;p&gt;$$\frac{\partial y}{\partial w} = X^T$$&lt;/p&gt;
-
-&lt;p&gt;The scale of the data has an effect on the magnitude of the gradient for
-the weights. If the gradient is big, you should reduce the learning rate.
-However you usually have different gradient magnitudes in a same batch. Normalizing
-the image to smaller pixel values is a cheap price to pay while making easier to
-tune an optimal learning rate for input images.&lt;/p&gt;
-
-&lt;p&gt;Furthermore, we usually apply a second type of normalization after the first one, called &lt;strong&gt;constrast normalization&lt;/strong&gt;.
-As the name imply it normalize the contrast so that the model doesn&amp;rsquo;t learn this spurious correlation.
-To do so, we normalize according to the dataset mean &amp;amp; standard deviation (as &lt;a href=&#34;https://github.com/keras-team/keras-applications/blob/master/keras_applications/imagenet_utils.py#L52-L55&#34; target=&#34;_blank&#34;&gt;Torch does&lt;/a&gt;):&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;img &lt;span style=&#34;color:#f92672&#34;&gt;/=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;255.&lt;/span&gt;
-mean &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#ae81ff&#34;&gt;0.485&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0.456&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0.406&lt;/span&gt;] &lt;span style=&#34;color:#75715e&#34;&gt;# Here it&amp;#39;s ImageNet statistics&lt;/span&gt;
-std &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#ae81ff&#34;&gt;0.229&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0.224&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0.225&lt;/span&gt;]
-
-&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;): &lt;span style=&#34;color:#75715e&#34;&gt;# Considering an ordering NCHW (batch, channel, height, width)&lt;/span&gt;
-    img[i, :, :] &lt;span style=&#34;color:#f92672&#34;&gt;-=&lt;/span&gt; mean[i]
-    img[i, :, :] &lt;span style=&#34;color:#f92672&#34;&gt;/=&lt;/span&gt; std[i]&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h3 id=&#34;1-batch-normalization&#34;&gt;1. Batch Normalization&lt;/h3&gt;
-
-&lt;p&gt;We&amp;rsquo;ve seen previously how to normalize the input, now let&amp;rsquo;s see a normalization
-inside the network.&lt;/p&gt;
-
-&lt;p&gt;(&lt;a href=&#34;https://arxiv.org/abs/1502.03167&#34; target=&#34;_blank&#34;&gt;Ioffe &amp;amp; Szegedy, 2015&lt;/a&gt;) declared that DNN
-training was suffering from the &lt;em&gt;internal covariate shift&lt;/em&gt;.&lt;/p&gt;
-
-&lt;p&gt;The authors describe it as:&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;[&amp;hellip;] the distribution of each layer’s inputs changes during training, as the
-parameters of the previous layers change.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;Their answer to this problem was to apply to the pre-activation a Batch
-Normalization (BN):&lt;/p&gt;
-
-&lt;p&gt;$$BN(x) = \gamma \frac{x - \mu_B}{\sigma_B} + \beta$$&lt;/p&gt;
-
-&lt;p&gt;$\mu_B$ and $\sigma_B$ are the mean and the standard deviation of the batch.
-$\gamma$ and $\beta$ are learned parameters.&lt;/p&gt;
-
-&lt;p&gt;The batch statistics are computed for a whole channel:&lt;/p&gt;
-
-&lt;figure&gt;
-
-&lt;img src=&#34;/figures/batch_norm.png&#34; alt=&#34;*Statistics are computed for a whole batch, channel per channel.*&#34; /&gt;
-
-
-
-&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
-  &lt;p style=&#34;text-align: center&#34;&gt;
-    &lt;em&gt;Statistics are computed for a whole batch, channel per channel.&lt;/em&gt;
-    
-    
-    
-  &lt;/p&gt; 
-&lt;/figcaption&gt;
-
-&lt;/figure&gt;
-
-&lt;p&gt;$\gamma$ and $\beta$ are essential because they enable the BN to represent
-the identity transform if needed. If it couldn&amp;rsquo;t, the resulting BN&amp;rsquo;s transformation
-(with a mean of 0 and a variance of 1) fed to a sigmoid non-linearity would
-be constrained to its linear regime.&lt;/p&gt;
-
-&lt;p&gt;While during training the mean and standard deviation are computed on the batch,
-during test time BN uses the whole dataset statistics using a moving average/std.&lt;/p&gt;
-
-&lt;p&gt;Batch Normalization has showed a considerable training acceleration to existing
-architectures and is now an almost de facto layer. It has however for weakness
-to use the batch statistics at training time: With small batches or with a dataset
-non &lt;a href=&#34;https://en.wikipedia.org/wiki/Independent_and_identically_distributed_random_variables&#34; target=&#34;_blank&#34;&gt;i.i.d&lt;/a&gt;
-it shows weak performance. In addition to that, the difference between training
-and test time of the mean and the std can be important, this can lead to a difference of performance between the two modes.&lt;/p&gt;
-
-&lt;h3 id=&#34;1-1-batch-renormalization&#34;&gt;1.1. Batch ReNormalization&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://arxiv.org/abs/1702.03275&#34; target=&#34;_blank&#34;&gt;(Ioffe, 2017)&lt;/a&gt;&amp;rsquo;s Batch Renormalization (BR)
-introduces an improvement over Batch Normalization.&lt;/p&gt;
-
-&lt;p&gt;BN uses the statistics ($\mu_B$ &amp;amp; $\sigma_B$) of the batch. BR introduces
-two new parameters $r$ &amp;amp; $d$ aiming to constrain the mean and std of BN,
-reducing the extreme difference when the batch size is small.&lt;/p&gt;
-
-&lt;p&gt;Ideally the normalization should be done with the instance&amp;rsquo;s statistic:&lt;/p&gt;
-
-&lt;p&gt;$$\hat{x} = \frac{x - \mu}{\sigma}$$&lt;/p&gt;
-
-&lt;p&gt;By choosing $r = \frac{\sigma_B}{\sigma}$ and $d = \frac{\mu_B - \mu}{\sigma}$:&lt;/p&gt;
-
-&lt;p&gt;$$\hat{x} = \frac{x - \mu}{\sigma} = \frac{x - \mu_B}{\sigma_B} \cdot r + d$$&lt;/p&gt;
-
-&lt;p&gt;The authors advise to constrain the maximum absolute values of $r$ and $d$.
-At first to 1 and 0, behaving like BN, then to relax gradually those bounds.&lt;/p&gt;
-
-&lt;h3 id=&#34;1-2-internal-covariate-shift&#34;&gt;1.2. Internal Covariate Shift?&lt;/h3&gt;
-
-&lt;p&gt;Ioffe &amp;amp; Szegedy argued that the changing distribution of the pre-activation hurt
-the training. While Batch Norm is widely used in SotA research, there is still
-controversy (&lt;a href=&#34;https://youtu.be/Qi1Yry33TQE?t=17m4s&#34; target=&#34;_blank&#34;&gt;Ali Rahami&amp;rsquo;s Test of Time&lt;/a&gt;)
-about what this algorithm is solving.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://arxiv.org/abs/1805.11604&#34; target=&#34;_blank&#34;&gt;(Santurkar et al, 2018)&lt;/a&gt; refuted the Internal
-Covariate Shift influence. To do so, they compared three models, one baseline,
-one with BN, and one with random noise added &lt;em&gt;after&lt;/em&gt; the normalization.&lt;/p&gt;
-
-&lt;p&gt;Because of the random noise, the activation&amp;rsquo;s input is not &lt;em&gt;normalized&lt;/em&gt; anymore
-and its distribution change at every time test.&lt;/p&gt;
-
-&lt;p&gt;As you can see on the following figure, they found that the random shift of distribution
-didn&amp;rsquo;t produce extremely different results:&lt;/p&gt;
-
-&lt;figure&gt;
-
-&lt;img src=&#34;/figures/cmp_icf.png&#34; alt=&#34;*Comparison between standard net, net with BN, and net with noisy BN.*&#34; /&gt;
-
-
-
-&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
-  &lt;p style=&#34;text-align: center&#34;&gt;
-    &lt;em&gt;Comparison between standard net, net with BN, and net with noisy BN.&lt;/em&gt;
-    
-    
-    
-  &lt;/p&gt; 
-&lt;/figcaption&gt;
-
-&lt;/figure&gt;
-
-&lt;p&gt;On the other hand they found that the Batch Normalization improved the
-&lt;a href=&#34;https://en.wikipedia.org/wiki/Lipschitz_continuity&#34; target=&#34;_blank&#34;&gt;Lipschitzness&lt;/a&gt; of the loss
-function. In simpler term, the loss is smoother, and thus its gradient as well.&lt;/p&gt;
-
-&lt;figure&gt;
-
-&lt;img src=&#34;/figures/smoothed_loss.png&#34; alt=&#34;*Figure 3: Loss with and without Batch Normalization.*&#34; /&gt;
-
-
-
-&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
-  &lt;p style=&#34;text-align: center&#34;&gt;
-    &lt;em&gt;Figure 3: Loss with and without Batch Normalization.&lt;/em&gt;
-    
-    
-    
-  &lt;/p&gt; 
-&lt;/figcaption&gt;
-
-&lt;/figure&gt;
-
-&lt;p&gt;According to the authors:&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Improved Lipschitzness of the gradients gives us confidence that when we take
-a larger step in a direction of a computed gradient, this gradient direction
-remains a fairly accurate estimate of the actual gradient direction after
-taking that step.  It thus enables any (gradient–based) training algorithm to
-take larger steps without the danger of running into a sudden change of the
-loss landscape such as flat region (corresponding to vanishing gradient) or
-sharp local minimum (causing exploding gradients).&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;The authors also found that replacing BN by a $l_1$, $l_2$, or $l_{\infty}$
-lead to similar results.&lt;/p&gt;
-
-&lt;h3 id=&#34;2-computing-the-mean-and-variance-differently&#34;&gt;2. Computing the mean and variance differently&lt;/h3&gt;
-
-&lt;p&gt;Algorithms similar to Batch Norm have been developed where the mean &amp;amp; variance
-are computed differently.&lt;/p&gt;
-
-&lt;figure&gt;
-
-&lt;img src=&#34;/figures/normalization.png&#34; /&gt;
-
-
-
-&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
-  &lt;p style=&#34;text-align: center&#34;&gt;
-    
-    &lt;a href=&#34;https://arxiv.org/abs/1803.08494&#34;&gt; 
-    source
-    &lt;/a&gt; 
-  &lt;/p&gt; 
-&lt;/figcaption&gt;
-
-&lt;/figure&gt;
-
-&lt;h3 id=&#34;2-1-layer-normalization&#34;&gt;2.1. Layer Normalization&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://arxiv.org/abs/1607.06450&#34; target=&#34;_blank&#34;&gt;(Ba et al, 2016)&lt;/a&gt;&amp;rsquo;s layer norm (LN) normalizes
-each image of a batch independently using all the channels. The goal is have constant
-performance with a large batch or a single image. &lt;strong&gt;It&amp;rsquo;s used in recurrent neural
-networks&lt;/strong&gt; where the number of time steps can differ between tasks.&lt;/p&gt;
-
-&lt;p&gt;While all time steps share the same weights, each should have its own statistic.
-BN needs previously computed batch statistics, which would be impossible if there
-are more time steps at test time than training time. LN is time steps independent
-by simply computing the statistics on the incoming input.&lt;/p&gt;
-
-&lt;h3 id=&#34;2-2-instance-normalization&#34;&gt;2.2. Instance Normalization&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://arxiv.org/abs/1607.08022&#34; target=&#34;_blank&#34;&gt;(Ulyanov et al, 2016)&lt;/a&gt;&amp;rsquo;s instance norm (IN)
-normalizes each channel of each batch&amp;rsquo;s image independently. &lt;strong&gt;The goal is to
-normalize the constrast of the content image&lt;/strong&gt;. According to the authors, only the
-style image contrast should matter.&lt;/p&gt;
-
-&lt;h3 id=&#34;2-3-group-normalization&#34;&gt;2.3. Group Normalization&lt;/h3&gt;
-
-&lt;p&gt;According to &lt;a href=&#34;https://arxiv.org/abs/1803.08494&#34; target=&#34;_blank&#34;&gt;(Wu and He, 2018)&lt;/a&gt;, convolution
-filters tend to group in related tasks (frequency, shapes, illumination, textures).&lt;/p&gt;
-
-&lt;p&gt;They normalize each image in a batch independently so the model is batch size
-independent. Moreover they normalize the channels per group arbitrarily defined
-(usually 32 channels per group). All filters of a same group should specialize
-in the same task.&lt;/p&gt;
-
-&lt;h3 id=&#34;3-normalization-on-the-network&#34;&gt;3. Normalization on the network&lt;/h3&gt;
-
-&lt;p&gt;Previously shown methods normalized the inputs, there are methods were the normalization
-happen in the network rather than on the data.&lt;/p&gt;
-
-&lt;h3 id=&#34;3-1-weight-normalization&#34;&gt;3.1. Weight Normalization&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://arxiv.org/abs/1602.07868&#34; target=&#34;_blank&#34;&gt;(Salimans and Kingma, 2016)&lt;/a&gt; found that
-decoupling the length of the weight vectors from their direction accelerated the
-training.&lt;/p&gt;
-
-&lt;p&gt;A fully connected layer does the following operation:&lt;/p&gt;
-
-&lt;p&gt;$$y = \phi(W \cdot x + b)$$&lt;/p&gt;
-
-&lt;p&gt;In weight normalization, the weight vectors is expressed the following way:&lt;/p&gt;
-
-&lt;p&gt;$$W = \frac{g}{\Vert V \Vert}V$$&lt;/p&gt;
-
-&lt;p&gt;$g$ and $V$ being respectively a learnable scalar and a learnable matrix.&lt;/p&gt;
-
-&lt;h3 id=&#34;3-2-cosine-normalization&#34;&gt;3.2. Cosine Normalization&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://arxiv.org/abs/1702.05870&#34; target=&#34;_blank&#34;&gt;(Luo et al, 2017)&lt;/a&gt; normalizes both the weights
-and the input by replacing the classic dot product by a cosine similarity:&lt;/p&gt;
-
-&lt;p&gt;$$y = \phi(\frac{W \cdot X}{\Vert W \Vert \Vert X \Vert})$$&lt;/p&gt;
-
-&lt;h3 id=&#34;4-conclusion&#34;&gt;4. Conclusion&lt;/h3&gt;
-
-&lt;p&gt;Batch normalization (BN) is still the most represented method among new
-architectures despite its defect: the dependence on the batch size. Batch
-renormalization (BR) fixes this problem by adding two new parameters to
-approximate instance statistics instead of batch statistics.&lt;/p&gt;
-
-&lt;p&gt;Layer norm (LN), instance norm (IN), and group norm (GN), are similar to
-BN. Their difference lie in the way statistics are computed.&lt;/p&gt;
-
-&lt;p&gt;LN was conceived for RNNs, IN for style transfer, and GN for CNNs.&lt;/p&gt;
-
-&lt;p&gt;Finally weigh norm and cosine norm normalize the network&amp;rsquo;s weight instead of simply
-the input data.&lt;/p&gt;
-
-&lt;p&gt;EDIT: this post has been recommended by &lt;a href=&#34;https://forums.fast.ai/t/lesson-6-official-resources-and-updates/31441&#34; target=&#34;_blank&#34;&gt;FastAI&lt;/a&gt;!&lt;/p&gt;
 </description>
     </item>
     
