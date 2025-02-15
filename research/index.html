@@ -120,11 +120,15 @@
   <h1>
   </h1>
 </header>
-<div class="post-content"><h1 id="distributed-training">Distributed Training</h1>
+<div class="post-content"><p>I tend to work on one thing at the time, and always getting my hands dirty implementing, debugging, and scaling myself the models.</p>
+<p>I&rsquo;ve started my journey with <strong>continual learning</strong>, and did my PhD on this. In hindsight, I was focused on academic benchmarks (<em>e.g.</em> learning incrementally new classes on ImageNet) that were not realistic enough.</p>
+<p>When joining DeepMind in late 2022 to work on continual learning, I&rsquo;ve realized that current deep learning needs more <strong>modularity</strong>: to learn &amp; unlearn specific knowledge skills but also to scale massively the model without also increasing its inference cost. In order to train massive modular system, I&rsquo;ve developped DiLoCo: a new way to distribute training of LLMs across the world with two orders of magnitude less bandwidth. Several startups are now based on that technology. Using DiLoCo, I&rsquo;ve made DiPaCo, a new kind of modular architecture with its weights are world-wide distributed and trained semi-independetly.</p>
+<p>I&rsquo;m still working on distributed training, regularly pushing futher the limits of what was thought to be possible. My dream is to do <strong>compute arbitrage on all the GPUs and TPUs across the world</strong>. No devices should be ever iddle, everthing must be used towards training better AIs.</p>
+<h1 id="distributed-training">Distributed Training</h1>
 <ul>
 <li><strong>2025</strong>:
 <ul>
-<li>Streaming DiLoCo with overlapping quantized communication: <a href="https://arxiv.org/abs/2501.18512" target="_blank">streaming diloco</a>
+<li><strong>Streaming DiLoCo</strong> with overlapping quantized communication: <a href="https://arxiv.org/abs/2501.18512" target="_blank">streaming diloco</a>
  and covered in <a href="https://importai.substack.com/p/import-ai-398-deepmind-makes-distributed" target="_blank">Import AI #398</a>
 </li>
 <li>Coverage by <a href="https://www.economist.com/science-and-technology/2025/01/08/training-ai-models-might-not-need-enormous-data-centres" target="_blank">The Economist</a>
@@ -133,19 +137,20 @@
 </li>
 <li><strong>2024</strong>:
 <ul>
-<li><strong>[ICML Workshop 2024]</strong> Async DiLoCo with heterogenous devices: <a href="https://arxiv.org/abs/2401.09135" target="_blank">async diloco</a>
-</li>
-<li>DiPaCo, distributed modular system: <a href="https://arxiv.org/abs/2403.10616" target="_blank">dipaco</a>
+<li><strong>Async DiLoCo</strong> with heterogenous devices: <a href="https://arxiv.org/abs/2401.09135" target="_blank">arxiv</a>
+ <code>[ICML Workshop 2024]</code></li>
+<li><strong>DiPaCo</strong>, distributed modular system: <a href="https://arxiv.org/abs/2403.10616" target="_blank">arxiv</a>
  and covered in <a href="https://importai.substack.com/p/import-ai-367-googles-world-spanning" target="_blank">Import AI #367</a>
 </li>
 </ul>
 </li>
 <li><strong>2023</strong>:
 <ul>
-<li><strong>[ICML Workshop 2024]</strong> DiLoCo: large-scale distributed training of LLMs: <a href="https://arxiv.org/abs/2311.08105" target="_blank">diloco</a>
-</li>
+<li><strong>DiLoCo</strong>: large-scale distributed training of LLMs: <a href="https://arxiv.org/abs/2311.08105" target="_blank">arxiv</a>
+ <code>[ICML Workshop 2024]</code></li>
 <li>It has kickstarted the startup PrimeIntellect with their first projects <a href="https://arxiv.org/abs/2407.07852" target="_blank">OpenDiLoCo</a>
  and <a href="https://arxiv.org/abs/2412.01152" target="_blank">Intellect-1</a>
+ and FlowerLabs with <a href="https://arxiv.org/abs/2405.10853" target="_blank">FlowerLM</a>
 </li>
 <li>Covered in <a href="https://importai.substack.com/p/import-ai-349-distributed-training" target="_blank">Import AI #349</a>
 </li>
@@ -158,34 +163,34 @@
 <li><strong>2024</strong>: Interview in the french newspaper ActuIA</li>
 <li><strong>2022</strong>:
 <ul>
-<li><strong>[CVPR 2022]</strong> Quick adaptation to new tasks with learns tokens for vision transformer: <a href="https://arxiv.org/abs/2111.11326" target="_blank">DyTox</a>
-</li>
-<li><strong>[CVPR Workshop 2022]</strong> Unsupervised continual domain adaptation: <a href="https://arxiv.org/abs/2204.11667" target="_blank">MuHDi</a>
-</li>
-<li><strong>[CoLLas 2023]</strong> Latent replay for foundation models: <a href="https://arxiv.org/abs/2205.00329" target="_blank">empirical study</a>
-</li>
+<li><strong>DyTox</strong>: Quick adaptation to new tasks with learns tokens for vision transformer: <a href="https://arxiv.org/abs/2111.11326" target="_blank">arxiv</a>
+ <code>[CVPR 2022]</code></li>
+<li><strong>MuHDi</strong> Unsupervised continual domain adaptation: <a href="https://arxiv.org/abs/2204.11667" target="_blank">arxiv</a>
+ <code>[CVPR Workshop 2022]</code></li>
+<li>Latent replay for foundation models: <a href="https://arxiv.org/abs/2205.00329" target="_blank">arxiv</a>
+ <code>[CoLLas 2023]</code></li>
 <li>My PhD thesis: <a href="https://theses.hal.science/tel-03872534v1/file/DOUILLARD_Arthur_these_2022.pdf" target="_blank">thesis</a>
 </li>
-<li><strong>[CVPR 2023]</strong>: panoptic segmentation: <a href="https://arxiv.org/abs/2211.13999" target="_blank">CoNFormer</a>
-</li>
-<li><strong>[ICLR Workshop 2023]</strong>: compute-optimal transfer learning: <a href="https://arxiv.org/abs/2304.13164" target="_blank">paper</a>
-</li>
+<li><strong>CoNFormer</strong>: panoptic segmentation: <a href="https://arxiv.org/abs/2211.13999" target="_blank">arxiv</a>
+ <code>[CVPR 2023]</code></li>
+<li>Compute-optimal transfer learning: <a href="https://arxiv.org/abs/2304.13164" target="_blank">arxiv</a>
+ <code>[ICLR Workshop 2023]</code></li>
 </ul>
 </li>
 <li><strong>2020</strong>:
 <ul>
-<li><strong>[CVPR 2021]</strong> Multi-scale features distillation for segmentation: <a href="https://arxiv.org/abs/2011.11390" target="_blank">PLOP</a>
-</li>
-<li><strong>[CVPR Workshop 2021]</strong> Zero-shot learning using ghost features: <a href="https://arxiv.org/abs/2006.13748" target="_blank">Ghost</a>
-</li>
-<li><strong>[CVPR Workshop 2021]</strong> Continuum, a data framework for continual learning: <a href="https://arxiv.org/abs/2102.06253" target="_blank">Continuum</a>
-</li>
-<li><strong>[TPAMI 2021]</strong> Synthetic visual data for rehearsal learning: <a href="https://arxiv.org/abs/2106.15287" target="_blank">synthetic data</a>
-</li>
+<li><strong>PLOP</strong> Multi-scale features distillation for segmentation: <a href="https://arxiv.org/abs/2011.11390" target="_blank">arxiv</a>
+ <code>[CVPR 2021]</code></li>
+<li><strong>Ghost</strong> Zero-shot learning using ghost features: <a href="https://arxiv.org/abs/2006.13748" target="_blank">arxiv</a>
+ <code>[CVPR Workshop 2021]</code></li>
+<li><strong>Continumm</strong>: a data framework for continual learning: <a href="https://arxiv.org/abs/2102.06253" target="_blank">arxiv</a>
+ <code>[CVPR Workshop 2021]</code></li>
+<li>Synthetic visual data for rehearsal learning: <a href="https://arxiv.org/abs/2106.15287" target="_blank">synthetic data</a>
+ <code>[TPAMI 2021]</code></li>
 </ul>
 </li>
-<li><strong>2019</strong>: <strong>[ECCV 2020]</strong> Features distillation to reduce catastrophic forgetting with extremely large number of tasks: <a href="https://arxiv.org/abs/2004.13513" target="_blank">PODNet</a>
-</li>
+<li><strong>2019</strong>: <strong>PODNet</strong>: features distillation to reduce catastrophic forgetting with extremely large number of tasks: <a href="https://arxiv.org/abs/2004.13513" target="_blank">PODNet</a>
+ <code>[ECCV 2020]</code></li>
 </ul>
 <h1 id="miscellaneous">Miscellaneous</h1>
 <ul>
@@ -197,8 +202,8 @@
 </li>
 </ul>
 </li>
-<li><strong>2019</strong>: <strong>[CVPR Workshop 2020]</strong> <a href="https://www.researchgate.net/profile/Arthur-Douillard/publication/344505647_CORE_Color_Regression_for_Multiple_Colors_Fashion_Garments/links/5faa9cf3299bf15bae0637d3/CORE-Color-Regression-for-Multiple-Colors-Fashion-Garments.pdf" target="_blank">Fashion garments color detection</a>
-</li>
+<li><strong>2019</strong>: <strong>Core</strong>: <a href="https://www.researchgate.net/profile/Arthur-Douillard/publication/344505647_CORE_Color_Regression_for_Multiple_Colors_Fashion_Garments/links/5faa9cf3299bf15bae0637d3/CORE-Color-Regression-for-Multiple-Colors-Fashion-Garments.pdf" target="_blank">Fashion garments color detection</a>
+ <code>[CVPR Workshop 2020]</code></li>
 <li><strong>2018</strong>: Won the NATO challenge with an aerial object detection method based on RetinaNet while at Dataiku: <a href="https://blog.dataiku.com/object-detection-with-deep-learning-on-aerial-imagery" target="_blank">post</a>
 </li>
 </ul>
