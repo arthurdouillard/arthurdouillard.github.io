@@ -6,7 +6,7 @@
     <description>Recent content in Spanish on Arthur Douillard</description>
     <generator>Hugo -- 0.139.2</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 08 Sep 2024 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 12 Jul 2024 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://arthurdouillard.com/tags/spanish/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>List of Irregular Verbs Across Romance Languages</title>
@@ -14,13 +14,6 @@
       <pubDate>Thu, 07 Mar 2013 00:00:00 +0000</pubDate>
       <guid>https://arthurdouillard.com/data/data1/</guid>
       <description>This dataset contains all irregular verbs in known Romance languages.</description>
-    </item>
-    <item>
-      <title>Lectures at the Villa of Reduced Circumstances</title>
-      <link>https://arthurdouillard.com/courses/course1/</link>
-      <pubDate>Mon, 10 Mar 2003 00:00:00 +0000</pubDate>
-      <guid>https://arthurdouillard.com/courses/course1/</guid>
-      <description>This graduate course presents classical results in Romance philology.</description>
     </item>
   </channel>
 </rss>

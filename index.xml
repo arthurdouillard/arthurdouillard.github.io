@@ -6,8 +6,15 @@
     <description>Recent content on Arthur Douillard</description>
     <generator>Hugo -- 0.139.2</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 18 Oct 2024 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 01 Dec 2024 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://arthurdouillard.com/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Literature reivew &amp; Brainstorming with Obsidian</title>
+      <link>https://arthurdouillard.com/posts/obsidian/</link>
+      <pubDate>Sun, 01 Dec 2024 00:00:00 +0000</pubDate>
+      <guid>https://arthurdouillard.com/posts/obsidian/</guid>
+      <description>Literature reivew &amp;amp; Brainstorming with Obsidian.</description>
+    </item>
     <item>
       <title>Location</title>
       <link>https://arthurdouillard.com/location/</link>
@@ -23,11 +30,18 @@
       <description>.</description>
     </item>
     <item>
-      <title>Your Inner Hedgehog</title>
-      <link>https://arthurdouillard.com/papers/paper3/</link>
-      <pubDate>Tue, 06 Apr 2021 00:00:00 +0000</pubDate>
-      <guid>https://arthurdouillard.com/papers/paper3/</guid>
-      <description>This paper describes the inner hedgehog, a psychological condition widespread in academia. Published in the Journal of Socio-Experimental Psychology, 2021.</description>
+      <title>CORE: Color Regression for Multiple Colors Fashion Garments</title>
+      <link>https://arthurdouillard.com/papers/2019-10-core/</link>
+      <pubDate>Tue, 01 Oct 2019 00:00:00 +0000</pubDate>
+      <guid>https://arthurdouillard.com/papers/2019-10-core/</guid>
+      <description>Fine-grained detection of colors in fashion garments.</description>
+    </item>
+    <item>
+      <title>Detecting Cars from Aerial Imagery for the NATO Innovation Challenge</title>
+      <link>https://arthurdouillard.com/papers/2018-06-nato/</link>
+      <pubDate>Fri, 01 Jun 2018 00:00:00 +0000</pubDate>
+      <guid>https://arthurdouillard.com/papers/2018-06-nato/</guid>
+      <description>Cars detection from satellite imagery using RetinaNet.</description>
     </item>
     <item>
       <title>List of Irregular Verbs Across Romance Languages</title>
@@ -37,13 +51,6 @@
       <description>This dataset contains all irregular verbs in known Romance languages.</description>
     </item>
     <item>
-      <title>Lectures at the Villa of Reduced Circumstances</title>
-      <link>https://arthurdouillard.com/courses/course1/</link>
-      <pubDate>Mon, 10 Mar 2003 00:00:00 +0000</pubDate>
-      <guid>https://arthurdouillard.com/courses/course1/</guid>
-      <description>This graduate course presents classical results in Romance philology.</description>
-    </item>
-    <item>
       <title>Portugese Irregular Verbs</title>
       <link>https://arthurdouillard.com/books/book1/</link>
       <pubDate>Wed, 01 Jan 1997 00:00:00 +0000</pubDate>
@@ -51,11 +58,25 @@
       <description>This book discusses Portugese irregular verbs in great details.</description>
     </item>
     <item>
-      <title>Profanity in Early Irish</title>
-      <link>https://arthurdouillard.com/courses/course2/</link>
-      <pubDate>Sat, 16 Jun 1990 00:00:00 +0000</pubDate>
-      <guid>https://arthurdouillard.com/courses/course2/</guid>
-      <description>This undergraduate course discusses profanity in Early Irish.</description>
+      <title>Epita | Deep Learning course</title>
+      <link>https://arthurdouillard.com/courses/epitadeep1/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://arthurdouillard.com/courses/epitadeep1/</guid>
+      <description>Deep Learning course from scratch with computer vision, nlp, and recsys.</description>
+    </item>
+    <item>
+      <title>Epita | DeepCourse</title>
+      <link>https://arthurdouillard.com/courses/deepcourse/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://arthurdouillard.com/courses/deepcourse/</guid>
+      <description>Deep Learning for Computer Vision, from scratch to Vision Transformer with colabs and Anki flashcards.</description>
+    </item>
+    <item>
+      <title>Sorbonne | RDFIA</title>
+      <link>https://arthurdouillard.com/courses/rdfia/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://arthurdouillard.com/courses/rdfia/</guid>
+      <description>Computer vision from SIFT to CNN</description>
     </item>
   </channel>
 </rss>

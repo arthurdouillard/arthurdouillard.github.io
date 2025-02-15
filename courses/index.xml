@@ -6,21 +6,27 @@
     <description>Recent content in Courses on Arthur Douillard</description>
     <generator>Hugo -- 0.139.2</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 08 Sep 2024 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://arthurdouillard.com/courses/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Lectures at the Villa of Reduced Circumstances</title>
-      <link>https://arthurdouillard.com/courses/course1/</link>
-      <pubDate>Mon, 10 Mar 2003 00:00:00 +0000</pubDate>
-      <guid>https://arthurdouillard.com/courses/course1/</guid>
-      <description>This graduate course presents classical results in Romance philology.</description>
+      <title>Epita | Deep Learning course</title>
+      <link>https://arthurdouillard.com/courses/epitadeep1/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://arthurdouillard.com/courses/epitadeep1/</guid>
+      <description>Deep Learning course from scratch with computer vision, nlp, and recsys.</description>
     </item>
     <item>
-      <title>Profanity in Early Irish</title>
-      <link>https://arthurdouillard.com/courses/course2/</link>
-      <pubDate>Sat, 16 Jun 1990 00:00:00 +0000</pubDate>
-      <guid>https://arthurdouillard.com/courses/course2/</guid>
-      <description>This undergraduate course discusses profanity in Early Irish.</description>
+      <title>Epita | DeepCourse</title>
+      <link>https://arthurdouillard.com/courses/deepcourse/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://arthurdouillard.com/courses/deepcourse/</guid>
+      <description>Deep Learning for Computer Vision, from scratch to Vision Transformer with colabs and Anki flashcards.</description>
+    </item>
+    <item>
+      <title>Sorbonne | RDFIA</title>
+      <link>https://arthurdouillard.com/courses/rdfia/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://arthurdouillard.com/courses/rdfia/</guid>
+      <description>Computer vision from SIFT to CNN</description>
     </item>
   </channel>
 </rss>
