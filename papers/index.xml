@@ -2,24 +2,24 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Papers on Arthur Douillard</title>
-    <link>https://arthurdouillard.com/papers/</link>
+    <link>http://localhost:1313/papers/</link>
     <description>Recent content in Papers on Arthur Douillard</description>
     <generator>Hugo -- 0.139.2</generator>
     <language>en</language>
     <lastBuildDate>Tue, 01 Oct 2019 00:00:00 +0000</lastBuildDate>
-    <atom:link href="https://arthurdouillard.com/papers/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/papers/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>CORE: Color Regression for Multiple Colors Fashion Garments</title>
-      <link>https://arthurdouillard.com/papers/2019-10-core/</link>
+      <link>http://localhost:1313/papers/2019-10-core/</link>
       <pubDate>Tue, 01 Oct 2019 00:00:00 +0000</pubDate>
-      <guid>https://arthurdouillard.com/papers/2019-10-core/</guid>
+      <guid>http://localhost:1313/papers/2019-10-core/</guid>
       <description>Fine-grained detection of colors in fashion garments.</description>
     </item>
     <item>
       <title>Detecting Cars from Aerial Imagery for the NATO Innovation Challenge</title>
-      <link>https://arthurdouillard.com/papers/2018-06-nato/</link>
+      <link>http://localhost:1313/papers/2018-06-nato/</link>
       <pubDate>Fri, 01 Jun 2018 00:00:00 +0000</pubDate>
-      <guid>https://arthurdouillard.com/papers/2018-06-nato/</guid>
+      <guid>http://localhost:1313/papers/2018-06-nato/</guid>
       <description>Cars detection from satellite imagery using RetinaNet.</description>
     </item>
   </channel>
