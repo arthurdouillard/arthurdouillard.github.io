@@ -506,18 +506,9 @@
                 </div>
 
                 <div class="mb-2">
-                    <label class="label-sm">Token Budget</label>
-                    <input type="text" id="tokenBudget" value="200,000,000,000" class="form-control formatted-input">
-                    <div class="label-sub">D (Default: 20 × N)</div>
-                </div>
-                
-                <div class="mb-2">
-                    <div class="flex-between-center">
-                        <label class="label-sm">Global Batch Size (Tokens)</label>
-                        <span id="batchSuggestion" class="label-sm" style="color: var(--blue-500); cursor: pointer; display: none;" onclick="applyBatchSuggestion()">Use suggested: <span id="batchSuggestionVal"></span></span>
-                    </div>
-                    <input type="text" id="batchSize" value="910,534" class="form-control formatted-input">
-                    <div class="label-sub">B (Recommended: <span id="batchRecVal">...</span> based on Table 10)</div>
+                    <label class="label-sm">Seconds per Step</label>
+                    <input type="text" id="secondsPerStep" value="1.0" class="form-control formatted-input">
+                    <div class="label-sub">Time for one training step (T_comp / num_steps)</div>
                 </div>
             </div>
 
@@ -566,71 +557,35 @@
             </div>
 
             <div>
-                <h2 class="section-title">Hardware & Network</h2>
-                <div class="input-group-grid mb-4">
-                    <div>
-                        <label class="label-sm">Total Chips (R)</label>
-                        <input type="text" id="totalChips" value="100" class="form-control formatted-input">
-                    </div>
-                    <div>
-                        <label class="label-sm">Chip Type (Est. Effective TFLOPS)</label>
-                        <select id="flopsPerChip" class="form-control">
-                            <optgroup label="NVIDIA GPUs">
-                                <option value="156">NVIDIA A100 (156 TFLOPS)</option>
-                                <option value="495" selected>NVIDIA H100 (495 TFLOPS)</option>
-                                <option value="1125">NVIDIA B200 (1125 TFLOPS)</option>
-                            </optgroup>
-                            <optgroup label="Google TPUs">
-                                <option value="138">TPU v4 (138 TFLOPS)</option>
-                                <option value="100">TPU v5e (100 TFLOPS)</option>
-                                <option value="230">TPU v5p (230 TFLOPS)</option>
-                                <option value="408">TPU v6e (408 TFLOPS)</option>
-                            </optgroup>
-                            <optgroup label="AWS Trainium">
-                                <option value="95">Trainium 1 (95 TFLOPS)</option>
-                                <option value="380">Trainium 2 (380 TFLOPS)</option>
-                            </optgroup>
-                        </select>
-                        <div class="label-sub">Q (Assumes ~50% MFU of bf16 peak)</div>
-                    </div>
+                <h2 class="section-title">Training Configuration</h2>
+                <div class="mb-4">
+                    <label class="label-sm">Total Steps (T)</label>
+                    <input type="text" id="totalSteps" value="1000" class="form-control formatted-input">
+                    <div class="label-sub">Number of training steps</div>
                 </div>
 
-                <div class="hardware-box">
-                    <div class="input-group-grid">
-                        <!-- Intra DC -->
-                        <div>
-                            <div class="label-sm" style="color: var(--slate-700); font-weight: 700; margin-bottom: 0.5rem;">Intra-Datacenter</div>
-                            <div style="margin-bottom: 0.5rem;">
-                                <label class="label-sm">Bandwidth (Per Chip)</label>
-                                <div class="input-addon-group">
-                                    <input type="text" id="intraBw" value="400" class="form-control formatted-input">
-                                    <span class="input-addon">Gbps</span>
-                                </div>
-                            </div>
-                            <div class="flex-between-center">
-                                <label class="label-sm">Overlap Intra-DC?</label>
-                                <input type="checkbox" id="intraOverlap" checked style="cursor: pointer;">
-                            </div>
-                            <input type="hidden" id="intraLat" value="100">
-                        </div>
+                <div class="mb-4">
+                    <label class="label-sm">Total Chips (R)</label>
+                    <input type="text" id="totalChips" value="100" class="form-control formatted-input">
+                    <div class="label-sub">Total number of accelerators</div>
+                </div>
+            </div>
 
-                        <!-- Inter DC -->
-                        <div>
-                            <div class="label-sm" style="color: var(--slate-700); font-weight: 700; margin-bottom: 0.5rem;">Inter-Datacenter</div>
-                            <div style="margin-bottom: 0.5rem;">
-                                <label class="label-sm">Bandwidth (Per Chip)</label>
-                                <div class="input-addon-group">
-                                    <input type="text" id="interBw" value="100" class="form-control formatted-input">
-                                    <span class="input-addon">Gbps</span>
-                                </div>
-                            </div>
-                            <div>
-                                <label class="label-sm">Latency</label>
-                                <div class="input-addon-group">
-                                    <input type="text" id="interLat" value="100" class="form-control formatted-input">
-                                    <span class="input-addon">ms</span>
-                                </div>
-                            </div>
+            <div>
+                <h2 class="section-title">Inter-Datacenter Network</h2>
+                <div class="input-group-grid">
+                    <div>
+                        <label class="label-sm">Bandwidth (Per Chip)</label>
+                        <div class="input-addon-group">
+                            <input type="text" id="interBw" value="100" class="form-control formatted-input">
+                            <span class="input-addon">Gbps</span>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="label-sm">Latency</label>
+                        <div class="input-addon-group">
+                            <input type="text" id="interLat" value="100" class="form-control formatted-input">
+                            <span class="input-addon">ms</span>
                         </div>
                     </div>
                 </div>
@@ -663,17 +618,6 @@
 
                 <div class="bar-group">
                     <div class="bar-label">
-                        <span>Intra-DC Comm (Inner)</span>
-                        <span class="result-val-sm" id="resCommIntra">0h 0m</span>
-                    </div>
-                    <div class="bar-track">
-                        <div id="barIntra" class="bar-fill-indigo" style="width: 0%"></div>
-                    </div>
-                    <div id="intraBottleneckMsg" class="hidden text-right" style="font-size: 0.65rem; color: var(--red-500); margin-top: 0.25rem;">⚠️ Intra-DC bottleneck (Comm > Compute)</div>
-                </div>
-
-                <div class="bar-group">
-                    <div class="bar-label">
                         <span>Inter-DC Comm (Outer)</span>
                         <span class="result-val-sm" id="resCommInter">0h 0m</span>
                     </div>
@@ -697,15 +641,6 @@
 
             <div class="flex-col" style="gap: 1rem;">
                 <div class="metric-row">
-                    <div>
-                        <div class="label-sm">Predicted Eval Loss (Absolute):</div>
-                        <div class="result-val-sm" style="display: flex; align-items: center;">
-                            <span id="resLoss">0.000</span>
-                            <span class="tag">Lower is better</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="metric-row">
                      <div>
                         <div class="label-sm">Inter-DC Capacity (at each DC):</div>
                         <div class="result-val-sm" id="resInterCapacity">0 Gbps</div>
@@ -723,13 +658,11 @@
             <div class="code-block">
                 <div class="code-title">Underlying Math</div>
                 <p id="mathMode" style="color: var(--green-400); font-weight: 700;">Standard DiLoCo (Sequential)</p>
-                <p>T_comp = 6ND / (R × Q)</p>
-                <p style="color: var(--slate-500);">// Intra-DC Communication (Inner Steps)</p>
-                <p class="text-slate-300" id="mathIntra">T_intra = [ (2N / W₀) × (1 - M/R) + ε₀ ] × T</p>
+                <p>T_comp = seconds_per_step × T</p>
                 <p style="color: var(--slate-500);">// Inter-DC Communication (Outer Steps)</p>
                 <p class="text-slate-300">T_comm_inter = [ (2N / W₁) × (1 - 1/R) + ε₁ ] × (T / H)</p>
                 <div id="mathTotalFormula" style="border-top: 1px solid var(--slate-700); margin-top: 0.5rem; padding-top: 0.5rem;">
-                    <p style="font-weight: 700;">Total = T_comp + T_comm_intra + T_comm_inter</p>
+                    <p style="font-weight: 700;">Total = T_comp + T_comm_inter</p>
                 </div>
             </div>
         </div>
@@ -853,65 +786,13 @@
         input.addEventListener('input', calculate);
     });
 
-    // Model Size Dropdown Logic
-    const modelSizeSelect = document.getElementById('modelSizeSelect');
-    const tokenBudgetInput = document.getElementById('tokenBudget');
-    const batchSizeInput = document.getElementById('batchSize');
+    // Model Size Dropdown
+    document.getElementById('modelSizeSelect').addEventListener('change', calculate);
 
-    modelSizeSelect.addEventListener('change', (e) => {
-        const val = e.target.value;
-        // Auto-update Token Budget (20 * N)
-        const n = parseFloat(val);
-        const d = n * 20;
-        tokenBudgetInput.value = formatNumber(d);
-        // Trigger calc
-        calculate();
-    });
-
-    // Chip Dropdown Logic
-    const chipSelect = document.getElementById('flopsPerChip');
-    const intraBwInput = document.getElementById('intraBw');
-    chipSelect.addEventListener('change', (e) => {
-        // Simple heuristic map for better UX defaults
-        const val = parseFloat(e.target.value);
-        if (val >= 495) { // H100/B200
-            intraBwInput.value = formatNumber(7200);
-        } else if (val >= 138) { // A100/TPUs
-            intraBwInput.value = formatNumber(3200);
-        } else {
-            intraBwInput.value = formatNumber(800);
-        }
-        calculate();
-    });
-
-    // Batch Suggestion Logic
-    let suggestedBatchSize = 0;
-
-    function updateBatchSuggestion(N, M) {
-        const seqBatch = SCALING_BATCH_A * Math.pow(N, SCALING_BATCH_ALPHA) * Math.pow(M, SCALING_BATCH_BETA);
-        suggestedBatchSize = Math.round(seqBatch * SEQ_LEN);
-        
-        document.getElementById('batchRecVal').innerText = formatNumber(suggestedBatchSize);
-        document.getElementById('batchSuggestionVal').innerText = formatNumber(suggestedBatchSize);
-        
-        const currentBatch = parseNumber(batchSizeInput.value);
-        if (Math.abs(currentBatch - suggestedBatchSize) > 1000) { 
-             document.getElementById('batchSuggestion').style.display = 'block';
-        } else {
-             document.getElementById('batchSuggestion').style.display = 'none';
-        }
-    }
-
-    window.applyBatchSuggestion = function() {
-        if (suggestedBatchSize > 0) {
-            batchSizeInput.value = formatNumber(suggestedBatchSize);
-            calculate();
-        }
-    };
-
+    // Streaming Toggle
     const streamingToggle = document.getElementById('streamingToggle');
     const streamingOptions = document.getElementById('streamingOptions');
-    
+
     streamingToggle.addEventListener('change', () => {
         if(streamingToggle.checked) {
             streamingOptions.classList.add('active');
@@ -920,12 +801,10 @@
         }
         calculate();
     });
-    
-    // Wire up new streaming/overlap inputs
+
+    // Wire up streaming inputs
     document.getElementById('staleness').addEventListener('input', calculate);
     document.getElementById('fragments').addEventListener('input', calculate);
-    document.getElementById('intraOverlap').addEventListener('change', calculate);
-    document.getElementById('intraBw').addEventListener('input', calculate); // Ensure manual edits update
 
     function formatTime(seconds) {
         if (seconds < 0) return "0s";
@@ -943,58 +822,36 @@
     function calculateCore(overrideInterBw) {
         // Fetch values
         const N = parseFloat(document.getElementById('modelSizeSelect').value);
-        const D = parseNumber(document.getElementById('tokenBudget').value);
-        const B = parseNumber(document.getElementById('batchSize').value);
+        const T = parseNumber(document.getElementById('totalSteps').value);
+        const secondsPerStep = parseNumber(document.getElementById('secondsPerStep').value);
         const M = parseNumber(document.getElementById('replicas').value);
         const H = parseNumber(document.getElementById('syncCadence').value);
         const R = parseNumber(document.getElementById('totalChips').value);
-        const Q_tera = parseFloat(document.getElementById('flopsPerChip').value);
-        
-        const W0_gbps = parseNumber(document.getElementById('intraBw').value);
-        const e0_us = parseNumber(document.getElementById('intraLat').value);
-        
+
         // Override W1 if running sweep
         const W1_gbps = overrideInterBw !== undefined ? overrideInterBw : parseNumber(document.getElementById('interBw').value);
         const e1_ms = parseNumber(document.getElementById('interLat').value);
 
         const isStreaming = document.getElementById('streamingToggle').checked;
         const staleness = isStreaming ? (parseNumber(document.getElementById('staleness').value) || 1) : 1;
-        // P from UI used for Streaming (Sequential) overhead
-        const fragments = isStreaming ? (parseNumber(document.getElementById('fragments').value) || 16) : 16; 
-        const overlapIntra = document.getElementById('intraOverlap').checked;
+        const fragments = isStreaming ? (parseNumber(document.getElementById('fragments').value) || 16) : 16;
 
         if (M < 2) return { error: "M must be >= 2" };
 
-        const Q = Q_tera * 1e12; 
-        const W0 = W0_gbps * 1e9; 
-        const W1 = W1_gbps * 1e9; 
-        const e0 = e0_us * 1e-6; 
-        const e1 = e1_ms * 1e-3; 
-        const PayloadBits = N * 16; 
+        const W1 = W1_gbps * 1e9;
+        const e1 = e1_ms * 1e-3;
+        const PayloadBits = N * 16;
 
         // Time calculations
-        const T = D / B;
-        const C = 6 * N * D;
-        const T_comp = C / (R * Q);
-
-        const inner_comm_per_step = ( (2 * PayloadBits) / W0 ) * (1 - M/R) + e0;
-        const T_comm_intra = inner_comm_per_step * T;
+        const T_comp = secondsPerStep * T;
 
         const outer_comm_per_step = ( (2 * PayloadBits) / W1 ) * (1 - 1/R) + e1;
         const T_comm_inter = outer_comm_per_step * (T / H);
 
         let T_total;
-        let overlapState = "sequential"; 
-        
-        // Determine baseline (Compute Phase) with optional Intra-Overlap
-        let T_baseline;
-        if (overlapIntra) {
-            // Assume we can hide comms behind compute, unless comms is slower
-            // Total baseline time = max(T_comp, T_comm_intra)
-            T_baseline = Math.max(T_comp, T_comm_intra);
-        } else {
-            T_baseline = T_comp + T_comm_intra;
-        }
+        let overlapState = "sequential";
+
+        const T_baseline = T_comp;
 
         if (isStreaming) {
             // Overlapping logic: T_baseline vs T_outer / Staleness
@@ -1015,8 +872,8 @@
         const utilization = (T_comp / T_total) * 100;
 
         return {
-            T, T_comp, T_comm_intra, T_comm_inter, T_total, utilization, overlapState, staleness, fragments,
-            N, M, R, W1_gbps, overlapIntra, T_baseline
+            T, T_comp, T_comm_inter, T_total, utilization, overlapState, staleness, fragments,
+            N, M, R, W1_gbps, T_baseline
         };
     }
 
@@ -1029,18 +886,9 @@
 
         const { N, M, R, W1_gbps } = res;
 
-        // Suggestions
-        if (N > 0 && M > 0) updateBatchSuggestion(N, M);
-
-        // Loss
-        if (N > 0 && M > 0) {
-            const loss = SCALING_LOSS_A * Math.pow(N, SCALING_LOSS_ALPHA) * Math.pow(M, SCALING_LOSS_BETA);
-            document.getElementById('resLoss').innerText = loss.toFixed(3);
-        }
-
         // Capacity
         if (R > 0 && M > 0 && W1_gbps > 0) {
-            const capacity = W1_gbps * 1e9 * (R / M); 
+            const capacity = W1_gbps * 1e9 * (R / M);
             document.getElementById('resInterCapacity').innerText = formatCapacity(capacity);
         } else {
             document.getElementById('resInterCapacity').innerText = "0 Gbps";
@@ -1049,35 +897,9 @@
         // Update UI Text
         document.getElementById('resSteps').innerText = Math.round(res.T).toLocaleString();
         document.getElementById('resComp').innerText = formatTime(res.T_comp);
-        document.getElementById('resCommIntra').innerText = formatTime(res.T_comm_intra);
-        document.getElementById('resCommInter').innerText = formatTime(res.T_comm_inter); 
+        document.getElementById('resCommInter').innerText = formatTime(res.T_comm_inter);
         document.getElementById('resTotal').innerText = formatTime(res.T_total);
         document.getElementById('resUtil').innerText = res.utilization.toFixed(2) + "%";
-
-        // Visuals - Intra Bottleneck
-        const intraMsg = document.getElementById('intraBottleneckMsg');
-        const commIntraElem = document.getElementById('resCommIntra');
-        
-        if (res.overlapIntra) {
-            if (res.T_comm_intra > res.T_comp) {
-                intraMsg.classList.remove('hidden');
-                intraMsg.innerText = "⚠️ Intra-DC bottleneck (Comm > Compute)";
-                commIntraElem.classList.remove('line-through');
-                commIntraElem.classList.remove('text-slate-400');
-            } else {
-                intraMsg.classList.remove('hidden');
-                intraMsg.innerText = "✅ Intra-DC Hidden";
-                intraMsg.className = "text-right";
-                intraMsg.style.color = "var(--green-500)";
-                intraMsg.style.fontSize = "0.65rem";
-                commIntraElem.classList.add('line-through');
-                commIntraElem.classList.add('text-slate-400');
-            }
-        } else {
-            intraMsg.classList.add('hidden');
-            commIntraElem.classList.remove('line-through');
-            commIntraElem.classList.remove('text-slate-400');
-        }
 
         // Visuals - Inter Overlap
         const isStreaming = document.getElementById('streamingToggle').checked;
@@ -1118,36 +940,20 @@
         }
 
         // Bar logic
-        if (res.overlapIntra && res.T_comm_intra <= res.T_comp) {
-             document.getElementById('barComp').style.width = (res.T_comp / res.T_total * 100) + "%";
-             document.getElementById('barIntra').style.width = "0%"; // Hidden
-        } else if (res.overlapIntra && res.T_comm_intra > res.T_comp) {
-             document.getElementById('barComp').style.width = "0%"; // Hidden by comms
-             document.getElementById('barIntra').style.width = (res.T_comm_intra / res.T_total * 100) + "%";
-        } else {
-             document.getElementById('barComp').style.width = (res.T_comp / res.T_total * 100) + "%";
-             document.getElementById('barIntra').style.width = (res.T_comm_intra / res.T_total * 100) + "%";
-        }
+        document.getElementById('barComp').style.width = (res.T_comp / res.T_total * 100) + "%";
 
         // Update Math Text
         const mathTitle = document.getElementById('mathMode');
         const mathFormula = document.getElementById('mathTotalFormula');
-        const mathIntra = document.getElementById('mathIntra');
-        
-        if (res.overlapIntra) {
-            mathIntra.innerText = "T_intra_eff = MAX(T_comp, T_intra_raw)";
-        } else {
-            mathIntra.innerText = "T_intra_eff = T_comp + T_intra_raw";
-        }
 
         if (isStreaming) {
             mathTitle.innerText = "Streaming DiLoCo (Overlapped)";
             mathTitle.style.color = "var(--green-400)";
-            mathFormula.innerHTML = `<p style="font-weight: 700;">Total = MAX( T_intra_eff, T_inter / S )</p>`;
+            mathFormula.innerHTML = `<p style="font-weight: 700;">Total = MAX( T_comp, T_inter / S )</p>`;
         } else {
             mathTitle.innerText = "Standard DiLoCo (Sequential)";
             mathTitle.style.color = "var(--blue-400)";
-            mathFormula.innerHTML = `<p style="font-weight: 700;">Total = T_intra_eff + T_inter</p>`;
+            mathFormula.innerHTML = `<p style="font-weight: 700;">Total = T_comp + T_inter</p>`;
         }
 
         // Update Sweep Plot
@@ -1165,36 +971,25 @@
         
         // Get base config (except Inter-DC BW which we sweep)
         const N = parseFloat(document.getElementById('modelSizeSelect').value);
-        const B = parseNumber(document.getElementById('batchSize').value);
+        const secondsPerStep = parseNumber(document.getElementById('secondsPerStep').value);
         const H = parseNumber(document.getElementById('syncCadence').value);
         const R = parseNumber(document.getElementById('totalChips').value);
-        const M = parseNumber(document.getElementById('replicas').value); 
-        const Q_tera = parseFloat(document.getElementById('flopsPerChip').value);
-        const W0_gbps = parseNumber(document.getElementById('intraBw').value);
-        const e0_us = parseNumber(document.getElementById('intraLat').value);
+        const M = parseNumber(document.getElementById('replicas').value);
         const e1_ms = parseNumber(document.getElementById('interLat').value);
-        const overlapIntra = document.getElementById('intraOverlap').checked;
         const staleness = parseNumber(document.getElementById('staleness').value) || 1;
-        // P from UI used for Streaming (Sequential) overhead
-        const fragments = parseNumber(document.getElementById('fragments').value) || 16; 
+        const fragments = parseNumber(document.getElementById('fragments').value) || 16;
 
         // Constants
-        const Q = Q_tera * 1e12;
-        const W0 = W0_gbps * 1e9;
-        const e0 = e0_us * 1e-6;
         const e1 = e1_ms * 1e-3;
         const PayloadBits = N * 16;
         const PayloadBitsFP4 = N * 4;
-        
+
         // Per-Step calculations
-        const C_step = 6 * N * B; // Flops per step
-        const T_comp_step = C_step / (R * Q);
-        const inner_comm_per_step = ((2 * PayloadBits) / W0) * (1 - M/R) + e0;
-        const T_intra_step = inner_comm_per_step;
-        
-        // Baseline time per step (Compute + Intra)
-        const T_baseline_step = overlapIntra ? Math.max(T_comp_step, T_intra_step) : (T_comp_step + T_intra_step);
-        
+        const T_comp_step = secondsPerStep;
+
+        // Baseline time per step (just compute now)
+        const T_baseline_step = T_comp_step;
+
         // Time for H steps (Inner Loop)
         const T_inner_phase = T_baseline_step * H; 
 
