@@ -423,7 +423,7 @@
             background: white;
             border: 1px solid var(--slate-200);
             border-radius: 0.5rem;
-            overflow: hidden;
+            overflow: visible;
             width: 100%;
             height: 400px;
             box-sizing: border-box;
@@ -675,123 +675,76 @@
                 <div class="label-sub">M (≥1)</div>
             </div>
 
-            <div>
-                <label class="label-sm">Bandwidth Between DCs</label>
-                <div class="input-addon-group">
-                    <input type="text" id="interBw" value="100" class="form-control formatted-input">
-                    <span class="input-addon">Gbps</span>
-                </div>
-                <div class="label-sub">B (inter-DC bandwidth)</div>
-            </div>
         </div>
     </div>
 
     <!-- Hardcoded Configurations -->
-    <div style="display: flex; flex-direction: column; gap: 1.5rem; margin-bottom: 2rem;">
+    <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 2rem;">
 
         <!-- Configuration 1: Data Parallel -->
-        <div class="panel">
-            <h2 class="section-title" style="color: #94a3b8; border-color: #94a3b8;">Data Parallel (H=1)</h2>
+        <div class="panel" style="padding: 0.75rem;">
+            <h2 class="section-title" style="color: #94a3b8; border-color: #94a3b8; font-size: 0.875rem; margin-bottom: 0.5rem; padding-bottom: 0.25rem;">Data Parallel (H=1)</h2>
 
-            <div class="grid-2-cols">
-                <div>
-                    <div class="mb-4">
-                        <label class="label-sm">Gradients Data Type</label>
-                        <select id="dp_dtype" class="form-control">
-                            <option value="2" selected>bfloat16 (2 bytes)</option>
-                            <option value="1">int8 (1 byte)</option>
-                            <option value="0.5">int4 (0.5 bytes)</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="results-panel" style="padding: 1rem; border-radius: 0.5rem;">
-                    <div class="result-row">
-                        <span class="result-key">Compute Utilization</span>
-                        <span class="result-val" id="dp_util">-</span>
-                    </div>
-                    <div class="result-row" style="border: 0;">
-                        <span class="result-key">Total Time</span>
-                        <span class="result-val-sm" id="dp_time">-</span>
-                    </div>
+            <div style="display: flex; gap: 1rem; align-items: center;">
+                <div style="flex: 1;">
+                    <label class="label-sm">Gradients Data Type</label>
+                    <select id="dp_dtype" class="form-control">
+                        <option value="2" selected>bfloat16 (2 bytes)</option>
+                        <option value="1">int8 (1 byte)</option>
+                        <option value="0.5">int4 (0.5 bytes)</option>
+                    </select>
                 </div>
             </div>
         </div>
 
         <!-- Configuration 2: DiLoCo -->
-        <div class="panel">
-            <h2 class="section-title" style="color: #ef4444; border-color: #ef4444;">DiLoCo</h2>
+        <div class="panel" style="padding: 0.75rem;">
+            <h2 class="section-title" style="color: #ef4444; border-color: #ef4444; font-size: 0.875rem; margin-bottom: 0.5rem; padding-bottom: 0.25rem;">DiLoCo</h2>
 
-            <div class="grid-2-cols">
-                <div>
-                    <div class="mb-4">
-                        <label class="label-sm">Gradients Data Type</label>
-                        <select id="diloco_dtype" class="form-control">
-                            <option value="2" selected>bfloat16 (2 bytes)</option>
-                            <option value="1">int8 (1 byte)</option>
-                            <option value="0.5">int4 (0.5 bytes)</option>
-                        </select>
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="label-sm">Synchronization Cadence (H)</label>
-                        <input type="text" id="diloco_H" value="30" class="form-control formatted-input">
-                    </div>
+            <div style="display: flex; gap: 1rem; align-items: flex-end;">
+                <div style="flex: 1;">
+                    <label class="label-sm">Gradients Data Type</label>
+                    <select id="diloco_dtype" class="form-control">
+                        <option value="2" selected>bfloat16 (2 bytes)</option>
+                        <option value="1">int8 (1 byte)</option>
+                        <option value="0.5">int4 (0.5 bytes)</option>
+                    </select>
                 </div>
 
-                <div class="results-panel" style="padding: 1rem; border-radius: 0.5rem;">
-                    <div class="result-row">
-                        <span class="result-key">Compute Utilization</span>
-                        <span class="result-val" id="diloco_util">-</span>
-                    </div>
-                    <div class="result-row" style="border: 0;">
-                        <span class="result-key">Total Time</span>
-                        <span class="result-val-sm" id="diloco_time">-</span>
-                    </div>
+                <div style="flex: 1;">
+                    <label class="label-sm">Synchronization Cadence (H)</label>
+                    <input type="text" id="diloco_H" value="30" class="form-control formatted-input">
                 </div>
             </div>
         </div>
 
         <!-- Configuration 3: Streaming DiLoCo with Overlap -->
-        <div class="panel">
-            <h2 class="section-title" style="color: #3b82f6; border-color: #3b82f6;">Streaming DiLoCo with Overlap</h2>
+        <div class="panel" style="padding: 0.75rem;">
+            <h2 class="section-title" style="color: #3b82f6; border-color: #3b82f6; font-size: 0.875rem; margin-bottom: 0.5rem; padding-bottom: 0.25rem;">Streaming DiLoCo with Overlap</h2>
 
-            <div class="grid-2-cols">
-                <div>
-                    <div class="mb-4">
-                        <label class="label-sm">Gradients Data Type</label>
-                        <select id="streaming_dtype" class="form-control">
-                            <option value="2" selected>bfloat16 (2 bytes)</option>
-                            <option value="1">int8 (1 byte)</option>
-                            <option value="0.5">int4 (0.5 bytes)</option>
-                        </select>
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="label-sm">Synchronization Cadence (H)</label>
-                        <input type="text" id="streaming_H" value="30" class="form-control formatted-input">
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="label-sm">Number of Fragments (P)</label>
-                        <input type="text" id="streaming_P" value="5" class="form-control formatted-input">
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="label-sm">Number of Overlap (S)</label>
-                        <input type="text" id="streaming_S" value="10" class="form-control formatted-input">
-                    </div>
+            <div style="display: flex; gap: 1rem; align-items: flex-end;">
+                <div style="flex: 1;">
+                    <label class="label-sm">Gradients Data Type</label>
+                    <select id="streaming_dtype" class="form-control">
+                        <option value="2" selected>bfloat16 (2 bytes)</option>
+                        <option value="1">int8 (1 byte)</option>
+                        <option value="0.5">int4 (0.5 bytes)</option>
+                    </select>
                 </div>
 
-                <div class="results-panel" style="padding: 1rem; border-radius: 0.5rem;">
-                    <div class="result-row">
-                        <span class="result-key">Compute Utilization</span>
-                        <span class="result-val" id="streaming_util">-</span>
-                    </div>
-                    <div class="result-row" style="border: 0;">
-                        <span class="result-key">Total Time</span>
-                        <span class="result-val-sm" id="streaming_time">-</span>
-                    </div>
+                <div style="flex: 1;">
+                    <label class="label-sm">Synchronization Cadence (H)</label>
+                    <input type="text" id="streaming_H" value="30" class="form-control formatted-input">
+                </div>
+
+                <div style="flex: 1;">
+                    <label class="label-sm">Number of Fragments (P)</label>
+                    <input type="text" id="streaming_P" value="5" class="form-control formatted-input">
+                </div>
+
+                <div style="flex: 1;">
+                    <label class="label-sm">Number of Overlap (S)</label>
+                    <input type="text" id="streaming_S" value="10" class="form-control formatted-input">
                 </div>
             </div>
         </div>
@@ -799,8 +752,8 @@
 
     <!-- Figure 4 Plot -->
     <div class="plot-section">
-        <h3 class="section-title" style="border:0; margin-bottom: 1rem;">Compute Utilization plot (Figure 4 of the Streaming DiLoCo paper)</h3>
-        <div id="figure4Plot" class="plot-box">
+        <h3 class="section-title" style="border:0; margin-bottom: 1rem;">Compute Utilization</h3>
+        <div id="figure4Plot" class="plot-box" style="position: relative;">
             <!-- Chart injected here -->
         </div>
     </div>
@@ -815,6 +768,7 @@
     <!-- Hidden fields for fixed parameters -->
     <input type="hidden" id="totalSteps" value="1000">
     <input type="hidden" id="totalChips" value="100">
+    <input type="hidden" id="interBw" value="100">
 
 <script>
     // Constants for Scaling Laws (Table 10)
@@ -873,7 +827,6 @@
     // Wire up all input listeners for global settings
     document.getElementById('numDatacenters').addEventListener('input', updateConfigurations);
     document.getElementById('secondsPerStep').addEventListener('input', updateConfigurations);
-    document.getElementById('interBw').addEventListener('input', updateConfigurations);
 
     // Wire up listeners for configuration-specific inputs
     document.getElementById('dp_dtype').addEventListener('change', updateConfigurations);
@@ -971,35 +924,7 @@
     }
 
     function updateConfigurations() {
-        // Configuration 1: Data Parallel (H=1, S=0, P=1)
-        const dp_dtype = parseFloat(document.getElementById('dp_dtype').value);
-        const dp_result = calculateCore(1, dp_dtype, 0, 1);
-        if (!dp_result.error) {
-            document.getElementById('dp_util').textContent = dp_result.utilization.toFixed(1) + '%';
-            document.getElementById('dp_time').textContent = formatTime(dp_result.T_total);
-        }
-
-        // Configuration 2: DiLoCo (H>1, S=0, P=1)
-        const diloco_dtype = parseFloat(document.getElementById('diloco_dtype').value);
-        const diloco_H = parseNumber(document.getElementById('diloco_H').value);
-        const diloco_result = calculateCore(diloco_H, diloco_dtype, 0, 1);
-        if (!diloco_result.error) {
-            document.getElementById('diloco_util').textContent = diloco_result.utilization.toFixed(1) + '%';
-            document.getElementById('diloco_time').textContent = formatTime(diloco_result.T_total);
-        }
-
-        // Configuration 3: Streaming DiLoCo with Overlap
-        const streaming_dtype = parseFloat(document.getElementById('streaming_dtype').value);
-        const streaming_H = parseNumber(document.getElementById('streaming_H').value);
-        const streaming_P = parseNumber(document.getElementById('streaming_P').value);
-        const streaming_S = parseNumber(document.getElementById('streaming_S').value);
-        const streaming_result = calculateCore(streaming_H, streaming_dtype, streaming_S, streaming_P);
-        if (!streaming_result.error) {
-            document.getElementById('streaming_util').textContent = streaming_result.utilization.toFixed(1) + '%';
-            document.getElementById('streaming_time').textContent = formatTime(streaming_result.T_total);
-        }
-
-        // Update the plot as well
+        // Update the plot
         updatePlot();
     }
 
@@ -1098,9 +1023,12 @@
         // Paths
         seriesData.forEach((points, i) => {
             const pathD = points.map((p, idx) => `${idx === 0 ? 'M' : 'L'} ${scaleX(p.x)} ${scaleY(p.y)}`).join(' ');
-            const dash = i === 2 ? 'stroke-dasharray="4,2"' : ''; 
+            const dash = i === 2 ? 'stroke-dasharray="4,2"' : '';
             svg += `<path d="${pathD}" fill="none" stroke="${seriesConfig[i].color}" stroke-width="2" ${dash} />`;
         });
+
+        // Hover marker (initially hidden)
+        svg += `<circle id="hoverMarker" cx="0" cy="0" r="5" fill="white" stroke="black" stroke-width="2" style="display: none;" />`;
 
         // Legend (Top Left)
         const legendX = padding.left + 15;
@@ -1118,6 +1046,87 @@
 
         svg += `</svg>`;
         container.innerHTML = svg;
+
+        // Create tooltip div
+        const tooltip = document.createElement('div');
+        tooltip.id = 'plotTooltip';
+        tooltip.style.cssText = 'position: absolute; visibility: hidden; background-color: rgba(30, 41, 59, 0.95); color: white; padding: 0.5rem 0.75rem; border-radius: 0.375rem; font-size: 0.75rem; pointer-events: none; z-index: 1000; white-space: nowrap;';
+        container.appendChild(tooltip);
+
+        // Add hover tooltip functionality
+        const svgElement = container.querySelector('svg');
+        const hoverMarker = svgElement.querySelector('#hoverMarker');
+
+        if (svgElement && tooltip && hoverMarker) {
+            svgElement.addEventListener('mousemove', (e) => {
+                const rect = svgElement.getBoundingClientRect();
+                const mouseX = e.clientX - rect.left;
+                const mouseY = e.clientY - rect.top;
+
+                // Check if mouse is in plot area
+                if (mouseX < padding.left || mouseX > width - padding.right ||
+                    mouseY < padding.top || mouseY > height - padding.bottom) {
+                    tooltip.style.visibility = 'hidden';
+                    hoverMarker.style.display = 'none';
+                    return;
+                }
+
+                // Convert mouse position to data coordinates
+                const xRatio = (mouseX - padding.left) / (width - padding.left - padding.right);
+                const bw = Math.exp(minX + xRatio * (maxX - minX));
+
+                // Find closest data point and line
+                let closestDistance = Infinity;
+                let closestSeries = null;
+                let closestPoint = null;
+
+                seriesData.forEach((points, seriesIdx) => {
+                    points.forEach(point => {
+                        const px = scaleX(point.x);
+                        const py = scaleY(point.y);
+                        const distance = Math.sqrt(Math.pow(mouseX - px, 2) + Math.pow(mouseY - py, 2));
+
+                        if (distance < closestDistance) {
+                            closestDistance = distance;
+                            closestSeries = seriesIdx;
+                            closestPoint = point;
+                        }
+                    });
+                });
+
+                // Only show tooltip if we're close enough to a line (within 30px)
+                if (closestDistance < 30 && closestPoint) {
+                    const utilization = closestPoint.y.toFixed(1);
+                    const bandwidth = closestPoint.x < 1 ?
+                        closestPoint.x.toFixed(2) :
+                        (closestPoint.x < 10 ? closestPoint.x.toFixed(1) : closestPoint.x.toFixed(0));
+
+                    tooltip.innerHTML = `<strong>${seriesConfig[closestSeries].name}</strong><br/>Bandwidth: ${bandwidth} Gbps<br/>Utilization: ${utilization}%`;
+                    tooltip.style.visibility = 'visible';
+
+                    // Position relative to the container
+                    const containerRect = container.getBoundingClientRect();
+                    tooltip.style.left = (e.clientX - containerRect.left + 10) + 'px';
+                    tooltip.style.top = (e.clientY - containerRect.top - 10) + 'px';
+
+                    // Show and position the marker
+                    const markerX = scaleX(closestPoint.x);
+                    const markerY = scaleY(closestPoint.y);
+                    hoverMarker.setAttribute('cx', markerX);
+                    hoverMarker.setAttribute('cy', markerY);
+                    hoverMarker.setAttribute('stroke', seriesConfig[closestSeries].color);
+                    hoverMarker.style.display = 'block';
+                } else {
+                    tooltip.style.visibility = 'hidden';
+                    hoverMarker.style.display = 'none';
+                }
+            });
+
+            svgElement.addEventListener('mouseleave', () => {
+                tooltip.style.visibility = 'hidden';
+                hoverMarker.style.display = 'none';
+            });
+        }
     }
 
     // Initial render
