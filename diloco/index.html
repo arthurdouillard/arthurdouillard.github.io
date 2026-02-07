@@ -660,31 +660,28 @@
                     <option value="100000000000">100B Params</option>
                     <option value="1000000000000">1T Params</option>
                 </select>
-                <div class="label-sub">N, assumes bfloat16</div>
+                <div class="label-sub">N (number of parameters)</div>
             </div>
 
             <div>
-                <label class="label-sm">Seconds per Step</label>
+                <label class="label-sm">Compute Time per Step</label>
                 <input type="text" id="secondsPerStep" value="1.0" class="form-control formatted-input">
-                <div class="label-sub">Time for one training step</div>
+                <div class="label-sub">Seconds</div>
             </div>
 
             <div>
-                <label class="label-sm">Bandwidth (Per Chip)</label>
+                <label class="label-sm">Number of Datacenters</label>
+                <input type="text" id="numDatacenters" value="2" class="form-control formatted-input">
+                <div class="label-sub">M (≥1)</div>
+            </div>
+
+            <div>
+                <label class="label-sm">Bandwidth Between DCs</label>
                 <div class="input-addon-group">
                     <input type="text" id="interBw" value="100" class="form-control formatted-input">
                     <span class="input-addon">Gbps</span>
                 </div>
-                <div class="label-sub">Inter-DC bandwidth</div>
-            </div>
-
-            <div>
-                <label class="label-sm">Latency</label>
-                <div class="input-addon-group">
-                    <input type="text" id="interLat" value="100" class="form-control formatted-input">
-                    <span class="input-addon">ms</span>
-                </div>
-                <div class="label-sub">Inter-DC latency</div>
+                <div class="label-sub">B (inter-DC bandwidth)</div>
             </div>
         </div>
     </div>
@@ -696,48 +693,33 @@
 
             <div>
                 <h2 class="section-title">DiLoCo Parameters</h2>
-                <div class="input-group-grid">
-                    <div>
-                        <label class="label-sm">Replicas (M)</label>
-                        <input type="text" id="replicas" value="2" class="form-control formatted-input">
-                        <div class="label-sub">M=1: Data-Parallel, M≥2: DiLoCo</div>
-                    </div>
-                    <div>
-                        <label class="label-sm">Sync Cadence (H)</label>
-                        <div class="tooltip-wrapper">
-                            <input type="text" id="syncCadence" value="30" class="form-control formatted-input">
-                            <span id="syncCadenceTooltip" class="tooltip-bubble" style="visibility: hidden;">For Data-Parallel (M=1), sync cadence doesn't apply</span>
-                        </div>
-                        <div class="label-sub">Inner steps</div>
-                    </div>
+
+                <div class="mb-4">
+                    <label class="label-sm">Synchronization Cadence (H)</label>
+                    <input type="text" id="syncCadence" value="30" class="form-control formatted-input">
+                    <div class="label-sub">Steps between syncs (H=1: Data-Parallel)</div>
                 </div>
 
-                <!-- Streaming Toggle -->
-                <div class="toggle-container">
-                    <div class="toggle-header">
-                        <div>
-                            <div class="toggle-title">Use Streaming DiLoCo</div>
-                            <div class="toggle-desc">Overlap Inter-DC comms with computation</div>
-                        </div>
-                        <div class="toggle-wrapper">
-                            <input type="checkbox" id="streamingToggle" checked class="toggle-checkbox"/>
-                            <label for="streamingToggle" class="toggle-slider"></label>
-                        </div>
-                    </div>
-                    
-                    <!-- Streaming Options (Hidden by default) -->
-                    <div id="streamingOptions" class="streaming-options input-group-grid active">
-                        <div>
-                            <label class="label-sm" style="color: var(--green-800);">Staleness (S)</label>
-                            <input type="text" id="staleness" value="1" class="form-control formatted-input" style="border-color: var(--green-400);">
-                            <div class="label-sub" style="color: var(--green-600);">Overlapping steps (1..10)</div>
-                        </div>
-                        <div>
-                            <label class="label-sm" style="color: var(--green-800);">Fragments (P)</label>
-                            <input type="text" id="fragments" value="16" class="form-control formatted-input" style="border-color: var(--green-400);">
-                            <div class="label-sub" style="color: var(--green-600);">Chunks per sync</div>
-                        </div>
-                    </div>
+                <div class="mb-4">
+                    <label class="label-sm">Gradients Data Type</label>
+                    <select id="dtypeSelect" class="form-control">
+                        <option value="2" selected>bfloat16 (2 bytes)</option>
+                        <option value="1">int8 (1 byte)</option>
+                        <option value="0.5">int4 (0.5 bytes)</option>
+                    </select>
+                    <div class="label-sub">Affects communication size</div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="label-sm">Overlapping Steps (S)</label>
+                    <input type="text" id="staleness" value="0" class="form-control formatted-input">
+                    <div class="label-sub">S=0: Sequential, S>0: Streaming</div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="label-sm">Number of Fragments (P)</label>
+                    <input type="text" id="fragments" value="1" class="form-control formatted-input">
+                    <div class="label-sub">P=1: Single send, P>1: Streaming</div>
                 </div>
             </div>
 
@@ -902,48 +884,45 @@
     // Model Size Dropdown
     document.getElementById('modelSizeSelect').addEventListener('change', updatePlot);
 
-    // Streaming Toggle
-    const streamingToggle = document.getElementById('streamingToggle');
-    const streamingOptions = document.getElementById('streamingOptions');
-
-    streamingToggle.addEventListener('change', () => {
-        if(streamingToggle.checked) {
-            streamingOptions.classList.add('active');
-        } else {
-            streamingOptions.classList.remove('active');
-        }
+    // Wire up all input listeners
+    document.getElementById('numDatacenters').addEventListener('input', () => {
+        updateFieldStates();
+        updatePlot();
+    });
+    document.getElementById('syncCadence').addEventListener('input', () => {
+        updateFieldStates();
+        updatePlot();
+    });
+    document.getElementById('dtypeSelect').addEventListener('change', updatePlot);
+    document.getElementById('staleness').addEventListener('input', () => {
+        updateFieldStates();
+        updatePlot();
+    });
+    document.getElementById('fragments').addEventListener('input', () => {
+        updateFieldStates();
         updatePlot();
     });
 
-    // Wire up streaming inputs
-    document.getElementById('staleness').addEventListener('input', updatePlot);
-    document.getElementById('fragments').addEventListener('input', updatePlot);
-
-    // Handle Replicas field - disable Sync Cadence when M=1 (Data-Parallel)
-    const replicasInput = document.getElementById('replicas');
+    // Handle field state logic
+    const stalenessInput = document.getElementById('staleness');
+    const fragmentsInput = document.getElementById('fragments');
     const syncCadenceInput = document.getElementById('syncCadence');
-    const syncCadenceTooltip = document.getElementById('syncCadenceTooltip');
 
-    function updateSyncCadenceState() {
-        const M = parseNumber(replicasInput.value);
-        if (M === 1) {
-            syncCadenceInput.disabled = true;
-            syncCadenceTooltip.style.visibility = 'visible';
+    function updateFieldStates() {
+        const H = parseNumber(syncCadenceInput.value);
+
+        // If H == 1 (Data-Parallel), disable S and P
+        if (H === 1) {
+            stalenessInput.disabled = true;
+            fragmentsInput.disabled = true;
         } else {
-            syncCadenceInput.disabled = false;
-            syncCadenceTooltip.style.visibility = 'hidden';
+            stalenessInput.disabled = false;
+            fragmentsInput.disabled = false;
         }
     }
 
-    replicasInput.addEventListener('input', () => {
-        updateSyncCadenceState();
-        updatePlot();
-    });
-
-    replicasInput.addEventListener('blur', updateSyncCadenceState);
-
     // Initial check on page load
-    updateSyncCadenceState();
+    updateFieldStates();
 
     function formatTime(seconds) {
         if (seconds < 0) return "0s";
@@ -963,64 +942,75 @@
         const N = parseFloat(document.getElementById('modelSizeSelect').value);
         const T = parseNumber(document.getElementById('totalSteps').value);
         const secondsPerStep = parseNumber(document.getElementById('secondsPerStep').value);
-        const M = parseNumber(document.getElementById('replicas').value);
+        const M = parseNumber(document.getElementById('numDatacenters').value);
         const H = parseNumber(document.getElementById('syncCadence').value);
-        const R = parseNumber(document.getElementById('totalChips').value);
+        const bytesPerParam = parseFloat(document.getElementById('dtypeSelect').value);
+        const S = parseNumber(document.getElementById('staleness').value);
+        const P = parseNumber(document.getElementById('fragments').value);
 
-        // Override W1 if running sweep
-        const W1_gbps = overrideInterBw !== undefined ? overrideInterBw : parseNumber(document.getElementById('interBw').value);
-        const e1_ms = parseNumber(document.getElementById('interLat').value);
-
-        const isStreaming = document.getElementById('streamingToggle').checked;
-        const staleness = isStreaming ? (parseNumber(document.getElementById('staleness').value) || 1) : 1;
-        const fragments = isStreaming ? (parseNumber(document.getElementById('fragments').value) || 16) : 16;
+        // Override bandwidth if running sweep
+        const B_gbps = overrideInterBw !== undefined ? overrideInterBw : parseNumber(document.getElementById('interBw').value);
 
         if (M < 1) return { error: "M must be >= 1" };
+        if (H < 1) return { error: "H must be >= 1" };
 
-        const W1 = W1_gbps * 1e9;
-        const e1 = e1_ms * 1e-3;
-        const PayloadBits = N * 16;
+        // Data size in bytes
+        const D = N * bytesPerParam;
+
+        // Convert bandwidth from Gbps to bytes/second: Gbps * 1e9 / 8
+        const B_bytes_per_sec = B_gbps * 1e9 / 8;
 
         // Time calculations
         const T_comp = secondsPerStep * T;
 
-        // If M=1 (Data-Parallel), no inter-DC communication
-        let T_comm_inter = 0;
+        // Communication time per synchronization using new formula:
+        // T_comm_per_sync = 2 * (1 - 1/M) * D / B
+        let T_comm_per_sync = 0;
         if (M > 1) {
-            const outer_comm_per_step = ( (2 * PayloadBits) / W1 ) * (1 - 1/R) + e1;
-            T_comm_inter = outer_comm_per_step * (T / H);
+            T_comm_per_sync = 2 * (1 - 1/M) * D / B_bytes_per_sec;
         }
 
+        // Total communication time across all syncs
+        const num_syncs = T / H;
+        const T_comm_inter = T_comm_per_sync * num_syncs;
+
+        // Determine mode and calculate total time
         let T_total;
         let overlapState = "sequential";
+        let mode = "Data-Parallel";
 
-        const T_baseline = T_comp;
-
-        if (M === 1) {
-            // Data-Parallel: no inter-DC communication
-            T_total = T_baseline;
+        if (H === 1) {
+            // Data-Parallel mode
+            T_total = T_comp + T_comm_inter;
             overlapState = "data_parallel";
-        } else if (isStreaming) {
-            // Overlapping logic: T_baseline vs T_outer / Staleness
-            const T_outer_effective = T_comm_inter / staleness;
+            mode = "Data-Parallel";
+        } else if (S > 0 || P > 1) {
+            // Streaming DiLoCo mode
+            mode = "Streaming DiLoCo";
 
-            if (T_outer_effective <= T_baseline) {
-                T_total = T_baseline;
+            // With overlapping, communication can be hidden behind computation
+            // We assume perfect overlap up to the computation window
+            const effective_staleness = Math.max(S, 1);
+            const T_outer_effective = T_comm_inter / effective_staleness;
+
+            if (T_outer_effective <= T_comp) {
+                T_total = T_comp;
                 overlapState = "hidden";
             } else {
                 T_total = T_outer_effective;
                 overlapState = "bound";
             }
         } else {
-            // Sequential DiLoCo adds Inter-DC on top
-            T_total = T_baseline + T_comm_inter;
+            // Standard DiLoCo mode
+            mode = "DiLoCo";
+            T_total = T_comp + T_comm_inter;
         }
 
         const utilization = (T_comp / T_total) * 100;
 
         return {
-            T, T_comp, T_comm_inter, T_total, utilization, overlapState, staleness, fragments,
-            N, M, R, W1_gbps, T_baseline
+            T, T_comp, T_comm_inter, T_total, utilization, overlapState,
+            N, M, H, bytesPerParam, S, P, B_gbps, mode
         };
     }
 
@@ -1042,24 +1032,18 @@
             return;
         }
 
-        const N = parseFloat(document.getElementById('modelSizeSelect').value);
-        const secondsPerStep = parseNumber(document.getElementById('secondsPerStep').value);
-        const M = parseNumber(document.getElementById('replicas').value);
-        const H = parseNumber(document.getElementById('syncCadence').value);
-        const R = parseNumber(document.getElementById('totalChips').value);
-        const T = parseNumber(document.getElementById('totalSteps').value);
-        const W1_gbps = parseNumber(document.getElementById('interBw').value);
-        const e1_ms = parseNumber(document.getElementById('interLat').value);
-        const isStreaming = document.getElementById('streamingToggle').checked;
-        const staleness = isStreaming ? (parseNumber(document.getElementById('staleness').value) || 1) : 1;
-        const fragments = isStreaming ? (parseNumber(document.getElementById('fragments').value) || 16) : 16;
-
         const config = {
             id: Date.now(),
             name: configName,
             params: {
-                N, secondsPerStep, M, H, R, T, W1_gbps, e1_ms,
-                isStreaming, staleness, fragments
+                N: res.N,
+                secondsPerStep: parseNumber(document.getElementById('secondsPerStep').value),
+                M: res.M,
+                H: res.H,
+                bytesPerParam: res.bytesPerParam,
+                S: res.S,
+                P: res.P,
+                B_gbps: res.B_gbps
             },
             results: res
         };
@@ -1099,20 +1083,17 @@
             const p = config.params;
             const r = config.results;
 
-            // Format model size
-            let modelSize = 'Unknown';
-            if (p.N >= 1e12) modelSize = (p.N / 1e12).toFixed(0) + 'T';
-            else if (p.N >= 1e9) modelSize = (p.N / 1e9).toFixed(0) + 'B';
-            else if (p.N >= 1e6) modelSize = (p.N / 1e6).toFixed(0) + 'M';
-
-            const mode = p.M === 1 ? 'Data-Parallel' : (p.isStreaming ? 'Streaming DiLoCo' : 'DiLoCo');
+            // Format dtype
+            let dtypeStr = 'bf16';
+            if (p.bytesPerParam === 1) dtypeStr = 'int8';
+            else if (p.bytesPerParam === 0.5) dtypeStr = 'int4';
 
             html += `
                 <div class="config-card">
                     <div class="config-header">
                         <div style="flex: 1;">
                             <div class="config-name">${config.name}</div>
-                            <div style="font-size: 0.7rem; color: var(--slate-400); margin-top: 0.125rem;">${mode}</div>
+                            <div style="font-size: 0.7rem; color: var(--slate-400); margin-top: 0.125rem;">${r.mode}</div>
                         </div>
                         <div style="text-align: right;">
                             <div class="config-util">${r.utilization.toFixed(1)}%</div>
@@ -1120,41 +1101,14 @@
                         </div>
                     </div>
 
-                    <div class="config-params">
-                        <div class="config-param">
-                            <span class="config-param-label">Model:</span>
-                            <span class="config-param-value">${modelSize}</span>
-                        </div>
-                        <div class="config-param">
-                            <span class="config-param-label">Replicas:</span>
-                            <span class="config-param-value">M=${p.M}</span>
-                        </div>
-                        <div class="config-param">
-                            <span class="config-param-label">Steps:</span>
-                            <span class="config-param-value">T=${p.T.toLocaleString()}</span>
-                        </div>
-                        <div class="config-param">
-                            <span class="config-param-label">Sync Cadence:</span>
-                            <span class="config-param-value">H=${p.H}</span>
-                        </div>
-                        <div class="config-param">
-                            <span class="config-param-label">Chips:</span>
-                            <span class="config-param-value">R=${p.R}</span>
-                        </div>
-                        <div class="config-param">
-                            <span class="config-param-label">Bandwidth:</span>
-                            <span class="config-param-value">${p.W1_gbps} Gbps</span>
-                        </div>
-                        ${p.isStreaming ? `
-                        <div class="config-param">
-                            <span class="config-param-label">Staleness:</span>
-                            <span class="config-param-value">S=${p.staleness}</span>
-                        </div>
-                        <div class="config-param">
-                            <span class="config-param-label">Fragments:</span>
-                            <span class="config-param-value">P=${p.fragments}</span>
-                        </div>
-                        ` : ''}
+                    <div style="font-size: 0.7rem; color: var(--slate-600); margin-top: 0.5rem; display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                        <span><strong>H:</strong> ${p.H}</span>
+                        <span>•</span>
+                        <span><strong>dtype:</strong> ${dtypeStr}</span>
+                        <span>•</span>
+                        <span><strong>S:</strong> ${p.S}</span>
+                        <span>•</span>
+                        <span><strong>P:</strong> ${p.P}</span>
                     </div>
 
                     <div style="margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid var(--blue-100); display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem;">
@@ -1192,16 +1146,15 @@
         const N = parseFloat(document.getElementById('modelSizeSelect').value);
         const secondsPerStep = parseNumber(document.getElementById('secondsPerStep').value);
         const H = parseNumber(document.getElementById('syncCadence').value);
-        const R = parseNumber(document.getElementById('totalChips').value);
-        const M = parseNumber(document.getElementById('replicas').value);
-        const e1_ms = parseNumber(document.getElementById('interLat').value);
-        const staleness = parseNumber(document.getElementById('staleness').value) || 1;
-        const fragments = parseNumber(document.getElementById('fragments').value) || 16;
+        const M = parseNumber(document.getElementById('numDatacenters').value);
+        const bytesPerParam = parseFloat(document.getElementById('dtypeSelect').value);
+        const S = parseNumber(document.getElementById('staleness').value);
+        const P = parseNumber(document.getElementById('fragments').value);
 
-        // Constants
-        const e1 = e1_ms * 1e-3;
-        const PayloadBits = N * 16;
-        const PayloadBitsFP4 = N * 4;
+        // Data sizes for different dtypes
+        const D = N * bytesPerParam;
+        const D_int8 = N * 1;
+        const D_int4 = N * 0.5;
 
         // Per-Step calculations
         const T_comp_step = secondsPerStep;
@@ -1220,54 +1173,56 @@
 
         // Series Definitions
         const seriesConfig = [
-            { name: "Data Parallel", color: "#94a3b8" }, // Grey
-            { name: "Vanilla DiLoCo", color: "#ef4444" }, // Red
+            { name: "Data Parallel (H=1)", color: "#94a3b8" }, // Grey
+            { name: "DiLoCo", color: "#ef4444" }, // Red
             { name: "Streaming DiLoCo", color: "#f97316" }, // Orange
             { name: "Streaming + Overlap", color: "#3b82f6" }, // Blue
-            { name: "Streaming + Overlap + FP4", color: "#10b981" } // Green
+            { name: "Streaming + Overlap + int8", color: "#10b981" } // Green
         ];
 
         const seriesData = seriesConfig.map(() => []);
 
         bwPoints.forEach(bw => {
-            const W1 = bw * 1e9;
-            const getInterTime = (bits) => ((2 * bits) / W1) * (1 - 1/R) + e1;
-            
-            // Comm Sync Times
-            const comm_inter_sync = getInterTime(PayloadBits);
-            const comm_inter_sync_fp4 = getInterTime(PayloadBitsFP4);
+            const B_bytes_per_sec = bw * 1e9 / 8;
 
-            // Overhead for Fragments (applied to ALL streaming variants)
-            const T_frag_overhead = (fragments - 1) * e1;
+            // Helper to get communication time per sync using new formula
+            const getCommTime = (data_bytes, num_dcs) => {
+                if (num_dcs <= 1) return 0;
+                return 2 * (1 - 1/num_dcs) * data_bytes / B_bytes_per_sec;
+            };
 
-            // 1. Data Parallel
-            const T_dp_step = T_baseline_step + comm_inter_sync; 
+            // Comm times per sync for different configurations
+            const comm_per_sync = getCommTime(D, M);
+            const comm_per_sync_int8 = getCommTime(D_int8, M);
+            const comm_per_sync_int4 = getCommTime(D_int4, M);
+
+            // 1. Data Parallel (H=1)
+            const T_dp_step = T_baseline_step + comm_per_sync;
             const util_dp = (T_comp_step / T_dp_step) * 100;
 
-            // 2. Vanilla DiLoCo
-            const T_vanilla_cycle = T_inner_phase + comm_inter_sync;
+            // 2. Vanilla DiLoCo (H>1, no overlap)
+            const T_vanilla_cycle = T_inner_phase + comm_per_sync;
             const util_vanilla = ((T_comp_step * H) / T_vanilla_cycle) * 100;
 
-            // 3. Streaming (Sequential)
-            // Difference: Pay latency cost P times. 
-            const T_streaming_cycle = T_vanilla_cycle + T_frag_overhead;
+            // 3. Streaming (Sequential with fragments)
+            // No real overlap, but broken into fragments
+            const T_streaming_cycle = T_vanilla_cycle;
             const util_streaming = ((T_comp_step * H) / T_streaming_cycle) * 100;
 
-            // 4. Streaming + Overlap
-            // T_total_cycle = Max(T_inner_phase, (T_inter_sync + overhead) / S)
-            // Note: Staleness S allows spreading the *entire* cost (transfer + overhead)
-            const T_overlap_cycle = Math.max(T_inner_phase, (comm_inter_sync + T_frag_overhead) / staleness);
+            // 4. Streaming + Overlap (S>0)
+            const effective_staleness = Math.max(S, 1);
+            const T_overlap_cycle = Math.max(T_inner_phase, comm_per_sync / effective_staleness);
             const util_overlap = ((T_comp_step * H) / T_overlap_cycle) * 100;
 
-            // 5. Streaming + Overlap + FP4
-            const T_overlap_fp4_cycle = Math.max(T_inner_phase, (comm_inter_sync_fp4 + T_frag_overhead) / staleness);
-            const util_overlap_fp4 = ((T_comp_step * H) / T_overlap_fp4_cycle) * 100;
+            // 5. Streaming + Overlap + int8
+            const T_overlap_int8_cycle = Math.max(T_inner_phase, comm_per_sync_int8 / effective_staleness);
+            const util_overlap_int8 = ((T_comp_step * H) / T_overlap_int8_cycle) * 100;
 
             seriesData[0].push({ x: bw, y: util_dp });
             seriesData[1].push({ x: bw, y: util_vanilla });
             seriesData[2].push({ x: bw, y: util_streaming });
             seriesData[3].push({ x: bw, y: util_overlap });
-            seriesData[4].push({ x: bw, y: util_overlap_fp4 });
+            seriesData[4].push({ x: bw, y: util_overlap_int8 });
         });
 
         // SVG Drawing
