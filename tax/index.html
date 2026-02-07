@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UK Tax Calculator</title>
+    <style>
+        :root {
+            /* Color Palette */
+            --bg-body: #f8fafc;
+            --bg-card: #ffffff;
+
+            --slate-50: #f8fafc;
+            --slate-100: #f1f5f9;
+            --slate-200: #e2e8f0;
+            --slate-300: #cbd5e1;
+            --slate-400: #94a3b8;
+            --slate-500: #64748b;
+            --slate-600: #475569;
+            --slate-700: #334155;
+            --slate-800: #1e293b;
+            --slate-900: #0f172a;
+
+            --blue-50: #fff7ed;
+            --blue-100: #ffedd5;
+            --blue-200: #fed7aa;
+            --blue-500: #f97316;
+            --blue-600: #d95f0e;
+            --blue-700: #c2410c;
+            --blue-900: #7c2d12;
+
+            --green-50: #f0fdf4;
+            --green-100: #dcfce7;
+            --green-200: #bbf7d0;
+            --green-400: #4ade80;
+            --green-600: #16a34a;
+            --green-800: #166534;
+
+            --indigo-500: #6366f1;
+            --purple-200: #e9d5ff;
+            --purple-500: #a855f7;
+            --purple-600: #9333ea;
+            --red-500: #ef4444;
+            --orange-50: #fff7ed;
+            --orange-600: #ea580c;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--slate-800);
+            line-height: 1.5;
+            margin: 0;
+            padding: 2rem;
+        }
+
+        /* Layout */
+        .container {
+            max-width: 64rem;
+            margin: 0 auto;
+        }
+
+        .header {
+            margin-bottom: 2rem;
+            border-bottom: 2px solid var(--slate-200);
+            padding-bottom: 1rem;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #d95f0e;
+            margin: 0;
+        }
+
+        .header p {
+            font-size: 0.875rem;
+            color: var(--slate-500);
+            margin-top: 0.5rem;
+        }
+
+        /* Panels */
+        .panel {
+            background-color: var(--bg-card);
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border: 1px solid var(--slate-100);
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--slate-700);
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--slate-100);
+            padding-bottom: 0.5rem;
+        }
+
+        /* Forms */
+        .label-sm {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--slate-500);
+            margin-bottom: 0.25rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid var(--slate-300);
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            background-color: var(--slate-50);
+            color: var(--slate-700);
+            font-weight: 500;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .form-control:focus {
+            outline: 2px solid var(--blue-600);
+            outline-offset: 1px;
+            border-color: var(--blue-600);
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .input-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1rem;
+            align-items: end;
+        }
+
+        /* Navigation Header */
+        .top-nav {
+            background-color: var(--bg-card);
+            border-bottom: 1px solid var(--slate-200);
+            padding: 1rem 2rem;
+            margin: -2rem -2rem 2rem -2rem;
+        }
+
+        .top-nav a {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            color: var(--slate-800);
+            font-weight: 600;
+            font-size: 1rem;
+            transition: color 0.2s;
+        }
+
+        .top-nav a:hover {
+            color: #d95f0e;
+        }
+
+        .top-nav img {
+            height: 18px;
+            width: 18px;
+        }
+
+        /* Results Table */
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.5rem;
+        }
+
+        .results-table th {
+            background-color: var(--slate-100);
+            color: var(--slate-700);
+            font-weight: 600;
+            padding: 0.75rem;
+            text-align: left;
+            border: 1px solid var(--slate-200);
+        }
+
+        .results-table td {
+            padding: 0.75rem;
+            border: 1px solid var(--slate-200);
+            font-family: 'SF Mono', 'Roboto Mono', monospace;
+            font-weight: 500;
+        }
+
+        .results-table tbody tr:hover {
+            background-color: var(--slate-50);
+        }
+
+        .results-table .row-label {
+            font-weight: 700;
+            text-align: left;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--slate-50);
+        }
+
+        .currency-header {
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .currency-value {
+            text-align: right;
+        }
+
+        .value-delta {
+            display: block;
+            font-size: 0.7rem;
+            color: var(--orange-600);
+            font-weight: 600;
+            margin-top: 0.25rem;
+        }
+
+        .value-delta.positive {
+            color: var(--green-600);
+        }
+
+        .value-delta.negative {
+            color: var(--red-500);
+        }
+
+        /* Tax Breakdown */
+        .tax-breakdown {
+            background-color: var(--blue-50);
+            border: 1px solid var(--blue-100);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .tax-breakdown h3 {
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: var(--blue-900);
+            margin: 0 0 0.75rem 0;
+        }
+
+        .tax-bracket {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem;
+            margin-bottom: 0.5rem;
+            background-color: white;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+        }
+
+        .tax-bracket-label {
+            color: var(--slate-700);
+            font-weight: 600;
+        }
+
+        .tax-bracket-amount {
+            font-family: 'SF Mono', 'Roboto Mono', monospace;
+            color: var(--blue-700);
+            font-weight: 700;
+        }
+
+        .effective-rate {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 2px solid var(--blue-200);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 700;
+            color: var(--blue-900);
+        }
+
+        .effective-rate-value {
+            font-family: 'SF Mono', 'Roboto Mono', monospace;
+            font-size: 1.25rem;
+        }
+
+        /* Utilities */
+        .hidden {
+            display: none;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .mb-2 {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .top-nav {
+                padding: 1rem;
+                margin: -1rem -1rem 1rem -1rem;
+            }
+
+            .input-row {
+                grid-template-columns: 1fr;
+            }
+
+            .results-table {
+                font-size: 0.75rem;
+            }
+
+            .results-table th,
+            .results-table td {
+                padding: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body class="container">
+
+    <nav class="top-nav">
+        <a href="../index.html">
+            <img src="../favicon.ico" alt="Home">
+            Arthur Douillard
+        </a>
+    </nav>
+
+    <header class="header">
+        <h1>UK Tax Calculator</h1>
+        <p>Calculate UK income tax with automatic currency conversion (GBP, USD, EUR)</p>
+        <p id="ratesStatus" style="font-size: 0.75rem; color: var(--slate-400); margin-top: 0.25rem;">Loading exchange rates...</p>
+    </header>
+
+    <!-- Input Panel -->
+    <div class="panel">
+        <h2 class="section-title">Income Details</h2>
+
+        <div class="input-row">
+            <div class="form-group">
+                <label class="label-sm">Annual Income</label>
+                <input type="number" id="incomeInput" class="form-control" placeholder="50000" value="50000" min="0" step="1000">
+                <div style="margin-top: 0.75rem;">
+                    <label class="label-sm" style="color: var(--orange-600); font-size: 0.7rem;">Compare with New Income (optional)</label>
+                    <input type="number" id="compareInput" class="form-control" placeholder="Enter new income to compare" min="0" step="1000" style="font-size: 0.8rem; padding: 0.4rem;">
+                    <div style="font-size: 0.65rem; color: var(--slate-400); margin-top: 0.25rem;">Leave empty to hide comparison</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="label-sm">Currency</label>
+                <select id="currencySelect" class="form-control">
+                    <option value="GBP">£ GBP (British Pound)</option>
+                    <option value="USD">$ USD (US Dollar)</option>
+                    <option value="EUR">€ EUR (Euro)</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Panel -->
+    <div class="panel" id="resultsPanel">
+        <h2 class="section-title">Tax Calculation Results</h2>
+
+        <table class="results-table">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th class="currency-header">GBP (£)</th>
+                    <th class="currency-header">USD ($)</th>
+                    <th class="currency-header">EUR (€)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="row-label">Annual Pre-Tax</td>
+                    <td class="currency-value" id="preTaxGBP">-</td>
+                    <td class="currency-value" id="preTaxUSD">-</td>
+                    <td class="currency-value" id="preTaxEUR">-</td>
+                </tr>
+                <tr>
+                    <td class="row-label">Annual Tax</td>
+                    <td class="currency-value" id="taxGBP">-</td>
+                    <td class="currency-value" id="taxUSD">-</td>
+                    <td class="currency-value" id="taxEUR">-</td>
+                </tr>
+                <tr>
+                    <td class="row-label">Annual Post-Tax</td>
+                    <td class="currency-value" id="postTaxGBP">-</td>
+                    <td class="currency-value" id="postTaxUSD">-</td>
+                    <td class="currency-value" id="postTaxEUR">-</td>
+                </tr>
+                <tr>
+                    <td class="row-label">Monthly Post-Tax</td>
+                    <td class="currency-value" id="monthlyGBP">-</td>
+                    <td class="currency-value" id="monthlyUSD">-</td>
+                    <td class="currency-value" id="monthlyEUR">-</td>
+                </tr>
+                <tr>
+                    <td class="row-label">Daily Post-Tax</td>
+                    <td class="currency-value" id="dailyGBP">-</td>
+                    <td class="currency-value" id="dailyUSD">-</td>
+                    <td class="currency-value" id="dailyEUR">-</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Tax Breakdown -->
+        <div class="tax-breakdown">
+            <h3>UK Tax Breakdown</h3>
+            <div id="taxBrackets"></div>
+            <div class="effective-rate">
+                <span>Effective Tax Rate</span>
+                <span class="effective-rate-value" id="effectiveRate">0.0%</span>
+            </div>
+        </div>
+    </div>
+
+<script>
+    // Exchange rates (fallback values if API fails)
+    const EXCHANGE_RATES = {
+        'GBP': 1.0,
+        'USD': 1.27,  // Fallback: 1 GBP = 1.27 USD
+        'EUR': 1.20   // Fallback: 1 GBP = 1.20 EUR
+    };
+
+    let ratesLastUpdated = null;
+
+    // UK Tax Brackets for 2024/2025 (England, Wales, Northern Ireland)
+    const TAX_BRACKETS = [
+        { limit: 12570, rate: 0.00, name: 'Personal Allowance' },
+        { limit: 50270, rate: 0.20, name: 'Basic Rate' },
+        { limit: 125140, rate: 0.40, name: 'Higher Rate' },
+        { limit: Infinity, rate: 0.45, name: 'Additional Rate' }
+    ];
+
+    // Format currency with commas and 2 decimal places
+    function formatCurrency(amount, symbol = '') {
+        const formatted = amount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        return symbol ? `${symbol}${formatted}` : formatted;
+    }
+
+    // Convert amount from input currency to GBP
+    function convertToGBP(amount, currency) {
+        return amount / EXCHANGE_RATES[currency];
+    }
+
+    // Convert amount from GBP to target currency
+    function convertFromGBP(amount, currency) {
+        return amount * EXCHANGE_RATES[currency];
+    }
+
+    // Calculate UK income tax
+    function calculateUKTax(incomeGBP) {
+        let totalTax = 0;
+        let previousLimit = 0;
+        const breakdown = [];
+
+        for (let i = 0; i < TAX_BRACKETS.length; i++) {
+            const bracket = TAX_BRACKETS[i];
+            const taxableInThisBracket = Math.min(incomeGBP, bracket.limit) - previousLimit;
+
+            if (taxableInThisBracket > 0) {
+                const taxInThisBracket = taxableInThisBracket * bracket.rate;
+                totalTax += taxInThisBracket;
+
+                breakdown.push({
+                    name: bracket.name,
+                    rate: bracket.rate,
+                    taxableAmount: taxableInThisBracket,
+                    taxAmount: taxInThisBracket
+                });
+
+                if (incomeGBP <= bracket.limit) {
+                    break;
+                }
+            }
+
+            previousLimit = bracket.limit;
+        }
+
+        const effectiveRate = incomeGBP > 0 ? (totalTax / incomeGBP) * 100 : 0;
+
+        return {
+            totalTax,
+            breakdown,
+            effectiveRate,
+            postTax: incomeGBP - totalTax
+        };
+    }
+
+    // Update all calculations and display
+    function updateCalculations() {
+        const incomeInput = parseFloat(document.getElementById('incomeInput').value) || 0;
+        const compareInput = parseFloat(document.getElementById('compareInput').value) || 0;
+        const currency = document.getElementById('currencySelect').value;
+
+        // Convert to GBP
+        const incomeGBP = convertToGBP(incomeInput, currency);
+        const compareGBP = compareInput > 0 ? convertToGBP(compareInput, currency) : 0;
+
+        // Calculate tax
+        const taxResult = calculateUKTax(incomeGBP);
+        const compareTaxResult = compareGBP > 0 ? calculateUKTax(compareGBP) : null;
+
+        // Update table for all three currencies
+        ['GBP', 'USD', 'EUR'].forEach(curr => {
+            const symbol = curr === 'GBP' ? '£' : (curr === 'USD' ? '$' : '€');
+
+            const preTax = convertFromGBP(incomeGBP, curr);
+            const tax = convertFromGBP(taxResult.totalTax, curr);
+            const postTax = convertFromGBP(taxResult.postTax, curr);
+            const monthly = postTax / 12;
+            const daily = postTax / 365;
+
+            // Format main values
+            let preTaxHTML = formatCurrency(preTax, symbol);
+            let taxHTML = formatCurrency(tax, symbol);
+            let postTaxHTML = formatCurrency(postTax, symbol);
+            let monthlyHTML = formatCurrency(monthly, symbol);
+            let dailyHTML = formatCurrency(daily, symbol);
+
+            // If comparison is active, add deltas
+            if (compareTaxResult) {
+                const comparePreTax = convertFromGBP(compareGBP, curr);
+                const compareTax = convertFromGBP(compareTaxResult.totalTax, curr);
+                const comparePostTax = convertFromGBP(compareTaxResult.postTax, curr);
+                const compareMonthly = comparePostTax / 12;
+                const compareDaily = comparePostTax / 365;
+
+                const deltaPreTax = comparePreTax - preTax;
+                const deltaTax = compareTax - tax;
+                const deltaPostTax = comparePostTax - postTax;
+                const deltaMonthly = compareMonthly - monthly;
+                const deltaDaily = compareDaily - daily;
+
+                const formatDelta = (delta) => {
+                    const sign = delta >= 0 ? '+' : '-';
+                    const className = delta > 0 ? 'positive' : (delta < 0 ? 'negative' : '');
+                    return `<span class="value-delta ${className}">${sign}${formatCurrency(Math.abs(delta), symbol)}</span>`;
+                };
+
+                preTaxHTML += formatDelta(deltaPreTax);
+                taxHTML += formatDelta(deltaTax);
+                postTaxHTML += formatDelta(deltaPostTax);
+                monthlyHTML += formatDelta(deltaMonthly);
+                dailyHTML += formatDelta(deltaDaily);
+            }
+
+            document.getElementById(`preTax${curr}`).innerHTML = preTaxHTML;
+            document.getElementById(`tax${curr}`).innerHTML = taxHTML;
+            document.getElementById(`postTax${curr}`).innerHTML = postTaxHTML;
+            document.getElementById(`monthly${curr}`).innerHTML = monthlyHTML;
+            document.getElementById(`daily${curr}`).innerHTML = dailyHTML;
+        });
+
+        // Update tax breakdown
+        const taxBracketsDiv = document.getElementById('taxBrackets');
+        taxBracketsDiv.innerHTML = '';
+
+        taxResult.breakdown.forEach(bracket => {
+            if (bracket.taxableAmount > 0) {
+                const bracketDiv = document.createElement('div');
+                bracketDiv.className = 'tax-bracket';
+
+                const rateText = bracket.rate === 0 ? 'Tax-free' : `${(bracket.rate * 100).toFixed(0)}% on £${formatCurrency(bracket.taxableAmount, '')}`;
+
+                bracketDiv.innerHTML = `
+                    <span class="tax-bracket-label">${bracket.name}: ${rateText}</span>
+                    <span class="tax-bracket-amount">£${formatCurrency(bracket.taxAmount, '')}</span>
+                `;
+
+                taxBracketsDiv.appendChild(bracketDiv);
+            }
+        });
+
+        // Update effective rate
+        document.getElementById('effectiveRate').textContent = `${taxResult.effectiveRate.toFixed(1)}%`;
+    }
+
+    // Fetch live exchange rates from Frankfurter API
+    function fetchLiveRates() {
+        const statusEl = document.getElementById('ratesStatus');
+        statusEl.textContent = 'Loading live exchange rates...';
+        statusEl.style.color = 'var(--slate-400)';
+
+        fetch('https://api.frankfurter.app/latest?from=GBP&to=USD,EUR')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('API request failed');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Update rates with live data
+                EXCHANGE_RATES.USD = data.rates.USD;
+                EXCHANGE_RATES.EUR = data.rates.EUR;
+                ratesLastUpdated = new Date(data.date);
+
+                // Update status
+                statusEl.textContent = `Live exchange rates updated: ${data.date} (1 GBP = ${data.rates.USD.toFixed(3)} USD, ${data.rates.EUR.toFixed(3)} EUR)`;
+                statusEl.style.color = 'var(--green-600)';
+
+                // Recalculate with new rates
+                updateCalculations();
+            })
+            .catch(error => {
+                console.error('Failed to fetch exchange rates:', error);
+                statusEl.textContent = 'Using approximate exchange rates (live rates unavailable)';
+                statusEl.style.color = 'var(--orange-600)';
+
+                // Still calculate with fallback rates
+                updateCalculations();
+            });
+    }
+
+    // Event listeners
+    document.getElementById('incomeInput').addEventListener('input', updateCalculations);
+    document.getElementById('compareInput').addEventListener('input', updateCalculations);
+    document.getElementById('currencySelect').addEventListener('change', updateCalculations);
+
+    // Fetch live rates on page load
+    fetchLiveRates();
+</script>
+
+</body>
+</html>
