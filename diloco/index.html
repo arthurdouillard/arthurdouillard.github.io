@@ -686,65 +686,112 @@
         </div>
     </div>
 
-    <div class="grid-2-cols">
+    <!-- Hardcoded Configurations -->
+    <div style="display: flex; flex-direction: column; gap: 1.5rem; margin-bottom: 2rem;">
 
-        <!-- Input Section -->
+        <!-- Configuration 1: Data Parallel -->
         <div class="panel">
+            <h2 class="section-title" style="color: #94a3b8; border-color: #94a3b8;">Data Parallel (H=1)</h2>
 
-            <div>
-                <h2 class="section-title">DiLoCo Parameters</h2>
-
-                <div class="mb-4">
-                    <label class="label-sm">Synchronization Cadence (H)</label>
-                    <input type="text" id="syncCadence" value="30" class="form-control formatted-input">
+            <div class="grid-2-cols">
+                <div>
+                    <div class="mb-4">
+                        <label class="label-sm">Gradients Data Type</label>
+                        <select id="dp_dtype" class="form-control">
+                            <option value="2" selected>bfloat16 (2 bytes)</option>
+                            <option value="1">int8 (1 byte)</option>
+                            <option value="0.5">int4 (0.5 bytes)</option>
+                        </select>
+                    </div>
                 </div>
 
-                <div class="mb-4">
-                    <label class="label-sm">Gradients Data Type</label>
-                    <select id="dtypeSelect" class="form-control">
-                        <option value="2" selected>bfloat16 (2 bytes)</option>
-                        <option value="1">int8 (1 byte)</option>
-                        <option value="0.5">int4 (0.5 bytes)</option>
-                    </select>
-                </div>
-
-                <div class="mb-4">
-                    <label class="label-sm">Overlapping Steps (S)</label>
-                    <input type="text" id="staleness" value="0" class="form-control formatted-input">
-                </div>
-
-                <div class="mb-4">
-                    <label class="label-sm">Number of Fragments (P)</label>
-                    <input type="text" id="fragments" value="1" class="form-control formatted-input">
+                <div class="results-panel" style="padding: 1rem; border-radius: 0.5rem;">
+                    <div class="result-row">
+                        <span class="result-key">Compute Utilization</span>
+                        <span class="result-val" id="dp_util">-</span>
+                    </div>
+                    <div class="result-row" style="border: 0;">
+                        <span class="result-key">Total Time</span>
+                        <span class="result-val-sm" id="dp_time">-</span>
+                    </div>
                 </div>
             </div>
-
-            <!-- Save Configuration Section -->
-            <div style="border-top: 2px solid var(--slate-200); padding-top: 1rem;">
-                <button id="saveConfigBtn" class="save-config-btn">
-                    <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="margin-right: 0.5rem;">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                    </svg>
-                    Add Configuration
-                </button>
-            </div>
-
         </div>
 
-        <!-- Saved Configurations Section (Right Column) -->
-        <div class="panel results-panel">
-            <h2 class="result-title">
-                <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
-                Saved Configurations
-            </h2>
+        <!-- Configuration 2: DiLoCo -->
+        <div class="panel">
+            <h2 class="section-title" style="color: #ef4444; border-color: #ef4444;">DiLoCo</h2>
 
-            <div id="configsList">
-                <div class="empty-state">
-                    <svg width="64" height="64" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="stroke-width: 1;">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
-                    </svg>
-                    <p style="font-size: 0.875rem; margin: 0;">No configurations saved yet</p>
-                    <p style="font-size: 0.75rem; margin-top: 0.5rem;">Configure your settings on the left and click "Add Configuration"</p>
+            <div class="grid-2-cols">
+                <div>
+                    <div class="mb-4">
+                        <label class="label-sm">Gradients Data Type</label>
+                        <select id="diloco_dtype" class="form-control">
+                            <option value="2" selected>bfloat16 (2 bytes)</option>
+                            <option value="1">int8 (1 byte)</option>
+                            <option value="0.5">int4 (0.5 bytes)</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="label-sm">Synchronization Cadence (H)</label>
+                        <input type="text" id="diloco_H" value="30" class="form-control formatted-input">
+                    </div>
+                </div>
+
+                <div class="results-panel" style="padding: 1rem; border-radius: 0.5rem;">
+                    <div class="result-row">
+                        <span class="result-key">Compute Utilization</span>
+                        <span class="result-val" id="diloco_util">-</span>
+                    </div>
+                    <div class="result-row" style="border: 0;">
+                        <span class="result-key">Total Time</span>
+                        <span class="result-val-sm" id="diloco_time">-</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Configuration 3: Streaming DiLoCo with Overlap -->
+        <div class="panel">
+            <h2 class="section-title" style="color: #3b82f6; border-color: #3b82f6;">Streaming DiLoCo with Overlap</h2>
+
+            <div class="grid-2-cols">
+                <div>
+                    <div class="mb-4">
+                        <label class="label-sm">Gradients Data Type</label>
+                        <select id="streaming_dtype" class="form-control">
+                            <option value="2" selected>bfloat16 (2 bytes)</option>
+                            <option value="1">int8 (1 byte)</option>
+                            <option value="0.5">int4 (0.5 bytes)</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="label-sm">Synchronization Cadence (H)</label>
+                        <input type="text" id="streaming_H" value="30" class="form-control formatted-input">
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="label-sm">Number of Fragments (P)</label>
+                        <input type="text" id="streaming_P" value="5" class="form-control formatted-input">
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="label-sm">Number of Overlap (S)</label>
+                        <input type="text" id="streaming_S" value="10" class="form-control formatted-input">
+                    </div>
+                </div>
+
+                <div class="results-panel" style="padding: 1rem; border-radius: 0.5rem;">
+                    <div class="result-row">
+                        <span class="result-key">Compute Utilization</span>
+                        <span class="result-val" id="streaming_util">-</span>
+                    </div>
+                    <div class="result-row" style="border: 0;">
+                        <span class="result-key">Total Time</span>
+                        <span class="result-val-sm" id="streaming_time">-</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -817,51 +864,25 @@
         input.addEventListener('blur', function() {
             this.value = formatNumber(this.value);
         });
-        input.addEventListener('input', updatePlot);
+        input.addEventListener('input', updateConfigurations);
     });
 
     // Model Size Dropdown
-    document.getElementById('modelSizeSelect').addEventListener('change', updatePlot);
+    document.getElementById('modelSizeSelect').addEventListener('change', updateConfigurations);
 
-    // Wire up all input listeners
-    document.getElementById('numDatacenters').addEventListener('input', () => {
-        updateFieldStates();
-        updatePlot();
-    });
-    document.getElementById('syncCadence').addEventListener('input', () => {
-        updateFieldStates();
-        updatePlot();
-    });
-    document.getElementById('dtypeSelect').addEventListener('change', updatePlot);
-    document.getElementById('staleness').addEventListener('input', () => {
-        updateFieldStates();
-        updatePlot();
-    });
-    document.getElementById('fragments').addEventListener('input', () => {
-        updateFieldStates();
-        updatePlot();
-    });
+    // Wire up all input listeners for global settings
+    document.getElementById('numDatacenters').addEventListener('input', updateConfigurations);
+    document.getElementById('secondsPerStep').addEventListener('input', updateConfigurations);
+    document.getElementById('interBw').addEventListener('input', updateConfigurations);
 
-    // Handle field state logic
-    const stalenessInput = document.getElementById('staleness');
-    const fragmentsInput = document.getElementById('fragments');
-    const syncCadenceInput = document.getElementById('syncCadence');
-
-    function updateFieldStates() {
-        const H = parseNumber(syncCadenceInput.value);
-
-        // If H == 1 (Data-Parallel), disable S and P
-        if (H === 1) {
-            stalenessInput.disabled = true;
-            fragmentsInput.disabled = true;
-        } else {
-            stalenessInput.disabled = false;
-            fragmentsInput.disabled = false;
-        }
-    }
-
-    // Initial check on page load
-    updateFieldStates();
+    // Wire up listeners for configuration-specific inputs
+    document.getElementById('dp_dtype').addEventListener('change', updateConfigurations);
+    document.getElementById('diloco_dtype').addEventListener('change', updateConfigurations);
+    document.getElementById('diloco_H').addEventListener('input', updateConfigurations);
+    document.getElementById('streaming_dtype').addEventListener('change', updateConfigurations);
+    document.getElementById('streaming_H').addEventListener('input', updateConfigurations);
+    document.getElementById('streaming_P').addEventListener('input', updateConfigurations);
+    document.getElementById('streaming_S').addEventListener('input', updateConfigurations);
 
     function formatTime(seconds) {
         if (seconds < 0) return "0s";
@@ -876,16 +897,12 @@
         return `${m}m ${s}s`;
     }
 
-    function calculateCore(overrideInterBw) {
-        // Fetch values
+    function calculateCore(H, bytesPerParam, S, P, overrideInterBw) {
+        // Fetch global values
         const N = parseFloat(document.getElementById('modelSizeSelect').value);
         const T = parseNumber(document.getElementById('totalSteps').value);
         const secondsPerStep = parseNumber(document.getElementById('secondsPerStep').value);
         const M = parseNumber(document.getElementById('numDatacenters').value);
-        const H = parseNumber(document.getElementById('syncCadence').value);
-        const bytesPerParam = parseFloat(document.getElementById('dtypeSelect').value);
-        const S = parseNumber(document.getElementById('staleness').value);
-        const P = parseNumber(document.getElementById('fragments').value);
 
         // Override bandwidth if running sweep
         const B_gbps = overrideInterBw !== undefined ? overrideInterBw : parseNumber(document.getElementById('interBw').value);
@@ -953,118 +970,39 @@
         };
     }
 
-    // Configuration Storage
-    let savedConfigurations = [];
-
-    // Save Configuration
-    function saveConfiguration() {
-        const res = calculateCore();
-        if (res.error) {
-            alert('Error calculating configuration: ' + res.error);
-            return;
+    function updateConfigurations() {
+        // Configuration 1: Data Parallel (H=1, S=0, P=1)
+        const dp_dtype = parseFloat(document.getElementById('dp_dtype').value);
+        const dp_result = calculateCore(1, dp_dtype, 0, 1);
+        if (!dp_result.error) {
+            document.getElementById('dp_util').textContent = dp_result.utilization.toFixed(1) + '%';
+            document.getElementById('dp_time').textContent = formatTime(dp_result.T_total);
         }
 
-        // Auto-generate name based on key parameters
-        const configNumber = savedConfigurations.length + 1;
-        const configName = `Config ${configNumber}`;
-
-        const config = {
-            id: Date.now(),
-            name: configName,
-            params: {
-                N: res.N,
-                secondsPerStep: parseNumber(document.getElementById('secondsPerStep').value),
-                M: res.M,
-                H: res.H,
-                bytesPerParam: res.bytesPerParam,
-                S: res.S,
-                P: res.P,
-                B_gbps: res.B_gbps
-            },
-            results: res
-        };
-
-        savedConfigurations.push(config);
-        renderConfigurations();
-    }
-
-    // Delete Configuration
-    function deleteConfiguration(id) {
-        savedConfigurations = savedConfigurations.filter(c => c.id !== id);
-        renderConfigurations();
-    }
-
-    // Render Configurations
-    function renderConfigurations() {
-        const container = document.getElementById('configsList');
-
-        if (savedConfigurations.length === 0) {
-            container.innerHTML = `
-                <div class="empty-state">
-                    <svg width="64" height="64" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="stroke-width: 1;">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
-                    </svg>
-                    <p style="font-size: 0.875rem; margin: 0;">No configurations saved yet</p>
-                    <p style="font-size: 0.75rem; margin-top: 0.5rem;">Configure your settings on the left and click "Add Configuration"</p>
-                </div>
-            `;
-            return;
+        // Configuration 2: DiLoCo (H>1, S=0, P=1)
+        const diloco_dtype = parseFloat(document.getElementById('diloco_dtype').value);
+        const diloco_H = parseNumber(document.getElementById('diloco_H').value);
+        const diloco_result = calculateCore(diloco_H, diloco_dtype, 0, 1);
+        if (!diloco_result.error) {
+            document.getElementById('diloco_util').textContent = diloco_result.utilization.toFixed(1) + '%';
+            document.getElementById('diloco_time').textContent = formatTime(diloco_result.T_total);
         }
 
-        let html = '';
-        savedConfigurations.forEach(config => {
-            const p = config.params;
-            const r = config.results;
+        // Configuration 3: Streaming DiLoCo with Overlap
+        const streaming_dtype = parseFloat(document.getElementById('streaming_dtype').value);
+        const streaming_H = parseNumber(document.getElementById('streaming_H').value);
+        const streaming_P = parseNumber(document.getElementById('streaming_P').value);
+        const streaming_S = parseNumber(document.getElementById('streaming_S').value);
+        const streaming_result = calculateCore(streaming_H, streaming_dtype, streaming_S, streaming_P);
+        if (!streaming_result.error) {
+            document.getElementById('streaming_util').textContent = streaming_result.utilization.toFixed(1) + '%';
+            document.getElementById('streaming_time').textContent = formatTime(streaming_result.T_total);
+        }
 
-            // Format dtype
-            let dtypeStr = 'bf16';
-            if (p.bytesPerParam === 1) dtypeStr = 'int8';
-            else if (p.bytesPerParam === 0.5) dtypeStr = 'int4';
-
-            html += `
-                <div class="config-card">
-                    <div class="config-header">
-                        <div style="flex: 1;">
-                            <div class="config-name">${config.name}</div>
-                            <div style="font-size: 0.7rem; color: var(--slate-400); margin-top: 0.125rem;">${r.mode}</div>
-                        </div>
-                        <div style="text-align: right;">
-                            <div class="config-util">${r.utilization.toFixed(1)}%</div>
-                            <div style="font-size: 0.65rem; color: var(--slate-500); margin-top: 0.125rem;">Compute Util.</div>
-                        </div>
-                    </div>
-
-                    <div style="font-size: 0.7rem; color: var(--slate-600); margin-top: 0.5rem; display: flex; flex-wrap: wrap; gap: 0.5rem;">
-                        <span><strong>H:</strong> ${p.H}</span>
-                        <span>•</span>
-                        <span><strong>dtype:</strong> ${dtypeStr}</span>
-                        <span>•</span>
-                        <span><strong>S:</strong> ${p.S}</span>
-                        <span>•</span>
-                        <span><strong>P:</strong> ${p.P}</span>
-                    </div>
-
-                    <div style="margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid var(--blue-100); display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem;">
-                        <div>
-                            <div style="color: var(--slate-500);">Total Time:</div>
-                            <div style="font-weight: 700; color: var(--blue-700); font-family: monospace;">${formatTime(r.T_total)}</div>
-                        </div>
-                        <button class="delete-config-btn" onclick="deleteConfiguration(${config.id})">
-                            <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                            </svg>
-                            Remove
-                        </button>
-                    </div>
-                </div>
-            `;
-        });
-
-        container.innerHTML = html;
+        // Update the plot as well
+        updatePlot();
     }
 
-    // Save Config Button
-    document.getElementById('saveConfigBtn').addEventListener('click', saveConfiguration);
 
     function updatePlot() {
         const container = document.getElementById('figure4Plot');
@@ -1073,30 +1011,24 @@
         // Use direct container dimensions from DOM
         const width = container.clientWidth || 600;
         const height = 400; // Hardcoded fixed height to prevent vertical compression
-        const padding = { top: 20, right: 20, bottom: 40, left: 50 }; 
-        
-        // Get base config (except Inter-DC BW which we sweep)
+        const padding = { top: 20, right: 20, bottom: 40, left: 50 };
+
+        // Get global config
         const N = parseFloat(document.getElementById('modelSizeSelect').value);
         const secondsPerStep = parseNumber(document.getElementById('secondsPerStep').value);
-        const H = parseNumber(document.getElementById('syncCadence').value);
         const M = parseNumber(document.getElementById('numDatacenters').value);
-        const bytesPerParam = parseFloat(document.getElementById('dtypeSelect').value);
-        const S = parseNumber(document.getElementById('staleness').value);
-        const P = parseNumber(document.getElementById('fragments').value);
 
-        // Data sizes for different dtypes
-        const D = N * bytesPerParam;
-        const D_int8 = N * 1;
-        const D_int4 = N * 0.5;
+        // Get configuration-specific settings
+        const dp_dtype = parseFloat(document.getElementById('dp_dtype').value);
+        const diloco_dtype = parseFloat(document.getElementById('diloco_dtype').value);
+        const diloco_H = parseNumber(document.getElementById('diloco_H').value);
+        const streaming_dtype = parseFloat(document.getElementById('streaming_dtype').value);
+        const streaming_H = parseNumber(document.getElementById('streaming_H').value);
+        const streaming_P = parseNumber(document.getElementById('streaming_P').value);
+        const streaming_S = parseNumber(document.getElementById('streaming_S').value);
 
         // Per-Step calculations
-        const T_comp_step = secondsPerStep;
-
-        // Baseline time per step (just compute now)
-        const T_baseline_step = T_comp_step;
-
-        // Time for H steps (Inner Loop)
-        const T_inner_phase = T_baseline_step * H; 
+        const T_comp_step = secondsPerStep; 
 
         // Sweep Configuration: 0.1G to 1000G
         const bwPoints = [];
@@ -1104,58 +1036,24 @@
             bwPoints.push(Math.pow(10, exp));
         }
 
-        // Series Definitions
+        // Series Definitions based on hardcoded configurations
         const seriesConfig = [
-            { name: "Data Parallel (H=1)", color: "#94a3b8" }, // Grey
-            { name: "DiLoCo", color: "#ef4444" }, // Red
-            { name: "Streaming DiLoCo", color: "#f97316" }, // Orange
-            { name: "Streaming + Overlap", color: "#3b82f6" }, // Blue
-            { name: "Streaming + Overlap + int8", color: "#10b981" } // Green
+            { name: "Data Parallel", color: "#94a3b8" },
+            { name: "DiLoCo", color: "#ef4444" },
+            { name: "Streaming DiLoCo with Overlap", color: "#3b82f6" }
         ];
 
         const seriesData = seriesConfig.map(() => []);
 
         bwPoints.forEach(bw => {
-            const B_bytes_per_sec = bw * 1e9 / 8;
+            // Calculate for each configuration at this bandwidth
+            const dp_res = calculateCore(1, dp_dtype, 0, 1, bw);
+            const diloco_res = calculateCore(diloco_H, diloco_dtype, 0, 1, bw);
+            const streaming_res = calculateCore(streaming_H, streaming_dtype, streaming_S, streaming_P, bw);
 
-            // Helper to get communication time per sync using new formula
-            const getCommTime = (data_bytes, num_dcs) => {
-                if (num_dcs <= 1) return 0;
-                return 2 * (1 - 1/num_dcs) * data_bytes / B_bytes_per_sec;
-            };
-
-            // Comm times per sync for different configurations
-            const comm_per_sync = getCommTime(D, M);
-            const comm_per_sync_int8 = getCommTime(D_int8, M);
-            const comm_per_sync_int4 = getCommTime(D_int4, M);
-
-            // 1. Data Parallel (H=1)
-            const T_dp_step = T_baseline_step + comm_per_sync;
-            const util_dp = (T_comp_step / T_dp_step) * 100;
-
-            // 2. Vanilla DiLoCo (H>1, no overlap)
-            const T_vanilla_cycle = T_inner_phase + comm_per_sync;
-            const util_vanilla = ((T_comp_step * H) / T_vanilla_cycle) * 100;
-
-            // 3. Streaming (Sequential with fragments)
-            // No real overlap, but broken into fragments
-            const T_streaming_cycle = T_vanilla_cycle;
-            const util_streaming = ((T_comp_step * H) / T_streaming_cycle) * 100;
-
-            // 4. Streaming + Overlap (S>0)
-            const effective_staleness = Math.max(S, 1);
-            const T_overlap_cycle = Math.max(T_inner_phase, comm_per_sync / effective_staleness);
-            const util_overlap = ((T_comp_step * H) / T_overlap_cycle) * 100;
-
-            // 5. Streaming + Overlap + int8
-            const T_overlap_int8_cycle = Math.max(T_inner_phase, comm_per_sync_int8 / effective_staleness);
-            const util_overlap_int8 = ((T_comp_step * H) / T_overlap_int8_cycle) * 100;
-
-            seriesData[0].push({ x: bw, y: util_dp });
-            seriesData[1].push({ x: bw, y: util_vanilla });
-            seriesData[2].push({ x: bw, y: util_streaming });
-            seriesData[3].push({ x: bw, y: util_overlap });
-            seriesData[4].push({ x: bw, y: util_overlap_int8 });
+            seriesData[0].push({ x: bw, y: dp_res.utilization });
+            seriesData[1].push({ x: bw, y: diloco_res.utilization });
+            seriesData[2].push({ x: bw, y: streaming_res.utilization });
         });
 
         // SVG Drawing
@@ -1222,11 +1120,8 @@
         container.innerHTML = svg;
     }
 
-    // Initial plot render
-    updatePlot();
-
-    // Make deleteConfiguration available globally
-    window.deleteConfiguration = deleteConfiguration;
+    // Initial render
+    updateConfigurations();
 </script>
 
 </body>
