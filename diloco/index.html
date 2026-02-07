@@ -466,10 +466,58 @@
 
         /* Hardware section specific */
         .hardware-box {
-            background-color: var(--slate-50); 
-            padding: 1rem; 
-            border-radius: 0.5rem; 
+            background-color: var(--slate-50);
+            padding: 1rem;
+            border-radius: 0.5rem;
             border: 1px solid var(--slate-200);
+        }
+
+        /* Tooltip */
+        .tooltip-wrapper {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .tooltip-bubble {
+            visibility: hidden;
+            opacity: 0;
+            background-color: var(--slate-800);
+            color: white;
+            text-align: center;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.375rem;
+            position: absolute;
+            z-index: 1000;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            font-size: 0.75rem;
+            transition: opacity 0.2s;
+            pointer-events: none;
+        }
+
+        .tooltip-bubble::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: var(--slate-800) transparent transparent transparent;
+        }
+
+        .tooltip-wrapper:hover .tooltip-bubble {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .form-control:disabled {
+            background-color: var(--slate-200);
+            color: var(--slate-400);
+            cursor: not-allowed;
         }
     </style>
 </head>
@@ -518,11 +566,14 @@
                     <div>
                         <label class="label-sm">Replicas (M)</label>
                         <input type="text" id="replicas" value="2" class="form-control formatted-input">
-                        <div class="label-sub">Must be ≥ 2</div>
+                        <div class="label-sub">M=1: Data-Parallel, M≥2: DiLoCo</div>
                     </div>
                     <div>
                         <label class="label-sm">Sync Cadence (H)</label>
-                        <input type="text" id="syncCadence" value="30" class="form-control formatted-input">
+                        <div class="tooltip-wrapper">
+                            <input type="text" id="syncCadence" value="30" class="form-control formatted-input">
+                            <span id="syncCadenceTooltip" class="tooltip-bubble" style="visibility: hidden;">For Data-Parallel (M=1), sync cadence doesn't apply</span>
+                        </div>
                         <div class="label-sub">Inner steps</div>
                     </div>
                 </div>
@@ -806,6 +857,32 @@
     document.getElementById('staleness').addEventListener('input', calculate);
     document.getElementById('fragments').addEventListener('input', calculate);
 
+    // Handle Replicas field - disable Sync Cadence when M=1 (Data-Parallel)
+    const replicasInput = document.getElementById('replicas');
+    const syncCadenceInput = document.getElementById('syncCadence');
+    const syncCadenceTooltip = document.getElementById('syncCadenceTooltip');
+
+    function updateSyncCadenceState() {
+        const M = parseNumber(replicasInput.value);
+        if (M === 1) {
+            syncCadenceInput.disabled = true;
+            syncCadenceTooltip.style.visibility = 'visible';
+        } else {
+            syncCadenceInput.disabled = false;
+            syncCadenceTooltip.style.visibility = 'hidden';
+        }
+    }
+
+    replicasInput.addEventListener('input', () => {
+        updateSyncCadenceState();
+        calculate();
+    });
+
+    replicasInput.addEventListener('blur', updateSyncCadenceState);
+
+    // Initial check on page load
+    updateSyncCadenceState();
+
     function formatTime(seconds) {
         if (seconds < 0) return "0s";
         if (seconds < 60) return seconds.toFixed(1) + "s";
@@ -836,7 +913,7 @@
         const staleness = isStreaming ? (parseNumber(document.getElementById('staleness').value) || 1) : 1;
         const fragments = isStreaming ? (parseNumber(document.getElementById('fragments').value) || 16) : 16;
 
-        if (M < 2) return { error: "M must be >= 2" };
+        if (M < 1) return { error: "M must be >= 1" };
 
         const W1 = W1_gbps * 1e9;
         const e1 = e1_ms * 1e-3;
@@ -845,15 +922,23 @@
         // Time calculations
         const T_comp = secondsPerStep * T;
 
-        const outer_comm_per_step = ( (2 * PayloadBits) / W1 ) * (1 - 1/R) + e1;
-        const T_comm_inter = outer_comm_per_step * (T / H);
+        // If M=1 (Data-Parallel), no inter-DC communication
+        let T_comm_inter = 0;
+        if (M > 1) {
+            const outer_comm_per_step = ( (2 * PayloadBits) / W1 ) * (1 - 1/R) + e1;
+            T_comm_inter = outer_comm_per_step * (T / H);
+        }
 
         let T_total;
         let overlapState = "sequential";
 
         const T_baseline = T_comp;
 
-        if (isStreaming) {
+        if (M === 1) {
+            // Data-Parallel: no inter-DC communication
+            T_total = T_baseline;
+            overlapState = "data_parallel";
+        } else if (isStreaming) {
             // Overlapping logic: T_baseline vs T_outer / Staleness
             const T_outer_effective = T_comm_inter / staleness;
 
