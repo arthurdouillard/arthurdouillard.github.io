@@ -1759,7 +1759,44 @@
                         closestPoint.x.toFixed(2) :
                         (closestPoint.x < 10 ? closestPoint.x.toFixed(1) : closestPoint.x.toFixed(0));
 
-                    tooltip.innerHTML = `<strong>${seriesConfig[closestSeries].name}</strong><br/>Bandwidth: ${bandwidth} Gbps<br/>Utilization: ${utilization}%`;
+                    // Calculate All-Reduce time for this bandwidth
+                    const B_bps = closestPoint.x * 1e9;
+                    const alpha = 0.002; // 2ms latency
+                    const N = parseFloat(document.getElementById('modelSizeSelect').value);
+                    const M = parseNumber(document.getElementById('numDatacenters').value);
+
+                    let arTime = 0;
+                    let arLabel = '';
+
+                    if (closestSeries === 0) {
+                        // Data Parallel: AR time per step
+                        const dtype = parseFloat(document.getElementById('dp_dtype').value);
+                        const S_total_bits = N * dtype * 8;
+                        const overhead_factor = M > 1 ? 2 * (1 - 1/M) : 0;
+                        const effective_size = S_total_bits * overhead_factor;
+                        arTime = alpha + effective_size / B_bps;
+                        arLabel = 'AR time per step';
+                    } else if (closestSeries === 1) {
+                        // DiLoCo: AR time at sync (not amortized)
+                        const dtype = parseFloat(document.getElementById('diloco_dtype').value);
+                        const S_outer_bits = N * dtype * 8;
+                        const overhead_factor = M > 1 ? 2 * (1 - 1/M) : 0;
+                        const effective_size = S_outer_bits * overhead_factor;
+                        arTime = alpha + effective_size / B_bps;
+                        arLabel = 'AR time at sync';
+                    } else if (closestSeries === 2) {
+                        // Streaming DiLoCo: AR time per fragment
+                        const dtype = parseFloat(document.getElementById('streaming_dtype').value);
+                        const P = parseNumber(document.getElementById('streaming_P').value);
+                        const S_outer_bits = N * dtype * 8;
+                        const fragment_size = S_outer_bits / P;
+                        const overhead_factor = M > 1 ? 2 * (1 - 1/M) : 0;
+                        const effective_size = fragment_size * overhead_factor;
+                        arTime = alpha + effective_size / B_bps;
+                        arLabel = 'AR time per fragment';
+                    }
+
+                    tooltip.innerHTML = `<strong>${seriesConfig[closestSeries].name}</strong><br/>Bandwidth: ${bandwidth} Gbps<br/>Utilization: ${utilization}%<br/>${arLabel}: ${formatTime(arTime)}`;
                     tooltip.style.visibility = 'visible';
 
                     // Position relative to the container
