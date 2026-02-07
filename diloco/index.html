@@ -722,41 +722,6 @@
                 </div>
             </div>
 
-            <div>
-                <h2 class="section-title">Training Configuration</h2>
-                <div class="mb-4">
-                    <label class="label-sm">Total Steps (T)</label>
-                    <input type="text" id="totalSteps" value="1000" class="form-control formatted-input">
-                    <div class="label-sub">Number of training steps</div>
-                </div>
-
-                <div class="mb-4">
-                    <label class="label-sm">Total Chips (R)</label>
-                    <input type="text" id="totalChips" value="100" class="form-control formatted-input">
-                    <div class="label-sub">Total number of accelerators</div>
-                </div>
-            </div>
-
-            <div>
-                <h2 class="section-title">Inter-Datacenter Network</h2>
-                <div class="input-group-grid">
-                    <div>
-                        <label class="label-sm">Bandwidth (Per Chip)</label>
-                        <div class="input-addon-group">
-                            <input type="text" id="interBw" value="100" class="form-control formatted-input">
-                            <span class="input-addon">Gbps</span>
-                        </div>
-                    </div>
-                    <div>
-                        <label class="label-sm">Latency</label>
-                        <div class="input-addon-group">
-                            <input type="text" id="interLat" value="100" class="form-control formatted-input">
-                            <span class="input-addon">ms</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <!-- Save Configuration Section -->
             <div style="border-top: 2px solid var(--slate-200); padding-top: 1rem;">
                 <h2 class="section-title">Save Configuration</h2>
@@ -776,6 +741,27 @@
 
         <!-- Saved Configurations Section (Right Column) -->
         <div class="panel results-panel">
+            <!-- Inter-Datacenter Network -->
+            <div style="margin-bottom: 1.5rem;">
+                <h2 class="section-title">Inter-Datacenter Network</h2>
+                <div class="input-group-grid">
+                    <div>
+                        <label class="label-sm">Bandwidth (Per Chip)</label>
+                        <div class="input-addon-group">
+                            <input type="text" id="interBw" value="100" class="form-control formatted-input">
+                            <span class="input-addon">Gbps</span>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="label-sm">Latency</label>
+                        <div class="input-addon-group">
+                            <input type="text" id="interLat" value="100" class="form-control formatted-input">
+                            <span class="input-addon">ms</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <h2 class="result-title">
                 <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
                 Saved Configurations
@@ -859,6 +845,10 @@
             Originally forked from <a href="https://mino98.github.io/diloco-calculator/" target="_blank" style="color: var(--blue-500); text-decoration: none;">mino98's DiLoCo Calculator</a>
         </p>
     </footer>
+
+    <!-- Hidden fields for fixed parameters -->
+    <input type="hidden" id="totalSteps" value="1000">
+    <input type="hidden" id="totalChips" value="100">
 
 <script>
     // Constants for Scaling Laws (Table 10)
