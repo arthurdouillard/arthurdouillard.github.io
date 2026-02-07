@@ -27,7 +27,94 @@
         }
 
     </style>
-</noscript><meta property="og:title" content="Research" />
+</noscript>
+
+<style>
+    .research-section {
+        background: rgba(217, 95, 14, 0.02);
+        border-left: 4px solid #d95f0e;
+        border-radius: 8px;
+        padding: 2rem;
+        margin: 2rem 0;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    .research-section:hover {
+        box-shadow: 0 4px 16px rgba(217, 95, 14, 0.2);
+        transform: translateY(-2px);
+    }
+
+    .research-section h1 {
+        color: #d95f0e;
+        margin-top: 0;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid rgba(217, 95, 14, 0.3);
+    }
+
+    .research-section > ul {
+        list-style: none;
+        padding-left: 0;
+    }
+
+    .research-section > ul > li {
+        margin-bottom: 2rem;
+        position: relative;
+    }
+
+    .research-section > ul > li > strong:first-child {
+        display: inline-block;
+        background: #d95f0e;
+        color: white;
+        padding: 0.3rem 0.8rem;
+        border-radius: 4px;
+        font-weight: bold;
+        margin-bottom: 0.8rem;
+        font-size: 0.95rem;
+    }
+
+    .research-section ul ul {
+        list-style: none;
+        padding-left: 0;
+        margin-top: 0.8rem;
+    }
+
+    .research-section ul ul li {
+        padding-left: 1.5rem;
+        margin-bottom: 0.8rem;
+        position: relative;
+        line-height: 1.6;
+    }
+
+    .research-section ul ul li::before {
+        content: "▸";
+        color: #d95f0e;
+        position: absolute;
+        left: 0;
+        font-weight: bold;
+    }
+
+    .research-section code {
+        background: rgba(217, 95, 14, 0.1);
+        color: #d95f0e;
+        padding: 0.2rem 0.4rem;
+        border-radius: 3px;
+        font-size: 0.85rem;
+    }
+
+    .research-section strong a {
+        color: inherit;
+        text-decoration: none;
+        border-bottom: 2px solid transparent;
+        transition: border-color 0.2s ease;
+    }
+
+    .research-section strong a:hover {
+        border-bottom-color: #d95f0e;
+    }
+</style>
+
+<meta property="og:title" content="Research" />
 <meta property="og:description" content="Research." />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://arthurdouillard.com/research/" />
@@ -124,17 +211,17 @@
 <p>I&rsquo;ve started my journey with <strong>continual learning</strong>, and did my PhD on this. In hindsight, I was focused on academic benchmarks (<em>e.g.</em> learning incrementally new classes on ImageNet) that were not realistic enough.</p>
 <p>When joining DeepMind in late 2022 to work on continual learning, I&rsquo;ve realized that current deep learning needs more <strong>modularity</strong>: to learn &amp; unlearn specific knowledge skills but also to scale massively the model without also increasing its inference cost. In order to train massive modular systems, I&rsquo;ve developped DiLoCo: a new way to do <strong>distribute training of LLMs across the world</strong> with two orders of magnitude less bandwidth. Several startups are now based on that technology. Using DiLoCo, I&rsquo;ve made DiPaCo, a new kind of modular architecture whose weights are world-wide distributed and trained semi-independetly.</p>
 <p>I&rsquo;m still working on distributed training, fighting the tyranny of centralized synchronous training. My dream is to do <strong>compute arbitrage on all the GPUs and TPUs across the world</strong>. No devices should be ever idle, everything must be used towards training better AIs.</p>
+
+<div class="research-section">
 <h1 id="distributed-training">Distributed Training</h1>
 <ul>
 <li><strong>2025</strong>:
 <ul>
-<li><strong>Streaming DiLoCo</strong> with overlapping quantized communication: <a href="https://arxiv.org/abs/2501.18512" target="_blank">streaming diloco</a>
- and covered in <a href="https://importai.substack.com/p/import-ai-398-deepmind-makes-distributed" target="_blank">Import AI #398</a>
+<li><strong><a href="https://arxiv.org/abs/2501.18512" target="_blank">Streaming DiLoCo</a></strong> with overlapping quantized communication and covered in <a href="https://importai.substack.com/p/import-ai-398-deepmind-makes-distributed" target="_blank">Import AI #398</a>
 </li>
-<li><strong>Scaling Laws for DiLoCo</strong>: <a href="https://arxiv.org/abs/2503.09799" target="_blank">scaling laws</a>
- and covered in <a href="https://importai.substack.com/p/import-ai-404-scaling-laws-for-distributed" target="_blank">Import AI #404</a>
+<li><strong><a href="https://arxiv.org/abs/2503.09799" target="_blank">Scaling Laws for DiLoCo</a></strong> and covered in <a href="https://importai.substack.com/p/import-ai-404-scaling-laws-for-distributed" target="_blank">Import AI #404</a>
 </li>
-<li><strong>Eager Async updates DiLoCo</strong>: <a href="https://arxiv.org/abs/2502.12996" target="_blank">eager async</a>
+<li><strong><a href="https://arxiv.org/abs/2502.12996" target="_blank">Eager Async updates DiLoCo</a></strong>
 </li>
 <li>Coverage by <a href="https://www.economist.com/science-and-technology/2025/01/08/training-ai-models-might-not-need-enormous-data-centres" target="_blank">The Economist</a>
  of my research on distributed training</li>
@@ -142,26 +229,24 @@
 </li>
 <li><strong>2024</strong>:
 <ul>
-<li><strong>Async DiLoCo</strong> with heterogenous devices: <a href="https://arxiv.org/abs/2401.09135" target="_blank">arxiv</a>
- <code>[ICML Workshop 2024]</code></li>
-<li><strong>DiPaCo</strong>, distributed modular system: <a href="https://arxiv.org/abs/2403.10616" target="_blank">arxiv</a>
- and covered in <a href="https://importai.substack.com/p/import-ai-367-googles-world-spanning" target="_blank">Import AI #367</a>
+<li><strong><a href="https://arxiv.org/abs/2401.09135" target="_blank">Async DiLoCo</a></strong> with heterogenous devices</li>
+<li><strong><a href="https://arxiv.org/abs/2403.10616" target="_blank">DiPaCo</a></strong>, distributed modular system and covered in <a href="https://importai.substack.com/p/import-ai-367-googles-world-spanning" target="_blank">Import AI #367</a>
 </li>
 </ul>
 </li>
 <li><strong>2023</strong>:
 <ul>
-<li><strong>DiLoCo</strong>: large-scale distributed training of LLMs: <a href="https://arxiv.org/abs/2311.08105" target="_blank">arxiv</a>
- <code>[ICML Workshop 2024]</code></li>
-<li>It has kickstarted the startup PrimeIntellect with their first projects <a href="https://arxiv.org/abs/2407.07852" target="_blank">OpenDiLoCo</a>
- and <a href="https://arxiv.org/abs/2412.01152" target="_blank">Intellect-1</a>
- and FlowerLabs with <a href="https://arxiv.org/abs/2405.10853" target="_blank">FlowerLM</a>
+<li><strong><a href="https://arxiv.org/abs/2311.08105" target="_blank">DiLoCo</a></strong>: large-scale distributed training of LLMs</li>
+<li>It has kickstarted the startup PrimeIntellect with their first projects <a href="https://arxiv.org/abs/2407.07852" target="_blank">OpenDiLoCo</a> and <a href="https://arxiv.org/abs/2412.01152" target="_blank">Intellect-1</a> and FlowerLabs with <a href="https://arxiv.org/abs/2405.10853" target="_blank">FlowerLM</a>
 </li>
 <li>Covered in <a href="https://importai.substack.com/p/import-ai-349-distributed-training" target="_blank">Import AI #349</a>
 </li>
 </ul>
 </li>
 </ul>
+</div>
+
+<div class="research-section">
 <h1 id="continual-learning">Continual Learning</h1>
 <p>Work mosly during my PhD thesis (2019-2022).</p>
 <ul>
@@ -172,58 +257,51 @@
 </li>
 <li><strong>2022</strong>:
 <ul>
-<li><strong>DyTox</strong>: Quick adaptation to new tasks with learns tokens for vision transformer: <a href="https://arxiv.org/abs/2111.11326" target="_blank">arxiv</a>
- <code>[CVPR 2022]</code></li>
-<li><strong>MuHDi</strong> Unsupervised continual domain adaptation: <a href="https://arxiv.org/abs/2204.11667" target="_blank">arxiv</a>
- <code>[CVPR Workshop 2022]</code></li>
-<li><strong>Latent replay</strong> for foundation models: <a href="https://arxiv.org/abs/2205.00329" target="_blank">arxiv</a>
- <code>[CoLLas 2023]</code></li>
-<li><strong>PhD</strong> thesis: <a href="https://theses.hal.science/tel-03872534v1/file/DOUILLARD_Arthur_these_2022.pdf" target="_blank">thesis</a>
+<li><strong><a href="https://arxiv.org/abs/2111.11326" target="_blank">DyTox</a></strong>: Quick adaptation to new tasks with learns tokens for vision transformer</li>
+<li><strong><a href="https://arxiv.org/abs/2204.11667" target="_blank">MuHDi</a></strong> Unsupervised continual domain adaptation</li>
+<li><strong><a href="https://arxiv.org/abs/2205.00329" target="_blank">Latent replay</a></strong> for foundation models</li>
+<li><strong><a href="https://theses.hal.science/tel-03872534v1/file/DOUILLARD_Arthur_these_2022.pdf" target="_blank">PhD thesis</a></strong>
 </li>
-<li><strong>CoNFormer</strong>: panoptic segmentation: <a href="https://arxiv.org/abs/2211.13999" target="_blank">arxiv</a>
- <code>[CVPR 2023]</code></li>
-<li><strong>Compute-optimal</strong> transfer learning: <a href="https://arxiv.org/abs/2304.13164" target="_blank">arxiv</a>
- <code>[ICLR Workshop 2023]</code></li>
+<li><strong><a href="https://arxiv.org/abs/2211.13999" target="_blank">CoNFormer</a></strong>: panoptic segmentation</li>
+<li><strong><a href="https://arxiv.org/abs/2304.13164" target="_blank">Compute-optimal</a></strong> transfer learning</li>
 </ul>
 </li>
 <li><strong>2020</strong>:
 <ul>
-<li><strong>PLOP</strong>: Multi-scale features distillation for segmentation: <a href="https://arxiv.org/abs/2011.11390" target="_blank">arxiv</a>
- <code>[CVPR 2021]</code></li>
-<li><strong>Ghost</strong>: Zero-shot learning using ghost features: <a href="https://arxiv.org/abs/2006.13748" target="_blank">arxiv</a>
- <code>[CVPR Workshop 2021]</code></li>
-<li><strong>Continumm</strong>: a data framework for continual learning: <a href="https://arxiv.org/abs/2102.06253" target="_blank">arxiv</a>
- <code>[CVPR Workshop 2021]</code></li>
-<li><strong>Synthetic</strong> visual data for rehearsal learning: <a href="https://arxiv.org/abs/2106.15287" target="_blank">synthetic data</a>
- <code>[TPAMI 2021]</code></li>
+<li><strong><a href="https://arxiv.org/abs/2011.11390" target="_blank">PLOP</a></strong>: Multi-scale features distillation for segmentation</li>
+<li><strong><a href="https://arxiv.org/abs/2006.13748" target="_blank">Ghost</a></strong>: Zero-shot learning using ghost features</li>
+<li><strong><a href="https://arxiv.org/abs/2102.06253" target="_blank">Continuum</a></strong>: a data framework for continual learning</li>
+<li><strong><a href="https://arxiv.org/abs/2106.15287" target="_blank">Synthetic</a></strong> visual data for rehearsal learning</li>
 </ul>
 </li>
-<li><strong>2019</strong>: <strong>PODNet</strong>: features distillation to reduce catastrophic forgetting with extremely large number of tasks: <a href="https://arxiv.org/abs/2004.13513" target="_blank">PODNet</a>
- <code>[ECCV 2020]</code></li>
+<li><strong>2019</strong>: <strong><a href="https://arxiv.org/abs/2004.13513" target="_blank">PODNet</a></strong>: features distillation to reduce catastrophic forgetting with extremely large number of tasks</li>
 </ul>
+</div>
+
+<div class="research-section">
 <h1 id="miscellaneous">Miscellaneous</h1>
 <ul>
 <li><strong>2024</strong>:
 <ul>
-<li><strong>WARP</strong>: less reward hacking with regular merging of diverse RLHF-ed models:: <a href="https://arxiv.org/abs/2406.16768" target="_blank">arxiv</a>
+<li><strong><a href="https://arxiv.org/abs/2406.16768" target="_blank">WARP</a></strong>: less reward hacking with regular merging of diverse RLHF-ed models
 </li>
-<li><strong>AI Ethics</strong>: how to mitigate harms from persuasive LLMs: <a href="https://arxiv.org/abs/2404.15058" target="_blank">arxiv</a>
+<li><strong><a href="https://arxiv.org/abs/2404.15058" target="_blank">AI Ethics</a></strong>: how to mitigate harms from persuasive LLMs
 </li>
 </ul>
 </li>
 <li><strong>2019</strong>:
 <ul>
-<li><strong>Core</strong>: Fashion garments color detection <a href="https://arxiv.org/abs/2010.02849" target="_blank">arxiv</a>
- <code>[CVPR Workshop 2020]</code></li>
+<li><strong><a href="https://arxiv.org/abs/2010.02849" target="_blank">Core</a></strong>: Fashion garments color detection</li>
 </ul>
 </li>
 <li><strong>2018</strong>:
 <ul>
-<li><strong>NATO</strong>: led &amp; won the NATO challenge with an aerial object detection method based on RetinaNet while at Dataiku: <a href="https://blog.dataiku.com/object-detection-with-deep-learning-on-aerial-imagery" target="_blank">post</a>
+<li><strong><a href="https://blog.dataiku.com/object-detection-with-deep-learning-on-aerial-imagery" target="_blank">NATO</a></strong>: led &amp; won the NATO challenge with an aerial object detection method based on RetinaNet while at Dataiku
 </li>
 </ul>
 </li>
 </ul>
+</div>
 
 </div>
     </main>
