@@ -635,18 +635,58 @@
             margin: 0 auto 1rem;
             opacity: 0.5;
         }
+
+        /* Share Button */
+        .share-btn {
+            padding: 0.5rem 1rem;
+            background-color: var(--green-600);
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            font-size: 0.875rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: background-color 0.2s;
+        }
+
+        .share-btn:hover {
+            background-color: var(--green-800);
+        }
+
+        .share-btn:active {
+            transform: scale(0.98);
+        }
+
+        .share-btn.copied {
+            background-color: var(--blue-600);
+        }
     </style>
 </head>
 <body class="container">
 
     <header class="header">
-        <h1>DiLoCo Bandwidth Simulator</h1>
-        <p>
-            Based on the papers:
-            <a href="https://arxiv.org/abs/2311.08105" target="_blank">DiLoCo</a>, 
-            <a href="https://arxiv.org/abs/2501.18512" target="_blank">Streaming DiLoCo</a>, 
-            <a href="https://arxiv.org/abs/2503.09799" target="_blank">Scaling Laws for DiLoCo</a>
-        </p>
+        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+            <div>
+                <h1>DiLoCo Bandwidth Simulator</h1>
+                <p>
+                    Based on the papers:
+                    <a href="https://arxiv.org/abs/2311.08105" target="_blank">DiLoCo</a>,
+                    <a href="https://arxiv.org/abs/2501.18512" target="_blank">Streaming DiLoCo</a>,
+                    <a href="https://arxiv.org/abs/2503.09799" target="_blank">Scaling Laws for DiLoCo</a>
+                </p>
+            </div>
+            <button id="shareBtn" class="share-btn" title="Copy shareable URL to clipboard">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <line x1="10" y1="14" x2="21" y2="3"></line>
+                </svg>
+                Share Config
+            </button>
+        </div>
     </header>
 
     <!-- Top Configuration Panel -->
@@ -735,7 +775,7 @@
 
                 <div style="flex: 1;">
                     <label class="label-sm">Fragment Period (H)</label>
-                    <input type="text" id="streaming_H" value="80" class="form-control formatted-input">
+                    <input type="text" id="streaming_H" value="100" class="form-control formatted-input">
                 </div>
 
                 <div style="flex: 1;">
@@ -745,7 +785,7 @@
 
                 <div style="flex: 1;">
                     <label class="label-sm">Overlap Delay (τ)</label>
-                    <input type="text" id="streaming_S" value="10" class="form-control formatted-input">
+                    <input type="text" id="streaming_S" value="1" class="form-control formatted-input">
                 </div>
             </div>
 
@@ -1220,6 +1260,9 @@
 
         // Update the plot
         updatePlot();
+
+        // Update URL with current configuration
+        updateURL();
     }
 
 
@@ -1659,7 +1702,129 @@
         }
     }
 
-    // Initial render
+    // ========================================================================
+    // URL PARAMETER HANDLING
+    // ========================================================================
+
+    /**
+     * Update URL with current configuration
+     */
+    function updateURL() {
+        const params = new URLSearchParams();
+
+        // Collect all configuration values
+        const config = {
+            'N': document.getElementById('modelSizeSelect').value,
+            'secondsPerStep': parseNumber(document.getElementById('secondsPerStep').value),
+            'M': parseNumber(document.getElementById('numDatacenters').value),
+            'dp_dtype': document.getElementById('dp_dtype').value,
+            'diloco_dtype': document.getElementById('diloco_dtype').value,
+            'diloco_H': parseNumber(document.getElementById('diloco_H').value),
+            'streaming_dtype': document.getElementById('streaming_dtype').value,
+            'streaming_H': parseNumber(document.getElementById('streaming_H').value),
+            'streaming_P': parseNumber(document.getElementById('streaming_P').value),
+            'streaming_S': parseNumber(document.getElementById('streaming_S').value)
+        };
+
+        // Add all params to URL
+        for (const [key, value] of Object.entries(config)) {
+            params.set(key, value);
+        }
+
+        // Update URL without reloading page
+        const newURL = window.location.pathname + '?' + params.toString();
+        window.history.replaceState({}, '', newURL);
+    }
+
+    /**
+     * Load configuration from URL parameters
+     */
+    function loadConfigFromURL() {
+        const urlParams = new URLSearchParams(window.location.search);
+
+        // Map of URL param names to input element IDs
+        const paramMap = {
+            'N': 'modelSizeSelect',
+            'secondsPerStep': 'secondsPerStep',
+            'M': 'numDatacenters',
+            'dp_dtype': 'dp_dtype',
+            'diloco_dtype': 'diloco_dtype',
+            'diloco_H': 'diloco_H',
+            'streaming_dtype': 'streaming_dtype',
+            'streaming_H': 'streaming_H',
+            'streaming_P': 'streaming_P',
+            'streaming_S': 'streaming_S'
+        };
+
+        let hasParams = false;
+
+        // Load each parameter from URL if present
+        for (const [urlParam, elementId] of Object.entries(paramMap)) {
+            if (urlParams.has(urlParam)) {
+                hasParams = true;
+                const value = urlParams.get(urlParam);
+                const element = document.getElementById(elementId);
+
+                if (element) {
+                    // For formatted inputs, apply formatting
+                    if (element.classList.contains('formatted-input')) {
+                        element.value = formatNumber(value);
+                    } else {
+                        element.value = value;
+                    }
+                }
+            }
+        }
+
+        return hasParams;
+    }
+
+    /**
+     * Share button functionality - copy URL to clipboard
+     */
+    document.getElementById('shareBtn').addEventListener('click', async function() {
+        const btn = this;
+        const originalText = btn.innerHTML;
+
+        try {
+            await navigator.clipboard.writeText(window.location.href);
+
+            // Show success feedback
+            btn.classList.add('copied');
+            btn.innerHTML = `
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                Copied!
+            `;
+
+            // Reset after 2 seconds
+            setTimeout(() => {
+                btn.classList.remove('copied');
+                btn.innerHTML = originalText;
+            }, 2000);
+        } catch (err) {
+            // Fallback for browsers that don't support clipboard API
+            console.error('Failed to copy:', err);
+
+            // Show error feedback
+            btn.innerHTML = `
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+                Failed
+            `;
+
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+            }, 2000);
+        }
+    });
+
+    // Load config from URL on page load, then render
+    loadConfigFromURL();
     updateConfigurations();
 </script>
 
