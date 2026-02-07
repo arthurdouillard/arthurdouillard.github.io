@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tools - Arthur Douillard</title>
+    <style>
+        :root {
+            /* Color Palette */
+            --bg-body: #f8fafc;
+            --bg-card: #ffffff;
+
+            --slate-50: #f8fafc;
+            --slate-100: #f1f5f9;
+            --slate-200: #e2e8f0;
+            --slate-300: #cbd5e1;
+            --slate-400: #94a3b8;
+            --slate-500: #64748b;
+            --slate-600: #475569;
+            --slate-700: #334155;
+            --slate-800: #1e293b;
+            --slate-900: #0f172a;
+
+            --blue-50: #fff7ed;
+            --blue-100: #ffedd5;
+            --blue-200: #fed7aa;
+            --blue-500: #f97316;
+            --blue-600: #d95f0e;
+            --blue-700: #c2410c;
+            --blue-900: #7c2d12;
+
+            --green-50: #f0fdf4;
+            --green-100: #dcfce7;
+            --green-200: #bbf7d0;
+            --green-400: #4ade80;
+            --green-600: #16a34a;
+            --green-800: #166534;
+
+            --indigo-500: #6366f1;
+            --purple-200: #e9d5ff;
+            --purple-500: #a855f7;
+            --purple-600: #9333ea;
+            --red-500: #ef4444;
+            --orange-50: #fff7ed;
+            --orange-600: #ea580c;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-body);
+            margin: 0;
+            padding: 20px;
+            color: var(--slate-900);
+            line-height: 1.6;
+        }
+
+        .header {
+            background-color: var(--bg-card);
+            border-bottom: 1px solid var(--slate-200);
+            padding: 1rem 2rem;
+            margin: -20px -20px 2rem -20px;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: var(--slate-900);
+        }
+
+        .nav-link {
+            color: var(--blue-600);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-link:hover {
+            color: var(--blue-700);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: var(--slate-900);
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .subtitle {
+            color: var(--slate-600);
+            font-size: 1.125rem;
+            margin-bottom: 3rem;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .tool-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--slate-200);
+            border-radius: 12px;
+            padding: 2rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+            border-color: var(--blue-500);
+        }
+
+        .tool-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--slate-900);
+            margin-bottom: 0.5rem;
+        }
+
+        .tool-description {
+            color: var(--slate-600);
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        .tool-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background-color: var(--blue-100);
+            color: var(--blue-700);
+            border-radius: 12px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <h1>Tools</h1>
+            <a href="../index.html" class="nav-link">← Back to Home</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="subtitle">
+            A collection of useful tools and calculators
+        </div>
+
+        <div class="tools-grid">
+            <a href="../diloco/index.html" class="tool-card">
+                <div class="tool-title">DiLoCo Bandwidth Simulator</div>
+                <div class="tool-description">
+                    Estimate bandwidth needed to reach a particular level of compute utilization when doing DiLoCo-type of communication.
+                </div>
+                <span class="tool-badge">Research Tool</span>
+            </a>
+
+            <a href="../tax/index.html" class="tool-card">
+                <div class="tool-title">UK Tax Calculator</div>
+                <div class="tool-description">
+                    Helper tool to compute tax and take-home in three different currencies.
+                </div>
+                <span class="tool-badge">Finance</span>
+            </a>
+        </div>
+    </div>
+</body>
+</html>
