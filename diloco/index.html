@@ -519,6 +519,121 @@
             color: var(--slate-400);
             cursor: not-allowed;
         }
+
+        /* Save Configuration Button */
+        .save-config-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: var(--blue-600);
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            font-size: 0.875rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s;
+        }
+
+        .save-config-btn:hover {
+            background-color: var(--blue-700);
+        }
+
+        .save-config-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* Configuration Cards */
+        .config-card {
+            background-color: white;
+            border: 2px solid var(--blue-200);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            position: relative;
+            transition: all 0.2s;
+        }
+
+        .config-card:hover {
+            border-color: var(--blue-400);
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
+        }
+
+        .config-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.75rem;
+        }
+
+        .config-name {
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--blue-900);
+            margin-bottom: 0.25rem;
+        }
+
+        .config-util {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--blue-600);
+            font-family: 'SF Mono', 'Roboto Mono', monospace;
+        }
+
+        .config-params {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            font-size: 0.75rem;
+            color: var(--slate-600);
+        }
+
+        .config-param {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .config-param-label {
+            color: var(--slate-500);
+        }
+
+        .config-param-value {
+            font-weight: 600;
+            color: var(--slate-700);
+            font-family: 'SF Mono', 'Roboto Mono', monospace;
+        }
+
+        .delete-config-btn {
+            background-color: var(--red-500);
+            color: white;
+            border: none;
+            border-radius: 0.375rem;
+            padding: 0.375rem 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .delete-config-btn:hover {
+            background-color: #dc2626;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--slate-400);
+        }
+
+        .empty-state svg {
+            margin: 0 auto 1rem;
+            opacity: 0.5;
+        }
     </style>
 </head>
 <body class="container">
@@ -642,78 +757,37 @@
                 </div>
             </div>
 
+            <!-- Save Configuration Section -->
+            <div style="border-top: 2px solid var(--slate-200); padding-top: 1rem;">
+                <h2 class="section-title">Save Configuration</h2>
+                <div class="mb-2">
+                    <label class="label-sm">Configuration Name</label>
+                    <input type="text" id="configName" value="" placeholder="e.g., High bandwidth setup" class="form-control">
+                </div>
+                <button id="saveConfigBtn" class="save-config-btn">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="margin-right: 0.5rem;">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                    Add Configuration
+                </button>
+            </div>
+
         </div>
 
-        <!-- Results Section (Right Column) -->
+        <!-- Saved Configurations Section (Right Column) -->
         <div class="panel results-panel">
             <h2 class="result-title">
-                <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                Estimated Wall-Clock Time
+                <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                Saved Configurations
             </h2>
-            
-            <div>
-                <div class="result-row">
-                    <span class="result-key">Total Steps (T)</span>
-                    <span class="result-val" id="resSteps">0</span>
-                </div>
 
-                <div class="bar-group">
-                    <div class="bar-label">
-                        <span>Computation Time</span>
-                        <span class="result-val-sm" id="resComp">0h 0m</span>
-                    </div>
-                    <div class="bar-track">
-                        <div id="barComp" class="bar-fill-blue" style="width: 0%"></div>
-                    </div>
-                </div>
-
-                <div class="bar-group">
-                    <div class="bar-label">
-                        <span>Inter-DC Comm (Outer)</span>
-                        <span class="result-val-sm" id="resCommInter">0h 0m</span>
-                    </div>
-                    <div class="bar-track">
-                        <div id="barInterGhost" class="bar-fill-purple-ghost" style="position: absolute; top:0; left:0; width: 0%"></div>
-                        <div id="barInter" class="bar-fill-purple" style="position: absolute; top:0; left:0; width: 0%"></div>
-                    </div>
-                    <div id="overlapDetail" class="hidden overlap-detail">
-                         <div style="color: var(--slate-500);">Overlap Check:</div>
-                         <div>Background Comm: <span class="font-bold" id="valCommOuter"></span></div>
-                         <div>Compute Window: <span class="font-bold" id="valCompWindow"></span> (x<span id="valStaleness">1</span>)</div>
-                         <div id="overlapVerdict" class="font-bold mt-1"></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="total-row">
-                <span class="label-sm" style="font-weight: 700; color: var(--blue-900); text-transform: uppercase;">Total Duration</span>
-                <span class="total-val" id="resTotal">0h 0m</span>
-            </div>
-
-            <div class="flex-col" style="gap: 1rem;">
-                <div class="metric-row">
-                     <div>
-                        <div class="label-sm">Inter-DC Capacity (at each DC):</div>
-                        <div class="result-val-sm" id="resInterCapacity">0 Gbps</div>
-                    </div>
-                </div>
-                <div class="metric-row">
-                     <div>
-                        <div class="label-sm">Compute Utilization:</div>
-                        <div class="result-val-sm" id="resUtil">0%</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Formula Block (Inside Right Panel now) -->
-            <div class="code-block">
-                <div class="code-title">Underlying Math</div>
-                <p id="mathMode" style="color: var(--green-400); font-weight: 700;">Standard DiLoCo (Sequential)</p>
-                <p>T_comp = seconds_per_step × T</p>
-                <p style="color: var(--slate-500);">// Inter-DC Communication (Outer Steps)</p>
-                <p class="text-slate-300">T_comm_inter = [ (2N / W₁) × (1 - 1/R) + ε₁ ] × (T / H)</p>
-                <div id="mathTotalFormula" style="border-top: 1px solid var(--slate-700); margin-top: 0.5rem; padding-top: 0.5rem;">
-                    <p style="font-weight: 700;">Total = T_comp + T_comm_inter</p>
+            <div id="configsList">
+                <div class="empty-state">
+                    <svg width="64" height="64" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="stroke-width: 1;">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
+                    </svg>
+                    <p style="font-size: 0.875rem; margin: 0;">No configurations saved yet</p>
+                    <p style="font-size: 0.75rem; margin-top: 0.5rem;">Configure your settings on the left and click "Add Configuration"</p>
                 </div>
             </div>
         </div>
@@ -834,11 +908,11 @@
         input.addEventListener('blur', function() {
             this.value = formatNumber(this.value);
         });
-        input.addEventListener('input', calculate);
+        input.addEventListener('input', updatePlot);
     });
 
     // Model Size Dropdown
-    document.getElementById('modelSizeSelect').addEventListener('change', calculate);
+    document.getElementById('modelSizeSelect').addEventListener('change', updatePlot);
 
     // Streaming Toggle
     const streamingToggle = document.getElementById('streamingToggle');
@@ -850,12 +924,12 @@
         } else {
             streamingOptions.classList.remove('active');
         }
-        calculate();
+        updatePlot();
     });
 
     // Wire up streaming inputs
-    document.getElementById('staleness').addEventListener('input', calculate);
-    document.getElementById('fragments').addEventListener('input', calculate);
+    document.getElementById('staleness').addEventListener('input', updatePlot);
+    document.getElementById('fragments').addEventListener('input', updatePlot);
 
     // Handle Replicas field - disable Sync Cadence when M=1 (Data-Parallel)
     const replicasInput = document.getElementById('replicas');
@@ -875,7 +949,7 @@
 
     replicasInput.addEventListener('input', () => {
         updateSyncCadenceState();
-        calculate();
+        updatePlot();
     });
 
     replicasInput.addEventListener('blur', updateSyncCadenceState);
@@ -962,88 +1036,160 @@
         };
     }
 
-    function calculate() {
-        const res = calculateCore();
-        if(res.error) {
-            document.getElementById('resTotal').innerText = res.error;
+    // Configuration Storage
+    let savedConfigurations = [];
+
+    // Save Configuration
+    function saveConfiguration() {
+        const configName = document.getElementById('configName').value.trim();
+
+        if (!configName) {
+            alert('Please enter a configuration name');
             return;
         }
 
-        const { N, M, R, W1_gbps } = res;
-
-        // Capacity
-        if (R > 0 && M > 0 && W1_gbps > 0) {
-            const capacity = W1_gbps * 1e9 * (R / M);
-            document.getElementById('resInterCapacity').innerText = formatCapacity(capacity);
-        } else {
-            document.getElementById('resInterCapacity').innerText = "0 Gbps";
+        const res = calculateCore();
+        if (res.error) {
+            alert('Error calculating configuration: ' + res.error);
+            return;
         }
 
-        // Update UI Text
-        document.getElementById('resSteps').innerText = Math.round(res.T).toLocaleString();
-        document.getElementById('resComp').innerText = formatTime(res.T_comp);
-        document.getElementById('resCommInter').innerText = formatTime(res.T_comm_inter);
-        document.getElementById('resTotal').innerText = formatTime(res.T_total);
-        document.getElementById('resUtil').innerText = res.utilization.toFixed(2) + "%";
-
-        // Visuals - Inter Overlap
+        const N = parseFloat(document.getElementById('modelSizeSelect').value);
+        const secondsPerStep = parseNumber(document.getElementById('secondsPerStep').value);
+        const M = parseNumber(document.getElementById('replicas').value);
+        const H = parseNumber(document.getElementById('syncCadence').value);
+        const R = parseNumber(document.getElementById('totalChips').value);
+        const T = parseNumber(document.getElementById('totalSteps').value);
+        const W1_gbps = parseNumber(document.getElementById('interBw').value);
+        const e1_ms = parseNumber(document.getElementById('interLat').value);
         const isStreaming = document.getElementById('streamingToggle').checked;
-        const overlapDetail = document.getElementById('overlapDetail');
-        const commInterElem = document.getElementById('resCommInter');
-        
-        if (isStreaming) {
-            const T_outer = res.T_comm_inter / res.staleness;
+        const staleness = isStreaming ? (parseNumber(document.getElementById('staleness').value) || 1) : 1;
+        const fragments = isStreaming ? (parseNumber(document.getElementById('fragments').value) || 16) : 16;
 
-            overlapDetail.classList.remove('hidden');
-            document.getElementById('valCommOuter').innerText = formatTime(T_outer);
-            document.getElementById('valCompWindow').innerText = formatTime(res.T_baseline);
-            document.getElementById('overlapVerdict').innerText = res.overlapState === "hidden" 
-                ? "✅ Fully Hidden (Comm < Window)" 
-                : "⚠️ Network Bound (Comm > Window)";
-            
-            document.getElementById('overlapVerdict').style.color = res.overlapState === "hidden" 
-                ? "var(--green-600)" 
-                : "var(--orange-600)";
+        const config = {
+            id: Date.now(),
+            name: configName,
+            params: {
+                N, secondsPerStep, M, H, R, T, W1_gbps, e1_ms,
+                isStreaming, staleness, fragments
+            },
+            results: res
+        };
 
-            if (res.overlapState === "hidden") {
-                commInterElem.classList.add('line-through');
-                commInterElem.classList.add('text-slate-400');
-                document.getElementById('barInter').style.width = "0%";
-                document.getElementById('barInterGhost').style.width = (T_outer / res.T_total * 100) + "%"; 
-            } else {
-                commInterElem.classList.remove('line-through');
-                commInterElem.classList.remove('text-slate-400');
-                document.getElementById('barInter').style.width = "100%"; 
-                document.getElementById('barInterGhost').style.width = "0%";
-            }
-        } else {
-            overlapDetail.classList.add('hidden');
-            commInterElem.classList.remove('line-through');
-            commInterElem.classList.remove('text-slate-400');
-            document.getElementById('barInter').style.width = (res.T_comm_inter / res.T_total * 100) + "%";
-            document.getElementById('barInterGhost').style.width = "0%";
-        }
+        savedConfigurations.push(config);
+        renderConfigurations();
 
-        // Bar logic
-        document.getElementById('barComp').style.width = (res.T_comp / res.T_total * 100) + "%";
-
-        // Update Math Text
-        const mathTitle = document.getElementById('mathMode');
-        const mathFormula = document.getElementById('mathTotalFormula');
-
-        if (isStreaming) {
-            mathTitle.innerText = "Streaming DiLoCo (Overlapped)";
-            mathTitle.style.color = "var(--green-400)";
-            mathFormula.innerHTML = `<p style="font-weight: 700;">Total = MAX( T_comp, T_inter / S )</p>`;
-        } else {
-            mathTitle.innerText = "Standard DiLoCo (Sequential)";
-            mathTitle.style.color = "var(--blue-400)";
-            mathFormula.innerHTML = `<p style="font-weight: 700;">Total = T_comp + T_inter</p>`;
-        }
-
-        // Update Sweep Plot
-        updatePlot();
+        // Clear the name input
+        document.getElementById('configName').value = '';
     }
+
+    // Delete Configuration
+    function deleteConfiguration(id) {
+        savedConfigurations = savedConfigurations.filter(c => c.id !== id);
+        renderConfigurations();
+    }
+
+    // Render Configurations
+    function renderConfigurations() {
+        const container = document.getElementById('configsList');
+
+        if (savedConfigurations.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <svg width="64" height="64" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="stroke-width: 1;">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
+                    </svg>
+                    <p style="font-size: 0.875rem; margin: 0;">No configurations saved yet</p>
+                    <p style="font-size: 0.75rem; margin-top: 0.5rem;">Configure your settings on the left and click "Add Configuration"</p>
+                </div>
+            `;
+            return;
+        }
+
+        let html = '';
+        savedConfigurations.forEach(config => {
+            const p = config.params;
+            const r = config.results;
+
+            // Format model size
+            let modelSize = 'Unknown';
+            if (p.N >= 1e12) modelSize = (p.N / 1e12).toFixed(0) + 'T';
+            else if (p.N >= 1e9) modelSize = (p.N / 1e9).toFixed(0) + 'B';
+            else if (p.N >= 1e6) modelSize = (p.N / 1e6).toFixed(0) + 'M';
+
+            const mode = p.M === 1 ? 'Data-Parallel' : (p.isStreaming ? 'Streaming DiLoCo' : 'DiLoCo');
+
+            html += `
+                <div class="config-card">
+                    <div class="config-header">
+                        <div style="flex: 1;">
+                            <div class="config-name">${config.name}</div>
+                            <div style="font-size: 0.7rem; color: var(--slate-400); margin-top: 0.125rem;">${mode}</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div class="config-util">${r.utilization.toFixed(1)}%</div>
+                            <div style="font-size: 0.65rem; color: var(--slate-500); margin-top: 0.125rem;">Compute Util.</div>
+                        </div>
+                    </div>
+
+                    <div class="config-params">
+                        <div class="config-param">
+                            <span class="config-param-label">Model:</span>
+                            <span class="config-param-value">${modelSize}</span>
+                        </div>
+                        <div class="config-param">
+                            <span class="config-param-label">Replicas:</span>
+                            <span class="config-param-value">M=${p.M}</span>
+                        </div>
+                        <div class="config-param">
+                            <span class="config-param-label">Steps:</span>
+                            <span class="config-param-value">T=${p.T.toLocaleString()}</span>
+                        </div>
+                        <div class="config-param">
+                            <span class="config-param-label">Sync Cadence:</span>
+                            <span class="config-param-value">H=${p.H}</span>
+                        </div>
+                        <div class="config-param">
+                            <span class="config-param-label">Chips:</span>
+                            <span class="config-param-value">R=${p.R}</span>
+                        </div>
+                        <div class="config-param">
+                            <span class="config-param-label">Bandwidth:</span>
+                            <span class="config-param-value">${p.W1_gbps} Gbps</span>
+                        </div>
+                        ${p.isStreaming ? `
+                        <div class="config-param">
+                            <span class="config-param-label">Staleness:</span>
+                            <span class="config-param-value">S=${p.staleness}</span>
+                        </div>
+                        <div class="config-param">
+                            <span class="config-param-label">Fragments:</span>
+                            <span class="config-param-value">P=${p.fragments}</span>
+                        </div>
+                        ` : ''}
+                    </div>
+
+                    <div style="margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid var(--blue-100); display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem;">
+                        <div>
+                            <div style="color: var(--slate-500);">Total Time:</div>
+                            <div style="font-weight: 700; color: var(--blue-700); font-family: monospace;">${formatTime(r.T_total)}</div>
+                        </div>
+                        <button class="delete-config-btn" onclick="deleteConfiguration(${config.id})">
+                            <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                            </svg>
+                            Remove
+                        </button>
+                    </div>
+                </div>
+            `;
+        });
+
+        container.innerHTML = html;
+    }
+
+    // Save Config Button
+    document.getElementById('saveConfigBtn').addEventListener('click', saveConfiguration);
 
     function updatePlot() {
         const container = document.getElementById('figure4Plot');
@@ -1200,8 +1346,11 @@
         container.innerHTML = svg;
     }
 
-    // Initial calculation
-    calculate();
+    // Initial plot render
+    updatePlot();
+
+    // Make deleteConfiguration available globally
+    window.deleteConfiguration = deleteConfiguration;
 </script>
 
 </body>
