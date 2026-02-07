@@ -663,6 +663,40 @@
         .share-btn.copied {
             background-color: var(--blue-600);
         }
+
+        /* Bandwidth Table */
+        .bandwidth-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.875rem;
+        }
+
+        .bandwidth-table th {
+            background-color: var(--slate-100);
+            color: var(--slate-700);
+            font-weight: 600;
+            padding: 0.75rem;
+            text-align: center;
+            border: 1px solid var(--slate-200);
+        }
+
+        .bandwidth-table td {
+            padding: 0.75rem;
+            text-align: center;
+            border: 1px solid var(--slate-200);
+            font-family: 'SF Mono', 'Roboto Mono', monospace;
+            font-weight: 500;
+        }
+
+        .bandwidth-table .method-name {
+            font-weight: 700;
+            text-align: left;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        .bandwidth-table tbody tr:hover {
+            background-color: var(--slate-50);
+        }
     </style>
 </head>
 <body class="container">
@@ -802,6 +836,54 @@
         <h3 class="section-title" style="border:0; margin-bottom: 1rem;">Compute Utilization</h3>
         <div id="figure4Plot" class="plot-box" style="position: relative;">
             <!-- Chart injected here -->
+        </div>
+    </div>
+
+    <!-- Bandwidth Requirements Table -->
+    <div class="panel" style="margin-bottom: 2rem;">
+        <h2 class="section-title">Bandwidth Requirements for Target Utilization</h2>
+        <p style="font-size: 0.875rem; color: var(--slate-600); margin-bottom: 1rem;">
+            Approximate inter-datacenter bandwidth (Gbps) needed to achieve each compute utilization (CU) threshold:
+        </p>
+        <div style="overflow-x: auto;">
+            <table id="bandwidthTable" class="bandwidth-table">
+                <thead>
+                    <tr>
+                        <th>Method</th>
+                        <th>25% CU</th>
+                        <th>50% CU</th>
+                        <th>75% CU</th>
+                        <th>90% CU</th>
+                        <th>95% CU</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="method-name" style="background-color: #f8fafc;">Data Parallel</td>
+                        <td id="dp_25">-</td>
+                        <td id="dp_50">-</td>
+                        <td id="dp_75">-</td>
+                        <td id="dp_90">-</td>
+                        <td id="dp_95">-</td>
+                    </tr>
+                    <tr>
+                        <td class="method-name" style="background-color: #fef2f2;">DiLoCo</td>
+                        <td id="diloco_25">-</td>
+                        <td id="diloco_50">-</td>
+                        <td id="diloco_75">-</td>
+                        <td id="diloco_90">-</td>
+                        <td id="diloco_95">-</td>
+                    </tr>
+                    <tr>
+                        <td class="method-name" style="background-color: #eff6ff;">Streaming DiLoCo</td>
+                        <td id="streaming_25">-</td>
+                        <td id="streaming_50">-</td>
+                        <td id="streaming_75">-</td>
+                        <td id="streaming_90">-</td>
+                        <td id="streaming_95">-</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 
@@ -1261,6 +1343,9 @@
         // Update the plot
         updatePlot();
 
+        // Update the bandwidth requirements table
+        updateBandwidthTable();
+
         // Update URL with current configuration
         updateURL();
     }
@@ -1700,6 +1785,99 @@
                 hoverMarker.style.display = 'none';
             });
         }
+    }
+
+    /**
+     * Find bandwidth required to reach target utilization using binary search
+     */
+    function findBandwidthForUtilization(targetUtil, H, bytesPerParam, S, P) {
+        const minBw = 0.1;
+        const maxBw = 1000;
+        const tolerance = 0.5; // 0.5% tolerance
+
+        let low = minBw;
+        let high = maxBw;
+        let bestBw = null;
+
+        // Binary search for bandwidth
+        for (let iter = 0; iter < 50; iter++) {
+            const midBw = (low + high) / 2;
+            const result = calculateCore(H, bytesPerParam, S, P, midBw);
+            const util = result.utilization;
+
+            if (Math.abs(util - targetUtil) < tolerance) {
+                bestBw = midBw;
+                break;
+            }
+
+            if (util < targetUtil) {
+                // Need more bandwidth
+                low = midBw;
+            } else {
+                // Need less bandwidth
+                high = midBw;
+                bestBw = midBw; // Keep track of last successful bandwidth
+            }
+        }
+
+        return bestBw;
+    }
+
+    /**
+     * Format bandwidth value for display
+     */
+    function formatBandwidth(bw) {
+        if (bw === null) return '> 1000';
+        if (bw < 1) return bw.toFixed(2);
+        if (bw < 10) return bw.toFixed(1);
+        return Math.round(bw).toString();
+    }
+
+    /**
+     * Update the bandwidth requirements table
+     */
+    function updateBandwidthTable() {
+        // Get configuration-specific settings
+        const dp_dtype = parseFloat(document.getElementById('dp_dtype').value);
+        const diloco_dtype = parseFloat(document.getElementById('diloco_dtype').value);
+        const diloco_H = parseNumber(document.getElementById('diloco_H').value);
+        const streaming_dtype = parseFloat(document.getElementById('streaming_dtype').value);
+        const streaming_H = parseNumber(document.getElementById('streaming_H').value);
+        const streaming_P = parseNumber(document.getElementById('streaming_P').value);
+        const streaming_S = parseNumber(document.getElementById('streaming_S').value);
+
+        const thresholds = [25, 50, 75, 90, 95];
+
+        // Calculate for each method
+        const methods = [
+            { prefix: 'dp', H: 1, dtype: dp_dtype, S: 0, P: 1 },
+            { prefix: 'diloco', H: diloco_H, dtype: diloco_dtype, S: 0, P: 1 },
+            { prefix: 'streaming', H: streaming_H, dtype: streaming_dtype, S: streaming_S, P: streaming_P }
+        ];
+
+        methods.forEach(method => {
+            thresholds.forEach(threshold => {
+                const cellId = `${method.prefix}_${threshold}`;
+                const cell = document.getElementById(cellId);
+
+                if (cell) {
+                    const bw = findBandwidthForUtilization(threshold, method.H, method.dtype, method.S, method.P);
+                    cell.textContent = formatBandwidth(bw);
+
+                    // Color code based on bandwidth range
+                    if (bw === null || bw > 100) {
+                        cell.style.color = 'var(--red-500)';
+                        cell.style.fontWeight = '700';
+                    } else if (bw > 10) {
+                        cell.style.color = 'var(--orange-600)';
+                        cell.style.fontWeight = '600';
+                    } else {
+                        cell.style.color = 'var(--green-600)';
+                        cell.style.fontWeight = '600';
+                    }
+                }
+            });
+        });
     }
 
     // ========================================================================
