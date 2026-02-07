@@ -648,32 +648,51 @@
         </p>
     </header>
 
+    <!-- Top Configuration Panel -->
+    <div class="panel" style="margin-bottom: 2rem;">
+        <h2 class="section-title">Model & Network Configuration</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+            <div>
+                <label class="label-sm">Model Size</label>
+                <select id="modelSizeSelect" class="form-control">
+                    <option value="1000000000">1B Params</option>
+                    <option value="10000000000" selected>10B Params</option>
+                    <option value="100000000000">100B Params</option>
+                    <option value="1000000000000">1T Params</option>
+                </select>
+                <div class="label-sub">N, assumes bfloat16</div>
+            </div>
+
+            <div>
+                <label class="label-sm">Seconds per Step</label>
+                <input type="text" id="secondsPerStep" value="1.0" class="form-control formatted-input">
+                <div class="label-sub">Time for one training step</div>
+            </div>
+
+            <div>
+                <label class="label-sm">Bandwidth (Per Chip)</label>
+                <div class="input-addon-group">
+                    <input type="text" id="interBw" value="100" class="form-control formatted-input">
+                    <span class="input-addon">Gbps</span>
+                </div>
+                <div class="label-sub">Inter-DC bandwidth</div>
+            </div>
+
+            <div>
+                <label class="label-sm">Latency</label>
+                <div class="input-addon-group">
+                    <input type="text" id="interLat" value="100" class="form-control formatted-input">
+                    <span class="input-addon">ms</span>
+                </div>
+                <div class="label-sub">Inter-DC latency</div>
+            </div>
+        </div>
+    </div>
+
     <div class="grid-2-cols">
-        
+
         <!-- Input Section -->
         <div class="panel">
-            
-            <div>
-                <h2 class="section-title">Model & Data</h2>
-                
-                <!-- Model Size Preset -->
-                <div class="mb-2">
-                    <label class="label-sm">Model Size</label>
-                    <select id="modelSizeSelect" class="form-control">
-                        <option value="1000000000">1B Params</option>
-                        <option value="10000000000" selected>10B Params</option>
-                        <option value="100000000000">100B Params</option>
-                        <option value="1000000000000">1T Params</option>
-                    </select>
-                    <div class="label-sub">N, assumes bfloat16</div>
-                </div>
-
-                <div class="mb-2">
-                    <label class="label-sm">Seconds per Step</label>
-                    <input type="text" id="secondsPerStep" value="1.0" class="form-control formatted-input">
-                    <div class="label-sub">Time for one training step (T_comp / num_steps)</div>
-                </div>
-            </div>
 
             <div>
                 <h2 class="section-title">DiLoCo Parameters</h2>
@@ -741,27 +760,6 @@
 
         <!-- Saved Configurations Section (Right Column) -->
         <div class="panel results-panel">
-            <!-- Inter-Datacenter Network -->
-            <div style="margin-bottom: 1.5rem;">
-                <h2 class="section-title">Inter-Datacenter Network</h2>
-                <div class="input-group-grid">
-                    <div>
-                        <label class="label-sm">Bandwidth (Per Chip)</label>
-                        <div class="input-addon-group">
-                            <input type="text" id="interBw" value="100" class="form-control formatted-input">
-                            <span class="input-addon">Gbps</span>
-                        </div>
-                    </div>
-                    <div>
-                        <label class="label-sm">Latency</label>
-                        <div class="input-addon-group">
-                            <input type="text" id="interLat" value="100" class="form-control formatted-input">
-                            <span class="input-addon">ms</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <h2 class="result-title">
                 <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
                 Saved Configurations
