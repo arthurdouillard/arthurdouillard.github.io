@@ -697,7 +697,6 @@
                 <div class="mb-4">
                     <label class="label-sm">Synchronization Cadence (H)</label>
                     <input type="text" id="syncCadence" value="30" class="form-control formatted-input">
-                    <div class="label-sub">Steps between syncs (H=1: Data-Parallel)</div>
                 </div>
 
                 <div class="mb-4">
@@ -707,29 +706,21 @@
                         <option value="1">int8 (1 byte)</option>
                         <option value="0.5">int4 (0.5 bytes)</option>
                     </select>
-                    <div class="label-sub">Affects communication size</div>
                 </div>
 
                 <div class="mb-4">
                     <label class="label-sm">Overlapping Steps (S)</label>
                     <input type="text" id="staleness" value="0" class="form-control formatted-input">
-                    <div class="label-sub">S=0: Sequential, S>0: Streaming</div>
                 </div>
 
                 <div class="mb-4">
                     <label class="label-sm">Number of Fragments (P)</label>
                     <input type="text" id="fragments" value="1" class="form-control formatted-input">
-                    <div class="label-sub">P=1: Single send, P>1: Streaming</div>
                 </div>
             </div>
 
             <!-- Save Configuration Section -->
             <div style="border-top: 2px solid var(--slate-200); padding-top: 1rem;">
-                <h2 class="section-title">Save Configuration</h2>
-                <div class="mb-2">
-                    <label class="label-sm">Configuration Name</label>
-                    <input type="text" id="configName" value="" placeholder="e.g., High bandwidth setup" class="form-control">
-                </div>
                 <button id="saveConfigBtn" class="save-config-btn">
                     <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="margin-right: 0.5rem;">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
@@ -764,58 +755,6 @@
         <h3 class="section-title" style="border:0; margin-bottom: 1rem;">Compute Utilization plot (Figure 4 of the Streaming DiLoCo paper)</h3>
         <div id="figure4Plot" class="plot-box">
             <!-- Chart injected here -->
-        </div>
-    </div>
-
-    <!-- FAQ Section -->
-    <div class="faq-section">
-        <h2 class="section-title" style="border:0;">Frequently Asked Questions</h2>
-        
-        <div class="faq-item">
-            <div class="faq-q">1. Source / Citation</div>
-            <div class="faq-a">
-                Based on <strong>Appendix A.2</strong> and <strong>A.3</strong> of <em>"Communication-Efficient Language Model Training Scales Reliably and Robustly"</em>.
-                Model assumes <strong>bfloat16</strong> precision.
-            </div>
-        </div>
-
-        <div class="faq-item">
-            <div class="faq-q">2. Wouldn't a real-world implementation of Streaming Diloco need some form of Hierarchical All-Reduce?</div>
-            <div class="faq-a">
-                I think so, most likely. Real-world implementations typically use hierarchical collectives.
-                However, the <strong>Scaling Laws paper</strong> explicitly models the time using the standard flat ring lower bound ($T \approx 2N/W$). This implies that if the Inter-DC link is the bottleneck, the total transfer time is governed by that bottleneck bandwidth ($W$) regardless of the reduction topology.
-            </div>
-        </div>
-
-        <div class="faq-item">
-            <div class="faq-q">3. What are Staleness (S) and Fragments (P)?</div>
-            <div class="faq-a">
-                <strong>Fragments (P):</strong> Streaming DiLoCo breaks the outer sync payload into $P$ chunks. While this doesn't change the <em>total</em> bytes sent, it allows for finer-grained overlap and lower memory overhead for buffers. <br>
-                <strong>Staleness (S):</strong> By allowing the outer optimizer to be $S$ steps stale, the communication of gradients can be spread over $S$ intervals of length $H$. This effectively reduces the bandwidth requirement by a factor of $S$ (or allows using a link $S$ times slower without bottlenecking).
-            </div>
-        </div>
-
-        <div class="faq-item">
-            <div class="faq-q">4. Why is "Bandwidth (Per Chip)" used in the formulas?</div>
-            <div class="faq-a">
-                <p style="margin-bottom: 0.5rem;">
-                    The training time calculation uses the bandwidth-optimal All-Reduce cost model from <em>Patarasuk & Yuan (2009)</em>, approximated in the paper as <code>T ≈ 2N / W</code>.
-                    In this formula, <strong>W</strong> represents the per-chip link bandwidth.
-                </p>
-                <p>
-                    However, the <strong>"Inter-DC Capacity"</strong> metric displayed in the results represents the <strong>aggregate cross-sectional bandwidth</strong> that would be required if every chip in the datacenter saturated its Inter-DC link simultaneously. It is calculated as <code>Bandwidth_Per_Chip × (R / M)</code>.
-                </p>
-            </div>
-        </div>
-        
-        <div class="faq-item">
-            <div class="faq-q">5. Why do Vanilla and Streaming DiLoCo lines overlap?</div>
-            <div class="faq-a">
-                In the simulator's model, Streaming DiLoCo sends the same <strong>total amount of data</strong> as Vanilla DiLoCo, just in smaller chunks. 
-                The only difference is the added latency overhead of sending multiple fragments ($P \times \epsilon$). 
-                For large models (e.g., 100B params), the bandwidth transfer time (tens of seconds) massively dominates the latency overhead (milliseconds), making the lines appear identical on the plot. 
-                To see them diverge, try increasing the <strong>Fragments</strong> count or the <strong>Inter-DC Latency</strong>.
-            </div>
         </div>
     </div>
 
@@ -1019,18 +958,15 @@
 
     // Save Configuration
     function saveConfiguration() {
-        const configName = document.getElementById('configName').value.trim();
-
-        if (!configName) {
-            alert('Please enter a configuration name');
-            return;
-        }
-
         const res = calculateCore();
         if (res.error) {
             alert('Error calculating configuration: ' + res.error);
             return;
         }
+
+        // Auto-generate name based on key parameters
+        const configNumber = savedConfigurations.length + 1;
+        const configName = `Config ${configNumber}`;
 
         const config = {
             id: Date.now(),
@@ -1050,9 +986,6 @@
 
         savedConfigurations.push(config);
         renderConfigurations();
-
-        // Clear the name input
-        document.getElementById('configName').value = '';
     }
 
     // Delete Configuration
