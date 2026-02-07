@@ -41,6 +41,7 @@
             --purple-500: #a855f7;
             --purple-600: #9333ea;
             --red-500: #ef4444;
+            --orange-50: #fff7ed;
             --orange-600: #ea580c;
         }
 
@@ -641,10 +642,10 @@
     <header class="header">
         <h1>DiLoCo Bandwidth Simulator</h1>
         <p>
-            Vibecoded (<a href="https://github.com/mino98/diloco-calculator" target="_blank">repo</a>) based on the paper trilogy: 
+            Based on the papers:
             <a href="https://arxiv.org/abs/2311.08105" target="_blank">DiLoCo</a>, 
             <a href="https://arxiv.org/abs/2501.18512" target="_blank">Streaming DiLoCo</a>, 
-            <a href="https://arxiv.org/abs/2503.09799" target="_blank">Scaling Laws</a>
+            <a href="https://arxiv.org/abs/2503.09799" target="_blank">Scaling Laws for DiLoCo</a>
         </p>
     </header>
 
@@ -679,35 +680,35 @@
     </div>
 
     <!-- Hardcoded Configurations -->
-    <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 2rem;">
+    <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 2rem;">
 
         <!-- Configuration 1: Data Parallel -->
-        <div class="panel" style="padding: 0.75rem;">
-            <h2 class="section-title" style="color: #94a3b8; border-color: #94a3b8; font-size: 0.875rem; margin-bottom: 0.5rem; padding-bottom: 0.25rem;">Data Parallel (H=1)</h2>
+        <div class="panel" style="padding: 0.5rem 0.75rem;">
+            <h2 class="section-title" style="color: #94a3b8; border-color: #94a3b8; font-size: 0.875rem; margin-bottom: 0.25rem; padding-bottom: 0;">Data Parallel (H=1)</h2>
 
-            <div style="display: flex; gap: 1rem; align-items: center;">
+            <div style="display: flex; gap: 0.75rem; align-items: center;">
                 <div style="flex: 1;">
                     <label class="label-sm">Gradients Data Type</label>
                     <select id="dp_dtype" class="form-control">
                         <option value="2" selected>bfloat16 (2 bytes)</option>
-                        <option value="1">int8 (1 byte)</option>
-                        <option value="0.5">int4 (0.5 bytes)</option>
+                        <option value="1">fp8 (1 byte)</option>
+                        <option value="0.5">fp4 (0.5 bytes)</option>
                     </select>
                 </div>
             </div>
         </div>
 
         <!-- Configuration 2: DiLoCo -->
-        <div class="panel" style="padding: 0.75rem;">
-            <h2 class="section-title" style="color: #ef4444; border-color: #ef4444; font-size: 0.875rem; margin-bottom: 0.5rem; padding-bottom: 0.25rem;">DiLoCo</h2>
+        <div class="panel" style="padding: 0.5rem 0.75rem;">
+            <h2 class="section-title" style="color: #ef4444; border-color: #ef4444; font-size: 0.875rem; margin-bottom: 0.25rem; padding-bottom: 0;">DiLoCo</h2>
 
-            <div style="display: flex; gap: 1rem; align-items: flex-end;">
+            <div style="display: flex; gap: 0.75rem; align-items: flex-end;">
                 <div style="flex: 1;">
                     <label class="label-sm">Gradients Data Type</label>
                     <select id="diloco_dtype" class="form-control">
                         <option value="2" selected>bfloat16 (2 bytes)</option>
-                        <option value="1">int8 (1 byte)</option>
-                        <option value="0.5">int4 (0.5 bytes)</option>
+                        <option value="1">fp8 (1 byte)</option>
+                        <option value="0.5">fp4 (0.5 bytes)</option>
                     </select>
                 </div>
 
@@ -719,32 +720,38 @@
         </div>
 
         <!-- Configuration 3: Streaming DiLoCo with Overlap -->
-        <div class="panel" style="padding: 0.75rem;">
-            <h2 class="section-title" style="color: #3b82f6; border-color: #3b82f6; font-size: 0.875rem; margin-bottom: 0.5rem; padding-bottom: 0.25rem;">Streaming DiLoCo with Overlap</h2>
+        <div class="panel" style="padding: 0.rem 0.75rem;">
+            <h2 class="section-title" style="color: #3b82f6; border-color: #3b82f6; font-size: 0.875rem; margin-bottom: 0.25rem; padding-bottom: 0;">Streaming DiLoCo with Overlap</h2>
 
-            <div style="display: flex; gap: 1rem; align-items: flex-end;">
+            <div style="display: flex; gap: 0.75rem; align-items: flex-end;">
                 <div style="flex: 1;">
                     <label class="label-sm">Gradients Data Type</label>
                     <select id="streaming_dtype" class="form-control">
                         <option value="2" selected>bfloat16 (2 bytes)</option>
-                        <option value="1">int8 (1 byte)</option>
-                        <option value="0.5">int4 (0.5 bytes)</option>
+                        <option value="1">fp8 (1 byte)</option>
+                        <option value="0.5">fp4 (0.5 bytes)</option>
                     </select>
                 </div>
 
                 <div style="flex: 1;">
-                    <label class="label-sm">Synchronization Cadence (H)</label>
-                    <input type="text" id="streaming_H" value="30" class="form-control formatted-input">
+                    <label class="label-sm">Fragment Period (H)</label>
+                    <input type="text" id="streaming_H" value="80" class="form-control formatted-input">
                 </div>
 
                 <div style="flex: 1;">
-                    <label class="label-sm">Number of Fragments (P)</label>
-                    <input type="text" id="streaming_P" value="5" class="form-control formatted-input">
+                    <label class="label-sm">Fragments (P)</label>
+                    <input type="text" id="streaming_P" value="16" class="form-control formatted-input">
                 </div>
 
                 <div style="flex: 1;">
-                    <label class="label-sm">Number of Overlap (S)</label>
+                    <label class="label-sm">Overlap Delay (τ)</label>
                     <input type="text" id="streaming_S" value="10" class="form-control formatted-input">
+                </div>
+            </div>
+
+            <div style="background-color: #eff6ff; border: 1px solid #bfdbfe; border-radius: 0.375rem; padding: 0.5rem; margin-top: 0.5rem;">
+                <div style="font-size: 0.65rem; color: #1e40af; line-height: 1.4;">
+                    <strong>Streaming pattern:</strong> H is the period for <em>each</em> fragment. With P fragments, one fragment is sent every <strong id="fragment_interval_display">5.0</strong> steps. Fragment size = total_size / P.
                 </div>
             </div>
         </div>
@@ -761,7 +768,7 @@
     <!-- Footer -->
     <footer style="margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--slate-200); text-align: center; color: var(--slate-500); font-size: 0.875rem;">
         <p>
-            Originally forked from <a href="https://mino98.github.io/diloco-calculator/" target="_blank" style="color: var(--blue-500); text-decoration: none;">mino98's DiLoCo Calculator</a>
+            Originally forked from <a href="https://mino98.github.io/diloco-calculator/" target="_blank" style="color: var(--blue-500); text-decoration: none;">mino98's DiLoCo Calculator</a>.
         </p>
     </footer>
 
@@ -771,15 +778,9 @@
     <input type="hidden" id="interBw" value="100">
 
 <script>
-    // Constants for Scaling Laws (Table 10)
-    const SCALING_BATCH_A = 0.00709;
-    const SCALING_BATCH_ALPHA = 0.4695;
-    const SCALING_BATCH_BETA = 0.3399;
-    const SEQ_LEN = 2048; 
-
-    const SCALING_LOSS_A = 19.226;
-    const SCALING_LOSS_ALPHA = -0.0985;
-    const SCALING_LOSS_BETA = 0.0116;
+    // ========================================================================
+    // TIMELINE + NETWORK QUEUE SIMULATOR
+    // ========================================================================
 
     // Input Formatting Logic
     const formatNumber = (num) => {
@@ -850,84 +851,613 @@
         return `${m}m ${s}s`;
     }
 
-    function calculateCore(H, bytesPerParam, S, P, overrideInterBw) {
-        // Fetch global values
-        const N = parseFloat(document.getElementById('modelSizeSelect').value);
-        const T = parseNumber(document.getElementById('totalSteps').value);
-        const secondsPerStep = parseNumber(document.getElementById('secondsPerStep').value);
-        const M = parseNumber(document.getElementById('numDatacenters').value);
+    // ========================================================================
+    // CORE SIMULATION: Timeline + Network Queue
+    // ========================================================================
 
-        // Override bandwidth if running sweep
-        const B_gbps = overrideInterBw !== undefined ? overrideInterBw : parseNumber(document.getElementById('interBw').value);
+    /**
+     * Generate bucketed gradient release schedule
+     * @param {number} K - Number of buckets
+     * @param {number} T_step - Total step time
+     * @param {number} T_fwd - Forward pass time
+     * @param {number} T_bwd - Backward pass time
+     * @param {number} S_total_bits - Total bits to communicate
+     * @returns {Array} Array of {release_offset, size_bits}
+     */
+    function makeBuckets(K, T_step, T_fwd, T_bwd, S_total_bits) {
+        const buckets = [];
+        for (let k = 0; k < K; k++) {
+            buckets.push({
+                release_offset: T_fwd + ((k + 1) / K) * T_bwd,
+                size_bits: S_total_bits / K
+            });
+        }
+        return buckets;
+    }
 
-        if (M < 1) return { error: "M must be >= 1" };
-        if (H < 1) return { error: "H must be >= 1" };
+    /**
+     * Calculate communication time
+     * @param {number} size_bits - Size in bits
+     * @param {number} B_bps - Bandwidth in bits/s
+     * @param {number} alpha - Latency per collective (seconds)
+     * @returns {number} Communication time in seconds
+     */
+    function commTime(size_bits, B_bps, alpha) {
+        return alpha + size_bits / B_bps;
+    }
 
-        // Data size in bytes
-        const D = N * bytesPerParam;
+    /**
+     * Simulate Data Parallel with bucketed all-reduce
+     * @param {Object} params - {N, T_step, T_fwd, T_bwd, K, S_total_bits, B_gbps, alpha, N_steps, M}
+     * @returns {Object} {CU, total_compute_time, total_stall_time, num_steps}
+     */
+    function simulateDP(params) {
+        const { N, T_step, T_fwd, T_bwd, K, S_total_bits, B_gbps, alpha, N_steps, M } = params;
+        const B_bps = B_gbps * 1e9;
 
-        // Convert bandwidth from Gbps to bytes/second: Gbps * 1e9 / 8
-        const B_bytes_per_sec = B_gbps * 1e9 / 8;
+        // Generate buckets
+        const buckets = makeBuckets(K, T_step, T_fwd, T_bwd, S_total_bits);
 
-        // Time calculations
-        const T_comp = secondsPerStep * T;
+        // Network queue state
+        let net_free_time = 0;
 
-        // Communication time per synchronization using new formula:
-        // T_comm_per_sync = 2 * (1 - 1/M) * D / B
-        let T_comm_per_sync = 0;
-        if (M > 1) {
-            T_comm_per_sync = 2 * (1 - 1/M) * D / B_bytes_per_sec;
+        // Compute clock
+        let t = 0;
+        let stall_total = 0;
+        let total_compute_time = 0;
+
+        // Simulate N inner steps
+        for (let step = 0; step < N_steps; step++) {
+            const step_start = t;
+            const jobs = [];
+
+            // Generate communication jobs for each bucket
+            buckets.forEach((bucket, k) => {
+                // Apply multi-datacenter overhead: 2 * (1 - 1/M) factor
+                const overhead_factor = M > 1 ? 2 * (1 - 1/M) : 0;
+                const effective_size = bucket.size_bits * overhead_factor;
+
+                if (effective_size > 0) {
+                    jobs.push({
+                        release_time: step_start + bucket.release_offset,
+                        deadline_time: step_start + T_step,
+                        size_bits: effective_size,
+                        tag: `step${step}_bucket${k}`
+                    });
+                }
+            });
+
+            // Schedule jobs on network queue
+            let max_stall = 0;
+            jobs.forEach(job => {
+                const start = Math.max(job.release_time, net_free_time);
+                const duration = commTime(job.size_bits, B_bps, alpha);
+                const finish = start + duration;
+                net_free_time = finish;
+
+                // Check if we missed deadline
+                const stall = Math.max(0, finish - job.deadline_time);
+                max_stall = Math.max(max_stall, stall);
+            });
+
+            // Apply stall to compute clock
+            t += max_stall;
+            stall_total += max_stall;
+
+            // Advance compute
+            t += T_step;
+            total_compute_time += T_step;
         }
 
-        // Total communication time across all syncs
-        const num_syncs = T / H;
-        const T_comm_inter = T_comm_per_sync * num_syncs;
-
-        // Determine mode and calculate total time
-        let T_total;
-        let overlapState = "sequential";
-        let mode = "Data-Parallel";
-
-        if (H === 1) {
-            // Data-Parallel mode
-            T_total = T_comp + T_comm_inter;
-            overlapState = "data_parallel";
-            mode = "Data-Parallel";
-        } else if (S > 0 || P > 1) {
-            // Streaming DiLoCo mode
-            mode = "Streaming DiLoCo";
-
-            // With overlapping, communication can be hidden behind computation
-            // We assume perfect overlap up to the computation window
-            const effective_staleness = Math.max(S, 1);
-            const T_outer_effective = T_comm_inter / effective_staleness;
-
-            if (T_outer_effective <= T_comp) {
-                T_total = T_comp;
-                overlapState = "hidden";
-            } else {
-                T_total = T_outer_effective;
-                overlapState = "bound";
-            }
-        } else {
-            // Standard DiLoCo mode
-            mode = "DiLoCo";
-            T_total = T_comp + T_comm_inter;
-        }
-
-        const utilization = (T_comp / T_total) * 100;
+        const CU = total_compute_time / (total_compute_time + stall_total);
 
         return {
-            T, T_comp, T_comm_inter, T_total, utilization, overlapState,
-            N, M, H, bytesPerParam, S, P, B_gbps, mode
+            CU: CU * 100,
+            total_compute_time,
+            total_stall_time: stall_total,
+            num_steps: N_steps,
+            mode: 'Data Parallel'
+        };
+    }
+
+    /**
+     * Simulate DiLoCo with outer synchronization
+     * @param {Object} params - {N, T_step, H, S_outer_bits, B_gbps, alpha, N_steps, M}
+     * @returns {Object} {CU, total_compute_time, total_stall_time, num_steps}
+     */
+    function simulateDiLoCo(params) {
+        const { N, T_step, H, S_outer_bits, B_gbps, alpha, N_steps, M } = params;
+        const B_bps = B_gbps * 1e9;
+
+        // Network queue state
+        let net_free_time = 0;
+
+        // Compute clock
+        let t = 0;
+        let stall_total = 0;
+        let total_compute_time = 0;
+
+        // Simulate N inner steps
+        for (let step = 0; step < N_steps; step++) {
+            const step_start = t;
+
+            // Check if this is an outer sync step
+            if ((step + 1) % H === 0) {
+                // Apply multi-datacenter overhead
+                const overhead_factor = M > 1 ? 2 * (1 - 1/M) : 0;
+                const effective_size = S_outer_bits * overhead_factor;
+
+                if (effective_size > 0) {
+                    const job = {
+                        release_time: step_start + T_step,
+                        deadline_time: step_start + T_step,
+                        size_bits: effective_size,
+                        tag: `outer_sync_step${step}`
+                    };
+
+                    // Schedule on network queue
+                    const start = Math.max(job.release_time, net_free_time);
+                    const duration = commTime(job.size_bits, B_bps, alpha);
+                    const finish = start + duration;
+                    net_free_time = finish;
+
+                    // Check if we missed deadline (creates bubble)
+                    const stall = Math.max(0, finish - job.deadline_time);
+                    t += stall;
+                    stall_total += stall;
+                }
+            }
+
+            // Advance compute
+            t += T_step;
+            total_compute_time += T_step;
+        }
+
+        const CU = total_compute_time / (total_compute_time + stall_total);
+
+        return {
+            CU: CU * 100,
+            total_compute_time,
+            total_stall_time: stall_total,
+            num_steps: N_steps,
+            mode: 'DiLoCo'
+        };
+    }
+
+    /**
+     * Simulate Streaming DiLoCo with continuous fragment streaming
+     * H is the period for EACH fragment (not the full outer update)
+     * With P fragments, one fragment is sent every H/P steps
+     * @param {Object} params - {N, T_step, T_fwd, T_bwd, H, P, tau, S_outer_bits, B_gbps, alpha, N_steps, M, K}
+     * @returns {Object} {CU, total_compute_time, total_stall_time, num_steps}
+     */
+    function simulateStreamingDiLoCo(params) {
+        const { N, T_step, T_fwd, T_bwd, H, P, tau, S_outer_bits, B_gbps, alpha, N_steps, M, K } = params;
+        const B_bps = B_gbps * 1e9;
+
+        // Fragment size (each fragment = 1/P of total model)
+        const fragment_size = S_outer_bits / P;
+
+        // Fragment interval: one fragment sent every H/P steps
+        const fragment_interval = H / P;
+
+        // Network queue state
+        let net_free_time = 0;
+
+        // Compute clock
+        let t = 0;
+        let stall_total = 0;
+        let total_compute_time = 0;
+
+        // Simulate N inner steps
+        for (let step = 0; step < N_steps; step++) {
+            const step_start = t;
+            const jobs = [];
+
+            // Check if we should send a fragment at this step
+            // Fragment streaming pattern: every H/P steps, send the next fragment in rotation
+            const current_fragment_slot = Math.floor((step % H) / fragment_interval);
+            const prev_fragment_slot = Math.floor(((step - 1 + H) % H) / fragment_interval);
+
+            // Send a fragment if we've entered a new fragment slot
+            if (step === 0 || current_fragment_slot !== prev_fragment_slot) {
+                const fragment_id = current_fragment_slot;
+
+                // Apply multi-datacenter overhead
+                const overhead_factor = M > 1 ? 2 * (1 - 1/M) : 0;
+                const effective_size = fragment_size * overhead_factor;
+
+                if (effective_size > 0) {
+                    // Release fragment during backward pass (simplified: at end of backward)
+                    const fragment_release_offset = T_fwd + T_bwd;
+
+                    jobs.push({
+                        release_time: step_start + fragment_release_offset,
+                        deadline_time: step_start + (tau + 1) * T_step,
+                        size_bits: effective_size,
+                        tag: `step${step}_frag${fragment_id}`
+                    });
+                }
+            }
+
+            // Schedule jobs on network queue
+            let max_stall = 0;
+            jobs.forEach(job => {
+                const start = Math.max(job.release_time, net_free_time);
+                const duration = commTime(job.size_bits, B_bps, alpha);
+                const finish = start + duration;
+                net_free_time = finish;
+
+                // Check if we missed deadline
+                const stall = Math.max(0, finish - job.deadline_time);
+                max_stall = Math.max(max_stall, stall);
+            });
+
+            // Apply stall to compute clock
+            t += max_stall;
+            stall_total += max_stall;
+
+            // Advance compute
+            t += T_step;
+            total_compute_time += T_step;
+        }
+
+        const CU = total_compute_time / (total_compute_time + stall_total);
+
+        return {
+            CU: CU * 100,
+            total_compute_time,
+            total_stall_time: stall_total,
+            num_steps: N_steps,
+            mode: 'Streaming DiLoCo'
+        };
+    }
+
+    /**
+     * Calculate number of fragments from model size
+     * Based on paper configurations
+     */
+    function getNumFragments(num_params) {
+        // Paper configurations:
+        // 1B → 8 fragments
+        // 10B → 16 fragments
+        // 100B → 36 fragments
+        // 1T → 40 fragments
+
+        if (num_params <= 2e9) {
+            return 8;   // 1B-2B models
+        } else if (num_params <= 15e9) {
+            return 16;  // 3B-15B models
+        } else if (num_params <= 150e9) {
+            return 36;  // 20B-150B models
+        } else {
+            return 40;  // 200B+ models
+        }
+    }
+
+    /**
+     * Wrapper function to call appropriate simulator
+     */
+    function calculateCore(H, bytesPerParam, S, P_user, overrideInterBw) {
+        // Fetch global values
+        const N = parseFloat(document.getElementById('modelSizeSelect').value);
+        const secondsPerStep = parseNumber(document.getElementById('secondsPerStep').value);
+        const M = parseNumber(document.getElementById('numDatacenters').value);
+        const B_gbps = overrideInterBw !== undefined ? overrideInterBw : 100; // default
+
+        // Use user-provided P value
+        const P = P_user;
+
+        // Simulation parameters
+        const N_steps = 2000; // Number of steps to simulate
+        const T_step = secondsPerStep;
+        const T_fwd = T_step / 3;
+        const T_bwd = T_step * 2 / 3;
+        const K = 16; // Number of buckets
+        const alpha = 0.002; // 2ms latency per collective
+
+        // Calculate data sizes in bits
+        const S_total_bits = N * bytesPerParam * 8; // Convert bytes to bits
+        const S_outer_bits = S_total_bits; // Outer sync same size as gradients
+
+        // Determine which simulation to run
+        let result;
+        if (H === 1) {
+            // Data Parallel
+            result = simulateDP({
+                N, T_step, T_fwd, T_bwd, K,
+                S_total_bits,
+                B_gbps,
+                alpha,
+                N_steps,
+                M
+            });
+        } else if (S > 0 || P > 1) {
+            // Streaming DiLoCo
+            result = simulateStreamingDiLoCo({
+                N, T_step, T_fwd, T_bwd,
+                H, P,
+                tau: S, // S is the overlap delay
+                S_outer_bits,
+                B_gbps,
+                alpha,
+                N_steps,
+                M,
+                K
+            });
+        } else {
+            // Standard DiLoCo
+            result = simulateDiLoCo({
+                N, T_step,
+                H,
+                S_outer_bits,
+                B_gbps,
+                alpha,
+                N_steps,
+                M
+            });
+        }
+
+        return {
+            utilization: result.CU,
+            mode: result.mode,
+            T_comp: result.total_compute_time,
+            T_comm_inter: result.total_stall_time,
+            T_total: result.total_compute_time + result.total_stall_time,
+            N, M, H, bytesPerParam, S, P, B_gbps
         };
     }
 
     function updateConfigurations() {
+        // Update fragment interval display
+        const H = parseNumber(document.getElementById('streaming_H').value);
+        const P = parseNumber(document.getElementById('streaming_P').value);
+        const fragment_interval = H / P;
+        const intervalDisplay = document.getElementById('fragment_interval_display');
+        if (intervalDisplay) {
+            intervalDisplay.textContent = fragment_interval.toFixed(1);
+        }
+
         // Update the plot
         updatePlot();
     }
 
+
+    function updateTimelineVisualizations() {
+        const container = document.getElementById('timelineVisualizations');
+        if(!container) return;
+
+        // Get configuration values
+        const secondsPerStep = parseNumber(document.getElementById('secondsPerStep').value);
+        const diloco_H = parseNumber(document.getElementById('diloco_H').value);
+        const streaming_H = parseNumber(document.getElementById('streaming_H').value);
+        const streaming_P = parseNumber(document.getElementById('streaming_P').value);
+        const streaming_S = parseNumber(document.getElementById('streaming_S').value);
+
+        const numSteps = 3; // Show 3 steps for visualization
+
+        // Timeline configuration
+        const timelineHeight = 120;
+        const rowHeight = 45;
+        const padding = { left: 100, right: 40, top: 20, bottom: 20 };
+
+        // Create timelines for each method
+        const timelines = [
+            {
+                name: 'Data Parallel',
+                color: '#94a3b8',
+                description: 'H=1 (synchronize every step)',
+                generateTimeline: () => generateDataParallelTimeline(numSteps, secondsPerStep)
+            },
+            {
+                name: 'DiLoCo',
+                color: '#ef4444',
+                description: `H=${diloco_H} (synchronize every ${diloco_H} steps)`,
+                generateTimeline: () => generateDiLoCoTimeline(numSteps, secondsPerStep, diloco_H)
+            },
+            {
+                name: 'Streaming DiLoCo with Overlap',
+                color: '#3b82f6',
+                description: `H=${streaming_H}, P=${streaming_P}, S=${streaming_S}`,
+                generateTimeline: () => generateStreamingDiLoCoTimeline(numSteps, secondsPerStep, streaming_H, streaming_P, streaming_S)
+            }
+        ];
+
+        let html = '';
+        timelines.forEach(timeline => {
+            const data = timeline.generateTimeline();
+            const totalWidth = padding.left + data.totalTime * 200 + padding.right; // 200px per second for more space
+
+            html += `
+                <div class="panel">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <div>
+                            <h4 style="font-size: 1rem; font-weight: 700; color: ${timeline.color}; margin: 0;">${timeline.name}</h4>
+                            <p style="font-size: 0.75rem; color: var(--slate-500); margin: 0.25rem 0 0 0;">${timeline.description}</p>
+                        </div>
+                    </div>
+                    <div style="overflow-x: auto; overflow-y: hidden;">
+                        ${renderTimeline(data, totalWidth, timelineHeight, padding, timeline.color)}
+                    </div>
+                </div>
+            `;
+        });
+
+        container.innerHTML = html;
+    }
+
+    function generateDataParallelTimeline(numSteps, stepTime) {
+        const events = [];
+        let currentTime = 0;
+
+        for (let step = 0; step < numSteps; step++) {
+            // Compute (forward + backward)
+            events.push({
+                type: 'compute',
+                start: currentTime,
+                duration: stepTime,
+                label: `step ${step}`,
+                stepTime: stepTime
+            });
+            currentTime += stepTime;
+
+            // Communication (all gradients)
+            events.push({
+                type: 'wan',
+                start: currentTime,
+                duration: stepTime * 0.3, // Assuming comm takes 30% of step time for visualization
+                label: 'GR',
+                stepTime: stepTime
+            });
+            currentTime += stepTime * 0.3;
+        }
+
+        return { events, totalTime: currentTime };
+    }
+
+    function generateDiLoCoTimeline(numSteps, stepTime, H) {
+        const events = [];
+        let currentTime = 0;
+
+        for (let step = 0; step < numSteps; step++) {
+            // Compute (forward + backward)
+            events.push({
+                type: 'compute',
+                start: currentTime,
+                duration: stepTime,
+                label: `step ${step}`,
+                stepTime: stepTime
+            });
+            currentTime += stepTime;
+
+            // Communication only every H steps
+            if ((step + 1) % H === 0) {
+                events.push({
+                    type: 'wan',
+                    start: currentTime,
+                    duration: stepTime * 0.3,
+                    label: 'GR',
+                    stepTime: stepTime
+                });
+                currentTime += stepTime * 0.3;
+            }
+        }
+
+        return { events, totalTime: currentTime };
+    }
+
+    function generateStreamingDiLoCoTimeline(numSteps, stepTime, H, P, S) {
+        const events = [];
+        let currentTime = 0;
+        const fragmentInterval = H / P;
+        let nextFragmentStep = fragmentInterval;
+        let fragmentsSent = 0;
+
+        for (let step = 0; step < numSteps; step++) {
+            const stepStart = currentTime;
+
+            // Compute (forward + backward)
+            events.push({
+                type: 'compute',
+                start: currentTime,
+                duration: stepTime,
+                label: `step ${step}`,
+                stepTime: stepTime
+            });
+
+            // Check if we should send a fragment at this step
+            if (step > 0 && step >= nextFragmentStep - 0.5) {
+                // Fragment communication overlaps with current computation
+                const fragmentDuration = (stepTime * 0.3) / P; // Each fragment is smaller
+                const fragmentStart = stepStart + stepTime * 0.3; // Start partway through compute
+
+                events.push({
+                    type: 'wan',
+                    start: fragmentStart,
+                    duration: fragmentDuration,
+                    label: `GR${fragmentsSent % P}`,
+                    stepTime: stepTime,
+                    overlap: true
+                });
+
+                nextFragmentStep += fragmentInterval;
+                fragmentsSent++;
+            }
+
+            currentTime += stepTime;
+        }
+
+        return { events, totalTime: currentTime };
+    }
+
+    function renderTimeline(data, width, height, padding, color) {
+        const scale = (width - padding.left - padding.right) / data.totalTime;
+        const rowHeight = 45;
+        const rowSpacing = 10;
+
+        let svg = `<svg width="${width}" height="${height}" style="font-family: sans-serif; font-size: 0.75rem;">`;
+        svg += `<rect width="100%" height="100%" fill="#fafafa" />`;
+
+        // Row labels
+        svg += `<text x="${padding.left - 10}" y="${padding.top + rowHeight/2 + 5}" text-anchor="end" fill="#64748b" font-weight="600" font-size="0.875rem">WAN</text>`;
+        svg += `<text x="${padding.left - 10}" y="${padding.top + rowHeight + rowSpacing + rowHeight/2 + 5}" text-anchor="end" fill="#64748b" font-weight="600" font-size="0.875rem">COMPUTE</text>`;
+
+        // Timeline axis
+        const axisY = height - 25;
+        svg += `<line x1="${padding.left}" y1="${axisY}" x2="${width - padding.right}" y2="${axisY}" stroke="#cbd5e1" stroke-width="1"/>`;
+
+        // Time labels
+        for (let t = 0; t <= data.totalTime; t += 0.5) {
+            const x = padding.left + t * scale;
+            svg += `<line x1="${x}" y1="${axisY}" x2="${x}" y2="${axisY + 4}" stroke="#cbd5e1" stroke-width="1"/>`;
+            if (t % 1 === 0) {
+                svg += `<text x="${x}" y="${axisY + 16}" text-anchor="middle" fill="#64748b" font-size="0.75rem">${t.toFixed(1)}</text>`;
+            }
+        }
+        svg += `<text x="${width - padding.right + 15}" y="${axisY + 5}" fill="#64748b" font-size="0.75rem">Time [s]</text>`;
+
+        // Render events
+        data.events.forEach(event => {
+            const x = padding.left + event.start * scale;
+            const w = event.duration * scale;
+            const y = event.type === 'wan'
+                ? padding.top
+                : padding.top + rowHeight + rowSpacing;
+
+            if (event.type === 'compute') {
+                // Split into forward and backward
+                const forwardPasses = 4;
+                const backwardPasses = 4;
+                const totalPasses = forwardPasses + backwardPasses;
+                const passWidth = w / totalPasses;
+
+                // Forward passes (blue)
+                for (let i = 0; i < forwardPasses; i++) {
+                    const px = x + i * passWidth;
+                    svg += `<rect x="${px}" y="${y}" width="${passWidth - 2}" height="${rowHeight}" fill="#3b82f6" stroke="white" stroke-width="2" rx="2"/>`;
+                    svg += `<text x="${px + passWidth/2}" y="${y + rowHeight/2 + 5}" text-anchor="middle" fill="white" font-size="0.75rem" font-weight="700">F${i}</text>`;
+                }
+
+                // Backward passes (green)
+                for (let i = 0; i < backwardPasses; i++) {
+                    const px = x + (forwardPasses + i) * passWidth;
+                    const shade = i % 2 === 0 ? '#22c55e' : '#16a34a';
+                    svg += `<rect x="${px}" y="${y}" width="${passWidth - 2}" height="${rowHeight}" fill="${shade}" stroke="white" stroke-width="2" rx="2"/>`;
+                    svg += `<text x="${px + passWidth/2}" y="${y + rowHeight/2 + 5}" text-anchor="middle" fill="white" font-size="0.75rem" font-weight="700">BW${3-i}</text>`;
+                }
+
+                // Step label above
+                svg += `<text x="${x + w/2}" y="${y - 5}" text-anchor="middle" fill="#475569" font-size="0.875rem" font-weight="700">${event.label} [${event.stepTime.toFixed(2)} s]</text>`;
+            } else if (event.type === 'wan') {
+                // Communication (purple)
+                svg += `<rect x="${x}" y="${y}" width="${w}" height="${rowHeight}" fill="${color}" stroke="white" stroke-width="2" rx="3"/>`;
+                svg += `<text x="${x + w/2}" y="${y + rowHeight/2 + 5}" text-anchor="middle" fill="white" font-size="0.875rem" font-weight="700">${event.label}</text>`;
+            }
+        });
+
+        svg += `</svg>`;
+        return svg;
+    }
 
     function updatePlot() {
         const container = document.getElementById('figure4Plot');
