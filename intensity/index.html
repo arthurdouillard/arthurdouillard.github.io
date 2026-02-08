@@ -683,7 +683,7 @@ function calculateIntensities() {
 
     // Generate cards HTML
     const cardsContainer = document.getElementById('intensityCards');
-    cardsContainer.innerHTML = operations.map(op => {
+    cardsContainer.innerHTML = operations.map((op, idx) => {
         const isMemoryBound = op.intensity < hwIntensity;
         const badge = isMemoryBound
             ? '<span style="display: inline-block; margin-left: 0.5rem; padding: 0.125rem 0.5rem; background-color: #fef3c7; color: #92400e; font-size: 0.65rem; font-weight: 600; border-radius: 0.25rem;">MEMORY-BOUND</span>'
