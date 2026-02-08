@@ -158,6 +158,10 @@
                     <label style="display: block; font-size: 0.75rem; font-weight: 600; color: var(--slate-600); margin-bottom: 0.5rem;">Top-K Routing (K)</label>
                     <input type="number" id="topK" value="2" min="1" step="1" style="width: 100%; padding: 0.4rem; border: 1px solid var(--slate-300); border-radius: 0.375rem; font-size: 0.875rem;">
                 </div>
+                <div>
+                    <label style="display: block; font-size: 0.75rem; font-weight: 600; color: var(--slate-600); margin-bottom: 0.5rem;">Num Layers (L)</label>
+                    <input type="number" id="numLayers" value="32" min="1" step="1" style="width: 100%; padding: 0.4rem; border: 1px solid var(--slate-300); border-radius: 0.375rem; font-size: 0.875rem;">
+                </div>
             </div>
         </div>
     </div>
@@ -467,6 +471,7 @@ function calculateIntensities() {
     const v = parseInt(document.getElementById('vocabSize').value);
     const e = parseInt(document.getElementById('numExperts').value);
     const k = parseInt(document.getElementById('topK').value);
+    const l = parseInt(document.getElementById('numLayers').value);
 
     // Get hardware specs
     const selected = document.getElementById('acceleratorSelect').value;
@@ -481,153 +486,195 @@ function calculateIntensities() {
         // Training/Prefilling: process full sequences
         const tokens = b * s;
 
-        // LayerNorm
+        // Calculate FLOPs for each operation type
+        const ln_flops = 3 * tokens * d;
+        const qkv_flops = 3 * 2 * tokens * d * d;
+        const softmax_flops = b * (2 * s * s * d + 5 * s * s);
+        const attn_out_flops = 2 * tokens * d * d;
+        const router_flops = 2 * tokens * d * e;
+        const tokensPerExpert = (tokens * k) / e;
+        const mlp_up_flops = 2 * tokensPerExpert * d * (4 * d);
+        const mlp_down_flops = 2 * tokensPerExpert * (4 * d) * d;
+        const output_emb_flops = 2 * tokens * d * v;
+
+        // Total FLOPs for forward pass (LayerNorm appears 2x per layer, Expert MLPs across E experts)
+        const totalFlops = l * (2 * ln_flops + qkv_flops + softmax_flops + attn_out_flops + router_flops + e * mlp_up_flops + e * mlp_down_flops) + output_emb_flops;
+
+        // LayerNorm (appears 2x per layer)
         operations.push({
             name: 'LayerNorm',
             color: '#9333ea',
-            intensity: (3 * tokens * d) / (2 * tokens * d * 2),
+            intensity: ln_flops / (2 * tokens * d * 2),
             flopsFormula: '3·B·S·D',
-            bytesFormula: '2·B·S·D·2'
+            bytesFormula: '2·B·S·D·2',
+            flopsPct: (l * 2 * ln_flops / totalFlops) * 100
         });
 
         // Attention QKV projection
         operations.push({
             name: 'Attn QKV Proj',
             color: '#10b981',
-            intensity: (3 * 2 * tokens * d * d) / ((3 * d * d * 2) + (tokens * d * 2) + (3 * tokens * d * 2)),
+            intensity: qkv_flops / ((3 * d * d * 2) + (tokens * d * 2) + (3 * tokens * d * 2)),
             flopsFormula: '3·2·B·S·D²',
-            bytesFormula: '(3·D²+B·S·D+3·B·S·D)·2'
+            bytesFormula: '(3·D²+B·S·D+3·B·S·D)·2',
+            flopsPct: (l * qkv_flops / totalFlops) * 100
         });
 
         // Attention softmax
         operations.push({
             name: 'Attn Softmax',
             color: '#10b981',
-            intensity: (b * (2 * s * s * d + 5 * s * s)) / ((2 * b * s * d * 2) + (b * s * s * 2)),
+            intensity: softmax_flops / ((2 * b * s * d * 2) + (b * s * s * 2)),
             flopsFormula: '2·B·S²·D + 5·B·S²',
-            bytesFormula: '(2·B·S·D+B·S²)·2'
+            bytesFormula: '(2·B·S·D+B·S²)·2',
+            flopsPct: (l * softmax_flops / totalFlops) * 100
         });
 
         // Attention output projection
         operations.push({
             name: 'Attn Output Proj',
             color: '#10b981',
-            intensity: (2 * tokens * d * d) / ((d * d * 2) + (tokens * d * 2) + (tokens * d * 2)),
+            intensity: attn_out_flops / ((d * d * 2) + (tokens * d * 2) + (tokens * d * 2)),
             flopsFormula: '2·B·S·D²',
-            bytesFormula: '(D²+2·B·S·D)·2'
+            bytesFormula: '(D²+2·B·S·D)·2',
+            flopsPct: (l * attn_out_flops / totalFlops) * 100
         });
 
         // Router
         operations.push({
             name: 'Router',
             color: '#d97706',
-            intensity: (2 * tokens * d * e) / ((d * e * 2) + (tokens * d * 2) + (tokens * e * 2)),
+            intensity: router_flops / ((d * e * 2) + (tokens * d * 2) + (tokens * e * 2)),
             flopsFormula: '2·B·S·D·E',
-            bytesFormula: '(D·E+B·S·D+B·S·E)·2'
+            bytesFormula: '(D·E+B·S·D+B·S·E)·2',
+            flopsPct: (l * router_flops / totalFlops) * 100
         });
 
         // Expert MLP up-projection (per expert, processes B*S*K/E tokens)
-        const tokensPerExpert = (tokens * k) / e;
         operations.push({
             name: 'Expert MLP Up (D→4D)',
             color: '#a855f7',
-            intensity: (2 * tokensPerExpert * d * (4 * d)) / ((4 * d * d * 2) + (tokensPerExpert * d * 2) + (tokensPerExpert * 4 * d * 2)),
+            intensity: mlp_up_flops / ((4 * d * d * 2) + (tokensPerExpert * d * 2) + (tokensPerExpert * 4 * d * 2)),
             flopsFormula: '2·B·S·K·D·4D/E',
-            bytesFormula: '(4D²+B·S·K·D/E+B·S·K·4D/E)·2'
+            bytesFormula: '(4D²+B·S·K·D/E+B·S·K·4D/E)·2',
+            flopsPct: (l * e * mlp_up_flops / totalFlops) * 100
         });
 
         // Expert MLP down-projection (per expert)
         operations.push({
             name: 'Expert MLP Down (4D→D)',
             color: '#a855f7',
-            intensity: (2 * tokensPerExpert * (4 * d) * d) / ((4 * d * d * 2) + (tokensPerExpert * 4 * d * 2) + (tokensPerExpert * d * 2)),
+            intensity: mlp_down_flops / ((4 * d * d * 2) + (tokensPerExpert * 4 * d * 2) + (tokensPerExpert * d * 2)),
             flopsFormula: '2·B·S·K·4D·D/E',
-            bytesFormula: '(4D²+B·S·K·4D/E+B·S·K·D/E)·2'
+            bytesFormula: '(4D²+B·S·K·4D/E+B·S·K·D/E)·2',
+            flopsPct: (l * e * mlp_down_flops / totalFlops) * 100
         });
 
         // Output embedding projection
         operations.push({
             name: 'Output Embedding',
             color: '#ef4444',
-            intensity: (2 * tokens * d * v) / ((d * v * 2) + (tokens * d * 2) + (tokens * v * 2)),
+            intensity: output_emb_flops / ((d * v * 2) + (tokens * d * 2) + (tokens * v * 2)),
             flopsFormula: '2·B·S·D·V',
-            bytesFormula: '(D·V+B·S·D+B·S·V)·2'
+            bytesFormula: '(D·V+B·S·D+B·S·V)·2',
+            flopsPct: (output_emb_flops / totalFlops) * 100
         });
     } else {
         // Sampling: generate 1 token at a time with KV-cache
         // Context length is S, generating 1 new token per batch element
 
-        // LayerNorm (only for B tokens, not B*S)
+        // Calculate FLOPs for each operation type
+        const ln_flops = 3 * b * d;
+        const qkv_flops = 3 * 2 * b * d * d;
+        const softmax_flops = b * (2 * s * d + 5 * s);
+        const attn_out_flops = 2 * b * d * d;
+        const router_flops = 2 * b * d * e;
+        const samplingTokensPerExpert = (b * k) / e;
+        const mlp_up_flops = 2 * samplingTokensPerExpert * d * (4 * d);
+        const mlp_down_flops = 2 * samplingTokensPerExpert * (4 * d) * d;
+        const output_emb_flops = 2 * b * d * v;
+
+        // Total FLOPs for forward pass (LayerNorm appears 2x per layer, Expert MLPs across E experts)
+        const totalFlops = l * (2 * ln_flops + qkv_flops + softmax_flops + attn_out_flops + router_flops + e * mlp_up_flops + e * mlp_down_flops) + output_emb_flops;
+
+        // LayerNorm (only for B tokens, not B*S, appears 2x per layer)
         operations.push({
             name: 'LayerNorm',
             color: '#9333ea',
-            intensity: (3 * b * d) / (2 * b * d * 2),
+            intensity: ln_flops / (2 * b * d * 2),
             flopsFormula: '3·B·D',
-            bytesFormula: '2·B·D·2'
+            bytesFormula: '2·B·D·2',
+            flopsPct: (l * 2 * ln_flops / totalFlops) * 100
         });
 
         // Attention QKV projection (only for new token)
         operations.push({
             name: 'Attn QKV Proj',
             color: '#10b981',
-            intensity: (3 * 2 * b * d * d) / ((3 * d * d * 2) + (b * d * 2) + (3 * b * d * 2)),
+            intensity: qkv_flops / ((3 * d * d * 2) + (b * d * 2) + (3 * b * d * 2)),
             flopsFormula: '3·2·B·D²',
-            bytesFormula: '(3·D²+B·D+3·B·D)·2'
+            bytesFormula: '(3·D²+B·D+3·B·D)·2',
+            flopsPct: (l * qkv_flops / totalFlops) * 100
         });
 
         // Attention softmax (Q=[B,1,D] attends to cached K=[B,S,D])
         operations.push({
             name: 'Attn Softmax',
             color: '#10b981',
-            intensity: (b * (2 * s * d + 5 * s)) / ((2 * b * s * d * 2) + (b * s * 2)),
+            intensity: softmax_flops / ((2 * b * s * d * 2) + (b * s * 2)),
             flopsFormula: '2·B·S·D + 5·B·S',
-            bytesFormula: '(2·B·S·D+B·S)·2'
+            bytesFormula: '(2·B·S·D+B·S)·2',
+            flopsPct: (l * softmax_flops / totalFlops) * 100
         });
 
         // Attention output projection (only for new token)
         operations.push({
             name: 'Attn Output Proj',
             color: '#10b981',
-            intensity: (2 * b * d * d) / ((d * d * 2) + (b * d * 2) + (b * d * 2)),
+            intensity: attn_out_flops / ((d * d * 2) + (b * d * 2) + (b * d * 2)),
             flopsFormula: '2·B·D²',
-            bytesFormula: '(D²+2·B·D)·2'
+            bytesFormula: '(D²+2·B·D)·2',
+            flopsPct: (l * attn_out_flops / totalFlops) * 100
         });
 
         // Router (only for new token)
         operations.push({
             name: 'Router',
             color: '#d97706',
-            intensity: (2 * b * d * e) / ((d * e * 2) + (b * d * 2) + (b * e * 2)),
+            intensity: router_flops / ((d * e * 2) + (b * d * 2) + (b * e * 2)),
             flopsFormula: '2·B·D·E',
-            bytesFormula: '(D·E+B·D+B·E)·2'
+            bytesFormula: '(D·E+B·D+B·E)·2',
+            flopsPct: (l * router_flops / totalFlops) * 100
         });
 
         // Expert MLP up-projection (per expert, processes B*K/E tokens)
-        const samplingTokensPerExpert = (b * k) / e;
         operations.push({
             name: 'Expert MLP Up (D→4D)',
             color: '#a855f7',
-            intensity: (2 * samplingTokensPerExpert * d * (4 * d)) / ((4 * d * d * 2) + (samplingTokensPerExpert * d * 2) + (samplingTokensPerExpert * 4 * d * 2)),
+            intensity: mlp_up_flops / ((4 * d * d * 2) + (samplingTokensPerExpert * d * 2) + (samplingTokensPerExpert * 4 * d * 2)),
             flopsFormula: '2·B·K·D·4D/E',
-            bytesFormula: '(4D²+B·K·D/E+B·K·4D/E)·2'
+            bytesFormula: '(4D²+B·K·D/E+B·K·4D/E)·2',
+            flopsPct: (l * e * mlp_up_flops / totalFlops) * 100
         });
 
         // Expert MLP down-projection (per expert)
         operations.push({
             name: 'Expert MLP Down (4D→D)',
             color: '#a855f7',
-            intensity: (2 * samplingTokensPerExpert * (4 * d) * d) / ((4 * d * d * 2) + (samplingTokensPerExpert * 4 * d * 2) + (samplingTokensPerExpert * d * 2)),
+            intensity: mlp_down_flops / ((4 * d * d * 2) + (samplingTokensPerExpert * 4 * d * 2) + (samplingTokensPerExpert * d * 2)),
             flopsFormula: '2·B·K·4D·D/E',
-            bytesFormula: '(4D²+B·K·4D/E+B·K·D/E)·2'
+            bytesFormula: '(4D²+B·K·4D/E+B·K·D/E)·2',
+            flopsPct: (l * e * mlp_down_flops / totalFlops) * 100
         });
 
         // Output embedding projection (only for new token)
         operations.push({
             name: 'Output Embedding',
             color: '#ef4444',
-            intensity: (2 * b * d * v) / ((d * v * 2) + (b * d * 2) + (b * v * 2)),
+            intensity: output_emb_flops / ((d * v * 2) + (b * d * 2) + (b * v * 2)),
             flopsFormula: '2·B·D·V',
-            bytesFormula: '(D·V+B·D+B·V)·2'
+            bytesFormula: '(D·V+B·D+B·V)·2',
+            flopsPct: (output_emb_flops / totalFlops) * 100
         });
     }
 
@@ -652,6 +699,7 @@ function calculateIntensities() {
                 </div>
                 <div style="font-family: 'SF Mono', monospace; font-size: 1.25rem; font-weight: 700; color: var(--slate-800);">${op.intensity.toFixed(2)}</div>
                 <div style="font-size: 0.7rem; color: var(--slate-500); margin-top: 0.25rem;">FLOPs/byte</div>
+                <div style="font-size: 0.75rem; font-weight: 600; color: var(--slate-700); margin-top: 0.5rem;">${op.flopsPct.toFixed(1)}% of total FLOPs</div>
                 <div style="margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid var(--slate-100); font-size: 0.65rem; color: var(--slate-600); font-family: 'SF Mono', monospace;">
                     <div>FLOPs: ${op.flopsFormula}</div>
                     <div style="margin-top: 0.25rem;">Bytes: ${op.bytesFormula}</div>
@@ -668,6 +716,7 @@ document.getElementById('batchSize').addEventListener('input', calculateIntensit
 document.getElementById('vocabSize').addEventListener('input', calculateIntensities);
 document.getElementById('numExperts').addEventListener('input', calculateIntensities);
 document.getElementById('topK').addEventListener('input', calculateIntensities);
+document.getElementById('numLayers').addEventListener('input', calculateIntensities);
 
 // Initialize hardware display and calculations
 updateHardwareDisplay();
