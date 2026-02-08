@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Asymmetric Clip GRPO - Interactive Visualization</title>
+    <title>Asymmetric Clip GRPO - The Problem with Symmetric Clipping</title>
     <style>
         :root {
             --bg-body: #f8fafc;
@@ -15,83 +15,83 @@
             --slate-700: #334155;
             --slate-800: #1e293b;
             --blue-500: #3b82f6;
-            --blue-600: #2563eb;
             --orange-600: #d95f0e;
             --green-500: #22c55e;
             --red-500: #ef4444;
-            --yellow-400: #fbbf24;
+            --purple-500: #a855f7;
         }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg-body);
             color: var(--slate-800);
-            line-height: 1.5;
+            line-height: 1.4;
             margin: 0;
-            padding: 2rem;
+            padding: 1.5rem;
+            font-size: 0.875rem;
         }
 
-        .container { max-width: 90rem; margin: 0 auto; }
+        .container { max-width: 80rem; margin: 0 auto; }
 
         .header {
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
             border-bottom: 2px solid var(--slate-200);
-            padding-bottom: 1rem;
+            padding-bottom: 0.75rem;
         }
-        .header h1 { font-size: 1.875rem; font-weight: 700; color: var(--orange-600); margin: 0; }
-        .header p { font-size: 0.875rem; color: var(--slate-500); margin-top: 0.5rem; }
+        .header h1 { font-size: 1.5rem; font-weight: 700; color: var(--orange-600); margin: 0; }
+        .header p { font-size: 0.8rem; color: var(--slate-500); margin-top: 0.25rem; }
 
         .top-nav {
             background-color: var(--bg-card);
             border-bottom: 1px solid var(--slate-200);
-            padding: 1rem 2rem;
-            margin: -2rem -2rem 2rem -2rem;
+            padding: 0.75rem 1.5rem;
+            margin: -1.5rem -1.5rem 1.5rem -1.5rem;
         }
         .top-nav a {
             display: inline-flex; align-items: center; gap: 0.5rem;
-            text-decoration: none; color: var(--slate-800); font-weight: 600; font-size: 1rem;
+            text-decoration: none; color: var(--slate-800); font-weight: 600; font-size: 0.9rem;
         }
         .top-nav a:hover { color: var(--orange-600); }
-        .top-nav img { height: 18px; width: 18px; }
+        .top-nav img { height: 16px; width: 16px; }
 
         .panel {
             background-color: var(--bg-card);
-            padding: 2rem;
-            border-radius: 0.75rem;
+            padding: 1.25rem;
+            border-radius: 0.5rem;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
             border: 1px solid var(--slate-100);
-            margin-bottom: 2rem;
+            margin-bottom: 1.25rem;
         }
 
         .section-title {
-            font-size: 1.125rem; font-weight: 600; color: var(--slate-700);
-            margin-bottom: 1rem; border-bottom: 1px solid var(--slate-100); padding-bottom: 0.5rem;
+            font-size: 0.95rem; font-weight: 600; color: var(--slate-700);
+            margin-bottom: 0.75rem; border-bottom: 1px solid var(--slate-100); padding-bottom: 0.4rem;
         }
 
         .input-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-bottom: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
         }
 
         .input-group {
             display: flex;
             flex-direction: column;
-            gap: 0.5rem;
+            gap: 0.35rem;
         }
 
         .input-group label {
-            font-size: 0.875rem;
+            font-size: 0.75rem;
             font-weight: 600;
             color: var(--slate-700);
         }
 
         .input-group input {
-            padding: 0.5rem;
+            padding: 0.4rem;
             border: 1px solid var(--slate-300);
-            border-radius: 0.375rem;
-            font-size: 0.875rem;
+            border-radius: 0.25rem;
+            font-size: 0.8rem;
             background-color: white;
             color: var(--slate-800);
         }
@@ -99,136 +99,203 @@
         .input-group input:focus {
             outline: none;
             border-color: var(--blue-500);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
         }
 
-        .comparison-container {
+        .explanation {
+            background-color: #fef3c7;
+            border-left: 3px solid #f59e0b;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border-radius: 0.25rem;
+            font-size: 0.8rem;
+            line-height: 1.5;
+        }
+
+        .explanation strong {
+            color: var(--orange-600);
+        }
+
+        .token-comparison {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            margin-top: 2rem;
+            gap: 1.25rem;
         }
 
-        .clip-visualization {
+        .token-card {
             background-color: var(--slate-100);
-            padding: 1.5rem;
-            border-radius: 0.5rem;
-        }
-
-        .clip-title {
-            font-size: 1rem;
-            font-weight: 600;
-            color: var(--slate-700);
-            margin-bottom: 1rem;
-            text-align: center;
-        }
-
-        .bar-container {
-            position: relative;
-            height: 60px;
-            background-color: white;
+            padding: 1rem;
             border-radius: 0.375rem;
-            margin: 1rem 0;
+            border: 2px solid var(--slate-300);
+        }
+
+        .token-card.exploration {
+            border-color: var(--purple-500);
+        }
+
+        .token-card.exploitation {
+            border-color: var(--blue-500);
+        }
+
+        .token-header {
+            font-size: 0.875rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.2rem;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .badge-exploration {
+            background-color: var(--purple-500);
+            color: white;
+        }
+
+        .badge-exploitation {
+            background-color: var(--blue-500);
+            color: white;
+        }
+
+        .clipping-group {
+            margin-bottom: 0.75rem;
+        }
+
+        .clipping-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .clipping-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--slate-600);
+            margin-bottom: 0.35rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .clipping-label .formula {
+            font-family: monospace;
+            color: var(--slate-500);
+            font-size: 0.65rem;
+        }
+
+        .probability-bar {
+            position: relative;
+            background-color: white;
+            height: 36px;
+            border-radius: 0.25rem;
+            margin-bottom: 0.35rem;
             overflow: hidden;
             border: 1px solid var(--slate-300);
         }
 
-        .bar {
+        .prob-old {
             position: absolute;
             height: 100%;
-            transition: all 0.3s ease;
+            background-color: rgba(148, 163, 184, 0.4);
+            border-right: 2px solid var(--slate-500);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.875rem;
+            font-size: 0.65rem;
             font-weight: 600;
         }
 
-        .bar-original {
-            background-color: rgba(59, 130, 246, 0.3);
-            border-right: 2px solid var(--blue-500);
-        }
-
-        .bar-clipped {
-            background-color: rgba(34, 197, 94, 0.5);
-            border-right: 3px solid var(--green-500);
-        }
-
-        .bar-clipped-low {
-            background-color: rgba(239, 68, 68, 0.5);
-        }
-
-        .bar-clipped-high {
-            background-color: rgba(251, 191, 36, 0.5);
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0.75rem;
-            margin-top: 1rem;
-            font-size: 0.875rem;
-        }
-
-        .stat-item {
-            background-color: white;
-            padding: 0.75rem;
-            border-radius: 0.375rem;
-            border: 1px solid var(--slate-200);
-        }
-
-        .stat-label {
-            color: var(--slate-500);
-            font-size: 0.75rem;
-            margin-bottom: 0.25rem;
-        }
-
-        .stat-value {
-            color: var(--slate-800);
-            font-weight: 600;
-            font-size: 0.875rem;
-        }
-
-        .legend {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1rem;
-            flex-wrap: wrap;
-            font-size: 0.75rem;
-        }
-
-        .legend-item {
+        .prob-max {
+            position: absolute;
+            height: 100%;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            justify-content: center;
+            font-size: 0.65rem;
+            font-weight: 600;
         }
 
-        .legend-box {
-            width: 20px;
-            height: 20px;
-            border-radius: 0.25rem;
-            border: 1px solid var(--slate-300);
+        .prob-max.symmetric {
+            background-color: rgba(239, 68, 68, 0.3);
+            color: var(--red-500);
         }
 
-        .scale-markers {
+        .prob-max.asymmetric {
+            background-color: rgba(34, 197, 94, 0.3);
+            color: var(--green-500);
+        }
+
+        .stats-compact {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.3rem;
+            font-size: 0.7rem;
+            margin-top: 0.35rem;
+        }
+
+        .stat-compact {
             display: flex;
             justify-content: space-between;
-            margin-top: 0.5rem;
-            font-size: 0.75rem;
+            padding: 0.3rem 0.4rem;
+            background-color: white;
+            border-radius: 0.2rem;
+        }
+
+        .stat-compact .label {
             color: var(--slate-500);
+        }
+
+        .stat-compact .value {
+            font-weight: 600;
+            color: var(--slate-800);
+        }
+
+        .stat-compact.highlight .value {
+            color: var(--orange-600);
+            font-weight: 700;
+        }
+
+        .improvement-badge {
+            background-color: #dcfce7;
+            color: var(--green-500);
+            padding: 0.15rem 0.35rem;
+            border-radius: 0.2rem;
+            font-size: 0.65rem;
+            font-weight: 700;
+        }
+
+        .key-insight {
+            background-color: #dbeafe;
+            border-left: 3px solid var(--blue-500);
+            padding: 0.75rem;
+            margin-top: 1rem;
+            border-radius: 0.25rem;
+            font-size: 0.8rem;
+            line-height: 1.5;
+        }
+
+        .divider {
+            height: 1px;
+            background-color: var(--slate-200);
+            margin: 0.75rem 0;
         }
 
         @media (max-width: 968px) {
-            .comparison-container {
+            .token-comparison {
                 grid-template-columns: 1fr;
             }
         }
 
         @media (max-width: 768px) {
             body { padding: 1rem; }
-            .top-nav { padding: 1rem; margin: -1rem -1rem 1rem -1rem; }
+            .top-nav { padding: 0.75rem 1rem; margin: -1rem -1rem 1rem -1rem; }
             .input-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr 1fr;
             }
         }
     </style>
@@ -243,168 +310,238 @@
     </nav>
 
     <header class="header">
-        <h1>Asymmetric Clip GRPO</h1>
-        <p>Visualize and compare different clipping strategies for probability ratios in Group Relative Policy Optimization</p>
+        <h1>Why Symmetric Clipping Hurts Exploration</h1>
+        <p>Understanding the asymmetric impact of clipping on exploration vs exploitation tokens in GRPO</p>
     </header>
 
     <div class="panel">
-        <h2 class="section-title">Input Parameters</h2>
-
-        <div class="input-grid">
-            <div class="input-group">
-                <label for="oldProb">Old Probability π<sub>old</sub>(a|s)</label>
-                <input type="number" id="oldProb" value="0.3" step="0.01" min="0.001" max="1">
-            </div>
-
-            <div class="input-group">
-                <label for="newProb">New Probability π<sub>new</sub>(a|s)</label>
-                <input type="number" id="newProb" value="0.5" step="0.01" min="0.001" max="1">
-            </div>
+        <div class="explanation">
+            <strong>Entropy collapse</strong> occurs in GRPO when clipping disproportionately constrains <strong>exploration tokens</strong> (low probability) compared to <strong>exploitation tokens</strong> (high probability). Even though both are clipped by the same relative factor (1 + ε), the <strong>absolute constraint</strong> is much more restrictive for exploration tokens.
         </div>
 
+        <h2 class="section-title">Parameters</h2>
         <div class="input-grid">
             <div class="input-group">
-                <label for="clipLow1">Clip Low (Strategy 1)</label>
-                <input type="number" id="clipLow1" value="0.8" step="0.05" min="0">
+                <label for="explorationProb">Exploration Token π<sub>old</sub></label>
+                <input type="number" id="explorationProb" value="0.01" step="0.01" min="0.001" max="1">
             </div>
 
             <div class="input-group">
-                <label for="clipHigh1">Clip High (Strategy 1)</label>
-                <input type="number" id="clipHigh1" value="1.2" step="0.05" min="0">
+                <label for="exploitationProb">Exploitation Token π<sub>old</sub></label>
+                <input type="number" id="exploitationProb" value="0.9" step="0.01" min="0.001" max="1">
             </div>
 
             <div class="input-group">
-                <label for="clipLow2">Clip Low (Strategy 2)</label>
-                <input type="number" id="clipLow2" value="0.7" step="0.05" min="0">
+                <label for="epsilonSymmetric">Symmetric ε</label>
+                <input type="number" id="epsilonSymmetric" value="0.2" step="0.05" min="0.05" max="1">
             </div>
 
             <div class="input-group">
-                <label for="clipHigh2">Clip High (Strategy 2)</label>
-                <input type="number" id="clipHigh2" value="1.5" step="0.05" min="0">
+                <label for="epsilonHigh">Asymmetric ε<sub>high</sub></label>
+                <input type="number" id="epsilonHigh" value="0.28" step="0.05" min="0.05" max="2">
             </div>
         </div>
     </div>
 
     <div class="panel">
-        <h2 class="section-title">Clipping Comparison</h2>
+        <h2 class="section-title">Comparison: Symmetric [1 - ε, 1 + ε] vs Asymmetric [1 - ε, 1 + ε<sub>high</sub>]</h2>
 
-        <div class="legend">
-            <div class="legend-item">
-                <div class="legend-box" style="background-color: rgba(59, 130, 246, 0.3); border-color: var(--blue-500);"></div>
-                <span>Original Ratio</span>
+        <div class="token-comparison">
+            <!-- Exploration Token -->
+            <div class="token-card exploration">
+                <div class="token-header">
+                    <span class="badge badge-exploration">Exploration Token</span>
+                    <span style="font-size: 0.7rem; color: var(--slate-500);">π<sub>old</sub> = <span id="exploration-prob-display">0.01</span></span>
+                </div>
+
+                <!-- Symmetric -->
+                <div class="clipping-group">
+                    <div class="clipping-label">
+                        <span>Symmetric Clipping</span>
+                        <span class="formula">[1 - ε, 1 + ε]</span>
+                    </div>
+                    <div id="exploration-symmetric-viz"></div>
+                    <div class="stats-compact">
+                        <div class="stat-compact">
+                            <span class="label">Max Allowed</span>
+                            <span class="value" id="exploration-max-sym">0.012</span>
+                        </div>
+                        <div class="stat-compact highlight">
+                            <span class="label">Increase</span>
+                            <span class="value" id="exploration-increase-sym">+0.002</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <!-- Asymmetric -->
+                <div class="clipping-group">
+                    <div class="clipping-label">
+                        <span>Asymmetric Clipping</span>
+                        <span class="formula">[1 - ε, 1 + ε<sub>high</sub>]</span>
+                    </div>
+                    <div id="exploration-asymmetric-viz"></div>
+                    <div class="stats-compact">
+                        <div class="stat-compact">
+                            <span class="label">Max Allowed</span>
+                            <span class="value" id="exploration-max-asym">0.0128</span>
+                        </div>
+                        <div class="stat-compact highlight">
+                            <span class="label">Increase</span>
+                            <span class="value" id="exploration-increase-asym">+0.0028</span>
+                        </div>
+                        <div class="stat-compact" style="grid-column: 1 / -1; background-color: #dcfce7;">
+                            <span class="label">Improvement</span>
+                            <span class="improvement-badge" id="exploration-improvement">+40%</span>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="legend-item">
-                <div class="legend-box" style="background-color: rgba(34, 197, 94, 0.5); border-color: var(--green-500);"></div>
-                <span>Clipped Ratio</span>
-            </div>
-            <div class="legend-item">
-                <div class="legend-box" style="background-color: rgba(239, 68, 68, 0.5);"></div>
-                <span>Clipped (Low)</span>
-            </div>
-            <div class="legend-item">
-                <div class="legend-box" style="background-color: rgba(251, 191, 36, 0.5);"></div>
-                <span>Clipped (High)</span>
+
+            <!-- Exploitation Token -->
+            <div class="token-card exploitation">
+                <div class="token-header">
+                    <span class="badge badge-exploitation">Exploitation Token</span>
+                    <span style="font-size: 0.7rem; color: var(--slate-500);">π<sub>old</sub> = <span id="exploitation-prob-display">0.9</span></span>
+                </div>
+
+                <!-- Symmetric -->
+                <div class="clipping-group">
+                    <div class="clipping-label">
+                        <span>Symmetric Clipping</span>
+                        <span class="formula">[1 - ε, 1 + ε]</span>
+                    </div>
+                    <div id="exploitation-symmetric-viz"></div>
+                    <div class="stats-compact">
+                        <div class="stat-compact">
+                            <span class="label">Max Allowed</span>
+                            <span class="value" id="exploitation-max-sym">1.08</span>
+                        </div>
+                        <div class="stat-compact highlight">
+                            <span class="label">Increase</span>
+                            <span class="value" id="exploitation-increase-sym">+0.18</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <!-- Asymmetric -->
+                <div class="clipping-group">
+                    <div class="clipping-label">
+                        <span>Asymmetric Clipping</span>
+                        <span class="formula">[1 - ε, 1 + ε<sub>high</sub>]</span>
+                    </div>
+                    <div id="exploitation-asymmetric-viz"></div>
+                    <div class="stats-compact">
+                        <div class="stat-compact">
+                            <span class="label">Max Allowed</span>
+                            <span class="value" id="exploitation-max-asym">1.152</span>
+                        </div>
+                        <div class="stat-compact highlight">
+                            <span class="label">Increase</span>
+                            <span class="value" id="exploitation-increase-asym">+0.252</span>
+                        </div>
+                        <div class="stat-compact" style="grid-column: 1 / -1; background-color: #dcfce7;">
+                            <span class="label">Improvement</span>
+                            <span class="improvement-badge" id="exploitation-improvement">+40%</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="comparison-container">
-            <div class="clip-visualization">
-                <div class="clip-title">Strategy 1</div>
-                <div id="viz1"></div>
-            </div>
-
-            <div class="clip-visualization">
-                <div class="clip-title">Strategy 2</div>
-                <div id="viz2"></div>
-            </div>
+        <div class="key-insight">
+            <strong>Key Insight:</strong> With symmetric clipping, exploitation can increase <span id="ratio-increase-sym" style="font-weight: 700;">90×</span> more than exploration. With asymmetric clipping (ε<sub>high</sub> = <span id="epsilon-high-display">0.28</span>), this ratio improves to <span id="ratio-increase-asym" style="font-weight: 700;">64×</span>, giving exploration tokens <span id="exploration-improvement-percent" style="font-weight: 700;">+40%</span> more headroom to increase probability.
         </div>
     </div>
 
+    <div class="panel">
+        <h2 class="section-title">Reference</h2>
+        <p style="font-size: 0.8rem; line-height: 1.5; color: var(--slate-700);">
+            This visualization is based on insights from: <a href="https://cameronrwolfe.substack.com/p/grpo-tricks" target="_blank" rel="noopener noreferrer" style="color: var(--blue-500); text-decoration: none; font-weight: 600;">GRPO Tricks</a> by Cameron R. Wolfe
+        </p>
+    </div>
+
     <script>
-        function calculateRatio(oldProb, newProb) {
-            return newProb / oldProb;
-        }
-
-        function clipRatio(ratio, clipLow, clipHigh) {
-            if (ratio < clipLow) return { clipped: clipLow, type: 'low' };
-            if (ratio > clipHigh) return { clipped: clipHigh, type: 'high' };
-            return { clipped: ratio, type: 'none' };
-        }
-
-        function createVisualization(containerId, ratio, clipLow, clipHigh, strategyNum) {
+        function createProbabilityBar(containerId, oldProb, maxProb, isAsymmetric = false) {
             const container = document.getElementById(containerId);
-            const result = clipRatio(ratio, clipLow, clipHigh);
-            const clippedRatio = result.clipped;
-            const clipType = result.type;
 
-            // Determine the scale for the bar (show from 0 to max of ratio, clipHigh, or 2)
-            const maxScale = Math.max(ratio, clipHigh, 2);
-            const minScale = 0;
-            const range = maxScale - minScale;
+            const maxScale = Math.max(1.0, maxProb * 1.1);
+            const oldPercent = (oldProb / maxScale) * 100;
+            const maxPercent = (maxProb / maxScale) * 100;
+            const increase = maxProb - oldProb;
 
-            // Calculate percentages for positioning
-            const ratioPercent = ((ratio - minScale) / range) * 100;
-            const clippedPercent = ((clippedRatio - minScale) / range) * 100;
-            const clipLowPercent = ((clipLow - minScale) / range) * 100;
-            const clipHighPercent = ((clipHigh - minScale) / range) * 100;
+            const barClass = isAsymmetric ? 'asymmetric' : 'symmetric';
 
-            let barHTML = `
-                <div class="bar-container">
-                    <div class="bar bar-original" style="width: ${ratioPercent}%;">
-                        <span style="color: var(--blue-600);">r = ${ratio.toFixed(3)}</span>
+            container.innerHTML = `
+                <div class="probability-bar">
+                    <div class="prob-old" style="width: ${oldPercent}%;">
+                        ${oldProb.toFixed(4)}
                     </div>
-                    <div class="bar bar-clipped ${clipType === 'low' ? 'bar-clipped-low' : clipType === 'high' ? 'bar-clipped-high' : ''}"
-                         style="width: ${clippedPercent}%; opacity: 0.9;">
-                        <span style="color: var(--slate-800);">${clippedRatio.toFixed(3)}</span>
-                    </div>
-                </div>
-                <div class="scale-markers">
-                    <span>0</span>
-                    <span style="position: absolute; left: ${clipLowPercent}%; transform: translateX(-50%); color: var(--red-500); font-weight: 600;">↓ ${clipLow}</span>
-                    <span style="position: absolute; left: ${clipHighPercent}%; transform: translateX(-50%); color: var(--yellow-400); font-weight: 600;">↓ ${clipHigh}</span>
-                    <span>${maxScale.toFixed(1)}</span>
-                </div>
-            `;
-
-            const clippedAmount = Math.abs(ratio - clippedRatio);
-            const clippedPercAmount = ratio > 0 ? (clippedAmount / ratio) * 100 : 0;
-
-            barHTML += `
-                <div class="stats-grid">
-                    <div class="stat-item">
-                        <div class="stat-label">Original Ratio</div>
-                        <div class="stat-value">${ratio.toFixed(4)}</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-label">Clipped Ratio</div>
-                        <div class="stat-value">${clippedRatio.toFixed(4)}</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-label">Clipping Type</div>
-                        <div class="stat-value">${clipType === 'none' ? 'None' : clipType === 'low' ? 'Low Clip' : 'High Clip'}</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-label">Amount Clipped</div>
-                        <div class="stat-value">${clippedAmount.toFixed(4)} (${clippedPercAmount.toFixed(1)}%)</div>
+                    <div class="prob-max ${barClass}" style="left: ${oldPercent}%; width: ${maxPercent - oldPercent}%;">
+                        +${increase.toFixed(4)}
                     </div>
                 </div>
             `;
-
-            container.innerHTML = barHTML;
         }
 
         function updateVisualizations() {
-            const oldProb = parseFloat(document.getElementById('oldProb').value) || 0.3;
-            const newProb = parseFloat(document.getElementById('newProb').value) || 0.5;
-            const clipLow1 = parseFloat(document.getElementById('clipLow1').value) || 0.8;
-            const clipHigh1 = parseFloat(document.getElementById('clipHigh1').value) || 1.2;
-            const clipLow2 = parseFloat(document.getElementById('clipLow2').value) || 0.7;
-            const clipHigh2 = parseFloat(document.getElementById('clipHigh2').value) || 1.5;
+            const explorationProb = parseFloat(document.getElementById('explorationProb').value) || 0.01;
+            const exploitationProb = parseFloat(document.getElementById('exploitationProb').value) || 0.9;
+            const epsilonSym = parseFloat(document.getElementById('epsilonSymmetric').value) || 0.2;
+            const epsilonHigh = parseFloat(document.getElementById('epsilonHigh').value) || 0.28;
 
-            const ratio = calculateRatio(oldProb, newProb);
+            // Update displays
+            document.getElementById('exploration-prob-display').textContent = explorationProb.toFixed(4);
+            document.getElementById('exploitation-prob-display').textContent = exploitationProb.toFixed(4);
 
-            createVisualization('viz1', ratio, clipLow1, clipHigh1, 1);
-            createVisualization('viz2', ratio, clipLow2, clipHigh2, 2);
+            // Symmetric clipping calculations
+            const explorationMaxSym = explorationProb * (1 + epsilonSym);
+            const exploitationMaxSym = Math.min(exploitationProb * (1 + epsilonSym), 1.0);
+            const explorationIncreaseSym = explorationMaxSym - explorationProb;
+            const exploitationIncreaseSym = exploitationMaxSym - exploitationProb;
+
+            // Asymmetric clipping calculations
+            const explorationMaxAsym = explorationProb * (1 + epsilonHigh);
+            const exploitationMaxAsym = Math.min(exploitationProb * (1 + epsilonHigh), 1.0);
+            const explorationIncreaseAsym = explorationMaxAsym - explorationProb;
+            const exploitationIncreaseAsym = exploitationMaxAsym - exploitationProb;
+
+            // Improvements
+            const explorationImprovement = ((explorationIncreaseAsym - explorationIncreaseSym) / explorationIncreaseSym) * 100;
+            const exploitationImprovement = ((exploitationIncreaseAsym - exploitationIncreaseSym) / exploitationIncreaseSym) * 100;
+
+            // Ratios
+            const ratioSym = exploitationIncreaseSym / explorationIncreaseSym;
+            const ratioAsym = exploitationIncreaseAsym / explorationIncreaseAsym;
+
+            // Update exploration visualizations
+            createProbabilityBar('exploration-symmetric-viz', explorationProb, explorationMaxSym, false);
+            createProbabilityBar('exploration-asymmetric-viz', explorationProb, explorationMaxAsym, true);
+
+            document.getElementById('exploration-max-sym').textContent = explorationMaxSym.toFixed(4);
+            document.getElementById('exploration-increase-sym').textContent = `+${explorationIncreaseSym.toFixed(4)}`;
+            document.getElementById('exploration-max-asym').textContent = explorationMaxAsym.toFixed(4);
+            document.getElementById('exploration-increase-asym').textContent = `+${explorationIncreaseAsym.toFixed(4)}`;
+            document.getElementById('exploration-improvement').textContent = `+${explorationImprovement.toFixed(0)}%`;
+
+            // Update exploitation visualizations
+            createProbabilityBar('exploitation-symmetric-viz', exploitationProb, exploitationMaxSym, false);
+            createProbabilityBar('exploitation-asymmetric-viz', exploitationProb, exploitationMaxAsym, true);
+
+            document.getElementById('exploitation-max-sym').textContent = exploitationMaxSym.toFixed(4);
+            document.getElementById('exploitation-increase-sym').textContent = `+${exploitationIncreaseSym.toFixed(4)}`;
+            document.getElementById('exploitation-max-asym').textContent = exploitationMaxAsym.toFixed(4);
+            document.getElementById('exploitation-increase-asym').textContent = `+${exploitationIncreaseAsym.toFixed(4)}`;
+            document.getElementById('exploitation-improvement').textContent = `+${exploitationImprovement.toFixed(0)}%`;
+
+            // Update key insight
+            document.getElementById('ratio-increase-sym').textContent = `${ratioSym.toFixed(0)}×`;
+            document.getElementById('ratio-increase-asym').textContent = `${ratioAsym.toFixed(0)}×`;
+            document.getElementById('epsilon-high-display').textContent = epsilonHigh.toFixed(2);
+            document.getElementById('exploration-improvement-percent').textContent = `+${explorationImprovement.toFixed(0)}%`;
         }
 
         // Add event listeners to all inputs
