@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intensity - MoE Architecture</title>
+    <style>
+        :root {
+            --bg-body: #f8fafc;
+            --bg-card: #ffffff;
+            --slate-100: #f1f5f9;
+            --slate-200: #e2e8f0;
+            --slate-500: #64748b;
+            --slate-700: #334155;
+            --slate-800: #1e293b;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--slate-800);
+            line-height: 1.5;
+            margin: 0;
+            padding: 2rem;
+        }
+
+        .container { max-width: 90rem; margin: 0 auto; }
+
+        .header {
+            margin-bottom: 2rem;
+            border-bottom: 2px solid var(--slate-200);
+            padding-bottom: 1rem;
+        }
+        .header h1 { font-size: 1.5rem; font-weight: 700; color: #d95f0e; margin: 0; }
+        .header p { font-size: 0.875rem; color: var(--slate-500); margin-top: 0.5rem; }
+
+        .top-nav {
+            background-color: var(--bg-card);
+            border-bottom: 1px solid var(--slate-200);
+            padding: 1rem 2rem;
+            margin: -2rem -2rem 2rem -2rem;
+        }
+        .top-nav a {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            text-decoration: none; color: var(--slate-800); font-weight: 600; font-size: 1rem;
+        }
+        .top-nav a:hover { color: #d95f0e; }
+        .top-nav img { height: 18px; width: 18px; }
+
+        .panel {
+            background-color: var(--bg-card);
+            padding: 2rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border: 1px solid var(--slate-100);
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.125rem; font-weight: 600; color: var(--slate-700);
+            margin-bottom: 1rem; border-bottom: 1px solid var(--slate-100); padding-bottom: 0.5rem;
+        }
+
+        .diagram-container { width: 100%; overflow-x: auto; padding: 1rem 0; }
+
+        @media (max-width: 768px) {
+            body { padding: 1rem; }
+            .top-nav { padding: 1rem; margin: -1rem -1rem 1rem -1rem; }
+        }
+    </style>
+</head>
+<body class="container">
+
+    <nav class="top-nav">
+        <a href="../index.html">
+            <img src="../favicon.ico" alt="Home">
+            Arthur Douillard
+        </a>
+    </nav>
+
+    <header class="header">
+        <h1>Intensity - MoE Architecture</h1>
+        <p>Visualizing Mixture-of-Experts (MoE) model architecture</p>
+    </header>
+
+    <div class="panel">
+        <h2 class="section-title">MoE Block Architecture</h2>
+        <div class="diagram-container" id="diagramContainer"></div>
+    </div>
+
+    <div class="panel">
+        <h2 class="section-title">Hardware Configuration</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 1rem;">
+            <div>
+                <label style="display: block; font-size: 0.875rem; font-weight: 600; color: var(--slate-700); margin-bottom: 0.5rem;">Accelerator Type</label>
+                <select id="acceleratorSelect" style="width: 100%; padding: 0.5rem; border: 1px solid var(--slate-300); border-radius: 0.375rem; font-size: 0.875rem; background-color: white; color: var(--slate-800);">
+                    <option value="tpu_v5e">TPU v5e</option>
+                    <option value="tpu_v5p">TPU v5p</option>
+                    <option value="tpu_v6e">TPU v6e</option>
+                    <option value="gpu_b200">GPU B200</option>
+                </select>
+            </div>
+            <div style="background-color: #f0fdfa; border: 1px solid #99f6e4; border-radius: 0.5rem; padding: 1rem;">
+                <div style="font-size: 0.75rem; font-weight: 600; color: #115e59; margin-bottom: 0.5rem;">Compute Performance</div>
+                <div style="font-family: 'SF Mono', 'Roboto Mono', monospace; font-size: 1.125rem; font-weight: 700; color: #0f766e;" id="computePerf">1.97e14</div>
+                <div style="font-size: 0.65rem; color: #0d9488; margin-top: 0.25rem;">FLOPs/s (bfloat16)</div>
+            </div>
+            <div style="background-color: #fef3c7; border: 1px solid #fde68a; border-radius: 0.5rem; padding: 1rem;">
+                <div style="font-size: 0.75rem; font-weight: 600; color: #78350f; margin-bottom: 0.5rem;">Memory Bandwidth</div>
+                <div style="font-family: 'SF Mono', 'Roboto Mono', monospace; font-size: 1.125rem; font-weight: 700; color: #92400e;" id="memBandwidth">8.2e11</div>
+                <div style="font-size: 0.65rem; color: #b45309; margin-top: 0.25rem;">bytes/s (HBM)</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; border-bottom: 1px solid var(--slate-100); padding-bottom: 0.5rem;">
+            <h2 style="font-size: 1.125rem; font-weight: 600; color: var(--slate-700); margin: 0;">Arithmetic Intensity Analysis</h2>
+            <div style="display: flex; gap: 0.5rem; background-color: var(--slate-100); border-radius: 0.5rem; padding: 0.25rem;">
+                <button id="modeTraining" style="padding: 0.375rem 0.75rem; font-size: 0.75rem; font-weight: 600; border: none; border-radius: 0.375rem; cursor: pointer; background-color: white; color: var(--slate-800); box-shadow: 0 1px 2px rgba(0,0,0,0.05);">Training & Prefilling</button>
+                <button id="modeSampling" style="padding: 0.375rem 0.75rem; font-size: 0.75rem; font-weight: 600; border: none; border-radius: 0.375rem; cursor: pointer; background-color: transparent; color: var(--slate-600);">Sampling</button>
+            </div>
+        </div>
+        <p id="modeDescription" style="font-size: 0.875rem; color: var(--slate-600); margin-bottom: 0.5rem;">
+            <strong>Training & Prefilling:</strong> Processing full sequences of S tokens. Operations are sorted by intensity from highest to lowest.
+        </p>
+        <div style="background-color: #fef9c3; border: 1px solid #fde047; border-radius: 0.5rem; padding: 0.75rem; margin-bottom: 1.5rem;">
+            <div style="font-size: 0.75rem; font-weight: 600; color: #854d0e; margin-bottom: 0.25rem;">Hardware Critical Intensity</div>
+            <div style="font-family: 'SF Mono', monospace; font-size: 1rem; font-weight: 700; color: #92400e;" id="hwIntensity">-</div>
+            <div style="font-size: 0.7rem; color: #a16207; margin-top: 0.25rem;">Operations below this threshold are <strong>memory-bound</strong>; above are <strong>compute-bound</strong></div>
+        </div>
+        <div id="intensityCards" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
+        </div>
+
+        <div style="margin-top: 1.5rem; padding: 1rem; background-color: #f8fafc; border-radius: 0.5rem; border: 1px solid var(--slate-200);">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                <div>
+                    <label style="display: block; font-size: 0.75rem; font-weight: 600; color: var(--slate-600); margin-bottom: 0.5rem;">Model Dimension (D)</label>
+                    <input type="number" id="modelDim" value="2048" min="128" step="128" style="width: 100%; padding: 0.4rem; border: 1px solid var(--slate-300); border-radius: 0.375rem; font-size: 0.875rem;">
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.75rem; font-weight: 600; color: var(--slate-600); margin-bottom: 0.5rem;">Sequence Length (S)</label>
+                    <input type="number" id="seqLen" value="32768" min="128" step="128" style="width: 100%; padding: 0.4rem; border: 1px solid var(--slate-300); border-radius: 0.375rem; font-size: 0.875rem;">
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.75rem; font-weight: 600; color: var(--slate-600); margin-bottom: 0.5rem;">Batch Size (B)</label>
+                    <input type="number" id="batchSize" value="128" min="1" step="1" style="width: 100%; padding: 0.4rem; border: 1px solid var(--slate-300); border-radius: 0.375rem; font-size: 0.875rem;">
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.75rem; font-weight: 600; color: var(--slate-600); margin-bottom: 0.5rem;">Vocab Size (V)</label>
+                    <input type="number" id="vocabSize" value="131072" min="1024" step="1024" style="width: 100%; padding: 0.4rem; border: 1px solid var(--slate-300); border-radius: 0.375rem; font-size: 0.875rem;">
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.75rem; font-weight: 600; color: var(--slate-600); margin-bottom: 0.5rem;">Num Experts (E)</label>
+                    <input type="number" id="numExperts" value="8" min="1" step="1" style="width: 100%; padding: 0.4rem; border: 1px solid var(--slate-300); border-radius: 0.375rem; font-size: 0.875rem;">
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.75rem; font-weight: 600; color: var(--slate-600); margin-bottom: 0.5rem;">Top-K Routing (K)</label>
+                    <input type="number" id="topK" value="2" min="1" step="1" style="width: 100%; padding: 0.4rem; border: 1px solid var(--slate-300); border-radius: 0.375rem; font-size: 0.875rem;">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel">
+        <h2 class="section-title">FAQ</h2>
+        <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+            <div>
+                <div style="font-weight: 600; font-size: 0.875rem; color: var(--slate-800); margin-bottom: 0.5rem;">What is the routing assumption for experts?</div>
+                <div style="font-size: 0.875rem; color: var(--slate-600); line-height: 1.6;">
+                    We assume <strong>uniform routing</strong> across all experts. With top-K=K routing, each token is routed to K experts, resulting in B×S×K total expert evaluations during training/prefilling, or B×K evaluations during sampling. Under uniform routing, each of the E experts processes approximately (B×S×K)/E tokens during training, or (B×K)/E tokens during sampling.
+                </div>
+            </div>
+            <div>
+                <div style="font-weight: 600; font-size: 0.875rem; color: var(--slate-800); margin-bottom: 0.5rem;">What does "arithmetic intensity" mean?</div>
+                <div style="font-size: 0.875rem; color: var(--slate-600); line-height: 1.6;">
+                    Arithmetic intensity is the ratio of FLOPs (floating-point operations) to bytes transferred from memory, measured in FLOPs/byte. Operations with high intensity perform many computations per byte of data moved, making them compute-bound. Operations with low intensity are limited by memory bandwidth and are memory-bound.
+                </div>
+            </div>
+            <div>
+                <div style="font-weight: 600; font-size: 0.875rem; color: var(--slate-800); margin-bottom: 0.5rem;">What is the hardware critical intensity threshold?</div>
+                <div style="font-size: 0.875rem; color: var(--slate-600); line-height: 1.6;">
+                    The critical intensity is computed as (compute performance) / (memory bandwidth). For example, TPU v5e has 197 TFLOPs/s and 820 GB/s, giving a critical intensity of ~240 FLOPs/byte. Operations below this threshold are memory-bound (limited by bandwidth), while operations above are compute-bound (limited by FLOPs).
+                </div>
+            </div>
+            <div>
+                <div style="font-weight: 600; font-size: 0.875rem; color: var(--slate-800); margin-bottom: 0.5rem;">What assumptions are made about operation fusion?</div>
+                <div style="font-size: 0.875rem; color: var(--slate-600); line-height: 1.6;">
+                    We assume that the <strong>attention softmax operation is fused</strong>, meaning QK<sup>T</sup>, softmax, and multiplication with V are combined into a single kernel. This significantly reduces memory traffic by avoiding intermediate materialization of the full attention matrix. Without fusion, memory requirements would be much higher for long sequences.
+                </div>
+            </div>
+            <div>
+                <div style="font-weight: 600; font-size: 0.875rem; color: var(--slate-800); margin-bottom: 0.5rem;">Where can I learn more about roofline analysis?</div>
+                <div style="font-size: 0.875rem; color: var(--slate-600); line-height: 1.6;">
+                    For a comprehensive introduction to roofline analysis and performance modeling, see the <a href="https://jax-ml.github.io/scaling-book/roofline/" target="_blank" rel="noopener noreferrer" style="color: #d95f0e; text-decoration: underline;">JAX Scaling Book's roofline chapter</a>. It provides detailed explanations of arithmetic intensity, hardware constraints, and optimization strategies.
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+function renderDiagram() {
+    const container = document.getElementById('diagramContainer');
+
+    const W = 1400, H = 340;
+    const midY = 170;
+    const bh = 40;           // box height
+    const gap = 18;          // gap between arrow tip and next box
+    const arrowLen = 28;     // arrow shaft length
+
+    const c = {
+        emb:     { fill: '#dbeafe', stroke: '#3b82f6' },
+        ln:      { fill: '#e9d5ff', stroke: '#9333ea' },
+        attn:    { fill: '#d1fae5', stroke: '#10b981' },
+        attnIn:  { fill: '#a7f3d0', stroke: '#10b981' },
+        attnMid: { fill: '#6ee7b7', stroke: '#10b981' },
+        attnOut: { fill: '#34d399', stroke: '#10b981' },
+        add:     { fill: '#fecaca', stroke: '#dc2626' },
+        router:  { fill: '#fde047', stroke: '#d97706' },
+        expert:  { fill: '#f3e8ff', stroke: '#a855f7' },
+        expertIn:{ fill: '#e9d5ff', stroke: '#a855f7' },
+        sigma:   { fill: '#fbbf24', stroke: '#d97706' },
+        outEmb:  { fill: '#fecaca', stroke: '#ef4444' },
+        wire:    '#94a3b8',
+        resd:    '#b0b8c4',
+    };
+
+    let s = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">`;
+    s += `<defs><marker id="ah" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0, 7 2.5, 0 5" fill="${c.wire}"/></marker></defs>`;
+
+    const R = (x,y,w,h,col,rx=5) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${col.fill}" stroke="${col.stroke}" stroke-width="1.5" rx="${rx}"/>`;
+    const T = (x,y,str,sz=11,fw=600,fl='#334155') => `<text x="${x}" y="${y}" text-anchor="middle" fill="${fl}" font-size="${sz}" font-weight="${fw}">${str}</text>`;
+    const A = (x1,y1,x2,y2) => `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${c.wire}" stroke-width="1.5" marker-end="url(#ah)"/>`;
+    const L = (x1,y1,x2,y2) => `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${c.wire}" stroke-width="1.5"/>`;
+
+    let x = 20;
+
+    // Input Emb
+    const iW = 80;
+    s += R(x, midY-bh/2, iW, bh, c.emb, 6);
+    s += T(x+iW/2, midY+4, 'Input Emb.', 11, 700);
+    x += iW;
+    s += A(x, midY, x+arrowLen, midY);
+    x += arrowLen + gap;
+
+    // LN1
+    const lnW = 72;
+    const ln1X = x;
+    s += R(x, midY-bh/2, lnW, bh, c.ln);
+    s += T(x+lnW/2, midY+4, 'LayerNorm', 10, 700);
+    x += lnW;
+    s += A(x, midY, x+arrowLen, midY);
+    x += arrowLen + gap;
+
+    // Self-Attention (taller)
+    const saW = 140, saH = 110;
+    const saX = x, saTop = midY - saH/2;
+    s += R(saX, saTop, saW, saH, c.attn, 7);
+    s += T(saX+saW/2, saTop+16, 'Self-Attention', 12, 700);
+
+    // Q K V
+    const qkvW = 32, qkvH = 22, qkvGap = 6;
+    const qkvStartX = saX + (saW - 3*qkvW - 2*qkvGap)/2;
+    const qkvY = saTop + 26;
+    ['Q','K','V'].forEach((l,i) => {
+        const bx = qkvStartX + i*(qkvW+qkvGap);
+        s += R(bx, qkvY, qkvW, qkvH, c.attnIn, 3);
+        s += T(bx+qkvW/2, qkvY+qkvH/2+4, l, 10, 700);
+    });
+
+    // softmax
+    const smY = qkvY + qkvH + 5, smH = 20;
+    s += R(saX+10, smY, saW-20, smH, c.attnMid, 3);
+    s += T(saX+saW/2, smY+smH/2+4, 'softmax(QKᵀ/√d)·V', 8, 600);
+
+    // output proj
+    const opY = smY + smH + 5, opH = 18;
+    s += R(saX+18, opY, saW-36, opH, c.attnOut, 3);
+    s += T(saX+saW/2, opY+opH/2+4, 'Output Proj', 8, 600, '#fff');
+
+    x += saW;
+    s += A(x, midY, x+arrowLen, midY);
+    x += arrowLen + gap;
+
+    // + (residual add 1) — small circle
+    const addR = 12;
+    const add1Cx = x + addR;
+    s += `<circle cx="${add1Cx}" cy="${midY}" r="${addR}" fill="${c.add.fill}" stroke="${c.add.stroke}" stroke-width="1.5"/>`;
+    s += T(add1Cx, midY+4, '+', 14, 700, '#dc2626');
+
+    // Residual 1: arc above from LN1 left edge to add1
+    const r1y = saTop - 12;
+    s += `<path d="M ${ln1X} ${midY-bh/2} L ${ln1X} ${r1y} L ${add1Cx} ${r1y} L ${add1Cx} ${midY-addR}" fill="none" stroke="${c.resd}" stroke-width="1.2" stroke-dasharray="4,3"/>`;
+
+    x = add1Cx + addR;
+    s += A(x, midY, x+arrowLen, midY);
+    x += arrowLen + gap;
+
+    // LN2
+    const ln2X = x;
+    s += R(x, midY-bh/2, lnW, bh, c.ln);
+    s += T(x+lnW/2, midY+4, 'LayerNorm', 10, 700);
+    x += lnW;
+    s += A(x, midY, x+arrowLen, midY);
+    x += arrowLen + gap;
+
+    // Router
+    const rtW = 60, rtH = 40;
+    const rtX = x;
+    s += R(rtX, midY-rtH/2, rtW, rtH, c.router);
+    s += T(rtX+rtW/2, midY+4, 'Router', 11, 700);
+    const rtRight = rtX + rtW;
+    x = rtRight;
+
+    // Fork: router → two expert paths (top and bottom), converge to Σ
+    const expertOff = 72;   // vertical offset of each expert from midY
+    const eW = 160, eH = 80;
+    const sigmaR = 14;
+
+    // Expert X positions: tight against router and sigma
+    const forkLineX = rtRight + 2;   // tiny offset so line doesn't overlap router border
+    const eX = forkLineX;            // expert left edge at fork line
+    const mergeLineX = eX + eW;      // merge line at expert right edge
+    const sigmaCx = mergeLineX + 2 + sigmaR; // sigma just after merge line
+
+    const e1Y = midY - expertOff;
+    const eNY = midY + expertOff;
+
+    // Fork: vertical line from router right edge, branching to each expert
+    s += L(forkLineX, midY, forkLineX, e1Y);
+    s += L(forkLineX, midY, forkLineX, eNY);
+
+    // Expert drawing helper
+    function drawExpert(cy, label) {
+        const ex = eX, ey = cy - eH/2;
+        s += R(ex, ey, eW, eH, c.expert);
+        s += T(ex+eW/2, ey + 14, label, 10, 700);
+
+        const mlpPad = 8, barH = 12, barGap = 4;
+        const narrowW = 40, wideW = eW - 2*mlpPad;
+        const mt = ey + 22;
+
+        // d → 4d (narrow)
+        s += R(ex + (eW-narrowW)/2, mt, narrowW, barH, c.expertIn, 2);
+        s += T(ex+eW/2, mt+barH/2+3, 'd → 4d', 7, 600, '#7e22ce');
+        // Activation (wide)
+        s += R(ex + mlpPad, mt + barH + barGap, wideW, barH, c.expertIn, 2);
+        s += T(ex+eW/2, mt + barH + barGap + barH/2+3, 'Activation (4d)', 7, 600, '#7e22ce');
+        // 4d → d (narrow)
+        s += R(ex + (eW-narrowW)/2, mt + 2*(barH + barGap), narrowW, barH, c.expertIn, 2);
+        s += T(ex+eW/2, mt + 2*(barH+barGap) + barH/2+3, '4d → d', 7, 600, '#7e22ce');
+    }
+
+    drawExpert(e1Y, 'Expert 1');
+    drawExpert(eNY, 'Expert N');
+
+    // Dots between experts
+    s += `<circle cx="${eX+eW/2-8}" cy="${midY}" r="2.5" fill="#a855f7"/>`;
+    s += `<circle cx="${eX+eW/2}" cy="${midY}" r="2.5" fill="#a855f7"/>`;
+    s += `<circle cx="${eX+eW/2+8}" cy="${midY}" r="2.5" fill="#a855f7"/>`;
+
+    // Merge: vertical line from expert right edges converging to midY
+    s += L(mergeLineX, e1Y, mergeLineX, midY);
+    s += L(mergeLineX, eNY, mergeLineX, midY);
+
+    // Σ right after merge
+    s += `<circle cx="${sigmaCx}" cy="${midY}" r="${sigmaR}" fill="${c.sigma.fill}" stroke="${c.sigma.stroke}" stroke-width="1.5"/>`;
+    s += T(sigmaCx, midY+5, 'Σ', 14, 700);
+
+    x = sigmaCx + sigmaR;
+    s += A(x, midY, x+arrowLen, midY);
+    x += arrowLen + gap;
+
+    // + (residual add 2)
+    const add2Cx = x + addR;
+    s += `<circle cx="${add2Cx}" cy="${midY}" r="${addR}" fill="${c.add.fill}" stroke="${c.add.stroke}" stroke-width="1.5"/>`;
+    s += T(add2Cx, midY+4, '+', 14, 700, '#dc2626');
+
+    // Residual 2: arc above — from LN2 left to add2, routed ABOVE expert 1
+    const r2y = e1Y - eH/2 - 14;
+    s += `<path d="M ${ln2X} ${midY-bh/2} L ${ln2X} ${r2y} L ${add2Cx} ${r2y} L ${add2Cx} ${midY-addR}" fill="none" stroke="${c.resd}" stroke-width="1.2" stroke-dasharray="4,3"/>`;
+
+    x = add2Cx + addR;
+    s += A(x, midY, x+arrowLen, midY);
+    x += arrowLen + gap;
+
+    // Output Emb
+    const oW = 80;
+    s += R(x, midY-bh/2, oW, bh, c.outEmb, 6);
+    s += T(x+oW/2, midY+4, 'Output Emb.', 11, 700);
+
+    s += '</svg>';
+    container.innerHTML = s;
+}
+
+renderDiagram();
+
+// Hardware configuration
+const acceleratorSpecs = {
+    tpu_v5e: {
+        name: 'TPU v5e',
+        compute: 1.97e14,      // FLOPs/s (bfloat16)
+        bandwidth: 8.2e11      // bytes/s (HBM)
+    },
+    tpu_v5p: {
+        name: 'TPU v5p',
+        compute: 4.59e14,      // FLOPs/s (bfloat16) - 459 TFLOPs
+        bandwidth: 2.765e12    // bytes/s (HBM) - 2765 GB/s
+    },
+    tpu_v6e: {
+        name: 'TPU v6e',
+        compute: 9.18e14,      // FLOPs/s (bfloat16) - 918 TFLOPs
+        bandwidth: 1.6e12      // bytes/s (HBM) - 1600 GB/s
+    },
+    gpu_b200: {
+        name: 'GPU B200',
+        compute: 2.25e15,      // FLOPs/s (bfloat16) - 2,250 TFLOPs
+        bandwidth: 8e12        // bytes/s (HBM) - 8000 GB/s
+    }
+};
+
+function updateHardwareDisplay() {
+    const selected = document.getElementById('acceleratorSelect').value;
+    const spec = acceleratorSpecs[selected];
+
+    document.getElementById('computePerf').textContent = spec.compute.toExponential(2);
+    document.getElementById('memBandwidth').textContent = spec.bandwidth.toExponential(2);
+
+    // Recalculate intensities when hardware changes
+    calculateIntensities();
+}
+
+document.getElementById('acceleratorSelect').addEventListener('change', updateHardwareDisplay);
+
+// Mode toggle state - must be defined before updateHardwareDisplay()
+let currentMode = 'training'; // 'training' or 'sampling'
+
+document.getElementById('modeTraining').addEventListener('click', () => {
+    currentMode = 'training';
+    document.getElementById('modeTraining').style.backgroundColor = 'white';
+    document.getElementById('modeTraining').style.color = 'var(--slate-800)';
+    document.getElementById('modeTraining').style.boxShadow = '0 1px 2px rgba(0,0,0,0.05)';
+    document.getElementById('modeSampling').style.backgroundColor = 'transparent';
+    document.getElementById('modeSampling').style.color = 'var(--slate-600)';
+    document.getElementById('modeSampling').style.boxShadow = 'none';
+    document.getElementById('modeDescription').innerHTML = '<strong>Training & Prefilling:</strong> Processing full sequences of S tokens. Operations are sorted by intensity from highest to lowest.';
+    calculateIntensities();
+});
+
+document.getElementById('modeSampling').addEventListener('click', () => {
+    currentMode = 'sampling';
+    document.getElementById('modeSampling').style.backgroundColor = 'white';
+    document.getElementById('modeSampling').style.color = 'var(--slate-800)';
+    document.getElementById('modeSampling').style.boxShadow = '0 1px 2px rgba(0,0,0,0.05)';
+    document.getElementById('modeTraining').style.backgroundColor = 'transparent';
+    document.getElementById('modeTraining').style.color = 'var(--slate-600)';
+    document.getElementById('modeTraining').style.boxShadow = 'none';
+    document.getElementById('modeDescription').innerHTML = '<strong>Sampling:</strong> Generating 1 token at a time with KV-cache. Context length = S tokens. Operations are sorted by intensity from highest to lowest.';
+    calculateIntensities();
+});
+
+// Arithmetic Intensity Calculations
+function calculateIntensities() {
+    const d = parseInt(document.getElementById('modelDim').value);
+    const s = parseInt(document.getElementById('seqLen').value);
+    const b = parseInt(document.getElementById('batchSize').value);
+    const v = parseInt(document.getElementById('vocabSize').value);
+    const e = parseInt(document.getElementById('numExperts').value);
+    const k = parseInt(document.getElementById('topK').value);
+
+    // Get hardware specs
+    const selected = document.getElementById('acceleratorSelect').value;
+    const spec = acceleratorSpecs[selected];
+    const hwIntensity = spec.compute / spec.bandwidth;
+    document.getElementById('hwIntensity').textContent = hwIntensity.toFixed(2) + ' FLOPs/byte';
+
+    // Define all operations based on mode
+    const operations = [];
+
+    if (currentMode === 'training') {
+        // Training/Prefilling: process full sequences
+        const tokens = b * s;
+
+        // LayerNorm
+        operations.push({
+            name: 'LayerNorm',
+            color: '#9333ea',
+            intensity: (3 * tokens * d) / (2 * tokens * d * 2),
+            flopsFormula: '3·B·S·D',
+            bytesFormula: '2·B·S·D·2'
+        });
+
+        // Attention QKV projection
+        operations.push({
+            name: 'Attn QKV Proj',
+            color: '#10b981',
+            intensity: (3 * 2 * tokens * d * d) / ((3 * d * d * 2) + (tokens * d * 2) + (3 * tokens * d * 2)),
+            flopsFormula: '3·2·B·S·D²',
+            bytesFormula: '(3·D²+B·S·D+3·B·S·D)·2'
+        });
+
+        // Attention softmax
+        operations.push({
+            name: 'Attn Softmax',
+            color: '#10b981',
+            intensity: (b * (2 * s * s * d + 5 * s * s)) / ((2 * b * s * d * 2) + (b * s * s * 2)),
+            flopsFormula: '2·B·S²·D + 5·B·S²',
+            bytesFormula: '(2·B·S·D+B·S²)·2'
+        });
+
+        // Attention output projection
+        operations.push({
+            name: 'Attn Output Proj',
+            color: '#10b981',
+            intensity: (2 * tokens * d * d) / ((d * d * 2) + (tokens * d * 2) + (tokens * d * 2)),
+            flopsFormula: '2·B·S·D²',
+            bytesFormula: '(D²+2·B·S·D)·2'
+        });
+
+        // Router
+        operations.push({
+            name: 'Router',
+            color: '#d97706',
+            intensity: (2 * tokens * d * e) / ((d * e * 2) + (tokens * d * 2) + (tokens * e * 2)),
+            flopsFormula: '2·B·S·D·E',
+            bytesFormula: '(D·E+B·S·D+B·S·E)·2'
+        });
+
+        // Expert MLP up-projection (per expert, processes B*S*K/E tokens)
+        const tokensPerExpert = (tokens * k) / e;
+        operations.push({
+            name: 'Expert MLP Up (D→4D)',
+            color: '#a855f7',
+            intensity: (2 * tokensPerExpert * d * (4 * d)) / ((4 * d * d * 2) + (tokensPerExpert * d * 2) + (tokensPerExpert * 4 * d * 2)),
+            flopsFormula: '2·B·S·K·D·4D/E',
+            bytesFormula: '(4D²+B·S·K·D/E+B·S·K·4D/E)·2'
+        });
+
+        // Expert MLP down-projection (per expert)
+        operations.push({
+            name: 'Expert MLP Down (4D→D)',
+            color: '#a855f7',
+            intensity: (2 * tokensPerExpert * (4 * d) * d) / ((4 * d * d * 2) + (tokensPerExpert * 4 * d * 2) + (tokensPerExpert * d * 2)),
+            flopsFormula: '2·B·S·K·4D·D/E',
+            bytesFormula: '(4D²+B·S·K·4D/E+B·S·K·D/E)·2'
+        });
+
+        // Output embedding projection
+        operations.push({
+            name: 'Output Embedding',
+            color: '#ef4444',
+            intensity: (2 * tokens * d * v) / ((d * v * 2) + (tokens * d * 2) + (tokens * v * 2)),
+            flopsFormula: '2·B·S·D·V',
+            bytesFormula: '(D·V+B·S·D+B·S·V)·2'
+        });
+    } else {
+        // Sampling: generate 1 token at a time with KV-cache
+        // Context length is S, generating 1 new token per batch element
+
+        // LayerNorm (only for B tokens, not B*S)
+        operations.push({
+            name: 'LayerNorm',
+            color: '#9333ea',
+            intensity: (3 * b * d) / (2 * b * d * 2),
+            flopsFormula: '3·B·D',
+            bytesFormula: '2·B·D·2'
+        });
+
+        // Attention QKV projection (only for new token)
+        operations.push({
+            name: 'Attn QKV Proj',
+            color: '#10b981',
+            intensity: (3 * 2 * b * d * d) / ((3 * d * d * 2) + (b * d * 2) + (3 * b * d * 2)),
+            flopsFormula: '3·2·B·D²',
+            bytesFormula: '(3·D²+B·D+3·B·D)·2'
+        });
+
+        // Attention softmax (Q=[B,1,D] attends to cached K=[B,S,D])
+        operations.push({
+            name: 'Attn Softmax',
+            color: '#10b981',
+            intensity: (b * (2 * s * d + 5 * s)) / ((2 * b * s * d * 2) + (b * s * 2)),
+            flopsFormula: '2·B·S·D + 5·B·S',
+            bytesFormula: '(2·B·S·D+B·S)·2'
+        });
+
+        // Attention output projection (only for new token)
+        operations.push({
+            name: 'Attn Output Proj',
+            color: '#10b981',
+            intensity: (2 * b * d * d) / ((d * d * 2) + (b * d * 2) + (b * d * 2)),
+            flopsFormula: '2·B·D²',
+            bytesFormula: '(D²+2·B·D)·2'
+        });
+
+        // Router (only for new token)
+        operations.push({
+            name: 'Router',
+            color: '#d97706',
+            intensity: (2 * b * d * e) / ((d * e * 2) + (b * d * 2) + (b * e * 2)),
+            flopsFormula: '2·B·D·E',
+            bytesFormula: '(D·E+B·D+B·E)·2'
+        });
+
+        // Expert MLP up-projection (per expert, processes B*K/E tokens)
+        const samplingTokensPerExpert = (b * k) / e;
+        operations.push({
+            name: 'Expert MLP Up (D→4D)',
+            color: '#a855f7',
+            intensity: (2 * samplingTokensPerExpert * d * (4 * d)) / ((4 * d * d * 2) + (samplingTokensPerExpert * d * 2) + (samplingTokensPerExpert * 4 * d * 2)),
+            flopsFormula: '2·B·K·D·4D/E',
+            bytesFormula: '(4D²+B·K·D/E+B·K·4D/E)·2'
+        });
+
+        // Expert MLP down-projection (per expert)
+        operations.push({
+            name: 'Expert MLP Down (4D→D)',
+            color: '#a855f7',
+            intensity: (2 * samplingTokensPerExpert * (4 * d) * d) / ((4 * d * d * 2) + (samplingTokensPerExpert * 4 * d * 2) + (samplingTokensPerExpert * d * 2)),
+            flopsFormula: '2·B·K·4D·D/E',
+            bytesFormula: '(4D²+B·K·4D/E+B·K·D/E)·2'
+        });
+
+        // Output embedding projection (only for new token)
+        operations.push({
+            name: 'Output Embedding',
+            color: '#ef4444',
+            intensity: (2 * b * d * v) / ((d * v * 2) + (b * d * 2) + (b * v * 2)),
+            flopsFormula: '2·B·D·V',
+            bytesFormula: '(D·V+B·D+B·V)·2'
+        });
+    }
+
+    // Sort by intensity (descending)
+    operations.sort((a, b) => b.intensity - a.intensity);
+
+    // Generate cards HTML
+    const cardsContainer = document.getElementById('intensityCards');
+    cardsContainer.innerHTML = operations.map(op => {
+        const isMemoryBound = op.intensity < hwIntensity;
+        const badge = isMemoryBound
+            ? '<span style="display: inline-block; margin-left: 0.5rem; padding: 0.125rem 0.5rem; background-color: #fef3c7; color: #92400e; font-size: 0.65rem; font-weight: 600; border-radius: 0.25rem;">MEMORY-BOUND</span>'
+            : '<span style="display: inline-block; margin-left: 0.5rem; padding: 0.125rem 0.5rem; background-color: #dbeafe; color: #1e40af; font-size: 0.65rem; font-weight: 600; border-radius: 0.25rem;">COMPUTE-BOUND</span>';
+        const borderColor = isMemoryBound ? '#fde047' : 'var(--slate-200)';
+
+        return `
+            <div style="background-color: white; border: 2px solid ${borderColor}; border-radius: 0.5rem; padding: 1rem;">
+                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
+                    <div style="width: 12px; height: 12px; background-color: ${op.color}; border-radius: 2px;"></div>
+                    <div style="font-weight: 700; font-size: 0.875rem; color: var(--slate-800);">${op.name}</div>
+                    ${badge}
+                </div>
+                <div style="font-family: 'SF Mono', monospace; font-size: 1.25rem; font-weight: 700; color: var(--slate-800);">${op.intensity.toFixed(2)}</div>
+                <div style="font-size: 0.7rem; color: var(--slate-500); margin-top: 0.25rem;">FLOPs/byte</div>
+                <div style="margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid var(--slate-100); font-size: 0.65rem; color: var(--slate-600); font-family: 'SF Mono', monospace;">
+                    <div>FLOPs: ${op.flopsFormula}</div>
+                    <div style="margin-top: 0.25rem;">Bytes: ${op.bytesFormula}</div>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+// Add event listeners for parameter inputs
+document.getElementById('modelDim').addEventListener('input', calculateIntensities);
+document.getElementById('seqLen').addEventListener('input', calculateIntensities);
+document.getElementById('batchSize').addEventListener('input', calculateIntensities);
+document.getElementById('vocabSize').addEventListener('input', calculateIntensities);
+document.getElementById('numExperts').addEventListener('input', calculateIntensities);
+document.getElementById('topK').addEventListener('input', calculateIntensities);
+
+// Initialize hardware display and calculations
+updateHardwareDisplay();
+</script>
+
+</body>
+</html>
