@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UK Tax Calculator</title>
+    <title>Tax Calculator</title>
     <style>
         :root {
             /* Color Palette */
@@ -165,6 +165,45 @@
             width: 18px;
         }
 
+        /* Location Tabs */
+        .location-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .location-tab {
+            padding: 0.5rem 1.25rem;
+            border: 2px solid var(--slate-200);
+            border-radius: 9999px;
+            background-color: var(--bg-card);
+            color: var(--slate-600);
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .location-tab:hover {
+            border-color: var(--blue-500);
+            color: var(--blue-700);
+            background-color: var(--blue-50);
+        }
+
+        .location-tab.active {
+            border-color: var(--blue-600);
+            background-color: var(--blue-600);
+            color: white;
+        }
+
+        .location-tab .tab-flag {
+            font-size: 1rem;
+        }
+
         /* Results Table */
         .results-table {
             width: 100%;
@@ -262,6 +301,19 @@
             font-weight: 700;
         }
 
+        .tax-layer-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--slate-600);
+            margin: 0.75rem 0 0.5rem 0;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .tax-layer-title:first-child {
+            margin-top: 0;
+        }
+
         .effective-rate {
             margin-top: 1rem;
             padding-top: 1rem;
@@ -314,6 +366,15 @@
             .results-table td {
                 padding: 0.5rem;
             }
+
+            .location-tabs {
+                gap: 0.375rem;
+            }
+
+            .location-tab {
+                padding: 0.4rem 0.75rem;
+                font-size: 0.8rem;
+            }
         }
     </style>
 </head>
@@ -327,10 +388,26 @@
     </nav>
 
     <header class="header">
-        <h1>UK Tax Calculator</h1>
-        <p>Calculate UK income tax with automatic currency conversion (GBP, USD, EUR)</p>
+        <h1>Tax Calculator</h1>
+        <p>Calculate income tax for different locations with automatic currency conversion</p>
         <p id="ratesStatus" style="font-size: 0.75rem; color: var(--slate-400); margin-top: 0.25rem;">Loading exchange rates...</p>
     </header>
+
+    <!-- Location Tabs -->
+    <div class="location-tabs" id="locationTabs">
+        <button class="location-tab active" data-location="london">
+            <span class="tab-flag">&#127468;&#127463;</span> London
+        </button>
+        <button class="location-tab" data-location="paris">
+            <span class="tab-flag">&#127467;&#127479;</span> Paris
+        </button>
+        <button class="location-tab" data-location="nyc">
+            <span class="tab-flag">&#127482;&#127480;</span> New York City
+        </button>
+        <button class="location-tab" data-location="sf">
+            <span class="tab-flag">&#127482;&#127480;</span> San Francisco
+        </button>
+    </div>
 
     <!-- Input Panel -->
     <div class="panel">
@@ -350,9 +427,9 @@
             <div class="form-group">
                 <label class="label-sm">Currency</label>
                 <select id="currencySelect" class="form-control">
-                    <option value="GBP">£ GBP (British Pound)</option>
+                    <option value="GBP">&pound; GBP (British Pound)</option>
                     <option value="USD">$ USD (US Dollar)</option>
-                    <option value="EUR">€ EUR (Euro)</option>
+                    <option value="EUR">&euro; EUR (Euro)</option>
                 </select>
             </div>
         </div>
@@ -360,15 +437,15 @@
 
     <!-- Results Panel -->
     <div class="panel" id="resultsPanel">
-        <h2 class="section-title">Tax Calculation Results</h2>
+        <h2 class="section-title" id="resultsSectionTitle">Tax Calculation Results</h2>
 
         <table class="results-table">
             <thead>
                 <tr>
                     <th></th>
-                    <th class="currency-header">GBP (£)</th>
+                    <th class="currency-header">GBP (&pound;)</th>
                     <th class="currency-header">USD ($)</th>
-                    <th class="currency-header">EUR (€)</th>
+                    <th class="currency-header">EUR (&euro;)</th>
                 </tr>
             </thead>
             <tbody>
@@ -407,7 +484,7 @@
 
         <!-- Tax Breakdown -->
         <div class="tax-breakdown">
-            <h3>UK Tax Breakdown</h3>
+            <h3 id="taxBreakdownTitle">Tax Breakdown</h3>
             <div id="taxBrackets"></div>
             <div class="effective-rate">
                 <span>Effective Tax Rate</span>
@@ -417,48 +494,190 @@
     </div>
 
 <script>
-    // Exchange rates (fallback values if API fails)
+    // ==================== EXCHANGE RATES ====================
     const EXCHANGE_RATES = {
         'GBP': 1.0,
-        'USD': 1.27,  // Fallback: 1 GBP = 1.27 USD
-        'EUR': 1.20   // Fallback: 1 GBP = 1.20 EUR
+        'USD': 1.27,
+        'EUR': 1.20
     };
 
     let ratesLastUpdated = null;
 
-    // UK Tax Brackets for 2024/2025 (England, Wales, Northern Ireland)
-    const TAX_BRACKETS = [
-        { limit: 12570, rate: 0.00, name: 'Personal Allowance' },
-        { limit: 50270, rate: 0.20, name: 'Basic Rate' },
-        { limit: 125140, rate: 0.40, name: 'Higher Rate' },
-        { limit: Infinity, rate: 0.45, name: 'Additional Rate' }
-    ];
+    // ==================== LOCATION TAX CONFIGS ====================
+    const LOCATIONS = {
+        london: {
+            name: 'London, UK',
+            localCurrency: 'GBP',
+            taxLayers: [
+                {
+                    name: 'Income Tax',
+                    brackets: [
+                        { limit: 12570, rate: 0.00, name: 'Personal Allowance' },
+                        { limit: 50270, rate: 0.20, name: 'Basic Rate' },
+                        { limit: 125140, rate: 0.40, name: 'Higher Rate' },
+                        { limit: Infinity, rate: 0.45, name: 'Additional Rate' }
+                    ]
+                },
+                {
+                    name: 'National Insurance',
+                    brackets: [
+                        { limit: 12570, rate: 0.00, name: 'NI Threshold' },
+                        { limit: 50270, rate: 0.08, name: 'Main Rate' },
+                        { limit: Infinity, rate: 0.02, name: 'Upper Rate' }
+                    ]
+                }
+            ]
+        },
+        paris: {
+            name: 'Paris, France',
+            localCurrency: 'EUR',
+            taxLayers: [
+                {
+                    name: 'Income Tax (Imp\u00f4t sur le revenu)',
+                    brackets: [
+                        { limit: 11294, rate: 0.00, name: 'Tranche 1' },
+                        { limit: 28797, rate: 0.11, name: 'Tranche 2 (11%)' },
+                        { limit: 82341, rate: 0.30, name: 'Tranche 3 (30%)' },
+                        { limit: 177106, rate: 0.41, name: 'Tranche 4 (41%)' },
+                        { limit: Infinity, rate: 0.45, name: 'Tranche 5 (45%)' }
+                    ]
+                },
+                {
+                    name: 'Social Contributions (CSG/CRDS)',
+                    // Simplified: ~9.7% flat on gross salary for employees
+                    brackets: [
+                        { limit: Infinity, rate: 0.097, name: 'CSG + CRDS (9.7%)' }
+                    ]
+                }
+            ]
+        },
+        nyc: {
+            name: 'New York City',
+            localCurrency: 'USD',
+            taxLayers: [
+                {
+                    name: 'Federal Income Tax',
+                    brackets: [
+                        { limit: 11600, rate: 0.10, name: '10% Bracket' },
+                        { limit: 47150, rate: 0.12, name: '12% Bracket' },
+                        { limit: 100525, rate: 0.22, name: '22% Bracket' },
+                        { limit: 191950, rate: 0.24, name: '24% Bracket' },
+                        { limit: 243725, rate: 0.32, name: '32% Bracket' },
+                        { limit: 609350, rate: 0.35, name: '35% Bracket' },
+                        { limit: Infinity, rate: 0.37, name: '37% Bracket' }
+                    ]
+                },
+                {
+                    name: 'NY State Tax',
+                    brackets: [
+                        { limit: 8500, rate: 0.04, name: '4% Bracket' },
+                        { limit: 11700, rate: 0.045, name: '4.5% Bracket' },
+                        { limit: 13900, rate: 0.0525, name: '5.25% Bracket' },
+                        { limit: 80650, rate: 0.055, name: '5.5% Bracket' },
+                        { limit: 215400, rate: 0.06, name: '6% Bracket' },
+                        { limit: 1077550, rate: 0.0685, name: '6.85% Bracket' },
+                        { limit: 5000000, rate: 0.0965, name: '9.65% Bracket' },
+                        { limit: 25000000, rate: 0.103, name: '10.3% Bracket' },
+                        { limit: Infinity, rate: 0.109, name: '10.9% Bracket' }
+                    ]
+                },
+                {
+                    name: 'NYC City Tax',
+                    brackets: [
+                        { limit: 12000, rate: 0.03078, name: '3.078% Bracket' },
+                        { limit: 25000, rate: 0.03762, name: '3.762% Bracket' },
+                        { limit: 50000, rate: 0.03819, name: '3.819% Bracket' },
+                        { limit: Infinity, rate: 0.03876, name: '3.876% Bracket' }
+                    ]
+                },
+                {
+                    name: 'FICA (Social Security + Medicare)',
+                    brackets: [
+                        { limit: 168600, rate: 0.0765, name: 'SS (6.2%) + Medicare (1.45%)' },
+                        { limit: Infinity, rate: 0.0145, name: 'Medicare only (1.45%)' }
+                    ]
+                }
+            ]
+        },
+        sf: {
+            name: 'San Francisco',
+            localCurrency: 'USD',
+            taxLayers: [
+                {
+                    name: 'Federal Income Tax',
+                    brackets: [
+                        { limit: 11600, rate: 0.10, name: '10% Bracket' },
+                        { limit: 47150, rate: 0.12, name: '12% Bracket' },
+                        { limit: 100525, rate: 0.22, name: '22% Bracket' },
+                        { limit: 191950, rate: 0.24, name: '24% Bracket' },
+                        { limit: 243725, rate: 0.32, name: '32% Bracket' },
+                        { limit: 609350, rate: 0.35, name: '35% Bracket' },
+                        { limit: Infinity, rate: 0.37, name: '37% Bracket' }
+                    ]
+                },
+                {
+                    name: 'California State Tax',
+                    brackets: [
+                        { limit: 10412, rate: 0.01, name: '1% Bracket' },
+                        { limit: 24684, rate: 0.02, name: '2% Bracket' },
+                        { limit: 38959, rate: 0.04, name: '4% Bracket' },
+                        { limit: 54081, rate: 0.06, name: '6% Bracket' },
+                        { limit: 68350, rate: 0.08, name: '8% Bracket' },
+                        { limit: 349137, rate: 0.093, name: '9.3% Bracket' },
+                        { limit: 418961, rate: 0.103, name: '10.3% Bracket' },
+                        { limit: 698271, rate: 0.113, name: '11.3% Bracket' },
+                        { limit: 1000000, rate: 0.123, name: '12.3% Bracket' },
+                        { limit: Infinity, rate: 0.133, name: '13.3% (Mental Health Surtax)' }
+                    ]
+                },
+                {
+                    name: 'CA SDI (State Disability Insurance)',
+                    brackets: [
+                        { limit: Infinity, rate: 0.011, name: 'SDI (1.1%)' }
+                    ]
+                },
+                {
+                    name: 'FICA (Social Security + Medicare)',
+                    brackets: [
+                        { limit: 168600, rate: 0.0765, name: 'SS (6.2%) + Medicare (1.45%)' },
+                        { limit: Infinity, rate: 0.0145, name: 'Medicare only (1.45%)' }
+                    ]
+                }
+            ]
+        }
+    };
 
-    // Format currency with commas and 2 decimal places
-    function formatCurrency(amount, symbol = '') {
+    let activeLocation = 'london';
+
+    // ==================== UTILITIES ====================
+
+    function formatCurrency(amount, symbol) {
+        if (symbol === undefined) symbol = '';
         const formatted = amount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-        return symbol ? `${symbol}${formatted}` : formatted;
+        return symbol ? symbol + formatted : formatted;
     }
 
-    // Convert amount from input currency to GBP
-    function convertToGBP(amount, currency) {
-        return amount / EXCHANGE_RATES[currency];
+    function convertToLocal(amount, fromCurrency, localCurrency) {
+        // Convert from input currency to local currency via GBP as base
+        const amountInGBP = amount / EXCHANGE_RATES[fromCurrency];
+        return amountInGBP * EXCHANGE_RATES[localCurrency];
     }
 
-    // Convert amount from GBP to target currency
-    function convertFromGBP(amount, currency) {
-        return amount * EXCHANGE_RATES[currency];
+    function convertFromLocal(amount, localCurrency, toCurrency) {
+        const amountInGBP = amount / EXCHANGE_RATES[localCurrency];
+        return amountInGBP * EXCHANGE_RATES[toCurrency];
     }
 
-    // Calculate UK income tax
-    function calculateUKTax(incomeGBP) {
+    // ==================== TAX CALCULATION ====================
+
+    function calculateBracketTax(income, brackets) {
         let totalTax = 0;
         let previousLimit = 0;
         const breakdown = [];
 
-        for (let i = 0; i < TAX_BRACKETS.length; i++) {
-            const bracket = TAX_BRACKETS[i];
-            const taxableInThisBracket = Math.min(incomeGBP, bracket.limit) - previousLimit;
+        for (let i = 0; i < brackets.length; i++) {
+            const bracket = brackets[i];
+            const taxableInThisBracket = Math.min(income, bracket.limit) - previousLimit;
 
             if (taxableInThisBracket > 0) {
                 const taxInThisBracket = taxableInThisBracket * bracket.rate;
@@ -471,155 +690,207 @@
                     taxAmount: taxInThisBracket
                 });
 
-                if (incomeGBP <= bracket.limit) {
-                    break;
-                }
+                if (income <= bracket.limit) break;
             }
 
             previousLimit = bracket.limit;
         }
 
-        const effectiveRate = incomeGBP > 0 ? (totalTax / incomeGBP) * 100 : 0;
+        return { totalTax, breakdown };
+    }
+
+    function calculateTax(incomeLocal, location) {
+        const config = LOCATIONS[location];
+        let totalTax = 0;
+        const layerResults = [];
+
+        for (const layer of config.taxLayers) {
+            const result = calculateBracketTax(incomeLocal, layer.brackets);
+            totalTax += result.totalTax;
+            layerResults.push({
+                name: layer.name,
+                totalTax: result.totalTax,
+                breakdown: result.breakdown
+            });
+        }
+
+        const effectiveRate = incomeLocal > 0 ? (totalTax / incomeLocal) * 100 : 0;
 
         return {
             totalTax,
-            breakdown,
+            layerResults,
             effectiveRate,
-            postTax: incomeGBP - totalTax
+            postTax: incomeLocal - totalTax
         };
     }
 
-    // Update all calculations and display
+    // ==================== UI UPDATE ====================
+
     function updateCalculations() {
         const incomeInput = parseFloat(document.getElementById('incomeInput').value) || 0;
         const compareInput = parseFloat(document.getElementById('compareInput').value) || 0;
-        const currency = document.getElementById('currencySelect').value;
+        const inputCurrency = document.getElementById('currencySelect').value;
+        const config = LOCATIONS[activeLocation];
+        const localCurrency = config.localCurrency;
+        const localSymbol = localCurrency === 'GBP' ? '\u00a3' : (localCurrency === 'USD' ? '$' : '\u20ac');
 
-        // Convert to GBP
-        const incomeGBP = convertToGBP(incomeInput, currency);
-        const compareGBP = compareInput > 0 ? convertToGBP(compareInput, currency) : 0;
+        // Convert input to the location's local currency
+        const incomeLocal = convertToLocal(incomeInput, inputCurrency, localCurrency);
+        const compareLocal = compareInput > 0 ? convertToLocal(compareInput, inputCurrency, localCurrency) : 0;
 
-        // Calculate tax
-        const taxResult = calculateUKTax(incomeGBP);
-        const compareTaxResult = compareGBP > 0 ? calculateUKTax(compareGBP) : null;
+        // Calculate tax in local currency
+        const taxResult = calculateTax(incomeLocal, activeLocation);
+        const compareTaxResult = compareLocal > 0 ? calculateTax(compareLocal, activeLocation) : null;
+
+        // Convert results to GBP for cross-currency display
+        const incomeGBP = incomeLocal / EXCHANGE_RATES[localCurrency];
+        const taxGBP = taxResult.totalTax / EXCHANGE_RATES[localCurrency];
+        const postTaxGBP = taxResult.postTax / EXCHANGE_RATES[localCurrency];
 
         // Update table for all three currencies
-        ['GBP', 'USD', 'EUR'].forEach(curr => {
-            const symbol = curr === 'GBP' ? '£' : (curr === 'USD' ? '$' : '€');
+        ['GBP', 'USD', 'EUR'].forEach(function(curr) {
+            const symbol = curr === 'GBP' ? '\u00a3' : (curr === 'USD' ? '$' : '\u20ac');
 
-            const preTax = convertFromGBP(incomeGBP, curr);
-            const tax = convertFromGBP(taxResult.totalTax, curr);
-            const postTax = convertFromGBP(taxResult.postTax, curr);
+            const preTax = incomeGBP * EXCHANGE_RATES[curr];
+            const tax = taxGBP * EXCHANGE_RATES[curr];
+            const postTax = postTaxGBP * EXCHANGE_RATES[curr];
             const monthly = postTax / 12;
             const daily = postTax / 365;
 
-            // Format main values
             let preTaxHTML = formatCurrency(preTax, symbol);
             let taxHTML = formatCurrency(tax, symbol);
             let postTaxHTML = formatCurrency(postTax, symbol);
             let monthlyHTML = formatCurrency(monthly, symbol);
             let dailyHTML = formatCurrency(daily, symbol);
 
-            // If comparison is active, add deltas
             if (compareTaxResult) {
-                const comparePreTax = convertFromGBP(compareGBP, curr);
-                const compareTax = convertFromGBP(compareTaxResult.totalTax, curr);
-                const comparePostTax = convertFromGBP(compareTaxResult.postTax, curr);
+                const compareGBP = compareLocal / EXCHANGE_RATES[localCurrency];
+                const compareTaxGBPVal = compareTaxResult.totalTax / EXCHANGE_RATES[localCurrency];
+                const comparePostTaxGBPVal = compareTaxResult.postTax / EXCHANGE_RATES[localCurrency];
+
+                const comparePreTax = compareGBP * EXCHANGE_RATES[curr];
+                const compareTax = compareTaxGBPVal * EXCHANGE_RATES[curr];
+                const comparePostTax = comparePostTaxGBPVal * EXCHANGE_RATES[curr];
                 const compareMonthly = comparePostTax / 12;
                 const compareDaily = comparePostTax / 365;
 
-                const deltaPreTax = comparePreTax - preTax;
-                const deltaTax = compareTax - tax;
-                const deltaPostTax = comparePostTax - postTax;
-                const deltaMonthly = compareMonthly - monthly;
-                const deltaDaily = compareDaily - daily;
-
-                const formatDelta = (delta) => {
+                var formatDelta = function(delta) {
                     const sign = delta >= 0 ? '+' : '-';
                     const className = delta > 0 ? 'positive' : (delta < 0 ? 'negative' : '');
-                    return `<span class="value-delta ${className}">${sign}${formatCurrency(Math.abs(delta), symbol)}</span>`;
+                    return '<span class="value-delta ' + className + '">' + sign + formatCurrency(Math.abs(delta), symbol) + '</span>';
                 };
 
-                preTaxHTML += formatDelta(deltaPreTax);
-                taxHTML += formatDelta(deltaTax);
-                postTaxHTML += formatDelta(deltaPostTax);
-                monthlyHTML += formatDelta(deltaMonthly);
-                dailyHTML += formatDelta(deltaDaily);
+                preTaxHTML += formatDelta(comparePreTax - preTax);
+                taxHTML += formatDelta(compareTax - tax);
+                postTaxHTML += formatDelta(comparePostTax - postTax);
+                monthlyHTML += formatDelta(compareMonthly - monthly);
+                dailyHTML += formatDelta(compareDaily - daily);
             }
 
-            document.getElementById(`preTax${curr}`).innerHTML = preTaxHTML;
-            document.getElementById(`tax${curr}`).innerHTML = taxHTML;
-            document.getElementById(`postTax${curr}`).innerHTML = postTaxHTML;
-            document.getElementById(`monthly${curr}`).innerHTML = monthlyHTML;
-            document.getElementById(`daily${curr}`).innerHTML = dailyHTML;
+            document.getElementById('preTax' + curr).innerHTML = preTaxHTML;
+            document.getElementById('tax' + curr).innerHTML = taxHTML;
+            document.getElementById('postTax' + curr).innerHTML = postTaxHTML;
+            document.getElementById('monthly' + curr).innerHTML = monthlyHTML;
+            document.getElementById('daily' + curr).innerHTML = dailyHTML;
         });
 
-        // Update tax breakdown
+        // Update tax breakdown with layers
         const taxBracketsDiv = document.getElementById('taxBrackets');
         taxBracketsDiv.innerHTML = '';
 
-        taxResult.breakdown.forEach(bracket => {
-            if (bracket.taxableAmount > 0) {
-                const bracketDiv = document.createElement('div');
-                bracketDiv.className = 'tax-bracket';
+        taxResult.layerResults.forEach(function(layer) {
+            const layerTitle = document.createElement('div');
+            layerTitle.className = 'tax-layer-title';
+            layerTitle.textContent = layer.name;
+            taxBracketsDiv.appendChild(layerTitle);
 
-                const rateText = bracket.rate === 0 ? 'Tax-free' : `${(bracket.rate * 100).toFixed(0)}% on £${formatCurrency(bracket.taxableAmount, '')}`;
+            layer.breakdown.forEach(function(bracket) {
+                if (bracket.taxableAmount > 0) {
+                    const bracketDiv = document.createElement('div');
+                    bracketDiv.className = 'tax-bracket';
 
-                bracketDiv.innerHTML = `
-                    <span class="tax-bracket-label">${bracket.name}: ${rateText}</span>
-                    <span class="tax-bracket-amount">£${formatCurrency(bracket.taxAmount, '')}</span>
-                `;
+                    const rateText = bracket.rate === 0
+                        ? 'Tax-free'
+                        : (bracket.rate * 100).toFixed(2).replace(/\.?0+$/, '') + '% on ' + localSymbol + formatCurrency(bracket.taxableAmount, '');
 
-                taxBracketsDiv.appendChild(bracketDiv);
-            }
+                    bracketDiv.innerHTML =
+                        '<span class="tax-bracket-label">' + bracket.name + ': ' + rateText + '</span>' +
+                        '<span class="tax-bracket-amount">' + localSymbol + formatCurrency(bracket.taxAmount, '') + '</span>';
+
+                    taxBracketsDiv.appendChild(bracketDiv);
+                }
+            });
         });
 
         // Update effective rate
-        document.getElementById('effectiveRate').textContent = `${taxResult.effectiveRate.toFixed(1)}%`;
+        document.getElementById('effectiveRate').textContent = taxResult.effectiveRate.toFixed(1) + '%';
+
+        // Update titles
+        document.getElementById('taxBreakdownTitle').textContent = config.name + ' Tax Breakdown';
+        document.getElementById('resultsSectionTitle').textContent = config.name + ' \u2014 Tax Calculation Results';
     }
 
-    // Fetch live exchange rates from Frankfurter API
+    // ==================== TAB SWITCHING ====================
+
+    function switchLocation(location) {
+        activeLocation = location;
+
+        // Update tab UI
+        document.querySelectorAll('.location-tab').forEach(function(tab) {
+            tab.classList.remove('active');
+            if (tab.getAttribute('data-location') === location) {
+                tab.classList.add('active');
+            }
+        });
+
+        // Recalculate (inputs are preserved since we don't touch them)
+        updateCalculations();
+    }
+
+    // ==================== EVENT LISTENERS ====================
+
+    document.querySelectorAll('.location-tab').forEach(function(tab) {
+        tab.addEventListener('click', function() {
+            switchLocation(this.getAttribute('data-location'));
+        });
+    });
+
+    document.getElementById('incomeInput').addEventListener('input', updateCalculations);
+    document.getElementById('compareInput').addEventListener('input', updateCalculations);
+    document.getElementById('currencySelect').addEventListener('change', updateCalculations);
+
+    // ==================== FETCH LIVE RATES ====================
+
     function fetchLiveRates() {
         const statusEl = document.getElementById('ratesStatus');
         statusEl.textContent = 'Loading live exchange rates...';
         statusEl.style.color = 'var(--slate-400)';
 
         fetch('https://api.frankfurter.app/latest?from=GBP&to=USD,EUR')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('API request failed');
-                }
+            .then(function(response) {
+                if (!response.ok) throw new Error('API request failed');
                 return response.json();
             })
-            .then(data => {
-                // Update rates with live data
+            .then(function(data) {
                 EXCHANGE_RATES.USD = data.rates.USD;
                 EXCHANGE_RATES.EUR = data.rates.EUR;
                 ratesLastUpdated = new Date(data.date);
 
-                // Update status
-                statusEl.textContent = `Live exchange rates updated: ${data.date} (1 GBP = ${data.rates.USD.toFixed(3)} USD, ${data.rates.EUR.toFixed(3)} EUR)`;
+                statusEl.textContent = 'Live exchange rates updated: ' + data.date + ' (1 GBP = ' + data.rates.USD.toFixed(3) + ' USD, ' + data.rates.EUR.toFixed(3) + ' EUR)';
                 statusEl.style.color = 'var(--green-600)';
 
-                // Recalculate with new rates
                 updateCalculations();
             })
-            .catch(error => {
+            .catch(function(error) {
                 console.error('Failed to fetch exchange rates:', error);
                 statusEl.textContent = 'Using approximate exchange rates (live rates unavailable)';
                 statusEl.style.color = 'var(--orange-600)';
 
-                // Still calculate with fallback rates
                 updateCalculations();
             });
     }
 
-    // Event listeners
-    document.getElementById('incomeInput').addEventListener('input', updateCalculations);
-    document.getElementById('compareInput').addEventListener('input', updateCalculations);
-    document.getElementById('currencySelect').addEventListener('change', updateCalculations);
-
-    // Fetch live rates on page load
+    // Init
     fetchLiveRates();
 </script>
 
