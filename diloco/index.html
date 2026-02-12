@@ -764,13 +764,8 @@
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
             <div>
                 <label class="label-sm">Model Size</label>
-                <select id="modelSizeSelect" class="form-control">
-                    <option value="1000000000">1B Params</option>
-                    <option value="10000000000" selected>10B Params</option>
-                    <option value="100000000000">100B Params</option>
-                    <option value="1000000000000">1T Params</option>
-                </select>
-                <div class="label-sub">N (number of parameters)</div>
+                <input type="text" id="modelSizeInput" value="10" class="form-control formatted-input model-size-input">
+                <div class="label-sub">Billion parameters (N)</div>
             </div>
 
             <div>
@@ -956,6 +951,14 @@
         return parseFloat(str.replace(/,/g, '')) || 0;
     };
 
+    // Get model size in actual parameter count (not billions)
+    const getModelSize = () => {
+        const input = document.getElementById('modelSizeInput');
+        if (!input) return 10e9; // Default fallback
+        const billions = parseNumber(input.value);
+        return billions * 1e9;
+    };
+
     function formatCapacity(bps) {
         const gbps = bps / 1e9;
         if (gbps < 1000) {
@@ -982,8 +985,22 @@
         input.addEventListener('input', updateConfigurations);
     });
 
-    // Model Size Dropdown
-    document.getElementById('modelSizeSelect').addEventListener('change', updateConfigurations);
+    // Model Size Input with special formatting
+    const modelSizeInput = document.getElementById('modelSizeInput');
+    modelSizeInput.addEventListener('focus', function() {
+        this.value = this.value.replace(/,/g, '');
+        this.select();
+    });
+    modelSizeInput.addEventListener('blur', function() {
+        const val = parseFloat(this.value.replace(/,/g, '')) || 10;
+        // Add comma formatting for values >= 1000
+        if (val >= 1000) {
+            this.value = val.toLocaleString('en-US');
+        } else {
+            this.value = val.toString();
+        }
+    });
+    modelSizeInput.addEventListener('input', updateConfigurations);
 
     // Wire up all input listeners for global settings
     document.getElementById('numDatacenters').addEventListener('input', updateConfigurations);
@@ -1300,7 +1317,7 @@
      */
     function calculateCore(H, bytesPerParam, S, P_user, overrideInterBw) {
         // Fetch global values
-        const N = parseFloat(document.getElementById('modelSizeSelect').value);
+        const N = getModelSize();
         const secondsPerStep = parseNumber(document.getElementById('secondsPerStep').value);
         const M = parseNumber(document.getElementById('numDatacenters').value);
         const B_gbps = overrideInterBw !== undefined ? overrideInterBw : 100; // default
@@ -1635,7 +1652,7 @@
         const padding = { top: 20, right: 20, bottom: 40, left: 50 };
 
         // Get global config
-        const N = parseFloat(document.getElementById('modelSizeSelect').value);
+        const N = getModelSize();
         const secondsPerStep = parseNumber(document.getElementById('secondsPerStep').value);
         const M = parseNumber(document.getElementById('numDatacenters').value);
 
@@ -1800,7 +1817,7 @@
                     // Calculate All-Reduce time for this bandwidth
                     const B_bps = closestPoint.x * 1e9;
                     const alpha = 0.002; // 2ms latency
-                    const N = parseFloat(document.getElementById('modelSizeSelect').value);
+                    const N = getModelSize();
                     const M = parseNumber(document.getElementById('numDatacenters').value);
 
                     let arTime = 0;
@@ -1967,7 +1984,7 @@
 
         // Collect all configuration values
         const config = {
-            'N': document.getElementById('modelSizeSelect').value,
+            'N': parseNumber(document.getElementById('modelSizeInput').value),
             'secondsPerStep': parseNumber(document.getElementById('secondsPerStep').value),
             'M': parseNumber(document.getElementById('numDatacenters').value),
             'dp_dtype': document.getElementById('dp_dtype').value,
@@ -1997,7 +2014,7 @@
 
         // Map of URL param names to input element IDs
         const paramMap = {
-            'N': 'modelSizeSelect',
+            'N': 'modelSizeInput',
             'secondsPerStep': 'secondsPerStep',
             'M': 'numDatacenters',
             'dp_dtype': 'dp_dtype',
@@ -2019,8 +2036,13 @@
                 const element = document.getElementById(elementId);
 
                 if (element) {
-                    // For formatted inputs, apply formatting
-                    if (element.classList.contains('formatted-input')) {
+                    // Special handling for model size input (add commas for >= 1000)
+                    if (elementId === 'modelSizeInput') {
+                        const val = parseFloat(value) || 10;
+                        element.value = val >= 1000 ? val.toLocaleString('en-US') : val.toString();
+                    }
+                    // For other formatted inputs, apply standard formatting
+                    else if (element.classList.contains('formatted-input')) {
                         element.value = formatNumber(value);
                     } else {
                         element.value = value;
