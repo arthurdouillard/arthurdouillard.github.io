@@ -359,12 +359,46 @@
             }
 
             .results-table {
-                font-size: 0.75rem;
+                font-size: 0.8rem;
             }
 
-            .results-table th,
-            .results-table td {
-                padding: 0.5rem;
+            .results-table thead {
+                display: none;
+            }
+
+            .results-table tbody tr {
+                display: block;
+                margin-bottom: 1rem;
+                border: 1px solid var(--slate-200);
+                border-radius: 0.5rem;
+                overflow: hidden;
+            }
+
+            .results-table tbody td {
+                display: flex;
+                justify-content: space-between;
+                align-items: baseline;
+                padding: 0.5rem 0.75rem;
+                border: none;
+                border-bottom: 1px solid var(--slate-100);
+            }
+
+            .results-table tbody td:last-child {
+                border-bottom: none;
+            }
+
+            .results-table tbody td.row-label {
+                background-color: var(--slate-100);
+                font-weight: 700;
+                display: block;
+                padding: 0.5rem 0.75rem;
+            }
+
+            .results-table tbody td.currency-value::before {
+                content: attr(data-label);
+                font-weight: 600;
+                color: var(--slate-600);
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             }
 
             .location-tabs {
@@ -416,10 +450,10 @@
         <div class="input-row">
             <div class="form-group">
                 <label class="label-sm">Annual Income</label>
-                <input type="number" id="incomeInput" class="form-control" placeholder="50000" value="50000" min="0" step="1000">
+                <input type="text" id="incomeInput" class="form-control" inputmode="numeric" placeholder="50,000" value="50,000">
                 <div style="margin-top: 0.75rem;">
                     <label class="label-sm" style="color: var(--orange-600); font-size: 0.7rem;">Compare with New Income (optional)</label>
-                    <input type="number" id="compareInput" class="form-control" placeholder="Enter new income to compare" min="0" step="1000" style="font-size: 0.8rem; padding: 0.4rem;">
+                    <input type="text" id="compareInput" class="form-control" inputmode="numeric" placeholder="Enter new income to compare" style="font-size: 0.8rem; padding: 0.4rem;">
                     <div style="font-size: 0.65rem; color: var(--slate-400); margin-top: 0.25rem;">Leave empty to hide comparison</div>
                 </div>
             </div>
@@ -427,8 +461,8 @@
             <div class="form-group">
                 <label class="label-sm">Currency</label>
                 <select id="currencySelect" class="form-control">
-                    <option value="GBP">&pound; GBP (British Pound)</option>
                     <option value="USD">$ USD (US Dollar)</option>
+                    <option value="GBP">&pound; GBP (British Pound)</option>
                     <option value="EUR">&euro; EUR (Euro)</option>
                 </select>
             </div>
@@ -451,33 +485,33 @@
             <tbody>
                 <tr>
                     <td class="row-label">Annual Pre-Tax</td>
-                    <td class="currency-value" id="preTaxGBP">-</td>
-                    <td class="currency-value" id="preTaxUSD">-</td>
-                    <td class="currency-value" id="preTaxEUR">-</td>
+                    <td class="currency-value" id="preTaxGBP" data-label="GBP (£)">-</td>
+                    <td class="currency-value" id="preTaxUSD" data-label="USD ($)">-</td>
+                    <td class="currency-value" id="preTaxEUR" data-label="EUR (€)">-</td>
                 </tr>
                 <tr>
                     <td class="row-label">Annual Tax</td>
-                    <td class="currency-value" id="taxGBP">-</td>
-                    <td class="currency-value" id="taxUSD">-</td>
-                    <td class="currency-value" id="taxEUR">-</td>
+                    <td class="currency-value" id="taxGBP" data-label="GBP (£)">-</td>
+                    <td class="currency-value" id="taxUSD" data-label="USD ($)">-</td>
+                    <td class="currency-value" id="taxEUR" data-label="EUR (€)">-</td>
                 </tr>
                 <tr>
                     <td class="row-label">Annual Post-Tax</td>
-                    <td class="currency-value" id="postTaxGBP">-</td>
-                    <td class="currency-value" id="postTaxUSD">-</td>
-                    <td class="currency-value" id="postTaxEUR">-</td>
+                    <td class="currency-value" id="postTaxGBP" data-label="GBP (£)">-</td>
+                    <td class="currency-value" id="postTaxUSD" data-label="USD ($)">-</td>
+                    <td class="currency-value" id="postTaxEUR" data-label="EUR (€)">-</td>
                 </tr>
                 <tr>
                     <td class="row-label">Monthly Post-Tax</td>
-                    <td class="currency-value" id="monthlyGBP">-</td>
-                    <td class="currency-value" id="monthlyUSD">-</td>
-                    <td class="currency-value" id="monthlyEUR">-</td>
+                    <td class="currency-value" id="monthlyGBP" data-label="GBP (£)">-</td>
+                    <td class="currency-value" id="monthlyUSD" data-label="USD ($)">-</td>
+                    <td class="currency-value" id="monthlyEUR" data-label="EUR (€)">-</td>
                 </tr>
                 <tr>
                     <td class="row-label">Daily Post-Tax</td>
-                    <td class="currency-value" id="dailyGBP">-</td>
-                    <td class="currency-value" id="dailyUSD">-</td>
-                    <td class="currency-value" id="dailyEUR">-</td>
+                    <td class="currency-value" id="dailyGBP" data-label="GBP (£)">-</td>
+                    <td class="currency-value" id="dailyUSD" data-label="USD ($)">-</td>
+                    <td class="currency-value" id="dailyEUR" data-label="EUR (€)">-</td>
                 </tr>
             </tbody>
         </table>
@@ -657,6 +691,35 @@
         return symbol ? symbol + formatted : formatted;
     }
 
+    function parseFormattedNumber(str) {
+        if (!str) return 0;
+        return parseFloat(str.replace(/,/g, '')) || 0;
+    }
+
+    function formatInputWithCommas(input) {
+        var cursorPos = input.selectionStart;
+        var oldValue = input.value;
+        var oldCommasBefore = (oldValue.substring(0, cursorPos).match(/,/g) || []).length;
+
+        // Strip non-numeric except decimal point
+        var raw = oldValue.replace(/[^0-9.]/g, '');
+        // Only allow one decimal point
+        var parts = raw.split('.');
+        if (parts.length > 2) raw = parts[0] + '.' + parts.slice(1).join('');
+
+        // Format integer part with commas
+        parts = raw.split('.');
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        var formatted = parts.join('.');
+
+        input.value = formatted;
+
+        // Adjust cursor position
+        var newCommasBefore = (formatted.substring(0, cursorPos + (formatted.length - oldValue.length)).match(/,/g) || []).length;
+        var newPos = cursorPos + (newCommasBefore - oldCommasBefore);
+        input.setSelectionRange(newPos, newPos);
+    }
+
     function convertToLocal(amount, fromCurrency, localCurrency) {
         // Convert from input currency to local currency via GBP as base
         const amountInGBP = amount / EXCHANGE_RATES[fromCurrency];
@@ -727,8 +790,8 @@
     // ==================== UI UPDATE ====================
 
     function updateCalculations() {
-        const incomeInput = parseFloat(document.getElementById('incomeInput').value) || 0;
-        const compareInput = parseFloat(document.getElementById('compareInput').value) || 0;
+        const incomeInput = parseFormattedNumber(document.getElementById('incomeInput').value);
+        const compareInput = parseFormattedNumber(document.getElementById('compareInput').value);
         const inputCurrency = document.getElementById('currencySelect').value;
         const config = LOCATIONS[activeLocation];
         const localCurrency = config.localCurrency;
@@ -855,8 +918,14 @@
         });
     });
 
-    document.getElementById('incomeInput').addEventListener('input', updateCalculations);
-    document.getElementById('compareInput').addEventListener('input', updateCalculations);
+    document.getElementById('incomeInput').addEventListener('input', function() {
+        formatInputWithCommas(this);
+        updateCalculations();
+    });
+    document.getElementById('compareInput').addEventListener('input', function() {
+        formatInputWithCommas(this);
+        updateCalculations();
+    });
     document.getElementById('currencySelect').addEventListener('change', updateCalculations);
 
     // ==================== FETCH LIVE RATES ====================
