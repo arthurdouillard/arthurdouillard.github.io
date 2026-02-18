@@ -1236,11 +1236,11 @@
 
     /**
      * Simulate DiLoCo with outer synchronization
-     * @param {Object} params - {N, T_step, H, S_outer_bits, B_gbps, alpha, N_steps, M}
+     * @param {Object} params - {N, T_step, T_fwd, T_bwd, H, K, S_outer_bits, B_gbps, alpha, N_steps, M}
      * @returns {Object} {CU, total_compute_time, total_stall_time, num_steps}
      */
     function simulateDiLoCo(params) {
-        const { N, T_step, H, S_outer_bits, B_gbps, alpha, N_steps, M } = params;
+        const { N, T_step, T_fwd, T_bwd, H, K, S_outer_bits, B_gbps, alpha, N_steps, M } = params;
         const B_bps = B_gbps * 1e9;
 
         // Network queue state
@@ -1262,23 +1262,30 @@
                 const effective_size = S_outer_bits * overhead_factor;
 
                 if (effective_size > 0) {
-                    const job = {
-                        release_time: step_start + T_step,
-                        deadline_time: step_start + T_step,
-                        size_bits: effective_size,
-                        tag: `outer_sync_step${step}`
-                    };
+                    const buckets = makeBuckets(K, T_step, T_fwd, T_bwd, effective_size);
+                    let max_stall = 0;
 
-                    // Schedule on network queue
-                    const start = Math.max(job.release_time, net_free_time);
-                    const duration = commTime(job.size_bits, B_bps, alpha);
-                    const finish = start + duration;
-                    net_free_time = finish;
+                    buckets.forEach((bucket, k) => {
+                        const job = {
+                            release_time: step_start + bucket.release_offset,
+                            deadline_time: step_start + T_step,
+                            size_bits: bucket.size_bits,
+                            tag: `outer_sync_step${step}_bucket${k}`
+                        };
 
-                    // Check if we missed deadline (creates bubble)
-                    const stall = Math.max(0, finish - job.deadline_time);
-                    t += stall;
-                    stall_total += stall;
+                        // Schedule on network queue
+                        const start = Math.max(job.release_time, net_free_time);
+                        const duration = commTime(job.size_bits, B_bps, alpha);
+                        const finish = start + duration;
+                        net_free_time = finish;
+
+                        // Check if we missed deadline (creates bubble)
+                        const stall = Math.max(0, finish - job.deadline_time);
+                        max_stall = Math.max(max_stall, stall);
+                    });
+
+                    t += max_stall;
+                    stall_total += max_stall;
                 }
             }
 
@@ -1342,14 +1349,15 @@
                 const effective_size = fragment_size * overhead_factor;
 
                 if (effective_size > 0) {
-                    // Release fragment during backward pass (simplified: at end of backward)
-                    const fragment_release_offset = T_fwd + T_bwd;
-
-                    jobs.push({
-                        release_time: step_start + fragment_release_offset,
-                        deadline_time: step_start + (tau + 1) * T_step,
-                        size_bits: effective_size,
-                        tag: `step${step}_frag${fragment_id}`
+                    // Split fragment into K buckets spread across the backward pass
+                    const buckets = makeBuckets(K, T_step, T_fwd, T_bwd, effective_size);
+                    buckets.forEach((bucket, k) => {
+                        jobs.push({
+                            release_time: step_start + bucket.release_offset,
+                            deadline_time: step_start + (tau + 1) * T_step,
+                            size_bits: bucket.size_bits,
+                            tag: `step${step}_frag${fragment_id}_bucket${k}`
+                        });
                     });
                 }
             }
@@ -1427,8 +1435,8 @@
         const T_step = secondsPerStep;
         const T_fwd = T_step / 3;
         const T_bwd = T_step * 2 / 3;
-        const K = 16; // Number of buckets
-        const alpha = 0.002; // 2ms latency per collective
+        const K = 128; // Number of buckets
+        const alpha = 0; // 0ms latency per collective
 
         // Calculate data sizes in bits
         const S_total_bits = N * bytesPerParam * 8; // Convert bytes to bits
@@ -1462,8 +1470,8 @@
         } else {
             // Standard DiLoCo
             result = simulateDiLoCo({
-                N, T_step,
-                H,
+                N, T_step, T_fwd, T_bwd,
+                H, K,
                 S_outer_bits,
                 B_gbps,
                 alpha,
@@ -1913,7 +1921,7 @@
 
                     // Calculate All-Reduce time for this bandwidth
                     const B_bps = closestPoint.x * 1e9;
-                    const alpha = 0.002; // 2ms latency
+                    const alpha = 0; // 0ms latency
                     const N = getModelSize();
                     const M = parseNumber(document.getElementById('numDatacenters').value);
 
