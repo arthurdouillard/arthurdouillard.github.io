@@ -1427,8 +1427,8 @@
         const T_step = secondsPerStep;
         const T_fwd = T_step / 3;
         const T_bwd = T_step * 2 / 3;
-        const K = 16; // Number of buckets
-        const alpha = 0.002; // 2ms latency per collective
+        const K = 128; // Number of buckets
+        const alpha = 0; // 0ms latency per collective
 
         // Calculate data sizes in bits
         const S_total_bits = N * bytesPerParam * 8; // Convert bytes to bits
@@ -1913,7 +1913,7 @@
 
                     // Calculate All-Reduce time for this bandwidth
                     const B_bps = closestPoint.x * 1e9;
-                    const alpha = 0.002; // 2ms latency
+                    const alpha = 0; // 0ms latency
                     const N = getModelSize();
                     const M = parseNumber(document.getElementById('numDatacenters').value);
 
