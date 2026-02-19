@@ -1069,6 +1069,15 @@
         return pbps.toFixed(2) + " Pbps";
     }
 
+    function debounce(fn, delay) {
+        let timer;
+        return function(...args) {
+            clearTimeout(timer);
+            timer = setTimeout(() => fn.apply(this, args), delay);
+        };
+    }
+    const debouncedUpdate = debounce(updateConfigurations, 300);
+
     // Attach listeners
     document.querySelectorAll('.formatted-input').forEach(input => {
         input.value = formatNumber(input.value);
@@ -1079,7 +1088,7 @@
         input.addEventListener('blur', function() {
             this.value = formatNumber(this.value);
         });
-        input.addEventListener('input', updateConfigurations);
+        input.addEventListener('input', debouncedUpdate);
     });
 
     // Model Size Input with special formatting
@@ -1097,20 +1106,20 @@
             this.value = val.toString();
         }
     });
-    modelSizeInput.addEventListener('input', updateConfigurations);
+    modelSizeInput.addEventListener('input', debouncedUpdate);
 
     // Wire up all input listeners for global settings
-    document.getElementById('numDatacenters').addEventListener('input', updateConfigurations);
-    document.getElementById('secondsPerStep').addEventListener('input', updateConfigurations);
+    document.getElementById('numDatacenters').addEventListener('input', debouncedUpdate);
+    document.getElementById('secondsPerStep').addEventListener('input', debouncedUpdate);
 
     // Wire up listeners for configuration-specific inputs
     document.getElementById('dp_dtype').addEventListener('change', updateConfigurations);
     document.getElementById('diloco_dtype').addEventListener('change', updateConfigurations);
-    document.getElementById('diloco_H').addEventListener('input', updateConfigurations);
+    document.getElementById('diloco_H').addEventListener('input', debouncedUpdate);
     document.getElementById('streaming_dtype').addEventListener('change', updateConfigurations);
-    document.getElementById('streaming_H').addEventListener('input', updateConfigurations);
-    document.getElementById('streaming_P').addEventListener('input', updateConfigurations);
-    document.getElementById('streaming_S').addEventListener('input', updateConfigurations);
+    document.getElementById('streaming_H').addEventListener('input', debouncedUpdate);
+    document.getElementById('streaming_P').addEventListener('input', debouncedUpdate);
+    document.getElementById('streaming_S').addEventListener('input', debouncedUpdate);
 
     function formatTime(seconds) {
         if (seconds < 0) return "0s";
