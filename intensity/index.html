@@ -10,7 +10,9 @@
             --bg-card: #ffffff;
             --slate-100: #f1f5f9;
             --slate-200: #e2e8f0;
+            --slate-300: #cbd5e1;
             --slate-500: #64748b;
+            --slate-600: #475569;
             --slate-700: #334155;
             --slate-800: #1e293b;
         }
@@ -194,7 +196,13 @@
             <div>
                 <div style="font-weight: 600; font-size: 0.875rem; color: var(--slate-800); margin-bottom: 0.5rem;">What assumptions are made about operation fusion?</div>
                 <div style="font-size: 0.875rem; color: var(--slate-600); line-height: 1.6;">
-                    We assume that the <strong>attention softmax operation is fused</strong>, meaning QK<sup>T</sup>, softmax, and multiplication with V are combined into a single kernel. This significantly reduces memory traffic by avoiding intermediate materialization of the full attention matrix. Without fusion, memory requirements would be much higher for long sequences.
+                    We assume that the <strong>attention softmax operation is fused</strong>, meaning QK<sup>T</sup>, softmax, and multiplication with V are combined into a single kernel. The S×S attention matrix is never materialized in HBM, so the memory traffic is just reading Q, K, V and writing the output (4·B·S·D values). Without fusion, memory requirements would be much higher for long sequences.
+                </div>
+            </div>
+            <div>
+                <div style="font-weight: 600; font-size: 0.875rem; color: var(--slate-800); margin-bottom: 0.5rem;">How is causal masking accounted for?</div>
+                <div style="font-size: 0.875rem; color: var(--slate-600); line-height: 1.6;">
+                    During training and prefilling, attention is <strong>causal</strong>: each token only attends to itself and earlier positions, so roughly half of the S×S attention matrix is computed. Fused kernels like FlashAttention skip the masked blocks entirely, so we halve the attention FLOPs. During sampling there is no discount, since the new token attends to the full context of S cached tokens.
                 </div>
             </div>
             <div>
@@ -418,7 +426,7 @@ const acceleratorSpecs = {
     tpu_v6e: {
         name: 'TPU v6e',
         compute: 9.18e14,      // FLOPs/s (bfloat16) - 918 TFLOPs
-        bandwidth: 1.6e12      // bytes/s (HBM) - 1600 GB/s
+        bandwidth: 1.64e12     // bytes/s (HBM) - 1640 GB/s
     },
     gpu_b200: {
         name: 'GPU B200',
@@ -477,6 +485,9 @@ function calculateIntensities() {
     const k = parseInt(document.getElementById('topK').value);
     const l = parseInt(document.getElementById('numLayers').value);
 
+    // Keep the last valid render while an input is empty/invalid or K > E
+    if (![d, s, b, v, e, k, l].every(x => Number.isFinite(x) && x > 0) || k > e) return;
+
     // Get hardware specs
     const selected = document.getElementById('acceleratorSelect').value;
     const spec = acceleratorSpecs[selected];
@@ -493,7 +504,9 @@ function calculateIntensities() {
         // Calculate FLOPs for each operation type
         const ln_flops = 3 * tokens * d;
         const qkv_flops = 3 * 2 * tokens * d * d;
-        const softmax_flops = b * (2 * s * s * d + 5 * s * s);
+        // Fused attention: QK^T (2·S²·D) + A·V (2·S²·D) + softmax (5·S²),
+        // halved because causal masking skips the upper triangle
+        const softmax_flops = b * (4 * s * s * d + 5 * s * s) / 2;
         const attn_out_flops = 2 * tokens * d * d;
         const router_flops = 2 * tokens * d * e;
         const tokensPerExpert = (tokens * k) / e;
@@ -524,13 +537,13 @@ function calculateIntensities() {
             flopsPct: (l * qkv_flops / totalFlops) * 100
         });
 
-        // Attention softmax
+        // Attention softmax (fused: reads Q,K,V and writes O, no S² matrix in HBM)
         operations.push({
             name: 'Attn Softmax',
             color: '#10b981',
-            intensity: softmax_flops / ((2 * b * s * d * 2) + (b * s * s * 2)),
-            flopsFormula: '2·B·S²·D + 5·B·S²',
-            bytesFormula: '(2·B·S·D+B·S²)·2',
+            intensity: softmax_flops / (4 * b * s * d * 2),
+            flopsFormula: '(4·B·S²·D + 5·B·S²)/2 (causal)',
+            bytesFormula: '4·B·S·D·2',
             flopsPct: (l * softmax_flops / totalFlops) * 100
         });
 
@@ -590,7 +603,9 @@ function calculateIntensities() {
         // Calculate FLOPs for each operation type
         const ln_flops = 3 * b * d;
         const qkv_flops = 3 * 2 * b * d * d;
-        const softmax_flops = b * (2 * s * d + 5 * s);
+        // Fused attention: qK^T (2·S·D) + a·V (2·S·D) + softmax (5·S);
+        // no causal discount since the new token attends to the full context
+        const softmax_flops = b * (4 * s * d + 5 * s);
         const attn_out_flops = 2 * b * d * d;
         const router_flops = 2 * b * d * e;
         const samplingTokensPerExpert = (b * k) / e;
@@ -621,13 +636,14 @@ function calculateIntensities() {
             flopsPct: (l * qkv_flops / totalFlops) * 100
         });
 
-        // Attention softmax (Q=[B,1,D] attends to cached K=[B,S,D])
+        // Attention softmax (Q=[B,1,D] attends to cached K,V=[B,S,D]; fused,
+        // so bytes = KV-cache read + Q read + O write)
         operations.push({
             name: 'Attn Softmax',
             color: '#10b981',
-            intensity: softmax_flops / ((2 * b * s * d * 2) + (b * s * 2)),
-            flopsFormula: '2·B·S·D + 5·B·S',
-            bytesFormula: '(2·B·S·D+B·S)·2',
+            intensity: softmax_flops / ((2 * b * s * d + 2 * b * d) * 2),
+            flopsFormula: '4·B·S·D + 5·B·S',
+            bytesFormula: '(2·B·S·D+2·B·D)·2',
             flopsPct: (l * softmax_flops / totalFlops) * 100
         });
 
