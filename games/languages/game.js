@@ -58,6 +58,30 @@ const routes = {
 
 const difficultyNames = { 1: "Warm-up", 2: "Getting tricky", 3: "Expert mode" };
 const circumference = 2 * Math.PI * 52;
+const commentary = {
+    bulgaria: [
+        "Айде! Cyrillic muscles activated.",
+        "No pressure — only national pride.",
+        "Sofia believes in you."
+    ],
+    france: [
+        "Allez! Make it magnifique.",
+        "The baguette of destiny awaits.",
+        "Paris is holding its breath."
+    ],
+    correct: [
+        "Goal! Straight into the vocabulary net.",
+        "Magnifique! Even the referee is impressed.",
+        "Браво! That word never stood a chance.",
+        "Language wizardry detected."
+    ],
+    missed: [
+        "Oof! That word had excellent defence.",
+        "Lost in translation — literally.",
+        "The dictionary breathes a sigh of relief.",
+        "Close! Blame the dramatic countdown."
+    ]
+};
 
 const elements = {
     setup: document.querySelector("#setup"),
@@ -84,6 +108,7 @@ const elements = {
     activeFlag: document.querySelector("#active-flag"),
     activeTeam: document.querySelector("#active-team"),
     difficulty: document.querySelector("#difficulty"),
+    matchCommentary: document.querySelector("#match-commentary"),
     matchProgress: document.querySelector("#match-progress"),
     timer: document.querySelector("#timer"),
     timerProgress: document.querySelector("#timer-progress"),
@@ -105,6 +130,7 @@ let state = {
     totalRounds: 20,
     round: 0,
     scores: { bulgaria: 0, france: 0 },
+    streaks: { bulgaria: 0, france: 0 },
     activeTeam: "bulgaria",
     selectedRoutes: Object.keys(routes),
     usedWords: new Set(),
@@ -115,8 +141,10 @@ let state = {
     revealed: false,
     judged: false,
     inTime: true,
+    lastCountdownSecond: null,
     muted: false
 };
+let audioContext = null;
 
 elements.timerProgress.style.strokeDasharray = circumference;
 elements.timerProgress.style.strokeDashoffset = 0;
@@ -167,8 +195,10 @@ function startMatch() {
     state.selectedRoutes = selectedRoutes;
     state.round = 0;
     state.scores = { bulgaria: 0, france: 0 };
+    state.streaks = { bulgaria: 0, france: 0 };
     state.usedWords = new Set();
     state.activeTeam = Math.random() < 0.5 ? "bulgaria" : "france";
+    prepareAudio();
     elements.setupError.textContent = "";
     saveSettings();
     updateScores();
@@ -238,12 +268,14 @@ function nextRound() {
     elements.correctButton.disabled = false;
     elements.missedButton.disabled = false;
     elements.correctButton.innerHTML = "<span>✓</span> Got it in time";
+    setCommentary(randomItem(commentary[state.activeTeam]));
 
     startTimer();
 }
 
 function startTimer() {
     clearInterval(state.timerId);
+    state.lastCountdownSecond = null;
     state.deadline = Date.now() + state.timerSeconds * 1000;
     updateTimer(state.timerSeconds);
     state.timerId = setInterval(() => {
@@ -263,7 +295,15 @@ function updateTimer(remaining) {
     elements.timeLeft.textContent = rounded;
     const ratio = remaining / state.timerSeconds;
     elements.timerProgress.style.strokeDashoffset = circumference * (1 - ratio);
-    elements.timer.classList.toggle("urgent", remaining <= Math.min(5, state.timerSeconds / 3));
+    elements.timer.classList.toggle("urgent", remaining < 5);
+
+    if (remaining < 5 && rounded > 0 && rounded !== state.lastCountdownSecond) {
+        state.lastCountdownSecond = rounded;
+        elements.timer.classList.remove("tick");
+        void elements.timer.offsetWidth;
+        elements.timer.classList.add("tick");
+        playTone("tick", (5 - rounded) * 70);
+    }
 }
 
 function revealAnswer(timedOut = false) {
@@ -277,6 +317,7 @@ function revealAnswer(timedOut = false) {
     if (timedOut) {
         elements.correctButton.disabled = true;
         elements.correctButton.innerHTML = "<span>⌛</span> Time’s up";
+        setCommentary("BUZZ! The clock wins this round.", "oops");
     } else {
         playTone("reveal");
     }
@@ -290,14 +331,20 @@ function judgeRound(correct) {
     elements.missedButton.disabled = true;
     if (correct) {
         state.scores[state.activeTeam] += 1;
+        state.streaks[state.activeTeam] += 1;
         playTone("correct");
+        const streak = state.streaks[state.activeTeam];
+        const streakMessage = streak >= 2 ? ` 🔥 ${streak}-word streak!` : "";
+        setCommentary(`${randomItem(commentary.correct)}${streakMessage}`, "celebrate");
     } else {
+        state.streaks[state.activeTeam] = 0;
         playTone("missed");
+        setCommentary(randomItem(commentary.missed), "oops");
     }
 
     updateScores();
     state.activeTeam = state.activeTeam === "bulgaria" ? "france" : "bulgaria";
-    window.setTimeout(nextRound, 260);
+    window.setTimeout(nextRound, 950);
 }
 
 function updateScores() {
@@ -329,31 +376,46 @@ function endMatch() {
     playTone("finish");
 }
 
-function playTone(kind) {
+function randomItem(items) {
+    return items[Math.floor(Math.random() * items.length)];
+}
+
+function setCommentary(message, mood = "") {
+    elements.matchCommentary.textContent = message;
+    elements.matchCommentary.className = `match-commentary ${mood}`.trim();
+}
+
+function prepareAudio() {
     if (state.muted) return;
     const AudioContext = window.AudioContext || window.webkitAudioContext;
     if (!AudioContext) return;
+    if (!audioContext) audioContext = new AudioContext();
+    if (audioContext.state === "suspended") audioContext.resume();
+}
 
-    const context = new AudioContext();
-    const oscillator = context.createOscillator();
-    const gain = context.createGain();
+function playTone(kind, pitchBoost = 0) {
+    prepareAudio();
+    if (state.muted || !audioContext) return;
+
+    const oscillator = audioContext.createOscillator();
+    const gain = audioContext.createGain();
     const settings = {
         reveal: [440, 0.06],
         correct: [660, 0.12],
         missed: [190, 0.1],
         timeout: [150, 0.18],
-        finish: [520, 0.25]
+        finish: [520, 0.25],
+        tick: [760, 0.055]
     }[kind];
 
-    oscillator.frequency.value = settings[0];
+    oscillator.frequency.value = settings[0] + pitchBoost;
     oscillator.type = kind === "missed" || kind === "timeout" ? "sawtooth" : "sine";
-    gain.gain.setValueAtTime(0.07, context.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, context.currentTime + settings[1]);
+    gain.gain.setValueAtTime(0.07, audioContext.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + settings[1]);
     oscillator.connect(gain);
-    gain.connect(context.destination);
+    gain.connect(audioContext.destination);
     oscillator.start();
-    oscillator.stop(context.currentTime + settings[1]);
-    oscillator.addEventListener("ended", () => context.close());
+    oscillator.stop(audioContext.currentTime + settings[1]);
 }
 
 elements.timerRange.addEventListener("input", updateSetupLabels);
@@ -372,6 +434,7 @@ elements.soundToggle.addEventListener("click", () => {
     state.muted = !state.muted;
     elements.soundToggle.setAttribute("aria-pressed", state.muted);
     elements.soundToggle.setAttribute("aria-label", state.muted ? "Enable sounds" : "Mute sounds");
+    if (!state.muted) prepareAudio();
 });
 
 document.addEventListener("keydown", (event) => {

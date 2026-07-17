@@ -357,6 +357,27 @@ button {
     font-weight: 700;
 }
 
+.match-commentary {
+    min-height: 1.4em;
+    margin: -8px 0 12px;
+    color: var(--muted);
+    font-family: "Fraunces", serif;
+    font-size: 0.88rem;
+    font-style: italic;
+}
+
+.match-commentary.celebrate {
+    color: var(--bulgaria);
+    font-style: normal;
+    font-weight: 700;
+    animation: commentary-pop 420ms ease-out;
+}
+
+.match-commentary.oops {
+    color: var(--red);
+    animation: commentary-wobble 360ms ease-out;
+}
+
 .timer {
     position: relative;
     width: 104px;
@@ -387,6 +408,14 @@ button {
 
 .timer.urgent .timer-progress {
     stroke: var(--red);
+}
+
+.timer.urgent .timer-number strong {
+    color: var(--red);
+}
+
+.timer.tick {
+    animation: timer-tick 240ms ease-out;
 }
 
 .timer-number {
@@ -558,6 +587,23 @@ button {
     font-weight: 600;
     cursor: pointer;
     text-decoration: underline;
+}
+
+@keyframes timer-tick {
+    0% { transform: scale(1); }
+    45% { transform: scale(1.12) rotate(-2deg); }
+    100% { transform: scale(1); }
+}
+
+@keyframes commentary-pop {
+    0% { opacity: 0; transform: translateY(5px) scale(0.96); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes commentary-wobble {
+    0%, 100% { transform: translateX(0); }
+    30% { transform: translateX(-5px); }
+    60% { transform: translateX(4px); }
 }
 
 .hidden {
