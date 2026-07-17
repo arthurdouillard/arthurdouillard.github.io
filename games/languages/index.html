@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#10182b">
+    <title>Language Derby — Bulgaria vs France</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <main class="game-shell">
+        <header class="topbar">
+            <a class="back-link" href="../../tools/index.html" aria-label="Back to tools">← Tools</a>
+            <div class="brand">
+                <span class="brand-kicker">Translation showdown</span>
+                <h1>Language Derby</h1>
+            </div>
+            <button class="icon-button" id="sound-toggle" type="button" aria-label="Mute sounds" aria-pressed="false">♪</button>
+        </header>
+
+        <section class="scoreboard" aria-label="Team scores">
+            <div class="team team-bulgaria" id="team-bulgaria">
+                <span class="flag" aria-hidden="true">🇧🇬</span>
+                <div>
+                    <span class="team-name">Bulgaria</span>
+                    <strong class="score" id="score-bulgaria">0</strong>
+                </div>
+            </div>
+            <div class="match-status">
+                <span id="turn-label">First kick-off</span>
+                <strong><span id="round-current">0</span>/<span id="round-total">20</span></strong>
+            </div>
+            <div class="team team-france" id="team-france">
+                <div>
+                    <span class="team-name">France</span>
+                    <strong class="score" id="score-france">0</strong>
+                </div>
+                <span class="flag" aria-hidden="true">🇫🇷</span>
+            </div>
+        </section>
+
+        <section class="setup panel" id="setup">
+            <div class="setup-heading">
+                <span class="eyebrow">Match settings</span>
+                <h2>Ready your teams</h2>
+                <p>Teams alternate. Translate aloud, then reveal the answer and judge yourselves.</p>
+            </div>
+
+            <div class="settings-grid">
+                <label class="setting">
+                    <span>Seconds per word</span>
+                    <output id="timer-output" for="timer-range">15s</output>
+                    <input id="timer-range" type="range" min="5" max="45" step="5" value="15">
+                </label>
+
+                <label class="setting">
+                    <span>Number of rounds</span>
+                    <select id="round-select">
+                        <option value="10">10 rounds</option>
+                        <option value="20" selected>20 rounds</option>
+                        <option value="30">30 rounds</option>
+                    </select>
+                </label>
+
+                <fieldset class="setting direction-setting">
+                    <legend>Translation routes</legend>
+                    <label><input type="checkbox" name="route" value="bg-fr" checked> Bulgarian → French</label>
+                    <label><input type="checkbox" name="route" value="bg-en" checked> Bulgarian → English</label>
+                    <label><input type="checkbox" name="route" value="fr-bg" checked> French → Bulgarian</label>
+                    <label><input type="checkbox" name="route" value="fr-en" checked> French → English</label>
+                </fieldset>
+            </div>
+
+            <button class="primary-button" id="start-button" type="button">Start the match <span>→</span></button>
+            <p class="setup-error" id="setup-error" role="alert"></p>
+        </section>
+
+        <section class="play-area panel hidden" id="play-area" aria-live="polite">
+            <div class="progress-track" aria-hidden="true">
+                <div class="progress-fill" id="match-progress"></div>
+            </div>
+
+            <div class="turn-banner">
+                <span id="active-flag">🇧🇬</span>
+                <div>
+                    <span>Playing now</span>
+                    <strong id="active-team">Team Bulgaria</strong>
+                </div>
+                <span class="difficulty" id="difficulty">Warm-up</span>
+            </div>
+
+            <div class="timer" id="timer" aria-label="Time remaining">
+                <svg viewBox="0 0 120 120" aria-hidden="true">
+                    <circle class="timer-track" cx="60" cy="60" r="52"></circle>
+                    <circle class="timer-progress" id="timer-progress" cx="60" cy="60" r="52"></circle>
+                </svg>
+                <div class="timer-number"><strong id="time-left">15</strong><span>sec</span></div>
+            </div>
+
+            <div class="word-card">
+                <div class="route" id="route-label">Bulgarian → French</div>
+                <div class="word" id="prompt-word">здравей</div>
+                <div class="pronunciation" id="pronunciation">zdravey</div>
+                <div class="answer hidden" id="answer">
+                    <span>Answer</span>
+                    <strong id="answer-word">bonjour</strong>
+                </div>
+            </div>
+
+            <button class="reveal-button" id="reveal-button" type="button">Reveal answer</button>
+
+            <div class="judge-actions hidden" id="judge-actions">
+                <button class="judge-button missed" id="missed-button" type="button">
+                    <span>✕</span> Missed it
+                </button>
+                <button class="judge-button correct" id="correct-button" type="button">
+                    <span>✓</span> Got it in time
+                </button>
+            </div>
+            <p class="keyboard-hint">Space to reveal · ← missed · → correct</p>
+        </section>
+
+        <section class="results panel hidden" id="results" aria-live="polite">
+            <div class="trophy" aria-hidden="true">🏆</div>
+            <span class="eyebrow">Full time</span>
+            <h2 id="winner-title">Bulgaria wins!</h2>
+            <p id="winner-summary">A hard-fought language derby.</p>
+            <div class="final-score">
+                <div><span>🇧🇬 Bulgaria</span><strong id="final-bulgaria">0</strong></div>
+                <span>—</span>
+                <div><span>France 🇫🇷</span><strong id="final-france">0</strong></div>
+            </div>
+            <button class="primary-button" id="rematch-button" type="button">Play a rematch <span>↻</span></button>
+            <button class="text-button" id="settings-button" type="button">Change settings</button>
+        </section>
+    </main>
+
+    <script src="game.js"></script>
+</body>
+</html>
