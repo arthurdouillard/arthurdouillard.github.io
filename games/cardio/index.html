@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#08111f">
+    <meta name="description" content="A webcam-powered cardio runner game controlled by your movement.">
+    <title>Cardio Runner - Arthur Douillard</title>
+    <link rel="icon" href="../../favicon.ico">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="top-nav">
+        <a href="../../index.html" class="brand">
+            <img src="../../favicon.ico" alt="">
+            Arthur Douillard
+        </a>
+        <a href="../../tools/index.html">Tools</a>
+    </nav>
+
+    <main class="game-shell">
+        <section class="game-stage" aria-label="Cardio Runner game">
+            <canvas id="gameCanvas"></canvas>
+
+            <div class="top-hud" aria-live="polite">
+                <div class="stat-card">
+                    <span class="stat-label">Distance</span>
+                    <strong><span id="distanceValue">0</span> m</strong>
+                </div>
+                <div class="stat-card stat-center">
+                    <span class="stat-label">Pace</span>
+                    <strong><span id="paceValue">0</span> spm</strong>
+                </div>
+                <div class="stat-card stat-right">
+                    <span class="stat-label">Best</span>
+                    <strong><span id="bestValue">0</span> m</strong>
+                </div>
+            </div>
+
+            <div class="speedometer" aria-label="Running speed">
+                <svg viewBox="0 0 120 72" aria-hidden="true">
+                    <path class="speedometer-track" d="M 12 62 A 48 48 0 0 1 108 62"></path>
+                    <path class="speedometer-zone slow" d="M 12 62 A 48 48 0 0 1 28 26"></path>
+                    <path class="speedometer-zone fast" d="M 92 26 A 48 48 0 0 1 108 62"></path>
+                    <g id="speedNeedle" class="speed-needle">
+                        <line x1="60" y1="62" x2="60" y2="21"></line>
+                    </g>
+                    <circle cx="60" cy="62" r="5"></circle>
+                </svg>
+                <strong><span id="speedValue">0</span> <small>km/h</small></strong>
+                <span id="speedHint">Lift alternating knees</span>
+            </div>
+
+            <div class="lane-indicator" aria-label="Detected lane">
+                <span data-lane="-1">L</span>
+                <span data-lane="0" class="active">C</span>
+                <span data-lane="1">R</span>
+            </div>
+            <div id="squatIndicator" class="squat-indicator">Head below orange line to squat</div>
+
+            <div class="stamina-wrap">
+                <div class="stamina-label">
+                    <span>Momentum</span>
+                    <span id="staminaMessage">Start running!</span>
+                </div>
+                <div class="stamina-track">
+                    <div id="staminaBar" class="stamina-bar"></div>
+                </div>
+            </div>
+
+            <div id="movementCue" class="movement-cue" aria-live="assertive"></div>
+
+            <aside class="camera-card">
+                <div class="camera-frame">
+                    <video id="webcam" playsinline muted></video>
+                    <canvas id="poseCanvas"></canvas>
+                    <div id="cameraStatus" class="camera-status">Camera off</div>
+                </div>
+                <div class="camera-readout">
+                    <span id="poseStatusDot" class="status-dot"></span>
+                    <span id="poseStatus">Waiting for camera</span>
+                </div>
+            </aside>
+
+            <div id="introOverlay" class="overlay visible">
+                <div class="modal intro-modal">
+                    <span class="eyebrow">Webcam fitness game</span>
+                    <h1>Cardio Runner</h1>
+                    <p class="lede">Run in place to keep moving. Shift your whole body left or right to change lanes, and squat under low beams.</p>
+
+                    <div class="move-grid">
+                        <div class="move-card">
+                            <span class="move-icon feet-icon" aria-hidden="true">◖ ◗</span>
+                            <strong>Run in place</strong>
+                            <span>Each alternating knee lift counts as a step. A quicker steady rhythm increases speed.</span>
+                        </div>
+                        <div class="move-card">
+                            <span class="move-icon" aria-hidden="true">↔</span>
+                            <strong>Move side to side</strong>
+                            <span>Shift into the clear lane.</span>
+                        </div>
+                        <div class="move-card">
+                            <span class="move-icon squat-icon" aria-hidden="true">↧</span>
+                            <strong>Squat down</strong>
+                            <span>Drop your head below your standing shoulder level.</span>
+                        </div>
+                    </div>
+
+                    <div class="setup-note">
+                        <strong>Set up your space</strong>
+                        <span>Place your device where your head, shoulders, hips, and knees are visible. Clear enough room to move and squat safely.</span>
+                    </div>
+
+                    <p id="modelStatus" class="model-status">
+                        <span class="spinner" aria-hidden="true"></span>
+                        Loading the movement model…
+                    </p>
+                    <button id="startButton" class="primary-button" disabled>Enable camera</button>
+                    <p class="privacy-note">Video stays on this device and is never uploaded.</p>
+                </div>
+            </div>
+
+            <div id="calibrationOverlay" class="overlay">
+                <div class="modal calibration-modal">
+                    <div id="calibrationCount" class="countdown">3</div>
+                    <h2>Stand in the center</h2>
+                    <p id="calibrationHint">Move back until your shoulders, hips, and knees are inside the guide.</p>
+                    <div class="calibration-preview">
+                        <canvas id="calibrationCanvas"></canvas>
+                        <div class="position-guide" aria-hidden="true">
+                            <span>Fit your body here</span>
+                        </div>
+                    </div>
+                    <div class="calibration-progress">
+                        <div id="calibrationBar"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="gameOverOverlay" class="overlay">
+                <div class="modal game-over-modal">
+                    <span class="eyebrow">Run complete</span>
+                    <h2 id="gameOverTitle">Out of momentum</h2>
+                    <div class="final-distance">
+                        <strong id="finalDistance">0</strong>
+                        <span>metres</span>
+                    </div>
+                    <p id="gameOverMessage">Keep alternating your feet so your momentum does not run out.</p>
+                    <button id="restartButton" class="primary-button">Run again</button>
+                    <button id="recalibrateButton" class="text-button">Recalibrate position</button>
+                </div>
+            </div>
+
+            <div id="errorOverlay" class="overlay">
+                <div class="modal error-modal">
+                    <span class="error-icon">!</span>
+                    <h2>Camera unavailable</h2>
+                    <p id="errorMessage">Allow camera access and reload the page to play.</p>
+                    <button id="retryButton" class="primary-button">Try again</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="instructions" aria-labelledby="how-to-play">
+            <div>
+                <span class="eyebrow">How it works</span>
+                <h2 id="how-to-play">Your body is the controller</h2>
+            </div>
+            <p>A lightweight pose model runs locally in your browser. It tracks body landmarks—not your image—to estimate your lane, detect a squat, and count alternating steps. Lift your knees in a clear left-right rhythm to accelerate; the road motion and speedometer respond to your cadence.</p>
+        </section>
+    </main>
+
+    <script type="module" src="game.js?v=6"></script>
+</body>
+</html>
